@@ -48,12 +48,17 @@ species<-c("Acer_barbatum","Acer_nigrum","Aesculus_octandra","Carya_aquatica","C
  #leaves me with 117 for analysis
 
  #seeking phylogenetic signal
-#error says "Labels duplicated between tips and nodes in phylogeny"
-signal<-comparative.data(pruned.by.anthy,anthy,names.col="name")
-
+ which(anthy$name%in%pruned.by.anthy$tip.label)
+ which(pruned.by.anthy$tip.label%in%anthy$name)
+ pruned.by.anthy$node.label<-""
+signal<-comparative.data(pruned.by.anthy,anthy,names.col=name,na.omit=FALSE)
+signal
+##############This was troubleshooting an old problem, but it works now###############
+#anthy$name
 #troubleshoot
-intersect(pruned.by.anthy$node.label,pruned.by.anthy$tip.label)
-name.check(phy = pruned.by.anthy,data = anthy,data.names = anthy$name)
-### the names match, not exactly sure what a label is and can seem to find it online
-
+#intersect(pruned.by.anthy$node.label,pruned.by.anthy$tip.label)
+#name.check(phy = pruned.by.anthy,data = anthy,data.names = anthy$name)
+#pruned.by.anthy$node.label<-""
+#pruned.by.anthy$tip.label
+######################################################################################
 
