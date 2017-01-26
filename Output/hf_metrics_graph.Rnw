@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage{caption}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{legalpaper,  margin=1in}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\begin{flushleft}
+Dan Buonaiuto\\
+December 2016
+\end{flushleft}
+\section*{Harvard Forest flowering and leafout counts by species}
+
+\begin{figure}[h!]
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+ &Species&	Flowered&	Leafed\\
+\hline
+1 &   ACPE&      81&100\\
+2   &  ACRU  &   123&125\\
+3    & ACSA     & 18&75\\
+4     &AMSP     & 26&38\\
+5     &ARSP     & 11&28\\
+6     &BEAL     & 31&75\\
+7     &BELE     & 14&36\\
+8     &BEPA     & 28&47\\
+9     &BEPO     & 34&48\\
+10    &CADE     &  0&36\\
+11    &COAL     & 20&27\\
+12    &CRSP     &  1&35\\
+13    &FAGR      & 5&84\\
+14    &FRAM     & 28&105\\
+15    &HAVI     &  1&75\\
+16 &ILVE  &18&44\\
+17 &KAAN     & 21&36\\
+18    &KALA     & 32&36\\
+19    &LYLI     & 16&34\\
+20    &NEMU     & 23&34\\
+21    &NYSY     &  9&35\\
+22    &PIST      & 5&25\\
+23    &POTR     & 26&26\\
+24    &PRSE     & 12&36\\
+25    &QUAL     &  0&75\\
+26    &QURU     & 70&100\\
+27    &QUVE     & 17&47\\
+28    &RHSP     & 33&36\\
+30    &TSCA     &  0&36\\
+31    &VACO     & 48&48\\
+32    &VIAL    &  23&36\\
+33    &VICA   &    4&36\\
+ \hline
+\end{tabular}
+\caption{The number of observations of flowering and leafout by species in Harvard Forest across all years of study. Interpretation fopn.jd and l75.jd observations} 
+\end{figure}
+\end{document}
