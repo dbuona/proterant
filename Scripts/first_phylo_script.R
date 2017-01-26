@@ -13,7 +13,7 @@ library(pez)
 library(dplyr)
 library(tidyr)
 library(caper)
-setwd("~/Documents/git/proteranTree/input")
+setwd("~/Documents/git/proterant/input")
 
 ###read in tree
 treee<-read.tree("Vascular_Plants_rooted.dated.tre")
