@@ -70,7 +70,7 @@ flo_point<-group_by(reduced_mean,year, species)
 floers<-summarise(flo_point, avgfl=mean(fopn.jd,na.rm=TRUE), sdfl=sd(fopn.jd, na.rm=TRUE))
 floers
 ##Average annual flower open date per species compared to average 75 leaf size in community
-r<-ggplot(floers, aes(x=year, y=avgfl)) +geom_point(aes(x=year, y=avgfl,color=species))+geom_line(data = leafout, aes(x=year, y=avgleaf, colour="Average Leafout"))+geom_line(data = leafout, aes(x=year, y=avgleaf+sdleaf, colour="sd leafout"))+geom_line(data = leafout, aes(x=year, y=avgleaf-sdleaf, colour="sd leafout"))
+r<-ggplot(floers, aes(x=year, y=avgfl)) +geom_point(aes(x=year, y=avgfl,color=species))+geom_smooth(data = leafout, aes(x=year, y=avgleaf, colour="Average Leafout"))
 r
 
 
