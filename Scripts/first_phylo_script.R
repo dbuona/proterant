@@ -55,8 +55,7 @@ species<-c("Acer_barbatum","Acer_nigrum","Aesculus_octandra","Carya_aquatica","C
  which(anthy$name%in%pruned.by.anthy$tip.label)
  which(pruned.by.anthy$tip.label%in%anthy$name)
  pruned.by.anthy$node.label<-""
- signal<-comparative.data(pruned.by.anthy,anthy,names.col=name,na.omit=FALSE)
-signal
+comparative.data(pruned.by.anthy,anthy,names.col=name,na.omit=FALSE)
 
 
 ##############This was troubleshooting an old problem, but it works now###############
@@ -69,23 +68,34 @@ signal
 ######################################################################################
 #follow ucdavis workflow for discrete traits
 ###new column for bianry proteranthy or non proteranthy
-anthy$proteranthy[anthy$mich_phen_seq == "pro"] <- 1
-anthy$proteranthy[anthy$mich_phen_seq == "pro/syn"] <- 1
-anthy$proteranthy[anthy$mich_phen_seq == "syn"] <- 0
-anthy$proteranthy[anthy$mich_phen_seq == "syn/ser"] <- 0
-anthy$proteranthy[anthy$mich_phen_seq == "ser"] <- 0
-anthy$proteranthy[anthy$mich_phen_seq == "hyst"] <- 0
-View(anthy)
+###combining data from both books into 1 column (mich trees is default)
+anthy$proteranthy[anthy$mich_phen_seq == "pro"] <- 2
+anthy$proteranthy[anthy$mich_phen_seq == "pro/syn"] <- 2
+anthy$proteranthy[anthy$mich_phen_seq == "syn"] <- 1
+anthy$proteranthy[anthy$mich_phen_seq == "syn/ser"] <- 1
+anthy$proteranthy[anthy$mich_phen_seq == "ser"] <- 1
+anthy$proteranthy[anthy$mich_phen_seq == "hyst"] <- 1
+anthy$proteranthy[is.na(anthy$mich_phen_seq)] <- 0
 
-### trying to make a plot where tip labels are color coded if proteranthous or not, non below work
+anthy2<-filter(anthy,proteranthy==0)
+anthy2$proteranthy[anthy2$silvic_phen_seq == "pro"] <- 2
+anthy2$proteranthy[anthy2$silvic_phen_seq == "pro/syn"] <- 2
+anthy2$proteranthy[anthy2$silvic_phen_seq == "syn"] <- 1
+anthy2$proteranthy[anthy2$silvic_phen_seq == "syn/ser"] <- 1
+anthy2$proteranthy[anthy2$silvic_phen_seq == "ser"] <- 1
+anthy2$proteranthy[anthy2$silvic_phen_seq == "hyst"] <- 1
+anthy2$proteranthy[is.na(anthy2$proteranthy)] <- 0
 
-plot.phylo(pruned.by.anthy,show.tip.label = TRUE, tip.color = "blue")
-trait.plot(pruned.by.anthy,dat = anthy, cols = anthy$proteranthy)   
-       
-###markov####these won't run
-help(fitDiscrete)
-pro_equalrate<-fitDiscrete(pruned.by.anthy$proteranty,dat=anthy, model="ER")
-pro_ardrate<-fitDiscrete(pruned.by.anthy,dat  anthy$proteranthy, model="ARD")
-###lamda
+anthy2<-select(anthy2, name,proteranthy)
+anthy<-left_join(anthy,anthy2,by="name")
+
+anthy$proteranthy.y[is.na(anthy$proteranthy.y)] <- 0
+anthy<-mutate(anthy, proteranthy = proteranthy.x + proteranthy.y)
+anthy$proteranthy[is.na(anthy$proteranthy)] <- 0
+
+
+  ##plot on tree
+plot.phylo(pruned.by.anthy,show.tip.label = TRUE, tip.color= anthy$proteranthy, adj=.4,align.tip.label = TRUE, cex = 0.5)
+###this worked but colors arent matching data
 
 
