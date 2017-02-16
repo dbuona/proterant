@@ -3,6 +3,8 @@ rm(list=ls()) # remove everything currently held in the R memory
 options(stringsAsFactors=FALSE)
 graphics.off()
 #load packages
+
+
 library(stringr)
 library(ape)
 library(phytools)
@@ -13,6 +15,8 @@ library(pez)
 library(dplyr)
 library(tidyr)
 library(caper)
+library(picante)
+
 setwd("~/Documents/git/proterant/input")
 
 ###read in tree
@@ -22,7 +26,7 @@ names.intree<-treee$tip.label
 ### read in data, format it like Zanne
 anthy<-read.csv("proterant_ds.csv", header = TRUE)
 anthy$name<-paste(anthy$genus,anthy$species,sep="_")
-View(anthy)
+
 ###myspecies
 namelist<-unique(anthy$name)
 namelist
@@ -51,8 +55,10 @@ species<-c("Acer_barbatum","Acer_nigrum","Aesculus_octandra","Carya_aquatica","C
  which(anthy$name%in%pruned.by.anthy$tip.label)
  which(pruned.by.anthy$tip.label%in%anthy$name)
  pruned.by.anthy$node.label<-""
-signal<-comparative.data(pruned.by.anthy,anthy,names.col=name,na.omit=FALSE)
+ signal<-comparative.data(pruned.by.anthy,anthy,names.col=name,na.omit=FALSE)
 signal
+
+
 ##############This was troubleshooting an old problem, but it works now###############
 #anthy$name
 #troubleshoot
@@ -61,4 +67,25 @@ signal
 #pruned.by.anthy$node.label<-""
 #pruned.by.anthy$tip.label
 ######################################################################################
+#follow ucdavis workflow for discrete traits
+###new column for bianry proteranthy or non proteranthy
+anthy$proteranthy[anthy$mich_phen_seq == "pro"] <- 1
+anthy$proteranthy[anthy$mich_phen_seq == "pro/syn"] <- 1
+anthy$proteranthy[anthy$mich_phen_seq == "syn"] <- 0
+anthy$proteranthy[anthy$mich_phen_seq == "syn/ser"] <- 0
+anthy$proteranthy[anthy$mich_phen_seq == "ser"] <- 0
+anthy$proteranthy[anthy$mich_phen_seq == "hyst"] <- 0
+View(anthy)
+
+### trying to make a plot where tip labels are color coded if proteranthous or not, non below work
+
+plot.phylo(pruned.by.anthy,show.tip.label = TRUE, tip.color = "blue")
+trait.plot(pruned.by.anthy,dat = anthy, cols = anthy$proteranthy)   
+       
+###markov####these won't run
+help(fitDiscrete)
+pro_equalrate<-fitDiscrete(pruned.by.anthy$proteranty,dat=anthy, model="ER")
+pro_ardrate<-fitDiscrete(pruned.by.anthy,dat  anthy$proteranthy, model="ARD")
+###lamda
+
 
