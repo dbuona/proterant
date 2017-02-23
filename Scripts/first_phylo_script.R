@@ -29,7 +29,6 @@ anthy$name<-paste(anthy$genus,anthy$species,sep="_")
 
 ###myspecies
 namelist<-unique(anthy$name)
-namelist
 
 ##Prune the tree
 to.prune<-which(!names.intree%in%namelist)
@@ -37,10 +36,7 @@ pruned.by.anthy<-drop.tip(treee,to.prune)
 ##did it work? Let's check
 plot(pruned.by.anthy)
 mytree.names<-pruned.by.anthy$tip.label
-mytree.names
 ### 108 of my species were in the tree. Which species didn't male it
-setdiff(namelist,mytree.names)
-
 ###Add in the remaining ones
 species<-c("Acer_barbatum","Acer_nigrum","Aesculus_octandra","Carya_aquatica","Carya_illinoiensis","Carya_laciniosa","Celtis_tenuifolia","Fraxinus_pensylvanica","Gymnocladus_dioicus","Malus_coronaria","Populus_heterophylla","Prunus_nigra","Quercus_prinoides","Quercus_coccinea","Quercus_ellipsoidalis","Quercus_douglasii","Quercus_muehlenbergii","Quercus_nuttallii","Quercus_phellos","Quercus_prinus","Salix_nigra","Sorbus_americana","Tilia_heterophylla","Ulmus_thomasii")
  for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anthy,species[i],where="random")
@@ -48,54 +44,48 @@ species<-c("Acer_barbatum","Acer_nigrum","Aesculus_octandra","Carya_aquatica","C
  mytree.names<-pruned.by.anthy$tip.label
  setdiff(namelist,mytree.names) 
  ##forwhatever reason, 15 species could not be added (8 quercus, 1 ulmus, 1 tilia, sorbus, salix, populus and gymocladus)
- mytree.names
- #leaves me with 117 for analysis
+ #for now, I will subset to exclude them
+anthy<-filter(anthy,name != "Gymnocladus_dioicus")
+ anthy<-filter(anthy,name !="Populus_heterophylla")
+ anthy<-filter(anthy,name !="Prunus_nigra") 
+ anthy<-filter(anthy,name !="Quercus_prinoides")
+ anthy<-filter(anthy,name !="Quercus_coccinea")
+ anthy<-filter(anthy,name !="Quercus_ellipsoidalis" )
+ anthy<-filter(anthy,name != "Quercus_douglasii")
+ anthy<-filter(anthy,name != "Quercus_muehlenbergii")
+ anthy<-filter(anthy,name != "Quercus_nuttallii")
+ anthy<-filter(anthy,name !="Quercus_phellos")
+ anthy<-filter(anthy,name !="Quercus_prinus")
+ anthy<-filter(anthy,name != "Salix_nigra")
+ anthy<-filter(anthy,name !="Sorbus_americana")
+ anthy<-filter(anthy,name !="Tilia_heterophylla")
+ anthy<-filter(anthy,name !="Ulmus_thomasii")
+##species list
+namelist<-unique(anthy$name)
+setdiff(namelist,mytree.names) 
+###okay, now there is no differentce between namelist and mytree.names
 
- #seeking phylogenetic signal
- which(anthy$name%in%pruned.by.anthy$tip.label)
- which(pruned.by.anthy$tip.label%in%anthy$name)
- pruned.by.anthy$node.label<-""
-comparative.data(pruned.by.anthy,anthy,names.col=name,na.omit=FALSE)
+final.df<-anthy[match(mytree.names, anthy$name),]
+namelist2<-final.df$name
+namelist2==mytree.names
+final.df$name== mytree.names
+###matches!
+final.df["pro"]<-NA
 
-
-##############This was troubleshooting an old problem, but it works now###############
-#anthy$name
-#troubleshoot
-#intersect(pruned.by.anthy$node.label,pruned.by.anthy$tip.label)
-#name.check(phy = pruned.by.anthy,data = anthy,data.names = anthy$name)
+  
+final.df$pro[final.df$Proteranthous == 1] <- 3
+final.df$pro[final.df$Proteranthous == 0] <- 2
+final.df$pro[final.df$Proteranthous== NA] <- 1
+  
+#which(anthy$name%in%pruned.by.anthy$tip.label)
+#which(pruned.by.anthy$tip.label%in%anthy$name)
 #pruned.by.anthy$node.label<-""
-#pruned.by.anthy$tip.label
-######################################################################################
-#follow ucdavis workflow for discrete traits
-###new column for bianry proteranthy or non proteranthy
-###combining data from both books into 1 column (mich trees is default)
-anthy$proteranthy[anthy$mich_phen_seq == "pro"] <- 2
-anthy$proteranthy[anthy$mich_phen_seq == "pro/syn"] <- 2
-anthy$proteranthy[anthy$mich_phen_seq == "syn"] <- 1
-anthy$proteranthy[anthy$mich_phen_seq == "syn/ser"] <- 1
-anthy$proteranthy[anthy$mich_phen_seq == "ser"] <- 1
-anthy$proteranthy[anthy$mich_phen_seq == "hyst"] <- 1
-anthy$proteranthy[is.na(anthy$mich_phen_seq)] <- 0
+#comparative.data(pruned.by.anthy,anthy,names.col=name,na.omit=FALSE)
 
-anthy2<-filter(anthy,proteranthy==0)
-anthy2$proteranthy[anthy2$silvic_phen_seq == "pro"] <- 2
-anthy2$proteranthy[anthy2$silvic_phen_seq == "pro/syn"] <- 2
-anthy2$proteranthy[anthy2$silvic_phen_seq == "syn"] <- 1
-anthy2$proteranthy[anthy2$silvic_phen_seq == "syn/ser"] <- 1
-anthy2$proteranthy[anthy2$silvic_phen_seq == "ser"] <- 1
-anthy2$proteranthy[anthy2$silvic_phen_seq == "hyst"] <- 1
-anthy2$proteranthy[is.na(anthy2$proteranthy)] <- 0
-
-anthy2<-select(anthy2, name,proteranthy)
-anthy<-left_join(anthy,anthy2,by="name")
-
-anthy$proteranthy.y[is.na(anthy$proteranthy.y)] <- 0
-anthy<-mutate(anthy, proteranthy = proteranthy.x + proteranthy.y)
-anthy$proteranthy[is.na(anthy$proteranthy)] <- 0
-
-
-  ##plot on tree
-plot.phylo(pruned.by.anthy,show.tip.label = TRUE, tip.color= anthy$proteranthy, adj=.4,align.tip.label = TRUE, cex = 0.5)
-###this worked but colors arent matching data
-
-
+ ##plot on tree
+plot.phylo(pruned.by.anthy,show.tip.label = TRUE, tip.color= final.df$pro, adj=.4,align.tip.label = TRUE, cex = 0.5)
+###this worked! green=proteranthous, red= non-proteranthous, black= NA
+###method below doesnt work
+x<-final.df$Proteranthous
+phylosig(pruned.by.anthy, x, method="lambda", test=TRUE, nsim=1000, se=NULL, start=NULL,
+         control=list())
