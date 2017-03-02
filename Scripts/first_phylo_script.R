@@ -89,3 +89,7 @@ plot.phylo(pruned.by.anthy,show.tip.label = TRUE, tip.color= final.df$pro, adj=.
 x<-final.df$Proteranthous
 phylosig(pruned.by.anthy, x, method="lambda", test=TRUE, nsim=1000, se=NULL, start=NULL,
          control=list())
+
+
+
+###Error in vcv.phylo(tree) : the tree has no branch lengths###but the tree should have branch lengths so not sure what this error means.
