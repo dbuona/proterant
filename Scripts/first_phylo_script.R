@@ -37,10 +37,10 @@ pruned.by.anthy<-drop.tip(treee,to.prune)
 plot(pruned.by.anthy)
 mytree.names<-pruned.by.anthy$tip.label
 ### 108 of my species were in the tree. Which species didn't male it
-###Add in the remaining ones
-species<-c("Acer_barbatum","Acer_nigrum","Aesculus_octandra","Carya_aquatica","Carya_illinoiensis","Carya_laciniosa","Celtis_tenuifolia","Fraxinus_pensylvanica","Gymnocladus_dioicus","Malus_coronaria","Populus_heterophylla","Prunus_nigra","Quercus_prinoides","Quercus_coccinea","Quercus_ellipsoidalis","Quercus_douglasii","Quercus_muehlenbergii","Quercus_nuttallii","Quercus_phellos","Quercus_prinus","Salix_nigra","Sorbus_americana","Tilia_heterophylla","Ulmus_thomasii")
- for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anthy,species[i],where="random")
- plotTree(pruned.by.anthy,ftype="i")
+###Add in the remaining ones, need to figure out how to do this with out dropping banch lengths, perhaps with pex function congeneric.merge
+#species<-c("Acer_barbatum","Acer_nigrum","Aesculus_octandra","Carya_aquatica","Carya_illinoiensis","Carya_laciniosa","Celtis_tenuifolia","Fraxinus_pensylvanica","Gymnocladus_dioicus","Malus_coronaria","Populus_heterophylla","Prunus_nigra","Quercus_prinoides","Quercus_coccinea","Quercus_ellipsoidalis","Quercus_douglasii","Quercus_muehlenbergii","Quercus_nuttallii","Quercus_phellos","Quercus_prinus","Salix_nigra","Sorbus_americana","Tilia_heterophylla","Ulmus_thomasii")
+ #for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anthy,species[i],where="random")
+ #plotTree(pruned.by.anthy,ftype="i")
  mytree.names<-pruned.by.anthy$tip.label
  setdiff(namelist,mytree.names) 
  ##forwhatever reason, 15 species could not be added (8 quercus, 1 ulmus, 1 tilia, sorbus, salix, populus and gymocladus)
@@ -87,9 +87,9 @@ plot.phylo(pruned.by.anthy,show.tip.label = TRUE, tip.color= final.df$pro, adj=.
 ###this worked! green=proteranthous, red= non-proteranthous, black= NA
 ###method below doesnt work
 x<-final.df$Proteranthous
+names(x)=pruned.by.anthy$tip.label
+
 phylosig(pruned.by.anthy, x, method="lambda", test=TRUE, nsim=1000, se=NULL, start=NULL,
          control=list())
 
 
-
-###Error in vcv.phylo(tree) : the tree has no branch lengths###but the tree should have branch lengths so not sure what this error means.
