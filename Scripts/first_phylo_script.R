@@ -94,5 +94,5 @@ names(x)=pruned.by.anthy$tip.label
 
 phylosig(pruned.by.anthy, x, method="lambda", test=TRUE, nsim=1000, se=NULL, start=NULL,
          control=list())
-
+help("phylosig")
 
