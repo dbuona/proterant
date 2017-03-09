@@ -24,10 +24,12 @@ d<-read.csv("data/hf003-06-mean-spp.csv",header=TRUE)
 hf<- filter(hf, Site == "hf")
 hf$gdd <- hf$AirT - 5
 hf$gdd <-ifelse(hf$gdd>0, hf$gdd, 0)
+hf$gdd <-ifelse(!is.na(hf$gdd), hf$gdd, 0)
 hf$count <- ave(
   hf$gdd, hf$Year, 
   FUN=function(x) cumsum(c(0, head(x, -1)))
 )
+hf<-filter(hf,Year>=1990)
 
 # Clean up dataframes and join
 hf<-rename(hf, year=Year)
@@ -35,6 +37,7 @@ d<-d%>%
   dplyr::select(year,species, bb.jd,l75.jd,fbb.jd,fopn.jd)
 d<- as.data.frame(rapply(object = d, f = round, classes = "numeric", how = "replace", digits = 0)) 
 df<-left_join(hf, d)
+
 ###species with enough values (from below)
 df<-filter(df, species %in% c( "ACPE","ACRU", "ACSA","BEAL","FRAM","QURU"))
 ##make subset for each phenophase
@@ -85,4 +88,6 @@ bb
 l75
 fbb
 fopn
-
+###Things to consider:
+#Pattern 1: 1 phenophase considerably more varlaible over time suggest different cues but could also by likely hood to accumulate gdds later in the season
+#Pattern 2: if tempurature is main cue, GDD shoudl be minimally varaible. compare varience over time between phenophases within species

@@ -1,4 +1,5 @@
 ##basic exploration of harvard forest data
+###offset (time between 1 phenophase and the other) would give you the ability to predict loss of hysteranthy once sensativities have been calculated
 rm(list=ls()) # remove everything currently held in the R memory
 options(stringsAsFactors=FALSE)
 graphics.off()
@@ -17,11 +18,18 @@ hf<-mutate(hf, buds_seq = bb.jd -fbb.jd)
 hf<-mutate(hf, functional_seq = l75.jd -fopn.jd)
 hf<-mutate(hf, inter_seq=bb.jd-fopn.jd)
 
-by_species <- hf %>% group_by(species)
+##fopn and l75
+by_species <- hf %>% group_by(species,year)
 by_species<-by_species %>% summarise(mean(functional_seq, na.rm = TRUE), sd(functional_seq, na.rm = TRUE))
 
-by_species2 <- hf %>% group_by(species)
+###fopn and lbb
+by_species2 <- hf %>% group_by(species,year)
 by_species2<-by_species2 %>% summarise(mean(inter_seq, na.rm = TRUE),sd(inter_seq, na.rm = TRUE))
 
-by_species3 <- hf %>% group_by(species)
+##lbb and fbb
+by_species3 <- hf %>% group_by(species,year)
 by_species3<-by_species3 %>% summarise(mean(buds_seq, na.rm = TRUE),sd(buds_seq, na.rm = TRUE))
+
+
+
+correlation between offset and overall growing degree days. ie can offselt of phenophases be explained by different growing degree needs?
