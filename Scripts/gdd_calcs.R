@@ -35,8 +35,9 @@ d<-d%>%
   dplyr::select(year,species, bb.jd,l75.jd,fbb.jd,fopn.jd)
 d<- as.data.frame(rapply(object = d, f = round, classes = "numeric", how = "replace", digits = 0)) 
 df<-left_join(hf, d)
-###species with enough values
+###species with enough values (from below)
 df<-filter(df, species %in% c( "ACPE","ACRU", "ACSA","BEAL","FRAM","QURU"))
+##make subset for each phenophase
 ###budburst
 df2<-df%>%
   dplyr::select(year,species, JD, bb.jd,l75.jd,fbb.jd,fopn.jd, count) %>%
@@ -49,7 +50,7 @@ df3<-df%>%
   filter(year>=1990)
 df3$day<- ifelse(df3$JD==df3$l75.jd,df3$JD,NA)
 df3<-na.omit(df3)
-###nowfor fbb.jd
+### fbb.jd
 df4<-df%>%
   dplyr::select(year,species, JD, bb.jd,l75.jd,fbb.jd,fopn.jd, count) %>%
   filter(year>=1990)
@@ -61,11 +62,7 @@ df5<-df%>%
   filter(year>=1990)
 df5$day<- ifelse(df5$JD==df5$fopn.jd,df5$JD,NA)
 df5<-na.omit(df5)
-
-###what's this:
-df2<-group_by(df2,species)
-#moved this up becasue these were the only species with enough data coverage
-#df<-filter(df, species %in% c( "ACPE","ACRU", "ACSA","BEAL","FAGR","FRAM","QURU"))
+#plots
 #bb
 q<-ggplot(df2, aes(x=year, y=bb.jd)) + geom_point()
 q+facet_wrap(~species)
