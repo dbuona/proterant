@@ -30,6 +30,15 @@ by_species2<-by_species2 %>% summarise(mean(inter_seq, na.rm = TRUE),sd(inter_se
 by_species3 <- hf %>% group_by(species,year)
 by_species3<-by_species3 %>% summarise(mean(buds_seq, na.rm = TRUE),sd(buds_seq, na.rm = TRUE))
 
+spec_tot<- hf %>% group_by(species)
+spec_tot<-spec_tot %>% summarise(mean(functional_seq, na.rm = TRUE), sd(functional_seq, na.rm = TRUE))
+
+spec_tot2<- hf %>% group_by(species)
+spec_tot2<-spec_tot2 %>% summarise(mean(inter_seq, na.rm = TRUE), sd(functional_seq, na.rm = TRUE))
+
+spec_tot3<- hf %>% group_by(species)
+spec_tot3<-spec_tot3 %>% summarise(mean(buds_seq, na.rm = TRUE), sd(functional_seq, na.rm = TRUE))
 
 
 correlation between offset and overall growing degree days. ie can offselt of phenophases be explained by different growing degree needs?
+

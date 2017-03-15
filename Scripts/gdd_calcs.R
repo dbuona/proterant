@@ -7,24 +7,16 @@
 rm(list=ls()) # remove everything currently held in the R memory
 options(stringsAsFactors=FALSE)
 graphics.off()
-
-# Load libraries
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-library(lubridate)
-
-# Set Working Directory
 setwd("~/Documents/git/proterant")
 hf<- read.csv("data/WeatherData.csv", header=TRUE)
 d<-read.csv("data/hf003-06-mean-spp.csv",header=TRUE)
-
+sub<-filter(hf,Year=="2001")
 # Harvard Forest
 # To double check my script is accurate
 hf<- filter(hf, Site == "hf")
 hf$gdd <- hf$AirT - 5
 hf$gdd <-ifelse(hf$gdd>0, hf$gdd, 0)
-hf$gdd <-ifelse(!is.na(hf$gdd), hf$gdd, 0) #added by dan
+hf$gdd <-ifelse(!is.na(hf$gdd), hf$gdd, 0) #added by dan-this is the problem line
 hf$count <- ave(
   hf$gdd, hf$Year, 
   FUN=function(x) cumsum(c(0, head(x, -1)))
@@ -92,4 +84,5 @@ fopn
 #Pattern 1: 1 phenophase considerably more varlaible over time suggest different cues but could also by likely hood to accumulate gdds later in the season
 #Pattern 2: if tempurature is main cue, GDD shoudl be minimally varaible. compare varience over time between phenophases within species
 #trouble shooting outliers
-dfsub<-filter(df,year=="2001")
+troubleshoot<-filter(df3,year=="2001")
+trouble<-filter(hf,year=="2001")
