@@ -7,13 +7,24 @@
 rm(list=ls()) # remove everything currently held in the R memory
 options(stringsAsFactors=FALSE)
 graphics.off()
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+
 setwd("~/Documents/git/proterant")
 hf<- read.csv("data/WeatherData.csv", header=TRUE)
+hf<-distinct(hf,Date,.keep_all = TRUE)
+
 d<-read.csv("data/hf003-06-mean-spp.csv",header=TRUE)
-sub<-filter(hf,Year=="2001")
+
+###removing duplicates trial
+#sub<-filter(hf,Year=="2001")
+#sub<-distinct(sub,Date)
+
 # Harvard Forest
 # To double check my script is accurate
-hf<- filter(hf, Site == "hf")
+#hf<- filter(hf, Site == "hf")
 hf$gdd <- hf$AirT - 5
 hf$gdd <-ifelse(hf$gdd>0, hf$gdd, 0)
 hf$gdd <-ifelse(!is.na(hf$gdd), hf$gdd, 0) #added by dan-this is the problem line
@@ -35,13 +46,13 @@ df<-filter(df, species %in% c( "ACPE","ACRU", "ACSA","BEAL","FRAM","QURU"))
 ##make subset for each phenophase
 ###budburst
 df2<-df%>%
-  dplyr::select(year,species, JD, bb.jd, count) %>%
+  dplyr::select(year,species, JD, bb.jd, tree.id,count) %>%
   filter(year>=1990)
 df2$day<- ifelse(df2$JD==df2$bb.jd,df2$JD,NA)
 df2<-na.omit(df2)
 ###l75
 df3<-df%>%
-  dplyr::select(year,species, JD,l75.jd, count) %>%
+  dplyr::select(year,species, JD,l75.jd,tree,id count) %>%
   filter(year>=1990)
 df3$day<- ifelse(df3$JD==df3$l75.jd,df3$JD,NA)
 df3<-na.omit(df3)
@@ -76,13 +87,19 @@ bb<-df2 %>% group_by(species) %>% summarise(mean(count), sd(count))
 l75<-df3 %>% group_by(species) %>% summarise(mean(count), sd(count))
 fbb<-df4 %>% group_by(species) %>% summarise(mean(count), sd(count))
 fopn<-df5 %>% group_by(species) %>% summarise(mean(count), sd(count))
-bb
-l75
-fbb
-fopn
-###Things to consider:
-#Pattern 1: 1 phenophase considerably more varlaible over time suggest different cues but could also by likely hood to accumulate gdds later in the season
-#Pattern 2: if tempurature is main cue, GDD shoudl be minimally varaible. compare varience over time between phenophases within species
-#trouble shooting outliers
-troubleshoot<-filter(df3,year=="2001")
-trouble<-filter(hf,year=="2001")
+
+colnames(bb) <- c("species","meanbb", "sdbb")
+colnames(l75) <- c("species","meanl75", "sdl75")
+colnames(fbb) <- c("species","meanfbb", "sdfbb")
+colnames(fopn) <- c("species","meanfopn", "sdfopn")
+
+burst<-mutate(bb,varybb= sdbb/meanbb)
+leaf<-mutate(l75,varyl75= sdl75/meanl75)
+fburst<-mutate(fbb,varyfbb= sdfbb/meanfbb)
+flower<-mutate(fopn,varyfopn= sdfopn/meanfopn)
+burst
+fburst
+leaf
+flower
+
+##good, need to redo with individual level observations in order to anova the vary
