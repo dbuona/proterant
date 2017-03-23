@@ -11,6 +11,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(lubridate)
+library(lme4)
 
 setwd("~/Documents/git/proterant")
 hf<- read.csv("data/WeatherData.csv", header=TRUE)
@@ -52,7 +53,7 @@ df2$day<- ifelse(df2$JD==df2$bb.jd,df2$JD,NA)
 df2<-na.omit(df2)
 ###l75
 df3<-df%>%
-  dplyr::select(year,species, JD,l75.jd,tree,id count) %>%
+  dplyr::select(year,species, JD,l75.jd,tree,id, count) %>%
   filter(year>=1990)
 df3$day<- ifelse(df3$JD==df3$l75.jd,df3$JD,NA)
 df3<-na.omit(df3)
