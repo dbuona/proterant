@@ -14,6 +14,7 @@ library(ggplot2)
 
 setwd("~/Documents/git/proterant/Data")
 hf<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
+mean_hf<-read.csv("hf003-06-mean-spp.csv",header = TRUE)
 hf<-mutate(hf, buds_seq = bb.jd -fbb.jd)
 hf<-mutate(hf, functional_seq = l75.jd -fopn.jd)
 hf<-mutate(hf, inter_seq=bb.jd-fopn.jd)
@@ -40,5 +41,8 @@ spec_tot3<- hf %>% group_by(species)
 spec_tot3<-spec_tot3 %>% summarise(mean(buds_seq, na.rm = TRUE), sd(functional_seq, na.rm = TRUE))
 
 
-correlation between offset and overall growing degree days. ie can offselt of phenophases be explained by different growing degree needs?
+#correlation between offset and overall growing degree days. ie can offselt of phenophases be explained by different growing degree needs?
+#look at slopes
+
+
 

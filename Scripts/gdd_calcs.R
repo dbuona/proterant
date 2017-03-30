@@ -47,13 +47,13 @@ df<-filter(df, species %in% c( "ACPE","ACRU", "ACSA","BEAL","FRAM","QURU"))
 ##make subset for each phenophase
 ###budburst
 df2<-df%>%
-  dplyr::select(year,species, JD, bb.jd, tree.id,count) %>%
+  dplyr::select(year,species, JD, bb.jd, count) %>%
   filter(year>=1990)
 df2$day<- ifelse(df2$JD==df2$bb.jd,df2$JD,NA)
 df2<-na.omit(df2)
 ###l75
 df3<-df%>%
-  dplyr::select(year,species, JD,l75.jd,tree,id, count) %>%
+  dplyr::select(year,species, JD,l75.jd, count) %>%
   filter(year>=1990)
 df3$day<- ifelse(df3$JD==df3$l75.jd,df3$JD,NA)
 df3<-na.omit(df3)
@@ -102,5 +102,6 @@ burst
 fburst
 leaf
 flower
+buds<-left_join(burst,fburst)
 
 ##good, need to redo with individual level observations in order to anova the vary

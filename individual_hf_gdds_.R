@@ -67,3 +67,5 @@ list_sp<- split(budbu, budbu$species)
 sapply(list_sp, function(x) cor(x$adj.bb,x$adj.fbb))
 t.test(budbu$sd.bb,budbu$sd.fbb)
 ###need to figure out a way to do this for each species... also remind me why i needed to standardize the sd with adj?
+
+
