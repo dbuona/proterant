@@ -52,8 +52,8 @@ recap<-df2 %>%
   group_by(tree.id,species) %>%
   summarise(mean.bb = mean(count),sd.bb=sd(count))
 #now divid sd, by mean
-
 recap<-mutate(recap, adj.bb= sd.bb/mean.bb)
+
 recapf<-df3 %>%
   group_by(tree.id,species) %>%
   summarise(mean.fbb = mean(count),sd.fbb=sd(count))
