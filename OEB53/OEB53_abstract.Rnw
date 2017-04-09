@@ -1,0 +1,16 @@
+\documentclass{article}
+\oddsidemargin -0.04cm   
+\evensidemargin -0.04cm
+\textwidth 16.59cm
+\textheight 21.94cm 
+\begin{document}
+Daniel Buonaiuto\\
+OEB53: Term paper abstract\\
+\\
+In many deciduous tree species, spring flowering proceeds leaf development (proteranthy), while in others, it is leaf expansion that occurs first (seranthy). It has been suggested that these floral-foliate phenological patterns may, in and of themselves, be adaptive. The dominant hypothesis in the literature is that proteranthy increases pollination efficiency for wind-pollinated taxa, though
+empirical evidence for this hypothesis is sparse. In part one of this paper, I review the support for this hypothesis and present several alternative hypothesizes. In part two, I will discuss the physiological and evolutionary constraints that may dictate floral-foliate phenological sequences in general, and in an era of global climate change.
+
+
+
+
+\end{document}
