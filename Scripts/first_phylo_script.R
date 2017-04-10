@@ -75,14 +75,7 @@ namelist2<-final.df$name
 namelist2==mytree.names
 final.df$name== mytree.names
 ###matches!
-###make column for coded hysteranthy classes all 6
-final.df["pro"]<-NA
-final.df$pro[final.df$Phen.sequence == "pro"] <- 1
-final.df$pro[final.df$Phen.sequence == "pro/syn"] <- 2
-final.df$pro[final.df$Phen.sequence== "syn"] <- 3
-final.df$pro[final.df$Phen.sequence== "syn/ser"] <- 4
-final.df$pro[final.df$Phen.sequence== "ser"] <- 5  
-final.df$pro[final.df$Phen.sequence== "hyst"] <- 6  
+
 ####now for functional
 final.df["func.pro"]<-NA
 final.df$func.pro[final.df$Phen.sequence == "pro"] <- 1
@@ -92,7 +85,7 @@ final.df$func.pro[final.df$Phen.sequence== "syn/ser"] <- 2
 final.df$func.pro[final.df$Phen.sequence== "ser"] <- 3  
 final.df$func.pro[final.df$Phen.sequence== "hyst"] <- 3 
 ##proteranthous as bianary
-final.df["bin.pro"]<-NA
+final.df[".pro"]<-NA
 final.df$bin.pro[final.df$Phen.sequence == "pro"] <- 1
 final.df$bin.pro[final.df$Phen.sequence == "pro/syn"] <- 1
 final.df$bin.pro[final.df$Phen.sequence== "syn"] <- 0
