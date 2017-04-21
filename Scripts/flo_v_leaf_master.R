@@ -25,7 +25,8 @@ d.spp<-read.csv("data/hf003-06-mean-spp.csv",header = TRUE)
 #I. Compare trends in flowering and leafout timing over the duration of the study 1990-2011
 ###currently using means calculated by O'Keefe (datasheet d.spp)
 ##plotting
-d.1<-filter(d.spp, species %in% c( "ACPE","ACRU", "ACSA","BEAL","FRAM","QURU")) #filter species where observation go full legnth of study
+#d.1<-filter(d.spp, species %in% c( "ACPE","ACRU", "ACSA","BEAL","FRAM","QURU")) #filter species where observation go full legnth of study
+d.1<-d.spp
 d.2<-gather(d.1,phenophase, eventday, bb.jd:fopn.jd)
 
 #d.1<-d.1 %>% group_by(year, species,phenophase) %>% summarise(meaneventday=mean(eventday))
