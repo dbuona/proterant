@@ -89,7 +89,7 @@ goodshrubs<-group_by(goodshrubs,sp,treatcode)
 goodshrubs<-gather(goodshrubs,phenophase,eventday,fday:lday)
 goodshrubs<-filter(goodshrubs, treatcode %in% c( "CL0","CS0", "WL0","WS0"))
 
-goodshrubs$sp[goodshrubs$sp == "CORCOR"] <- "C. cornuta"
+
 goodshrubs$sp[goodshrubs$sp == "ILEMUC"] <- "I. mucronata"
 goodshrubs$sp[goodshrubs$sp == "PRUPEN"] <- "P. pensylvanica"
 goodshrubs$sp[goodshrubs$sp == "CORCOR"] <- "C. cornuta"
@@ -102,10 +102,21 @@ goodshrubs$treatcode[goodshrubs$treatcode == "CL0"] <- "CL"
 goodshrubs$phenophase[goodshrubs$phenophase == "fday"] <- "flowering"
 goodshrubs$phenophase[goodshrubs$phenophase == "lday"] <- "leafing"
 
-q<-ggplot(goodshrubs, aes(x=treatcode, y=eventday, color=phenophase)) +
-  stat_summary()+labs(x="Treatment", y="Days since initiation")
-q+facet_wrap(~sp)
+goodshrubs$warm[goodshrubs$warm == 20] <- "warm"
+goodshrubs$warm[goodshrubs$warm == 15] <- "cool"
 
+goodshrubs$photo[goodshrubs$photo == 12] <- "long"
+goodshrubs$photo[goodshrubs$photo == 8] <- "short"
+
+colnames(goodshrubs)[7] <- "temperature"
+colnames(goodshrubs)[8] <- "photoperiod"
+
+
+q<-ggplot(goodshrubs, aes(x=temperature, y=eventday, color=photoperiod, shape=phenophase)) +stat_summary()
+ q+facet_wrap(~sp)+labs(x="temperature", y="days since initiation")
+ 
+ q<-ggplot(goodshrubs, aes(x=treatcode, y=eventday, color=phenophase)) +stat_summary()
+ q+facet_wrap(~sp)+labs(x="temperature", y="days since initiation")
 
 
 
