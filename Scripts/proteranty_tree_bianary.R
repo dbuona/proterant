@@ -21,7 +21,6 @@ setwd("~/Documents/git/proterant/input")
 treee<-read.tree("Vascular_Plants_rooted.dated.tre")
 #list of species in tree
 names.intree<-treee$tip.label
-
 ### read in data from michigan trees, format it like Zanne
 anthy<-read.csv("michigantrees_sequence.csv", header = TRUE)
 anthy$name<-paste(anthy$Genus,anthy$Species,sep="_")
@@ -30,7 +29,7 @@ namelist<-unique(anthy$name)
 ##Prune the tree
 to.prune<-which(!names.intree%in%namelist)
 pruned.by.anthy<-drop.tip(treee,to.prune)
-
+plot(pruned.by.anthy)
 ###what are the tip labels in pruned phylogeny?
 mytree.names<-pruned.by.anthy$tip.label
 
@@ -73,7 +72,7 @@ phylo.d(data = final.df,phy = pruned.by.anthy, names.col = name, binvar = pro, p
 ##try another way, comparative data objects should be able to just run
 
 phylo.d(d, binvar=pro)
-
+###make a name vector with pro values and try it in phylo d
 ###try with phylobase http://www2.hawaii.edu/~mbutler/PDFs/Ch10.Phylobase.pdf
 ###only works as continuous with column labels
 library(tidyverse)
