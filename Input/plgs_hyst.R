@@ -69,9 +69,17 @@ name.check(pruned.by.anthy, final.df)
 #model
 pro <- final.df[, "pro"]
 pol<- final.df[, "pol"]
+height<-final.df[,"heigh_height"]
 
-
-
-pglsModel2 <- gls(pro ~ pol, correlation = corBrownian(phy = pruned.by.anthy),
+pglsModel2 <- gls(pro ~ pol+height, correlation = corBrownian(phy = pruned.by.anthy),
                   data = final.df, method = "ML")
 anova(pglsModel2)
+###I think it needs to be a logistical regression as bianary
+
+library("phylolm")
+mod3<-phyloglm(pro~pol,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+         start.beta=NULL, start.alpha=NULL,
+         boot = 0, full.matrix = TRUE)
+summary(mod3)
+vcov(mod3)
+coef(mod3)
