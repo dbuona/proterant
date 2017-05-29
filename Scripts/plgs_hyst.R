@@ -160,3 +160,12 @@ mod8a<-phyloglm(pro~pol+height10,final.df, pruned.by.anthy, method = "logistic_M
 summary(mod8a)
 0.47130/4 #=0.117825
 0.31157/4 # 0.0778925
+
+######interactions#####3
+mod9<-glm(pro~pol*heigh_height,family = binomial(link="logit"),data=final.df)
+summary(mod9)
+
+mod9a<-phyloglm(pro~pol*heigh_height,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 30, log.alpha.bound = 4,
+                start.beta=NULL, start.alpha=NULL,
+                boot = 0, full.matrix = TRUE)
+summary(mod9a)
