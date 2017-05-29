@@ -105,7 +105,7 @@ inv.logit(-0.1823)
 inv.logit(-0.1911)
 0.1481481 +0.4545508+ 0.4523699
 
-mod2<-phyloglm(pro~Pollination-1,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+mod2<-phyloglm(pro~as.factor-1,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
               start.beta=NULL, start.alpha=NULL,
               boot = 0, full.matrix = TRUE)
 
@@ -113,7 +113,7 @@ summary(mod2)
 inv.logit(-1.65410)
 inv.logit(0.30585)
 inv.logit(-0.93966)
-
+## check crawley ### height first
 mod3<-phyloglm(pro~Pollination+class,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 20, log.alpha.bound = 4,
                start.beta=NULL, start.alpha=NULL,
                boot = 0, full.matrix = TRUE)
