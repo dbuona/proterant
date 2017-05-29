@@ -91,5 +91,6 @@ par(mfrow=c(1,2))
 final.df <- final.df[pruned.by.anthy$tip.label,]
 View(multiPhylosignal(final.df,pruned.by.anthy))
 
-
-
+##how many species are each
+count(final.df,pro)
+28+52
