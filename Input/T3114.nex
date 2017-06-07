@@ -1,0 +1,71 @@
+#NEXUS
+
+[!This data set was downloaded from TreeBASE, a relational database of phylogenetic knowledge. TreeBASE has been supported by the NSF, Harvard University, Yale University, SDSC and UC Davis. Please do not remove this acknowledgment from the Nexus file.
+
+
+Generated on June 07, 2017; 14:51 GMT
+
+TreeBASE (cc) 1994-2008
+
+Study reference:
+Grimm G., Renner S.S., Stamatakis A., & Hemleben V. 2006. A nuclear ribosomal DNA
+phylogeny of Acer inferred with maximum likelihood, splits graphs, and motif analyses
+of 606 sequences. Evolutionary Bioinformatics, 2: 279-294.
+
+TreeBASE Study URI:  http://purl.org/phylo/treebase/phylows/study/TB2:S2155]
+
+BEGIN TAXA;
+        TITLE  TaxonLabelSet13906;
+        DIMENSIONS NTAX=40;
+        TAXLABELS
+            Acer_Acer_groupA0_spp
+            Acer_Acer_groupA1_spp
+            Acer_Acer_groupB1_spp
+            Acer_Acer_groupB2_spp
+            Acer_Acer_groupB3_spp
+            Acer_Acer_groupB4_spp
+            Acer_Arguta_spp
+            Acer_Cissifolia_spp
+            Acer_Ginnala_spp
+            Acer_Grisea_spp
+            Acer_Lithocarpa_spp
+            Acer_Macrantha_type1a_spp
+            Acer_Macrantha_type1b_spp
+            Acer_Macrantha_type1c_spp
+            Acer_Macrantha_type2_spp
+            Acer_Palmata_spp_other
+            Acer_Platanoidea_spp_other
+            Acer_Rubra_spp
+            Acer_Trifida_spp_other
+            Acer_buergerianum
+            Acer_campestre
+            Acer_cappadocicum
+            Acer_carpinifolium
+            Acer_caudatum_multiserratum
+            Acer_caudatum_ukurunduense
+            Acer_distylum
+            Acer_erianthum
+            Acer_glabrum
+            Acer_laurinum
+            Acer_macrophyllum
+            Acer_mandshuricum
+            Acer_miyabei
+            Acer_negundo
+            Acer_nipponicum
+            Acer_pentaphyllum
+            Acer_pilosum
+            Acer_pseudoplatanus
+            Acer_spicatum
+            Dipteronia_dyeriana
+            Dipteronia_sinensis
+            ;
+END;
+
+BEGIN TREES;
+      TITLE Tb9272;
+      LINK TAXA = TaxonLabelSet13906;
+      TREE test_tree_ITS_40 = [&R] (Dipteronia_sinensis,(Acer_glabrum,((((Acer_pilosum,(((Acer_buergerianum,Acer_Trifida_spp_other),Acer_mandshuricum),Acer_pentaphyllum,Acer_Grisea_spp)),(Acer_Rubra_spp,Acer_laurinum)),((Acer_carpinifolium,((Acer_Acer_groupA1_spp,Acer_Acer_groupB1_spp,Acer_Acer_groupB2_spp),Acer_pseudoplatanus,(Acer_Acer_groupB3_spp,Acer_Acer_groupB4_spp))),Acer_Acer_groupA0_spp,Acer_Ginnala_spp)),(((Acer_spicatum,(Acer_caudatum_multiserratum,Acer_caudatum_ukurunduense)),(Acer_negundo,Acer_Cissifolia_spp),(Acer_Arguta_spp,(Acer_erianthum,Acer_Palmata_spp_other))),(Dipteronia_dyeriana,(Acer_distylum,Acer_nipponicum))),((Acer_Macrantha_type2_spp,Acer_Lithocarpa_spp),(Acer_macrophyllum,(Acer_cappadocicum,(Acer_Platanoidea_spp_other,Acer_campestre,Acer_miyabei))),(Acer_Macrantha_type1c_spp,Acer_Macrantha_type1b_spp,Acer_Macrantha_type1a_spp)))));
+[!  TreeBASE tree URI: http://purl.org/phylo/treebase/phylows/tree/TB2:Tr3114]
+
+
+END;
