@@ -96,57 +96,52 @@ library("phylolm")
 ######model for heigh height only
 mod4<-glm(pro~heigh_height,family = binomial(link="logit"),data=final.df)
 summary(mod4)
-inv.logit(coef(mod4)[1]+coef(mod4)[2]*mean(final.df$heigh_height))
-mean(final.df$heigh_height)
-###results:
-#=.3420594 at mean height of 20.275 meters
-#probability of switch to proteranthy with every increased meter in heigh_height
-.06413/4
-#0.016325
+
+library(boot)
 
 mod4a<-phyloglm(pro~heigh_height,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
 start.beta=NULL, start.alpha=NULL,
 boot = 0, full.matrix = TRUE)
 summary(mod4a)
-0.034187/4
-#0.00854675
 
 ###now as catogorical
 mod5<-glm(pro~class,family = binomial(link="logit"),data=final.df)
 summary(mod5)
-0.3788/4
-#=0.09
+
 
 mod5a<-phyloglm(pro~class,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
                 boot = 0, full.matrix = TRUE)
 summary(mod5a)
--0.00034306/4
-#-8.5765e-05
+
 ##############bianaryxbianary for polliantion syndrome and hysteranthy##http://data.princeton.edu/wws509/notes/c3.pdf
 mod6<-glm(pro~pol,family = binomial(link="logit"),data=final.df)
 summary(mod6)
-1.5311/4
-##.382775 ~40%
+###better interpretation
+inv.logit(-1.5755)# = 0.1714337
+-1.5755+1.5311 #=-0.0444
+inv.logit(-0.0444)#= 0.4889018
+
+#17% likelihood insect pollianted will be hysteranthous
+#48% likeligood wind pollinated will be hysteranthous
+
 mod6a<-phyloglm(pro~pol,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
                 boot = 0, full.matrix = TRUE)
 summary(mod6a)
-0.78879/4
-###0.197 ~20% chance you become hysteranthous if you switch from insect to wind pollination
-
+inv.logit(-1.41260) #-.1958243
+-1.41260+0.78879 #-0.62381
+inv.logit(-0.62381) #= 0.3489154
+##there is a 34% likilihood something that is wind pollinated is hysteranthous when compared to 19% if insect
 ##########################################################height and pollination syndrome#############
 mod7<-glm(pro~pol+heigh_height,family = binomial(link="logit"),data=final.df)
 summary(mod7)
-1.35708/4 #=0.33927
-0.02552/4 #=0.00638
 
 mod7a<-phyloglm(pro~pol+heigh_height,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 30, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
                 boot = 0, full.matrix = TRUE)
 summary(mod7a)
-1.049309/4  #=0.2623273
-0.015686/4 #=0.0039215
+
 
 #rescale heigh_height
 height10<-final.df$heigh_height/10
@@ -169,3 +164,6 @@ mod9a<-phyloglm(pro~pol*heigh_height,final.df, pruned.by.anthy, method = "logist
                 start.beta=NULL, start.alpha=NULL,
                 boot = 0, full.matrix = TRUE)
 summary(mod9a)
+library(brms)
+help(brm)
+binomial(link = "logit")
