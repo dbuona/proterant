@@ -1,29 +1,10 @@
 ###This will be the source code for calling my phylogenetic tree adn michigan trees data to be used in further analysis
-rm(list=ls()) # remove everything currently held in the R memory
-options(stringsAsFactors=FALSE)
-graphics.off()
 #load packages
-
-library(ape)
-library(phytools)
-library(geiger)
-library(gbm)
-library(pez)
-library(dplyr)
-library(tidyr)
-library(caper)
-library(picante)
-
-setwd("~/Documents/git/proterant/input")
-
-###read in tree from Zanne et al
-treee<-read.tree("Vascular_Plants_rooted.dated.tre")
-
 
 #list of species in tree
 names.intree<-treee$tip.label
-### read in data from michigan trees, format it like Zanne
-anthy<-read.csv("michigantrees_sequence.csv", header = TRUE)
+
+#dataformat it like Zanne
 anthy$name<-paste(anthy$Genus,anthy$Species,sep="_")
 
 # list of my species myspecies

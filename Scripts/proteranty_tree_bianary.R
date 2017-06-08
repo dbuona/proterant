@@ -71,7 +71,7 @@ d
 phylo.d(data = final.df,phy = pruned.by.anthy, names.col = name, binvar = pro, permut = 1000, rnd.bias = NULL)
 ##try another way, comparative data objects should be able to just run
 
-phylo.d(d, binvar=pro)
+
 ###make a name vector with pro values and try it in phylo d
 ###try with phylobase http://www2.hawaii.edu/~mbutler/PDFs/Ch10.Phylobase.pdf
 ###only works as continuous with column labels

@@ -66,9 +66,9 @@ final.df$pol[final.df$Pollination == "wind"] <- 1
 
 ###now height
 final.df$class<-NA
-final.df<- within(final.df, class[heigh_height<10]<-1)
-final.df<- within(final.df, class[heigh_height>=10 & heigh_height <20]<-2)
-final.df<- within(final.df, class[heigh_height>=20]<-3)
+final.df<- within(final.df, class[heigh_height<10]<-0)
+final.df<- within(final.df, class[heigh_height>=10 & heigh_height <20]<-1)
+final.df<- within(final.df, class[heigh_height>=20]<-2)
 
 
 ###make factors for bianary traits
