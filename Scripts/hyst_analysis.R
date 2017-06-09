@@ -95,10 +95,16 @@ inv.logit(coef(mod3a)[1]+coef(mod3a)[2]+coef(mod3a)[3])#= 0.3534184  if you are 
 library("brms")
 library("MCMCglmm")
 
+pruned.by.anthy$node.label<-""
+inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = FALSE)
+###only works if i chcange scale to false ###does this matter??
+A <- solve(inv.phylo$Ainv)
+rownames(A) <- rownames(inv.phylo$Ainv)
 
-model_simple <- brm(pro ~ pol +class2+ (1|pruned.by.anthy), data = final.df, 
-                    family = bernoulli(link = "logit"), cov_ranef = list(phylo = A))
+final.df<-rownames_to_column(final.df, "name")
+model_simple <- brm(pro ~ pol +class2+ (1|name), data = final.df, 
+                    family = bernoulli(link = "logit"), cov_ranef = list(pruned.by.anthy = A))
 
-                   
-
-
+library(shinystan)                   
+launch_shiny(model_simple, rstudio = getOption("shinystan.rstudio"))
+summary(model_simple)
