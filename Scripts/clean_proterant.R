@@ -71,6 +71,7 @@ final.df2$shrink<-NA
 final.df2$shrink<-ifelse(is.na(final.df2$michpro)& is.na(final.df2$silvpro), 1,0)
 final.df2<-filter(final.df2, shrink==0)
 
+
 final.df2$dum<-NA
 final.df2$proM<-ifelse(is.na(final.df2$proM) , final.df2$michpro, final.df2$proM)
 ##make integrated resposne column that favors silvics
