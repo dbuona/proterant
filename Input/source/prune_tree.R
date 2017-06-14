@@ -61,16 +61,29 @@ final.df$pol<-as.integer(final.df$pol)
 
 ##make height catagorical
 final.df$class<-NA
-final.df<- within(final.df, class[heigh_height<10]<-0)
-final.df<- within(final.df, class[heigh_height>=10 & heigh_height <20]<-1)
-final.df<- within(final.df, class[heigh_height>=20]<-2)
+final.df<- within(final.df, class[heigh_height<10]<-"0shrub")
+final.df<- within(final.df, class[heigh_height>=10 & heigh_height <20]<-"1smalltree")
+final.df<- within(final.df, class[heigh_height>=20]<-"2talltree")
 
 ##make it just shrub vs. tree
 final.df$class2<-NA
 final.df<- within(final.df, class2[heigh_height<=15]<-0)
 final.df<- within(final.df, class2[heigh_height>15]<-1)
 
+###reduce number variables for columns for flower class
+final.df<- within(final.df, flower_class[flower_class=="polygamo_monecious"]<-"monoecious")
+final.df<- within(final.df, flower_class[flower_class=="polygamo_dioecious"]<-"dioecious")
+final.df<- within(final.df, flower_class[flower_class=="polygamous"]<-"perfect")
 
+#dummy variable flower class
+final.df$flo_type<-NA
+final.df<- within(final.df, flo_type[flower_class=="perfect"]<-"0perfect")
+final.df<- within(final.df, flo_type[flower_class=="monoecious"]<-"1monoecious")
+final.df<- within(final.df, flo_type[flower_class=="dioecious"]<-"2dioecious")
+
+##try collapsing tolerance
+final.df<- within(final.df, shade_tol[shade_tol=="very_tolerant"]<-"tolerant")
+final.df<- within(final.df, shade_tol[shade_tol=="very_intolerant"]<-"intolerant")
 #rescale height to be in 10 meter increments
 height10<-final.df$heigh_height/10
 
