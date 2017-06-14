@@ -17,15 +17,11 @@ pruned.by.anthy<-drop.tip(treee,to.prune)
 ###what are the tip labels in pruned phylogeny?
 mytree.names<-pruned.by.anthy$tip.label
 
-intersect(namelist,mytree.names) #80 species include
+intersect(namelist,mytree.names) #107 species include
 
-setdiff(namelist,mytree.names) #14 species did not make it
+setdiff(namelist,mytree.names) #30 species did not make it
 
-##Add missing species
-#[1] "Populus_heterophylla"  "Salix_nigra"           "Gymnocladus_dioicus"   "Malus_coronaria"       "Sorbus_americana"      "Prunus_nigra"         
-#[7] "Ulmus_thomasii"        "Celtis_tenuifolia"     "Quercus_muehlenbergii" "Quercus_prinoides"     "Quercus_coccinea"      "Quercus_ellipsoidalis"
-#[13] "Carya_lacinosa"        "Acer_nigrum" 
-###or not
+
 
 ###format the data in the same order as the tree
 final.df<-anthy[match(mytree.names, anthy$name),]
@@ -54,9 +50,10 @@ final.df$Pollination[final.df$name == "Acer_rubrum"] <- "wind"
 final.df$Pollination[final.df$name == "Acer_saccharinum"] <- "wind"
 final.df$Pollination[final.df$name == "Acer_saccharum"] <- "wind"
 
-final.df["pol"]<-0
+final.df["pol"]<-0 ### note, "ambo is coded as 0 right now"
 final.df$pol[final.df$Pollination == "insect"] <- 0
 final.df$pol[final.df$Pollination == "wind"] <- 1
+
 
 final.df$pro<-as.integer(final.df$pro)
 final.df$pol<-as.integer(final.df$pol)
