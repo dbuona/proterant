@@ -135,7 +135,7 @@ inv.logit(coef(mod5a)[1]+coef(mod5a)[2]) # doesnt exist
 
 
 
-stop("just stop for now")
+#stop("just stop for now")
 #########That was fun####################Nowdoit in BRMS####
 library("brms")
 library("MCMCglmm")
