@@ -21,47 +21,11 @@ is.ultrametric(treee)### is not ultrametric
 anthy<-read.csv("michigantrees_sequence.csv", header = TRUE)
 source("source/prune_tree.R")
 
-
-#####compute phylo.d########################################################
-#final.df<-select_(final.df,"name","pro","pol")
-#final.df<-filter(final.df, name== c(namelist2))
-#which(final.df$name%in%pruned.by.anthy$tip.label)
-#which(pruned.by.anthy$tip.label%in%final.df$name)
-#pruned.by.anthy$node.label<-""
-#phylo.d(data = final.df,phy = pruned.by.anthy, names.col = tip.label, binvar = pro, permut = 1000, rnd.bias = NULL)
-#d<-comparative.data(pruned.by.anthy,final.df,name, na.omit = FALSE)
-#d
-
-#phylo.d(data = final.df,phy = pruned.by.anthy, names.col = name, binvar = pro, permut = 1000, rnd.bias = NULL)
 #############################################################################
 ####PGLS models for height and pollination syndrome##########################
 library("phylolm")
 #make $name row names
 final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
-
-##### model for pollin syndroma height as continueous--difficult to intrepret but see gellman
-#mod1<-glm(pro~pol+heigh_height,family = binomial(link="logit"),data=final.df)
-#summary(mod1)
-
-#mod1a<-phyloglm(pro~pol+heigh_height,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
-                #start.beta=NULL, start.alpha=NULL,
-                #boot = 0, full.matrix = TRUE)
-#summary(mod1a)
-
-######PGLS models for height as discrete (3 classes) pollin syndrome############################
-mod2<-glm(pro~pol+class,family = binomial(link="logit"),data=final.df)
-summary(mod2)
-inv.logit(coef(mod2)[1]) #insect shrub
-inv.logit(coef(mod2)[1]+coef(mod2)[2])# wind shrub
-inv.logit(coef(mod2)[1]+coef(mod2)[3])# insect small tree
-inv.logit(coef(mod2)[1]+coef(mod2)[4]) # insect large tree
-inv.logit(coef(mod2)[1]+coef(mod2)[2]+coef(mod2)[3])# wind small tree
-inv.logit(coef(mod2)[1]+coef(mod2)[2]+coef(mod2)[4])# wind large tree
-
-mod2a<-phyloglm(pro~pol+class,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
-                start.beta=NULL, start.alpha=NULL,
-                boot = 0, full.matrix = TRUE)
-summary(mod2a)
 
 ######PGLS models for shrub/tree bianary and pollin syndrome (this is model i think i care about the most #################
 mod3<-glm(pro~pol+class2,family = binomial(link="logit"),data=final.df)
@@ -95,7 +59,7 @@ inv.logit(coef(mod4)[1]+coef(mod4)[2]+coef(mod4)[3]+coef(mod4)[5]) #dio wind tre
 inv.logit(coef(mod4)[1]+coef(mod4)[2]+coef(mod4)[5]) #dio wind shrub
 
 
-mod4a<-phyloglm(pro~pol+class+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+mod4a<-phyloglm(pro~pol+class2+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
                 boot = 0, full.matrix = TRUE)
 summary(mod4a)
@@ -110,29 +74,13 @@ inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]+coef(mod4a)[5]) #dio wind
 inv.logit(coef(mod4a)[1]+coef(mod4)[2]+coef(mod4a)[5])
 
 
-mod5<-glm(pro~pol+class2+flo_type+shade_tol,family = binomial(link="logit"),data=final.df)
-summary(mod5)
-
-mod5a<-phyloglm(pro~pol+class+flo_type+shade_tol,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 20, log.alpha.bound = 4,
-         start.beta=NULL, start.alpha=NULL,
-         boot = 0, full.matrix = TRUE)
-summary(mod5a)
-
-####just no flower type
-mod6<-glm(pro~pol+class2+shade_tol,family = binomial(link="logit"),data=final.df)
-summary(mod6)
-
-
 
 ##metrics
 #wind pollinated shrubs
-filter(final.df, pol==1 & class=="0shrub")
-filter(final.df, pol==1 & class2==1)
-filter(final.df,pol==1 &flo_type=="0perfect"& flo_type=="0perfect") #just elms
-filter(final.df,pol==1 &flo_type=="0perfect" & class=="0shrub") ##doesnt exist 
-#so
-inv.logit(coef(mod5a)[1]+coef(mod5a)[2]) # doesnt exist
-
+dim(filter(final.df, pol==1 & class=="0shrub"))
+dim(filter(final.df, pol==1 & class2==1))
+dim(filter(final.df,pol==1 &flo_type=="0perfect"& flo_type=="0perfect")) #just elms
+dim(filter(final.df,pol==1 &flo_type=="0perfect" & class=="0shrub")) ##doesnt exist 
 
 
 #stop("just stop for now")
@@ -152,13 +100,21 @@ inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 final.df<-rownames_to_column(final.df, "name")
-help(brm)
-model_simple <- brm(pro ~ pol +class2+ (1|name), data = final.df, 
-                    family = bernoulli(link = "logit"), cov_ranef = list(pruned.by.anthy = A), iter= 10000)
-###priors?
-#cov_ranef = list(pruned.by.anthy = A),
+
+model_simple <- brm(pro~ pol+class2 + (1|name), data = final.df, 
+ family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),
+ prior = c(prior(normal(0, 5), "b"),
+ prior(normal(0, 5), "Intercept"),
+ prior(student_t(3, 0, 10), "sd")))                    
+######need help determining priors--and interpretting output. This provides very different estimate than plgs
 pairs(model_simple)
 summary(model_simple)
+
 library(shinystan)                   
 launch_shiny(model_simple, rstudio = getOption("shinystan.rstudio"))
+
+#####compute phylo.d########################################################
+#final.df<-rownames_to_column(final.df  ,var="rowname")
+#phylo.d(data = final.df,phy = pruned.by.anthy, names.col = rowname, binvar = pro, permut = 1000, rnd.bias = NULL)
+
 
