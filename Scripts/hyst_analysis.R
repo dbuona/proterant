@@ -13,7 +13,7 @@ library(caper)
 library(picante)
 library(tidyverse)
 library(boot)
-
+#https://academic-oup-com.ezp-prod1.hul.harvard.edu/sysbio/article-lookup/doi/10.1093/sysbio/syp074 Garland and Ives 2010
 
 ###read in tree from Zanne et al
 treee<-read.tree("Vascular_Plants_rooted.dated.tre")
