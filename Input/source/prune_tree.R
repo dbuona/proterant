@@ -40,6 +40,14 @@ final.df$pro[final.df$Phen.sequence== "syn/ser"] <- 0
 final.df$pro[final.df$Phen.sequence== "ser"] <- 0 
 final.df$pro[final.df$Phen.sequence== "hyst"] <- 0
 
+final.df["pro2"]<-NA
+final.df$pro2[final.df$Phen.sequence == "pro"] <- 1
+final.df$pro2[final.df$Phen.sequence == "pro/syn"] <- 1
+final.df$pro2[final.df$Phen.sequence== "syn"] <- 1
+final.df$pro2[final.df$Phen.sequence== "syn/ser"] <- 0
+final.df$pro2[final.df$Phen.sequence== "ser"] <- 0 
+final.df$pro2[final.df$Phen.sequence== "hyst"] <- 0
+
 ###now make pollination syndrom bianary
 ##change acer
 final.df$Pollination[final.df$name == "Acer_spicatum"] <- "insect"
@@ -84,8 +92,32 @@ final.df<- within(final.df, flo_type[flower_class=="dioecious"]<-"2dioecious")
 ##try collapsing tolerance
 final.df<- within(final.df, shade_tol[shade_tol=="very_tolerant"]<-"tolerant")
 final.df<- within(final.df, shade_tol[shade_tol=="very_intolerant"]<-"intolerant")
-#rescale height to be in 10 meter increments
-height10<-final.df$heigh_height/10
+unique(final.df$shade_tol)
+
+####option for bianry tolerance
+final.df$shade_bin<-NA
+final.df<- within(final.df, shade_bin[shade_tol=="moderately_tolerant"]<-"tolerant")
+final.df<- within(final.df, shade_bin[shade_tol=="tolerant"]<-"tolerant")
+final.df<- within(final.df, shade_bin[shade_tol=="intolerant"]<-"intolerant")
+
+### deal with av_fruit_time
+hist(final.df$av_fruit_time)
+fruits<-final.df$av_fruit_time
+final.df<-filter(final.df, !is.na(av_fruit_time))
+mean(final.df$av_fruit_time)
+median(final.df$av_fruit_time)
+
+final.df$fruit_bin<-NA
+final.df<- within(final.df, fruit_bin[av_fruit_time<=8.5]<-0)
+final.df<- within(final.df, fruit_bin[av_fruit_time>8.5]<-1)
+
+pruned.by.anthy$node.label<-""
+###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
+is.ultrametric(pruned.by.anthy)
+plot(pruned.by.anthy)
+pruned.by.anthy<-chronoMPL(pruned.by.anthy)
+is.ultrametric(pruned.by.anthy)
+plot(pruned.by.anthy)
 
 stop("this is not an error, just tells you we've finished the code")
 
