@@ -20,7 +20,42 @@ mytree.names<-pruned.by.anthy$tip.label
 intersect(namelist,mytree.names) #107 species include
 
 setdiff(namelist,mytree.names) #30 species did not make it
+###
+###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
+is.ultrametric(pruned.by.anthy)
+#plot(pruned.by.anthy)
+pruned.by.anthy<-chronoMPL(pruned.by.anthy)
+is.ultrametric(pruned.by.anthy)
+#plot(pruned.by.anthy)
+#adding species to tree
+pruned.by.anthy
 
+
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Prunus_nigra",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_coccinea",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Amelanchier_laevis",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_pedicellaris",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_nigra",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_ellipsoidalis",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Amelanchier_sanguinea",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_succulenta",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_serissima",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_lacinosa",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_candida",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Malus_coronaria",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_muehlenbergii",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_crus-galli",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_humilis",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Vaccinium_myrtilloides",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Sorbus_americana",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_prinoides",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Alnus_viridus",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_macrosperma",genus=NULL,where="random")
+
+mytree.names<-pruned.by.anthy$tip.label
 
 
 ###format the data in the same order as the tree
@@ -29,6 +64,8 @@ namelist2<-final.df$name
 namelist2==mytree.names
 final.df$name== mytree.names
 
+
+setdiff(mytree.names,namelist2)
 
 
 ####add comlumns for analysis
@@ -112,12 +149,7 @@ final.df<- within(final.df, fruit_bin[av_fruit_time<=8.5]<-0)
 final.df<- within(final.df, fruit_bin[av_fruit_time>8.5]<-1)
 
 pruned.by.anthy$node.label<-""
-###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
-is.ultrametric(pruned.by.anthy)
-plot(pruned.by.anthy)
-pruned.by.anthy<-chronoMPL(pruned.by.anthy)
-is.ultrametric(pruned.by.anthy)
-plot(pruned.by.anthy)
+
 
 stop("this is not an error, just tells you we've finished the code")
 

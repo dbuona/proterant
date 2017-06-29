@@ -34,10 +34,7 @@ lapply(final.df, class) ### does this matter for bianary?
 ######PGLS models for shrub/tree bianary and pollin syndrome #################
 mod3<-glm(pro~pol+class2,family = binomial(link="logit"),data=final.df)
 summary(mod3)
-inv.logit(coef(mod3)[1])
-inv.logit(coef(mod3)[1]+coef(mod3)[2])
-inv.logit(coef(mod3)[1]+coef(mod3)[3])
-inv.logit(coef(mod3)[1]+coef(mod3)[2]+coef(mod3)[3])
+
 
 ###same as above by phylogenetically corrected
 mod3a<-phyloglm(pro~pol+class2,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
@@ -51,39 +48,18 @@ mod3aa<-phyloglm(pro2~pol+class2,final.df, pruned.by.anthy, method = "logistic_M
                 boot = 0, full.matrix = TRUE)
 summary(mod3aa)
 
-inv.logit(coef(mod3aa)[1])#if you are insect shrub
-inv.logit(coef(mod3aa)[1]+coef(mod3aa)[2])
-inv.logit(coef(mod3a)[1]+coef(mod3a)[3])
-inv.logit(coef(mod3a)[1]+coef(mod3a)[2]+coef(mod3a)[3])
 
 
 #########################################################add flower type
 mod4<-glm(pro~pol+class2+flo_type,family = binomial(link="logit"),data=final.df)
 summary(mod4)
-inv.logit(coef(mod4)[1])#  if you are perfect insect shrub
-inv.logit(coef(mod4)[1]+coef(mod4)[2]) #perfect wind shrub
-inv.logit(coef(mod4)[1]+coef(mod4)[3]) #perfect insect tree
-inv.logit(coef(mod4)[1]+coef(mod4)[4])#  monecious insect  shrub
-inv.logit(coef(mod4)[1]+coef(mod4)[2]+coef(mod4)[3]) #perfect wind tree
-inv.logit(coef(mod4)[1]+coef(mod4)[2]+coef(mod4)[3]+coef(mod4)[4]) # mono, wind, tree
-inv.logit(coef(mod4)[1]+coef(mod4)[2]+coef(mod4)[4]) # mono wind shrub
-inv.logit(coef(mod4)[1]+coef(mod4)[2]+coef(mod4)[3]+coef(mod4)[5]) #dio wind tree
-inv.logit(coef(mod4)[1]+coef(mod4)[2]+coef(mod4)[5]) #dio wind shrub
 
 
 mod4a<-phyloglm(pro~pol+class2+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
                 boot = 0, full.matrix = TRUE)
 summary(mod4a)
-inv.logit(coef(mod4a)[1])#  if you are perfect insect shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]) #perfect wind shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[3]) #perfect insect tree
-inv.logit(coef(mod4a)[1]+coef(mod4a)[4])#  monecious insect  shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]) #perfect wind tree
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]+coef(mod4a)[4]) # mono, wind, tree
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[4]) # mono wind shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]+coef(mod4a)[5]) #dio wind tree
-inv.logit(coef(mod4a)[1]+coef(mod4)[2]+coef(mod4a)[5])
+
 
 ####full model with everything bianary- exclude flo_type#########
 full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin,family = binomial(link="logit"),data=final.df)
@@ -96,13 +72,21 @@ full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin,final.df, pruned.by.anthy
 summary(full.modA)
 coef(full.modA)
 
+inv.logit(coef(full.modA)[1])
+inv.logit(coef(full.modA)[1]+coef(full.modA)[2])
+inv.logit(coef(full.modA)[1]+coef(full.modA)[2]+coef(full.modA)[5])
+inv.logit(coef(full.modA)[1]+coef(full.modA)[5])
+
 ###full phylogenetically, with hysteranthy to include synanthy
 full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot = 0, full.matrix = TRUE)
 summary(full.modAA)
 coef(full.modAA)
-
+inv.logit(coef(full.modAA)[1])
+inv.logit(coef(full.modAA)[1]+coef(full.modAA)[2])
+inv.logit(coef(full.modAA)[1]+coef(full.modAA)[2]+coef(full.modA)[5])
+inv.logit(coef(full.modAA)[1]+coef(full.modAA)[5])
 
 ##metrics
 #wind pollinated shrubs
@@ -151,4 +135,13 @@ launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
 #final.df<-rownames_to_column(final.df  ,var="rowname")
 #phylo.d(data = final.df,phy = pruned.by.anthy, names.col = name, binvar = pro, permut = 1000, rnd.bias = NULL)
 
-
+stop(not an error)
+inv.logit(coef(mod4a)[1])#  if you are perfect insect shrub
+inv.logit(coef(mod4a)[1]+coef(mod4a)[2]) #perfect wind shrub
+inv.logit(coef(mod4a)[1]+coef(mod4a)[3]) #perfect insect tree
+inv.logit(coef(mod4a)[1]+coef(mod4a)[4])#  monecious insect  shrub
+inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]) #perfect wind tree
+inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]+coef(mod4a)[4]) # mono, wind, tree
+inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[4]) # mono wind shrub
+inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]+coef(mod4a)[5]) #dio wind tree
+inv.logit(coef(mod4a)[1]+coef(mod4)[2]+coef(mod4a)[5])
