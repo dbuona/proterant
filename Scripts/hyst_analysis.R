@@ -42,24 +42,12 @@ mod3a<-phyloglm(pro~pol+class2,final.df, pruned.by.anthy, method = "logistic_MPL
                 boot = 0, full.matrix = TRUE)
 summary(mod3a)
 
+
 ####phylogenetically correlated with synanthy coded as hysteranthy########
 mod3aa<-phyloglm(pro2~pol+class2,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
                 boot = 0, full.matrix = TRUE)
 summary(mod3aa)
-
-
-
-#########################################################add flower type
-mod4<-glm(pro~pol+class2+flo_type,family = binomial(link="logit"),data=final.df)
-summary(mod4)
-
-
-mod4a<-phyloglm(pro~pol+class2+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
-                start.beta=NULL, start.alpha=NULL,
-                boot = 0, full.matrix = TRUE)
-summary(mod4a)
-
 
 ####full model with everything bianary- exclude flo_type#########
 full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin,family = binomial(link="logit"),data=final.df)
@@ -71,7 +59,8 @@ full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin,final.df, pruned.by.anthy
                 boot = 0, full.matrix = TRUE)
 summary(full.modA)
 coef(full.modA)
-
+vcov(full.modA)
+help(vcov)
 inv.logit(coef(full.modA)[1])
 inv.logit(coef(full.modA)[1]+coef(full.modA)[2])
 inv.logit(coef(full.modA)[1]+coef(full.modA)[2]+coef(full.modA)[5])
@@ -82,11 +71,13 @@ full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin,final.df, pruned.by.ant
                     start.beta=NULL, start.alpha=NULL,
                     boot = 0, full.matrix = TRUE)
 summary(full.modAA)
+
 coef(full.modAA)
 inv.logit(coef(full.modAA)[1])
 inv.logit(coef(full.modAA)[1]+coef(full.modAA)[2])
 inv.logit(coef(full.modAA)[1]+coef(full.modAA)[2]+coef(full.modA)[5])
 inv.logit(coef(full.modAA)[1]+coef(full.modAA)[5])
+vcov(full.modAA)
 
 ##metrics
 #wind pollinated shrubs
@@ -96,7 +87,7 @@ dim(filter(final.df,pol==1 &flo_type=="0perfect"& flo_type=="0perfect")) #just e
 dim(filter(final.df,pol==1 &flo_type=="0perfect" & class=="0shrub")) ##doesnt exist 
 #stop("just stop for now")
 
-#########That was fun####################Nowdoit in BRMS####
+#########That was fun####################Nowdoit in BRMS############################################
 
 library("brms")
 library("MCMCglmm")
@@ -135,13 +126,6 @@ launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
 #final.df<-rownames_to_column(final.df  ,var="rowname")
 #phylo.d(data = final.df,phy = pruned.by.anthy, names.col = name, binvar = pro, permut = 1000, rnd.bias = NULL)
 
-stop(not an error)
-inv.logit(coef(mod4a)[1])#  if you are perfect insect shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]) #perfect wind shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[3]) #perfect insect tree
-inv.logit(coef(mod4a)[1]+coef(mod4a)[4])#  monecious insect  shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]) #perfect wind tree
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]+coef(mod4a)[4]) # mono, wind, tree
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[4]) # mono wind shrub
-inv.logit(coef(mod4a)[1]+coef(mod4a)[2]+coef(mod4a)[3]+coef(mod4a)[5]) #dio wind tree
-inv.logit(coef(mod4a)[1]+coef(mod4)[2]+coef(mod4a)[5])
+
+
+
