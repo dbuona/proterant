@@ -56,11 +56,11 @@ library("MCMCglmm")
 #https://cran.r-project.org/web/packages/brms/README.html for some guideance
 
 #make all variable character for brms
-final.df$pro<-as.character(final.df$pro)
-final.df$pol<-as.character(final.df$pol)
-final.df$class2<-as.character(final.df$class2)
-final.df$shade_bin<-as.character(final.df$shade_bin)
-final.df$fruit_bin<-as.character(final.df$fruit_bin)
+final.df$pro<-as.numeric(final.df$pro)
+final.df$pol<-as.numeric(final.df$pol)
+final.df$class2<-as.numeric(final.df$class2)
+final.df$shade_bin<-as.numeric(final.df$shade_bin)
+final.df$fruit_bin<-as.numeric(final.df$fruit_bin)
 
 
 ##construct covarience matrix:
@@ -74,10 +74,10 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
  prior = c(prior(normal(0, 5), "b"),
  prior(normal(0, 5), "Intercept"),
- prior(student_t(3, 0, 10), "sd")))
+ prior(student_t(3, 0, 5), "sd")))
 summary(model)
 
-plot(marginal_effects(model,conditions="conditions", probs = c(0.05, 0.95)))
+plot(marginal_effects(model, probs = c(0.05, 0.95)))
 
 #check out the priors
 beta_draws <- as.matrix(model, pars = "b")
@@ -119,7 +119,7 @@ mcmc_areas(beta4_and_prior)
 ### seems okay but ask Lizzie
 #poster-r check
 plot(model)
-pp_check(model)
+
 
 
 

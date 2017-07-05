@@ -122,9 +122,9 @@ final.df<- within(final.df, flower_class[flower_class=="polygamous"]<-"perfect")
 
 #dummy variable flower class
 final.df$flo_type<-NA
-final.df<- within(final.df, flo_type[flower_class=="perfect"]<-"bisexual")
-final.df<- within(final.df, flo_type[flower_class=="monoecious"]<-"unisexual")
-final.df<- within(final.df, flo_type[flower_class=="dioecious"]<-"unisexual")
+final.df<- within(final.df, flo_type[flower_class=="perfect"]<-0)
+final.df<- within(final.df, flo_type[flower_class=="monoecious"]<-1)
+final.df<- within(final.df, flo_type[flower_class=="dioecious"]<-1)
 
 ##try collapsing tolerance
 final.df<- within(final.df, shade_tol[shade_tol=="very_tolerant"]<-"tolerant")
@@ -133,9 +133,9 @@ unique(final.df$shade_tol)
 
 ####option for bianry tolerance
 final.df$shade_bin<-NA
-final.df<- within(final.df, shade_bin[shade_tol=="moderately_tolerant"]<-"tolerant")
-final.df<- within(final.df, shade_bin[shade_tol=="tolerant"]<-"tolerant")
-final.df<- within(final.df, shade_bin[shade_tol=="intolerant"]<-"intolerant")
+final.df<- within(final.df, shade_bin[shade_tol=="moderately_tolerant"]<-1)
+final.df<- within(final.df, shade_bin[shade_tol=="tolerant"]<-1)
+final.df<- within(final.df, shade_bin[shade_tol=="intolerant"]<-0)
 
 ### deal with av_fruit_time
 hist(final.df$av_fruit_time)
@@ -150,6 +150,7 @@ final.df<- within(final.df, fruit_bin[av_fruit_time>8.5]<-1)
 
 pruned.by.anthy$node.label<-""
 
+final.df<-dplyr::select(final.df, name,pro,pol,class2,flo_type,fruit_bin,shade_bin)
 
 stop("this is not an error, just tells you we've finished the code")
 
