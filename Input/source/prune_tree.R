@@ -122,9 +122,9 @@ final.df<- within(final.df, flower_class[flower_class=="polygamous"]<-"perfect")
 
 #dummy variable flower class
 final.df$flo_type<-NA
-final.df<- within(final.df, flo_type[flower_class=="perfect"]<-"0perfect")
-final.df<- within(final.df, flo_type[flower_class=="monoecious"]<-"1monoecious")
-final.df<- within(final.df, flo_type[flower_class=="dioecious"]<-"2dioecious")
+final.df<- within(final.df, flo_type[flower_class=="perfect"]<-"bisexual")
+final.df<- within(final.df, flo_type[flower_class=="monoecious"]<-"unisexual")
+final.df<- within(final.df, flo_type[flower_class=="dioecious"]<-"unisexual")
 
 ##try collapsing tolerance
 final.df<- within(final.df, shade_tol[shade_tol=="very_tolerant"]<-"tolerant")

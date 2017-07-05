@@ -77,26 +77,67 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  prior(student_t(3, 0, 10), "sd")))
 summary(model)
 
-plot(marginal_effects(model, probs = c(0.05, 0.95)))
+plot(marginal_effects(model,conditions="conditions", probs = c(0.05, 0.95)))
+
+#check out the priors
+beta_draws <- as.matrix(model, pars = "b")
+dim(beta_draws)
+library(bayesplot)
+mcmc_intervals(beta_draws)
+
+beta2_and_prior <- cbind(
+  prior = rnorm(nrow(beta_draws), 0, 10), # draw from prior distribution
+  posterior = beta_draws[, 2]
+)
+mcmc_areas(beta2_and_prior) 
+###try it with other values
+in_draws <- as.matrix(model, pars = "Intercept")
+dim(in_draws)
+mcmc_intervals(in_draws)
+
+beta3_and_prior <- cbind(
+  prior = rnorm(nrow(in_draws), 0, 10), # draw from prior distribution
+  posterior = beta_draws[, 2]
+)
+mcmc_areas(beta3_and_prior) 
+###student T
+sd_draws <- as.matrix(model, pars = "sd")
+dim(sd_draws)
+mcmc_intervals(sd_draws)
+
+beta4_and_prior <- cbind(
+  prior = rnorm(nrow(sd_draws), 0, 10), # draw from prior distribution
+  posterior = beta_draws[, 2]
+)
+mcmc_areas(beta4_and_prior)
+
+#all together now
+
+mcmc_areas(beta2_and_prior)
+mcmc_areas(beta3_and_prior)
+mcmc_areas(beta4_and_prior)
+### seems okay but ask Lizzie
+#poster-r check
+plot(model)
+pp_check(model)
+
+
+
+
 
 ### not as good model
-model2 <- brm(pro~ pol+class2 +fruit_bin+shade_bin+ (1|name), data = final.df, 
-                    family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
-                    prior = c(prior(cauchy(0, 5), "b"),
-                              prior(cauchy(0, 5), "Intercept"),
-                              prior(student_t(3,0, 10), "sd")))   
+#model2 <- brm(pro~ pol+class2 +fruit_bin+shade_bin+ (1|name), data = final.df, 
+   #                 family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
+  #                  prior = c(prior(cauchy(0, 5), "b"),
+ #                             prior(cauchy(0, 5), "Intercept"),
+#                              prior(student_t(3,0, 10), "sd")))   
 
-
-summary(model2)
+#summary(model2)
 
 library(shinystan)                   
 launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
 
 
-#####compute phylo.d########################################################
-#final.df<-rownames_to_column(final.df  ,var="rowname")
-#phylo.d(data = final.df,phy = pruned.by.anthy, names.col = name, binvar = pro, permut = 1000, rnd.bias = NULL)
 
-myy<-final.df$pro
 
 
