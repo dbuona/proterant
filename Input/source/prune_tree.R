@@ -100,9 +100,6 @@ final.df$pol[final.df$Pollination == "insect"] <- 0
 final.df$pol[final.df$Pollination == "wind"] <- 1
 
 
-final.df$pro<-as.integer(final.df$pro)
-final.df$pol<-as.integer(final.df$pol)
-#final.df$class<-as.integer(final.df$class)
 
 ##make height catagorical
 final.df$class<-NA
@@ -148,9 +145,18 @@ final.df$fruit_bin<-NA
 final.df<- within(final.df, fruit_bin[av_fruit_time<=8.5]<-0)
 final.df<- within(final.df, fruit_bin[av_fruit_time>8.5]<-1)
 
+final.df$pro<-as.integer(final.df$pro)
+final.df$pro2<-as.integer(final.df$pro2)
+final.df$pol<-as.integer(final.df$pol)
+final.df$class2<-as.integer(final.df$class2)
+final.df$shade_bin<-as.integer(final.df$shade_bin)
+final.df$fruit_bin<-as.integer(final.df$fruit_bin)
+final.df$flo_type<-as.integer(final.df$flo_type)
+
+
 pruned.by.anthy$node.label<-""
 
-final.df<-dplyr::select(final.df, name,pro,pol,class2,flo_type,fruit_bin,shade_bin)
+#final.df<-dplyr::select(final.df, name,pro,pro2,pol,class2,flo_type,fruit_bin,shade_bin)
 
 stop("this is not an error, just tells you we've finished the code")
 

@@ -31,9 +31,8 @@ final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 #what is the data structure?
 lapply(final.df, class) ### does this matter for bianary?
 
-
 ####full model with everything bianary#########
-full.mod<-glm(pro~pol*class2*shade_bin*fruit_bin,family = binomial(link="logit"),data=final.df)
+full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin+flo_type,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
 
 ####full  phylogentically corrected###########
@@ -48,20 +47,19 @@ full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, prun
                     boot = 0, full.matrix = TRUE)
 summary(full.modAA)
 
-
 #########That was fun####################Nowdoit in BRMS############################################
 
 library("brms")
 library("MCMCglmm")
 #https://cran.r-project.org/web/packages/brms/README.html for some guideance
 
-#make all variable character for brms
-final.df$pro<-as.numeric(final.df$pro)
-final.df$pol<-as.numeric(final.df$pol)
-final.df$class2<-as.numeric(final.df$class2)
-final.df$shade_bin<-as.numeric(final.df$shade_bin)
-final.df$fruit_bin<-as.numeric(final.df$fruit_bin)
-
+#make all variable factoror brms
+final.df$pro<-as.factor(final.df$pro)
+final.df$pol<-as.factor(final.df$pol)
+final.df$class2<-as.factor(final.df$class2)
+final.df$shade_bin<-as.factor(final.df$shade_bin)
+final.df$fruit_bin<-as.factor(final.df$fruit_bin)
+final.df$flo_type<-as.factor(final.df$flo_type)
 
 ##construct covarience matrix:
 inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
@@ -69,22 +67,20 @@ A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 final.df<-rownames_to_column(final.df, "name")
 
-###Best model so far
+###Best model###############################################################################
 model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = final.df, 
  family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
  prior = c(prior(normal(0, 5), "b"),
  prior(normal(0, 5), "Intercept"),
  prior(student_t(3, 0, 5), "sd")))
 summary(model)
-
 plot(marginal_effects(model, probs = c(0.05, 0.95)))
 
-#check out the priors
+####################check out the priors############################################
 beta_draws <- as.matrix(model, pars = "b")
 dim(beta_draws)
 library(bayesplot)
 mcmc_intervals(beta_draws)
-
 beta2_and_prior <- cbind(
   prior = rnorm(nrow(beta_draws), 0, 10), # draw from prior distribution
   posterior = beta_draws[, 2]
@@ -94,7 +90,6 @@ mcmc_areas(beta2_and_prior)
 in_draws <- as.matrix(model, pars = "Intercept")
 dim(in_draws)
 mcmc_intervals(in_draws)
-
 beta3_and_prior <- cbind(
   prior = rnorm(nrow(in_draws), 0, 10), # draw from prior distribution
   posterior = beta_draws[, 2]
@@ -104,7 +99,6 @@ mcmc_areas(beta3_and_prior)
 sd_draws <- as.matrix(model, pars = "sd")
 dim(sd_draws)
 mcmc_intervals(sd_draws)
-
 beta4_and_prior <- cbind(
   prior = rnorm(nrow(sd_draws), 0, 10), # draw from prior distribution
   posterior = beta_draws[, 2]
@@ -113,15 +107,25 @@ mcmc_areas(beta4_and_prior)
 
 #all together now
 
-mcmc_areas(beta2_and_prior)
-mcmc_areas(beta3_and_prior)
-mcmc_areas(beta4_and_prior)
+#mcmc_areas(beta2_and_prior)
+#mcmc_areas(beta3_and_prior)
+#mcmc_areas(beta4_and_prior)
 ### seems okay but ask Lizzie
-#poster-r check
+########################posterior###check#######################################################
 plot(model)
+pp_check(model, type = "bars")
 
+#For binomial data, plots of y and yrep show the proportion of 'successes' rather than the raw count.
 
+### View the stan code for the mdoel
+stancode(model)
+##predictions, not totally usefule
+pp <- predict(model)
+head(pp)
 
+#####see in shiny################################
+library(shinystan)                   
+launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
 
 
 
@@ -134,10 +138,16 @@ plot(model)
 
 #summary(model2)
 
-library(shinystan)                   
-launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
 
 
+stop("no need to run the full crossed model")
+##########################full crossed model#############################################################
+model2 <- brm(pro~ pol*class2*fruit_bin*shade_bin *flo_type+ (1|name), data = final.df, 
+             family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
+             prior = c(prior(normal(0, 5), "b"),
+                       prior(normal(0, 5), "Intercept"),
+                       prior(student_t(3, 0, 5), "sd")))
+summary(model2) ### nothing significant
 
 
 

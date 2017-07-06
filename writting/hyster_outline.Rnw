@@ -1,0 +1,77 @@
+\documentclass{article}
+\usepackage{Sweave}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{siunitx}
+\usepackage{mdframed}
+\usepackage{natbib}
+\bibliographystyle{..//refs/styles/besjournals.bst}
+\usepackage[small]{caption}
+\setkeys{Gin}{width=0.8\textwidth}
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+\topmargin -1.5cm        
+\oddsidemargin -0.04cm   
+\evensidemargin -0.04cm
+\textwidth 16.59cm
+\textheight 21.94cm 
+&\pagestyle{empty} %comment if want page numbers
+\parskip 0pt
+\renewcommand{\baselinestretch}{1.5}
+\parindent 10pt
+
+\newmdenv[
+  topline=true,
+  bottomline=true,
+  skipabove=\topsep,
+  skipbelow=\topsep
+]{siderules}
+\usepackage{lineno}
+\linenumbers
+
+\begin{document}
+\title{Hysteranthy Outline}
+
+\section{Abstract}
+\section{Introduction}
+Look up in the spring. Sometimes you see flowers before leaves. Why do some tree flower before leafout while others flower after? This trait, called hysteranthy or proteranthy, of precocious flowering, has been long observed and since the 1800's there is a long standing hypothesis. Hysteranthy is a associated with wind pollination, leafless flowering increased windflow through forest and minimized barriers to pollen transfer. This explaination has been repeated with out significant empirical testing. Some have investigated it indirrectly, modeling pollen flow through canopy, and others quontifying pollen interception, but to my knowledge there has been no comprehesive investigation of the prevelance and associations of this trait. Pollen efficiency could also This is largely because flower and leaf phenology has been long considered seperately. We investigated the prevelance and trait associations of hysteranthous flowering.\\
+Hypothesis: Associated with wind pollination, and height. Also will test other biological relevant traits and the null hypothesis.\\
+Alternative:Hysteranthy is an adapation for early flowering so fruit can mature and disperse. Flowers are less constrained than leaves by frost.
+
+\section{Methods}
+\subsection{data}
+Data from Michigan Trees (Barnes and Wagner) and Michigan Shrubs and Vines (Barnes, Dick and Gunner).\\
+Hysteranthy descriptions coded 1 or 0 before or before/with=1, with, with/after or after=0\\
+pollination: wind or animal
+Tree or shrub coded based on 15 meters of highest height\\
+flowers coded bisexual or unisexual\\
+shade tolerance, collapsed to tolerant or intolerant\\
+fruiting: Average fruit maturation for each species coded. then split early (before 8.5 ) or late (after 8.5)\\
+Phylogeny obtained from Zanne et al, species added randomly to genus
+\subsection{statistical analysis}
+Baysian approach in brms, corrected for phylogeny\\
+show model
+\section{Results}
+X/140 are hysteranthous
+X/140 hysteranthous or synanthous
+pollination syndrome and time of fruiting supported
+alpha value not strongly phylogenetically constrained
+\section{Discussion}
+Hypothesis is supported (both).\\
+Classification may vary based on personal interpretation (eg silvics) or vary annually, or over population\\
+Dont know what structures these paterns (external, internal)
+related through resources, genetic pathways? and perhaps function (hysteranthy)
+What will happen when climate changes
+Phenology researchers need to consider flower and leaves together.
+
+\section{Figures}
+results table
+phylogeny
+graph like dans
+\section{Suppliment}
+full model with interactions
+pp_checks?
+
+\end{document}
