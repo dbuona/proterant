@@ -67,8 +67,9 @@ final.df$fruit_bin<-as.numeric(final.df$fruit_bin)
 
 par(mfrow=c(2,3))
 for (i in names(final.df)) {
-  plot(pruned.by.anthy, show.tip.label=TRUE, main=c(i))
+  plot(pruned.by.anthy, show.tip.label=FALSE, main=c(i))
   tiplabels(pch=22, col=final.df[,i]+1, bg=final.df[,i]+1, cex=0.5)
 }
 par(mfrow=c(1,1))
-dotTree(pruned.by.anthy,final.df,data.type="discrete", fsize=0.7,x.space=0.05)
+colors2<-setNames(c("black","white"),c(0,1))
+dotTree(pruned.by.anthy,final.df,data.type="discrete",colors=colors2, fsize=0.6,x.space=0.05)

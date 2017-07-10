@@ -114,10 +114,14 @@ mcmc_areas(beta4_and_prior)
 ########################posterior###check#######################################################
 plot(model)
 pp_check(model, type = "bars")
-
 #For binomial data, plots of y and yrep show the proportion of 'successes' rather than the raw count.
 
-### View the stan code for the mdoel
+########################Visualization####################
+load("/Users/danielbuonaiuto/Downloads/shinystan-multiparam-gg (1).RData")
+p<-shinystan_multiparam_gg 
+my_labels<-c("flower type","height class", "shade tolerance", "dispersal time", "pollination syndrome")
+p + scale_y_continuous(labels = my_labels)+theme_classic()+geom_vline(aes(xintercept=0))+labs(x="effect size", y="predictor")
+### View the stan code for the mdoe
 stancode(model)
 ##predictions, not totally usefule
 pp <- predict(model)

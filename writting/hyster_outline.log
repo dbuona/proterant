@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  6 JUL 2017 14:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  7 JUL 2017 10:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -812,11 +812,41 @@ LaTeX Font Info:    Try loading font information for T1+aess on input line 87.
 File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
 ) [1
 
-{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
+{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<tree1.jpeg, id=10, 732.7375pt x 1204.5pt>
+File: tree1.jpeg Graphic file (type jpg)
+ <use tree1.jpeg>
+Package pdftex.def Info: tree1.jpeg used on input line 139.
+(pdftex.def)             Requested size: 207.70311pt x 341.42978pt.
+ [2]
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.143 \begin
+            {figure}[H]
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+<effect_plot2.jpeg, id=14, 674.52pt x 394.47375pt>
+File: effect_plot2.jpeg Graphic file (type jpg)
+ <use effect_plot2.jpeg>
+Package pdftex.def Info: effect_plot2.jpeg used on input line 144.
+(pdftex.def)             Requested size: 472.03111pt x 276.05751pt.
+
+Overfull \hbox (10.12994pt too wide) in paragraph at lines 144--145
+[][] 
+ []
+
+[3 <./tree1.jpeg>]
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.142 pp_
+l.151 pp_
          checks?
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -824,31 +854,32 @@ you left one out. Proceed, with fingers crossed.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.143 
+l.152 
       
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
 
-[3] (./hyster_outline.aux) ) 
+[4 <./effect_plot2.jpeg>] (./hyster_outline.aux) ) 
 Here is how much of TeX's memory you used:
- 15087 strings out of 493014
- 301975 string characters out of 6133351
- 323738 words of memory out of 5000000
- 18469 multiletter control sequences out of 15000+600000
- 23552 words of font info for 46 fonts, out of 8000000 for 9000
+ 15114 strings out of 493014
+ 302297 string characters out of 6133351
+ 323754 words of memory out of 5000000
+ 18487 multiletter control sequences out of 15000+600000
+ 26612 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,5n,42p,10386b,378s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2016/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmss8.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmti10.pfb>
-Output written on hyster_outline.pdf (3 pages, 79486 bytes).
+ 37i,8n,42p,10386b,528s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2016/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2016/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2016/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2016/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2016/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2016/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2016/texmf-dist/font
+s/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on hyster_outline.pdf (4 pages, 359181 bytes).
 PDF statistics:
- 38 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 47 PDF objects out of 1000 (max. 8388607)
+ 31 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
