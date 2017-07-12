@@ -72,7 +72,7 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
  prior = c(prior(normal(0, 5), "b"),
  prior(normal(0, 5), "Intercept"),
- prior(student_t(3, 0, 5), "sd")))
+ prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model??
 summary(model)
 plot(marginal_effects(model, probs = c(0.05, 0.95)))
 
