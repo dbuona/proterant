@@ -73,7 +73,7 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  prior = c(prior(normal(0, 5), "b"),
  prior(normal(0, 5), "Intercept"),
  prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model??
-summary(model)
+Q<-summary(model)
 plot(marginal_effects(model, probs = c(0.05, 0.95)))
 
 ####################check out the priors############################################
@@ -133,6 +133,7 @@ launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
 
 
 
+
 ### not as good model
 #model2 <- brm(pro~ pol+class2 +fruit_bin+shade_bin+ (1|name), data = final.df, 
    #                 family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
@@ -140,7 +141,6 @@ launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
  #                             prior(cauchy(0, 5), "Intercept"),
 #                              prior(student_t(3,0, 10), "sd")))   
 
-#summary(model2)
 
 
 
