@@ -23,7 +23,7 @@ setdiff(namelist,mytree.names) #30 species did not make it
 ###
 ###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
 is.ultrametric(pruned.by.anthy)
-#plot(pruned.by.anthy)
+help(chronoMPL)
 pruned.by.anthy<-chronoMPL(pruned.by.anthy)
 is.ultrametric(pruned.by.anthy)
 #plot(pruned.by.anthy)

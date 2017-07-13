@@ -159,4 +159,4 @@ model2 <- brm(pro~ pol*class2*fruit_bin*shade_bin *flo_type+ (1|name), data = fi
 summary(model2) ### nothing significant
 
 
-
+table(anthy$Phen.sequence)
