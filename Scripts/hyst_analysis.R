@@ -38,14 +38,15 @@ summary(full.mod)
 ####full  phylogentically corrected###########
 full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
-                boot = 0, full.matrix = TRUE)
+                boot = 10, full.matrix = TRUE)
 summary(full.modA)
+
 
 ###full phylogenetically, with hysteranthy to include synanthy
 full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot = 0, full.matrix = TRUE)
-summary(full.modAA)
+
 
 #########That was fun####################Nowdoit in BRMS############################################
 
@@ -62,18 +63,22 @@ final.df$fruit_bin<-as.factor(final.df$fruit_bin)
 final.df$flo_type<-as.factor(final.df$flo_type)
 
 ##construct covarience matrix:
+final.df<-rownames_to_column(final.df, "name")
 inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
-final.df<-rownames_to_column(final.df, "name")
+
 
 ###Best model###############################################################################
 model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = final.df, 
- family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
+ family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=1000,
  prior = c(prior(normal(0, 5), "b"),
  prior(normal(0, 5), "Intercept"),
- prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model??
-Q<-summary(model)
+ prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
+summary(model)
+#hyp<-"sd_name__Intercept^2/(sd_name__Intercept^2+ =0"
+#hypothesis(model,hyp, class=NULL)
+summary(full.modA)
 plot(marginal_effects(model, probs = c(0.05, 0.95)))
 
 ####################check out the priors############################################
