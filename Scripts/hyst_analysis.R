@@ -35,7 +35,7 @@ lapply(final.df, class) ### does this matter for bianary?
 full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin+flo_type,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
 
-####full  phylogentically corrected###########
+####full  phylogentically corrected########### this model seems sensative when to the random additions? sometimes shade is significant and alpha higher
 full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
                 boot = 10, full.matrix = TRUE)
@@ -46,7 +46,7 @@ summary(full.modA)
 full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot = 0, full.matrix = TRUE)
-
+summary(full.modAA)
 
 #########That was fun####################Nowdoit in BRMS############################################
 
@@ -76,10 +76,16 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  prior(normal(0, 5), "Intercept"),
  prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
 summary(model)
-#hyp<-"sd_name__Intercept^2/(sd_name__Intercept^2+ =0"
-#hypothesis(model,hyp, class=NULL)
+
+####Phylogenetic signal:Work in progress
+hyp<-"sd_name__Intercept^2/(sd_name__Intercept^2+((3.141593^2)/3))=0" ###This might be the phylogenetic correlation: https://stats.stackexchange.com/questions/62770/calculating-icc-for-random-effects-logistic-regression
+hypothesis(model,hyp, class=NULL)
+#explainaition of iCC http://www.theanalysisfactor.com/the-intraclass-correlation-coefficient-in-mixed-models/
+
 summary(full.modA)
 plot(marginal_effects(model, probs = c(0.05, 0.95)))
+
+
 
 ####################check out the priors############################################
 beta_draws <- as.matrix(model, pars = "b")
@@ -122,10 +128,12 @@ pp_check(model, type = "bars")
 #For binomial data, plots of y and yrep show the proportion of 'successes' rather than the raw count.
 
 ########################Visualization####################
-load("/Users/danielbuonaiuto/Downloads/shinystan-multiparam-gg (1).RData")
-p<-shinystan_multiparam_gg 
-my_labels<-c("flower type","height class", "shade tolerance", "dispersal time", "pollination syndrome")
-p + scale_y_continuous(labels = my_labels)+theme_classic()+geom_vline(aes(xintercept=0))+labs(x="effect size", y="predictor")
+load("/Users/danielbuonaiuto/Desktop/shinystan-multiparam-gg (2).RData")
+library(ggplot2)
+p<-shinystan_multiparam_gg
+
+my_labels<-c("sd Name (intercept","flower type","shade tolerance", "height class", "dispersal season","pollination syndrome","intercept")
+p+scale_y_continuous(breaks= 1:7,labels = my_labels)+theme_classic()+geom_vline(aes(xintercept=0))+labs(x="effect size", y="predictor")
 ### View the stan code for the mdoe
 stancode(model)
 ##predictions, not totally usefule

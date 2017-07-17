@@ -101,17 +101,17 @@ Phenology researchers need to consider flower and leaves together.
 \hline
  &Estimate&Error&Lower CI& Upper CI\\
  \hline
-Intercept&1.36&1.73&-2.04&4.93\\
+Intercept&2.14&2.78&-3.64&7.88\\
 \hline
-Pollination syndrome&5.47&2.24&1.63&10.33\\
+Pollination syndrome&5.23&2.12&1.77&9.94\\
 \hline
-Height class&-0.10&1.78&-3.67&3.59\\
+Height class&-0.18&1.19&-2.38&2.33\\
 \hline
-Fruiting time&-8.59&2.71&-14.39&-3.83\\
+Fruiting time&-5.89&1.83&-10.2&-3.09\\
 \hline
-Shade tolerance&-1.87&1.59&5.38&0.97\\
+Shade tolerance&-1.43&1.08&-3.71&0.55\\
 \hline
-Flower type&-1.59&1.81&-5.32&1.98\\
+Flower type&-1.22&1.61&-4.30&2.30\\
 \hline
 
 \end{tabular}
@@ -124,7 +124,7 @@ Flower type&-1.59&1.81&-5.32&1.98\\
   \label{Tree}
 \end{figure}\\
 \begin{figure}[H]
- \fbox{ \includegraphics[width=\linewidth]{effect_plot2.jpeg}} 
+ \fbox{ \includegraphics[width=\linewidth]{better_effect_plot.jpeg}} 
   \caption{The effect size and significantce for each predictor, I'll explain this more too}
   \label{Effect sizes}
 \end{figure}
