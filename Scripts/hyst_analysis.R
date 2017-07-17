@@ -48,6 +48,7 @@ full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, prun
                     boot = 0, full.matrix = TRUE)
 summary(full.modAA)
 
+
 #########That was fun####################Nowdoit in BRMS############################################
 
 library("brms")
@@ -76,6 +77,8 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  prior(normal(0, 5), "Intercept"),
  prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
 summary(model)
+###none of this methods, this or phylo.d ever work
+#fitDiscrete(pruned.by.anthy, final.df$pro,data.names=final.df$name, model="ER")
 
 ####Phylogenetic signal:Work in progress
 hyp<-"sd_name__Intercept^2/(sd_name__Intercept^2+((3.141593^2)/3))=0" ###This might be the phylogenetic correlation: https://stats.stackexchange.com/questions/62770/calculating-icc-for-random-effects-logistic-regression
