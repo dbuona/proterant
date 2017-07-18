@@ -33,9 +33,10 @@ pro<-final.df$pro
 names(pro)<-rownames(final.df)
 fitDiscrete(pruned.by.anthy,pro, transform = "lambda")
 ##This !&^!%#@@ won't work still
-#final.df<-rownames_to_column(final.df, "name")
-#d<-comparative.data(pruned.by.anthy,final.df,names.col = name, na.omit = FALSE)
-#phylo.d(final.df,pruned.by.anthy,names.col = name ,binvar = pro ,permut = 1000, rnd.bias=NULL)
+final.df<-rownames_to_column(final.df, "name")
+d<-comparative.data(pruned.by.anthy,final.df,name,vcv = TRUE,vcv.dim = 3, na.omit = FALSE)
+PhyloD <- phylo.d(d, binvar=pro)
+phylo.d(as.data.frame(final.df),pruned.by.anthy,names.col = name ,binvar = pro ,permut = 1000, rnd.bias=NULL)
 
 #what is the data structure?
 lapply(final.df, class) ### does this matter for bianary?
