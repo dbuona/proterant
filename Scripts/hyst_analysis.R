@@ -28,10 +28,22 @@ library("phylolm")
 #make $name row names
 final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 
+###phylo structure
+pro<-final.df$pro
+names(pro)<-rownames(final.df)
+fitDiscrete(pruned.by.anthy,pro, transform = "lambda")
+##This !&^!%#@@ won't work still
+#final.df<-rownames_to_column(final.df, "name")
+#d<-comparative.data(pruned.by.anthy,final.df,names.col = name, na.omit = FALSE)
+#phylo.d(final.df,pruned.by.anthy,names.col = name ,binvar = pro ,permut = 1000, rnd.bias=NULL)
+
 #what is the data structure?
 lapply(final.df, class) ### does this matter for bianary?
 
 ####full model with everything bianary#########
+#make $name row names
+final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
+
 full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin+flo_type,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
 
@@ -69,7 +81,6 @@ inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 
-
 ###Best model###############################################################################
 model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = final.df, 
  family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=1000,
@@ -78,18 +89,25 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
 summary(model)
 ###none of this methods, this or phylo.d ever work
-#fitDiscrete(pruned.by.anthy, final.df$pro,data.names=final.df$name, model="ER")
 
 ####Phylogenetic signal:Work in progress
-hyp<-"sd_name__Intercept^2/(sd_name__Intercept^2+((3.141593^2)/3))=0" ###This might be the phylogenetic correlation: https://stats.stackexchange.com/questions/62770/calculating-icc-for-random-effects-logistic-regression
+hyp<-"sd_name__Intercept^2/(sd_name__Intercept^2+((3.14159^2)/3)) =0" ###This might be the phylogenetic correlation: https://stats.stackexchange.com/questions/62770/calculating-icc-for-random-effects-logistic-regression
 hypothesis(model,hyp, class=NULL)
 #explainaition of iCC http://www.theanalysisfactor.com/the-intraclass-correlation-coefficient-in-mixed-models/
 
 summary(full.modA)
 plot(marginal_effects(model, probs = c(0.05, 0.95)))
 
+########################Visualization####################
+load("/Users/danielbuonaiuto/Desktop/shinystan-multiparam-gg (2).RData")
+library(ggplot2)
+p<-shinystan_multiparam_gg
 
-
+my_labels<-c("sd Name (intercept","flower type","shade tolerance", "height class", "dispersal season","pollination syndrome","intercept")
+p+scale_y_continuous(breaks= 1:7,labels = my_labels)+theme_classic()+geom_vline(aes(xintercept=0))+labs(x="effect size", y="predictor")
+### View the stan code for the mdoe
+stancode(model)
+##predictions, not totally usefule
 ####################check out the priors############################################
 beta_draws <- as.matrix(model, pars = "b")
 dim(beta_draws)
@@ -128,35 +146,11 @@ mcmc_areas(beta4_and_prior)
 ########################posterior###check#######################################################
 plot(model)
 pp_check(model, type = "bars")
-#For binomial data, plots of y and yrep show the proportion of 'successes' rather than the raw count.
 
-########################Visualization####################
-load("/Users/danielbuonaiuto/Desktop/shinystan-multiparam-gg (2).RData")
-library(ggplot2)
-p<-shinystan_multiparam_gg
-
-my_labels<-c("sd Name (intercept","flower type","shade tolerance", "height class", "dispersal season","pollination syndrome","intercept")
-p+scale_y_continuous(breaks= 1:7,labels = my_labels)+theme_classic()+geom_vline(aes(xintercept=0))+labs(x="effect size", y="predictor")
-### View the stan code for the mdoe
-stancode(model)
-##predictions, not totally usefule
-pp <- predict(model)
-head(pp)
 
 #####see in shiny################################
 library(shinystan)                   
 launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
-
-
-
-
-### not as good model
-#model2 <- brm(pro~ pol+class2 +fruit_bin+shade_bin+ (1|name), data = final.df, 
-   #                 family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
-  #                  prior = c(prior(cauchy(0, 5), "b"),
- #                             prior(cauchy(0, 5), "Intercept"),
-#                              prior(student_t(3,0, 10), "sd")))   
-
 
 
 
@@ -171,3 +165,8 @@ summary(model2) ### nothing significant
 
 
 table(anthy$Phen.sequence)
+library(rstan)
+
+
+
+
