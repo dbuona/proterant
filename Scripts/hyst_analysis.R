@@ -13,6 +13,7 @@ library(caper)
 library(picante)
 library(tidyverse)
 library(boot)
+library(phylolm)
 #https://academic-oup-com.ezp-prod1.hul.harvard.edu/sysbio/article-lookup/doi/10.1093/sysbio/syp074 Garland and Ives 2010
 
 ###read in tree from Zanne et al
@@ -23,35 +24,37 @@ anthy<-filter(anthy, !is.na(av_fruit_time))
 source("source/prune_tree.R")
 is.ultrametric(pruned.by.anthy)
 #############################################################################
-####PGLS models for height and pollination syndrome##########################
-library("phylolm")
-#make $name row names
-final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 
-###phylo structure
-pro<-final.df$pro
+
+###phylo structure-caluclating pagels lamda
+pro<-final.df$pro ##make hysteranthy an object
+final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")#make $name row names
 names(pro)<-rownames(final.df)
-fitDiscrete(pruned.by.anthy,pro, transform = "lambda")
-##This !&^!%#@@ won't work still
+fitDiscrete(pruned.by.anthy,pro, transform = "lambda") ###really high, but sensative to reiterations of tree. 
+
+##This !&^!%#@@ won't work still-phylo d
 final.df<-rownames_to_column(final.df, "name")
-d<-comparative.data(pruned.by.anthy,final.df,name,vcv = TRUE,vcv.dim = 3, na.omit = FALSE)
+d<-comparative.data(pruned.by.anthy,final.df,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloD <- phylo.d(d, binvar=pro)
-phylo.d(as.data.frame(final.df),pruned.by.anthy,names.col = name ,binvar = pro ,permut = 1000, rnd.bias=NULL)
+#or
+phylo.d(final.df,pruned.by.anthy,names.col = name ,binvar = pro ,permut = 1000, rnd.bias=NULL)
 
 #what is the data structure?
 lapply(final.df, class) ### does this matter for bianary?
 
-####full model with everything bianary#########
+##MODELS#########################################################################
+
 #make $name row names
 final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 
+####full model with everything bianary###
 full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin+flo_type,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
 
-####full  phylogentically corrected########### this model seems sensative when to the random additions? sometimes shade is significant and alpha higher
+####full  phylogentically corrected########### this model seems sensative when to the random additions? sometimes shade is significant 
 full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
-                boot = 10, full.matrix = TRUE)
+                 boot=100,full.matrix = TRUE)
 summary(full.modA)
 
 
@@ -84,7 +87,7 @@ rownames(A) <- rownames(inv.phylo$Ainv)
 
 ###Best model###############################################################################
 model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = final.df, 
- family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=1000,
+ family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
  prior = c(prior(normal(0, 5), "b"),
  prior(normal(0, 5), "Intercept"),
  prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
@@ -158,11 +161,11 @@ launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
 stop("no need to run the full crossed model")
 ##########################full crossed model#############################################################
 model2 <- brm(pro~ pol*class2*fruit_bin*shade_bin *flo_type+ (1|name), data = final.df, 
-             family = bernoulli(link="logit"), cov_ranef = list(pruned.by.anthy= A),iter=10000,
+             family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
              prior = c(prior(normal(0, 5), "b"),
                        prior(normal(0, 5), "Intercept"),
                        prior(student_t(3, 0, 5), "sd")))
-summary(model2) ### nothing significant
+summary(model2) ### no interactions significant
 
 
 table(anthy$Phen.sequence)
