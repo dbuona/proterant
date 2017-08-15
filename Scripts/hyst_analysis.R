@@ -42,6 +42,16 @@ phylo.d(final.df,pruned.by.anthy,names.col = name ,binvar = pro ,permut = 1000, 
 #what is the data structure?
 lapply(final.df, class) ### does this matter for bianary?
 
+###now is pollination still important for within early ones
+#data
+earl<-filter(final.df, fruit_bin==0)
+## tree
+namelist2<-unique(earl$name)
+names.intree2<-pruned.by.anthy$tip.label
+##Prune the tree
+to.prune<-which(!names.intree2%in%namelist2)
+pruned.earl<-drop.tip(pruned.by.anthy,to.prune)
+
 ##MODELS#########################################################################
 
 #make $name row names
@@ -56,7 +66,11 @@ full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned
                 start.beta=NULL, start.alpha=NULL,
                  boot=100,full.matrix = TRUE)
 summary(full.modA)
-
+###model with fruit time and height as continuous
+full.modB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 20, log.alpha.bound = 4,
+                    start.beta=NULL, start.alpha=NULL,
+                    boot=10,full.matrix = TRUE)
+summary(full.modB) ### signifcance and direction does not change with coninues
 
 ###full phylogenetically, with hysteranthy to include synanthy
 full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
@@ -64,6 +78,12 @@ full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, prun
                     boot = 0, full.matrix = TRUE)
 summary(full.modAA)
 
+###model with early subset only
+earl<-  earl %>% remove_rownames %>% column_to_rownames(var="name")
+earl.mod<-phyloglm(pro~pol+class2+shade_bin+flo_type,earl, pruned.earl, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+                    start.beta=NULL, start.alpha=NULL,
+                    boot=10,full.matrix = TRUE)
+summary(earl.mod)### yay, with onlu "early" fruiters
 
 #########That was fun####################Nowdoit in BRMS############################################
 
