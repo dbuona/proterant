@@ -1,3 +1,5 @@
+###This is Dan's main thesis file.   
+
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -27,10 +29,10 @@ is.ultrametric(pruned.by.anthy)
 
 
 ###phylo structure-caluclating pagels lamda
-pro<-final.df$pro ##make hysteranthy an object
-final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")#make $name row names
-names(pro)<-rownames(final.df)
-fitDiscrete(pruned.by.anthy,pro, transform = "lambda") ###really high, but sensative to reiterations of tree. 
+#pro<-final.df$pro ##make hysteranthy an object
+#final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")#make $name row names
+#names(pro)<-rownames(final.df)
+#fitDiscrete(pruned.by.anthy,pro, transform = "lambda") ###really high, but sensative to reiterations of tree. 
 
 ##This !&^!%#@@ won't work still-phylo d
 final.df<-rownames_to_column(final.df, "name")
@@ -64,13 +66,25 @@ summary(full.mod)
 ####full  phylogentically corrected########### this model seems sensative when to the random additions? sometimes shade is significant 
 full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                 start.beta=NULL, start.alpha=NULL,
-                 boot=100,full.matrix = TRUE)
+                 boot=10,full.matrix = TRUE)
 summary(full.modA)
+##different estimates
+full.modAA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_IG10", btol = 10, log.alpha.bound = 4,
+                    start.beta=NULL, start.alpha=NULL,
+                    boot=10,full.matrix = TRUE)
+summary(full.modAA)
+
+
 ###model with fruit time and height as continuous
 full.modB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 20, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot=10,full.matrix = TRUE)
-summary(full.modB) ### signifcance and direction does not change with coninues
+full.modBB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_type,final.df, pruned.by.anthy, method = "logistic_IG10", btol = 20, log.alpha.bound = 4,
+                    start.beta=NULL, start.alpha=NULL,
+                    boot= 2,full.matrix = TRUE)
+
+summary(fullmodBB) ### does this better match my bayesian estimates 
+summary(full.modB) ### signifcance and direction does not change with coninuous, height does become signifiant marginally
 
 ###full phylogenetically, with hysteranthy to include synanthy
 full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
@@ -80,9 +94,9 @@ summary(full.modAA)
 
 ###model with early subset only
 earl<-  earl %>% remove_rownames %>% column_to_rownames(var="name")
-earl.mod<-phyloglm(pro~pol+class2+shade_bin+flo_type,earl, pruned.earl, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+earl.mod<-phyloglm(pro~pol+heigh_height+shade_bin+flo_type,earl, pruned.earl, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
-                    boot=10,full.matrix = TRUE)
+                    boot=100,full.matrix = TRUE)
 summary(earl.mod)### yay, with onlu "early" fruiters
 
 #########That was fun####################Nowdoit in BRMS############################################
@@ -112,7 +126,15 @@ model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = fin
  prior(normal(0, 5), "Intercept"),
  prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
 summary(model)
-###none of this methods, this or phylo.d ever work
+
+###bayesian and continuous
+modelcont <- brm(pro~ pol+heigh_height+av_fruit_time+shade_bin +flo_type+ (1|name), data = final.df, 
+             family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
+             prior = c(prior(normal(0, 5), "b"),
+                       prior(normal(0, 5), "Intercept"),
+                       prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
+summary(modelcont)
+summary(full.modB)
 
 ####Phylogenetic signal:Work in progress
 hyp<-"sd_name__Intercept^2/(sd_name__Intercept^2+((3.14159^2)/3)) =0" ###This might be the phylogenetic correlation: https://stats.stackexchange.com/questions/62770/calculating-icc-for-random-effects-logistic-regression
@@ -130,10 +152,10 @@ p<-shinystan_multiparam_gg
 my_labels<-c("sd Name (intercept","flower type","shade tolerance", "height class", "dispersal season","pollination syndrome","intercept")
 p+scale_y_continuous(breaks= 1:7,labels = my_labels)+theme_classic()+geom_vline(aes(xintercept=0))+labs(x="effect size", y="predictor")
 ### View the stan code for the mdoe
-stancode(model)
+stancode(modelcont)
 ##predictions, not totally usefule
 ####################check out the priors############################################
-beta_draws <- as.matrix(model, pars = "b")
+beta_draws <- as.matrix(modelcont, pars = "b")
 dim(beta_draws)
 library(bayesplot)
 mcmc_intervals(beta_draws)
@@ -143,7 +165,7 @@ beta2_and_prior <- cbind(
 )
 mcmc_areas(beta2_and_prior) 
 ###try it with other values
-in_draws <- as.matrix(model, pars = "Intercept")
+in_draws <- as.matrix(modelcont, pars = "Intercept")
 dim(in_draws)
 mcmc_intervals(in_draws)
 beta3_and_prior <- cbind(
@@ -152,7 +174,7 @@ beta3_and_prior <- cbind(
 )
 mcmc_areas(beta3_and_prior) 
 ###student T
-sd_draws <- as.matrix(model, pars = "sd")
+sd_draws <- as.matrix(modelcont, pars = "sd")
 dim(sd_draws)
 mcmc_intervals(sd_draws)
 beta4_and_prior <- cbind(
@@ -175,7 +197,7 @@ pp_check(model, type = "bars")
 #####see in shiny################################
 library(shinystan)                   
 launch_shiny(model, rstudio = getOption("shinystan.rstudio"))
-
+launch_shiny(modelcont, rstudio = getOption("shinystan.rstudio"))
 
 
 stop("no need to run the full crossed model")
