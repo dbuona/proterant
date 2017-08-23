@@ -132,8 +132,7 @@ modelcont <- brm(pro~ pol+heigh_height+av_fruit_time+shade_bin +flo_type+ (1|nam
              family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
              prior = c(prior(normal(0, 5), "b"),
                        prior(normal(0, 5), "Intercept"),
-                       prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
-summary(modelcont)
+                       prior(student_t(3, 0, 5), "sd"))) 
 summary(full.modB)
 
 ####Phylogenetic signal:Work in progress
