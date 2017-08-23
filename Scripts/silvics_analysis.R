@@ -94,6 +94,14 @@ final.df$av_fruit_time[final.df$av_fruit_time == "fall/winter"] <- 11
 final.df$av_fruit_time[final.df$av_fruit_time == "winter"] <- 12
 
 final.df$av_fruit_time<-as.numeric(final.df$av_fruit_time)
+mean(final.df$av_fruit_time) #10
+median(final.df$av_fruit_time) #9.5
+
+final.df$fruit_bin<-NA
+final.df<- within(final.df, fruit_bin[av_fruit_time<=8.5]<-0)
+final.df<- within(final.df, fruit_bin[av_fruit_time>8.5]<-1)
+
+
 
 ##check again
 namelist2<-final.df$name
@@ -108,9 +116,9 @@ pruned.by.anthy$node.label<-""
 ## models
 
 #final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
-final.df<-dplyr::select(final.df,name,pro,pol,av_fruit_time)
+final.df<-dplyr::select(final.df,name,pro,pol,av_fruit_time,fruit_bin)
 
-silv.mod<-glm(pro~pol+av_fruit_time,family = binomial(link="logit"),data=final.df)
+silv.mod<-glm(pro~pol+fruit_bin,family = binomial(link="logit"),data=final.df)
 summary(silv.mod)
 
 full.modA<-phyloglm(pro~pol+av_fruit_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
@@ -150,7 +158,7 @@ inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 
-modelminusoak <- brm(pro~pol+av_fruit_time+(1|name), data = final.df, 
+modelminusoak <- brm(pro~pol+fruit_bin+(1|name), data = final.df, 
              family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
              prior = c(prior(normal(0, 5), "b"),
                        prior(normal(0, 5), "Intercept"),
