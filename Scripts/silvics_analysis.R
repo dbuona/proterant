@@ -22,7 +22,8 @@ library(phylolm)
 treee<-read.tree("Vascular_Plants_rooted.dated.tre")
 is.ultrametric(treee)### is not ultrametric
 anthy<-read.csv("silvics_data.csv", header = TRUE)
-anthy<-filter(anthy, !is.na(av_fruit_time))
+#anthy<-filter(anthy, !is.na(av_fruit_time))
+anthy<-filter(anthy, !is.na(flower_time))
 
 ###Prune tree
 #list of species in tree
@@ -30,6 +31,9 @@ names.intree<-treee$tip.label
 
 #dataformat it like Zanne
 anthy$name<-paste(anthy$genus,anthy$species,sep="_")
+
+#fix names
+anthy$name[anthy$name == "Fraxinus_pensylvanica"] <- "Fraxinus_pennsylvanica"
 
 # list of my species myspecies
 namelist<-unique(anthy$name)
@@ -40,15 +44,27 @@ pruned.by.anthy<-drop.tip(treee,to.prune)
 
 mytree.names<-pruned.by.anthy$tip.label
 
-intersect(namelist,mytree.names) #53 species include
+intersect(namelist,mytree.names) #55 species include
 
-setdiff(namelist,mytree.names) #11 didn't make it
+setdiff(namelist,mytree.names) #10didn't make it
 
-###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
 is.ultrametric(pruned.by.anthy)
 pruned.by.anthy<-chronoMPL(pruned.by.anthy)
 is.ultrametric(pruned.by.anthy)
-#plot(pruned.by.anthy)
+##add them back
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_barbatum",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_nigra",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_phellos",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_nuttallii",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_laciniosa",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_aquatica",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Aesculus_octandra",genus=NULL,where="random")
+
+###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
+
 
 mytree.names<-pruned.by.anthy$tip.label
 
@@ -115,24 +131,17 @@ pruned.by.anthy$node.label<-""
 
 ## models
 
-#final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
-final.df<-dplyr::select(final.df,name,pro,pol,av_fruit_time,fruit_bin)
 
-silv.mod<-glm(pro~pol+fruit_bin,family = binomial(link="logit"),data=final.df)
+final.df<-dplyr::select(final.df,name,pro,pol,av_fruit_time,flower_time,fruit_bin)
+final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
+
+silv.mod<-glm(pro~pol+flower_time,family = binomial(link="logit"),data=final.df)
 summary(silv.mod)
 
-full.modA<-phyloglm(pro~pol+av_fruit_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+silv.modcont<-phyloglm(pro~flower_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot=10,full.matrix = TRUE)
-
-#Error in phyloglm(pro ~ pol + av_fruit_time, final.df, pruned.by.anthy,  : 
-#the number of rows in the data does not match the number of tips in the tree.
-#but yes it does
-pruned.by.anthy$tip.label==final.df$name
-pruned.by.anthy$tip.label!=final.df$name
-#see?
-
-summary(full.modA)
+summary(silv.modcont)
 
 ###let just see it in bayesian
 library("brms")
@@ -151,8 +160,23 @@ model <- brm(pro~pol+av_fruit_time+(1|name), data = final.df,
 summary(model)
 ###fruit time is not significant (this is because possibly the range is too big)
 
-### red oak group seem to be nullifying fruit time effect--try it without them
+#####################################red oak group could be pulling things weird TRY TO change it back to annual
+final.df$av_fruit_time[final.df$av_fruit_time == 22.0] <- 10.0
+final.df$av_fruit_time[final.df$av_fruit_time == 21.0] <- 9.0
 
+
+silv.mod<-glm(pro~pol+av_fruit_time,family = binomial(link="logit"),data=final.df)
+summary(silv.mod)
+
+silv.modcont<-phyloglm(pro~pol+av_fruit_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
+                       start.beta=NULL, start.alpha=NULL,
+                       boot=10,full.matrix = TRUE)
+summary(silv.modcont)
+
+
+
+
+#####
 final.df<-filter(final.df, av_fruit_time<= 14)
 inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)

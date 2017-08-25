@@ -52,7 +52,7 @@ pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_humilis",genus=NUL
 pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Vaccinium_myrtilloides",genus=NULL,where="random")
 pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Sorbus_americana",genus=NULL,where="random")
 pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_prinoides",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Alnus_viridus",genus=NULL,where="random")
+pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Alnus_viridis",genus=NULL,where="random")
 pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_macrosperma",genus=NULL,where="random")
 
 mytree.names<-pruned.by.anthy$tip.label

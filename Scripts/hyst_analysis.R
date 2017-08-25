@@ -25,24 +25,22 @@ anthy<-read.csv("michigantrees_sequence.csv", header = TRUE)
 anthy<-filter(anthy, !is.na(av_fruit_time))
 source("source/prune_tree.R")
 is.ultrametric(pruned.by.anthy)
-#############################################################################
+#write.tree(pruned.by.anthy, "michigan.phy")
+########################################################################
+#phlogenetic signal####################################################
+##WOrked! but only when the data dpoesnt match
 
-
-###phylo structure-caluclating pagels lamda
-#pro<-final.df$pro ##make hysteranthy an object
-#final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")#make $name row names
-#names(pro)<-rownames(final.df)
-#fitDiscrete(pruned.by.anthy,pro, transform = "lambda") ###really high, but sensative to reiterations of tree. 
-
-##This !&^!%#@@ won't work still-phylo d
-final.df<-rownames_to_column(final.df, "name")
+###try making it a comaprative data object for phylo.D
 d<-comparative.data(pruned.by.anthy,final.df,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
-PhyloD <- phylo.d(d, binvar=pro)
-#or
-phylo.d(final.df,pruned.by.anthy,names.col = name ,binvar = pro ,permut = 1000, rnd.bias=NULL)
 
-#what is the data structure?
-lapply(final.df, class) ### does this matter for bianary?
+plot(pruned.by.anthy)
+PhyloD <- phylo.d(d, binvar=pro)##D=0.3156129
+summary(pruned.by.anthy)
+
+
+names<-final.df$name
+tips<-pruned.by.anthy$tip.label
+names==tips
 
 ###now is pollination still important for within early ones
 #data
@@ -59,6 +57,7 @@ pruned.earl<-drop.tip(pruned.by.anthy,to.prune)
 #make $name row names
 final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 
+
 ####full model with everything bianary###
 full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin+flo_type,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
@@ -68,23 +67,16 @@ full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned
                 start.beta=NULL, start.alpha=NULL,
                  boot=10,full.matrix = TRUE)
 summary(full.modA)
-##different estimates
-full.modAA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_IG10", btol = 10, log.alpha.bound = 4,
+
+
+###model with fruit time and height as continuous, addind flower time
+full.modB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_time+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot=10,full.matrix = TRUE)
-summary(full.modAA)
-
-
-###model with fruit time and height as continuous
-full.modB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 20, log.alpha.bound = 4,
-                    start.beta=NULL, start.alpha=NULL,
-                    boot=10,full.matrix = TRUE)
-full.modBB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_type,final.df, pruned.by.anthy, method = "logistic_IG10", btol = 20, log.alpha.bound = 4,
-                    start.beta=NULL, start.alpha=NULL,
-                    boot= 2,full.matrix = TRUE)
-
-summary(fullmodBB) ### does this better match my bayesian estimates 
 summary(full.modB) ### signifcance and direction does not change with coninuous, height does become signifiant marginally
+
+cor(final.df$flo_time,final.df$av_fruit_time)
+
 
 ###full phylogenetically, with hysteranthy to include synanthy
 full.modAA<-phyloglm(pro2~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
