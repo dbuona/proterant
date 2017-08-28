@@ -154,7 +154,7 @@ final.df$fruit_bin<-as.integer(final.df$fruit_bin)
 final.df$flo_type<-as.integer(final.df$flo_type)
 
 
-pruned.by.anthy$node.label<-""
+pruned.by.anthy$node.label<-NULL
 
 #final.df<-dplyr::select(final.df, name,pro,pro2,pol,class2,flo_type,fruit_bin,shade_bin)
 

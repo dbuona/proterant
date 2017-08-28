@@ -1,0 +1,40 @@
+Models: 
+  Mich trees: full.modelB
+  Mich trees: earl.mod
+  Silvics:??
+
+
+Testing coventional wisdom approach.
+I. Introduction
+  hyp: pollination syndrome
+  alt: adaption fofor early flowering
+II. Methods
+  A. Data collection
+  B. Model building-full models michigan tree
+  C. Early only, to see polinations
+  D. Silvics- validate results. ***or find other data source
+
+III.  Results
+  A. Pollination syndrome, fruit time, flower time, and sort of height (short) significant
+  B. Pollination robust to subset in early fruiters only
+  C. Silvics--only flower time significant.
+  
+IV. 
+  A. 
+  C. Why? Less trust worthy data. Observation bias. Differences in hysterany classification. National rather ran regional dataset might make estimations of phenology un-unseful
+  
+Approach 2: Complicating the early flowering hypothesis.
+I. Intro
+  Hypothesis: hysteranthy is an adaptation for early flowering
+  Alt: pollination syndrome or other traits are important too.
+  
+Methods:
+  A. Simple model pro~flower_time for large rough data set silvics, Mich, or NPN, GBNPN
+  B. Michigan trees, see it as a trust worthy dataset.
+  
+Results: same as above
+Discussion: early flowering is king, but other things too. Why ecologically might early dispersal, shortness?
+
+ISSSUES REMAINING:
+iterate tree to account for random additions
+understand scaling factors for bayesian vs. pgls

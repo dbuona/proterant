@@ -127,18 +127,21 @@ final.df$name== mytree.names
 
 setdiff(mytree.names,namelist2)
 
-pruned.by.anthy$node.label<-""
+pruned.by.anthy$node.label<-NULL
+
+########phylo signal###############
+d<-comparative.data(pruned.by.anthy,final.df,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+PhyloD <- phylo.d(d, binvar=pro)##D=0.3156129
 
 ## models
-
 
 final.df<-dplyr::select(final.df,name,pro,pol,av_fruit_time,flower_time,fruit_bin)
 final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 
-silv.mod<-glm(pro~pol+flower_time,family = binomial(link="logit"),data=final.df)
+silv.mod<-glm(pro~pol+flower_time+av_fruit_time,family = binomial(link="logit"),data=final.df)
 summary(silv.mod)
 
-silv.modcont<-phyloglm(pro~flower_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
+silv.modcont<-phyloglm(pro~flower_time+pol,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot=10,full.matrix = TRUE)
 summary(silv.modcont)
@@ -177,14 +180,15 @@ summary(silv.modcont)
 
 
 #####
-final.df<-filter(final.df, av_fruit_time<= 14)
+#final.df<-filter(final.df, av_fruit_time<= 14)
+final.df<-rownames_to_column(final.df, "name")
 inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 
-modelminusoak <- brm(pro~pol+fruit_bin+(1|name), data = final.df, 
+modelsilv <- brm(pro~pol+flower_time+av_fruit_time+(1|name), data = final.df, 
              family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
              prior = c(prior(normal(0, 5), "b"),
                        prior(normal(0, 5), "Intercept"),
                        prior(student_t(3, 0, 5), "sd"))) 
-summary(modelminusoak)
+summary(modelsilv)
