@@ -50,7 +50,7 @@ final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 ####full model with everything bianary###
 
 
-full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin+flo_type,family = binomial(link="logit"),data=final.df)
+full.mod<-glm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_type+flo_time,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
 
 
