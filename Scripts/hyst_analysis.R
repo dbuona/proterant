@@ -36,10 +36,10 @@ PhyloD <- phylo.d(d, binvar=pro)##D=0.3156129
 # format data and tree
 earl<-filter(final.df, fruit_bin==0)
 ## tree
-namelist2<-unique(earl$name)
+namelist3<-unique(earl$name)
 names.intree2<-pruned.by.anthy$tip.label
 ##Prune the tree
-to.prune<-which(!names.intree2%in%namelist2)
+to.prune<-which(!names.intree2%in%namelist3)
 pruned.earl<-drop.tip(pruned.by.anthy,to.prune)
 
 ##MODELS#########################################################################
@@ -48,8 +48,12 @@ pruned.earl<-drop.tip(pruned.by.anthy,to.prune)
 final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 
 ####full model with everything bianary###
+
+
 full.mod<-glm(pro~pol+class2+shade_bin+fruit_bin+flo_type,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
+
+
 
 ####full  phylogentically corrected########### this model seems sensative when to the random additions? sometimes shade is significant 
 full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,

@@ -19,7 +19,7 @@ mytree.names<-pruned.by.anthy$tip.label
 
 intersect(namelist,mytree.names) #107 species include
 
-setdiff(namelist,mytree.names) #30 species did not make it
+addins<-setdiff(namelist,mytree.names) #30 species did not make it
 ###
 ###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
 is.ultrametric(pruned.by.anthy)
@@ -27,33 +27,42 @@ help(chronoMPL)
 pruned.by.anthy<-chronoMPL(pruned.by.anthy)
 is.ultrametric(pruned.by.anthy)
 #plot(pruned.by.anthy)
-#adding species to tree
-pruned.by.anthy
+#adding species to tree at root
+species<-addins
+for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anthy,species[i],
+                                                             where="root")
+mytree.names<-pruned.by.anthy$tip.label
+
+intersect(namelist,mytree.names) #107 species include
+setdiff(namelist,mytree.names)
 
 
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Prunus_nigra",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_coccinea",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Amelanchier_laevis",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_pedicellaris",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_nigra",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_ellipsoidalis",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Amelanchier_sanguinea",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_succulenta",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_serissima",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_lacinosa",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_candida",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Malus_coronaria",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_muehlenbergii",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_crus-galli",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_humilis",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Vaccinium_myrtilloides",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Sorbus_americana",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_prinoides",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Alnus_viridis",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_macrosperma",genus=NULL,where="random")
+
+#or non loop
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Prunus_nigra",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_coccinea",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Amelanchier_laevis",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_pedicellaris",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_nigra",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_ellipsoidalis",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Amelanchier_sanguinea",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_succulenta",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_serissima",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_lacinosa",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_candida",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Malus_coronaria",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_muehlenbergii",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_crus-galli",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_humilis",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Vaccinium_myrtilloides",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Sorbus_americana",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_prinoides",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Alnus_viridis",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Crataegus_macrosperma",genus=NULL,where="random")
+
 
 mytree.names<-pruned.by.anthy$tip.label
 
@@ -155,6 +164,13 @@ final.df$flo_type<-as.integer(final.df$flo_type)
 
 
 pruned.by.anthy$node.label<-NULL
+final.df<-na.omit(final.df)
+
+nameL<-final.df$name
+pru.labels<-pruned.by.anthy$tip.label
+to.prune<-which(!pru.labels%in%nameL)
+pruned.by.anthy<-drop.tip(pruned.by.anthy,to.prune)
+
 
 #final.df<-dplyr::select(final.df, name,pro,pro2,pol,class2,flo_type,fruit_bin,shade_bin)
 

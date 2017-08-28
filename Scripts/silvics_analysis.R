@@ -23,7 +23,7 @@ treee<-read.tree("Vascular_Plants_rooted.dated.tre")
 is.ultrametric(treee)### is not ultrametric
 anthy<-read.csv("silvics_data.csv", header = TRUE)
 #anthy<-filter(anthy, !is.na(av_fruit_time))
-anthy<-filter(anthy, !is.na(flower_time))
+anthy<-na.omit(anthy)
 
 ###Prune tree
 #list of species in tree
@@ -46,22 +46,33 @@ mytree.names<-pruned.by.anthy$tip.label
 
 intersect(namelist,mytree.names) #55 species include
 
-setdiff(namelist,mytree.names) #10didn't make it
+addins<-setdiff(namelist,mytree.names) #10didn't make it
 
+###make ultrametric
 is.ultrametric(pruned.by.anthy)
 pruned.by.anthy<-chronoMPL(pruned.by.anthy)
 is.ultrametric(pruned.by.anthy)
+
+species<-addins
+for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anthy,species[i],
+                                                                  where="root")
+mytree.names<-pruned.by.anthy$tip.label
+
+intersect(namelist,mytree.names) #107 species include
+setdiff(namelist,mytree.names)
+
+
 ##add them back
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_barbatum",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_nigra",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_phellos",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_nuttallii",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_laciniosa",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_aquatica",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random")
-pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Aesculus_octandra",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_barbatum",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_nigra",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_phellos",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_nuttallii",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_laciniosa",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_aquatica",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Aesculus_octandra",genus=NULL,where="random")
 
 ###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
 
@@ -141,7 +152,7 @@ final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
 silv.mod<-glm(pro~pol+flower_time+av_fruit_time,family = binomial(link="logit"),data=final.df)
 summary(silv.mod)
 
-silv.modcont<-phyloglm(pro~flower_time+pol,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
+silv.modcont<-phyloglm(pro~flower_time+pol+av_fruit_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot=10,full.matrix = TRUE)
 summary(silv.modcont)
@@ -171,7 +182,7 @@ final.df$av_fruit_time[final.df$av_fruit_time == 21.0] <- 9.0
 silv.mod<-glm(pro~pol+av_fruit_time,family = binomial(link="logit"),data=final.df)
 summary(silv.mod)
 
-silv.modcont<-phyloglm(pro~pol+av_fruit_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
+silv.modcont<-phyloglm(pro~pol+flower_time+av_fruit_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                        start.beta=NULL, start.alpha=NULL,
                        boot=10,full.matrix = TRUE)
 summary(silv.modcont)
