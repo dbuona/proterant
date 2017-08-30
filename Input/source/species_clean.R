@@ -21,6 +21,5 @@ setdiff(anthy$name,clean_names$name)
 
 goober<-filter(anthy, name %in% clean_names$name)
 
-anthy<-goober
 
 
