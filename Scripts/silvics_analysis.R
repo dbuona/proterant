@@ -81,12 +81,12 @@ mytree.names<-pruned.by.anthy$tip.label
 
 ###format the data in the same order as the tree
 final.df<-anthy[match(mytree.names, anthy$name),]
-namelist2<-final.df$name
-namelist2==mytree.names
+namelist3<-final.df$name
+namelist3==mytree.names
 final.df$name== mytree.names
 
 
-setdiff(mytree.names,namelist2)
+setdiff(mytree.names,namelist3)
 
 ### add analysis columns
 

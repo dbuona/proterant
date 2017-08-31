@@ -21,7 +21,7 @@ library(phylolm)
 ###read in tree from Zanne et al
 treee<-read.tree("Vascular_Plants_rooted.dated.tre")
 is.ultrametric(treee)### is not ultrametric
-anthy<-read.csv("keeler.csv", header = TRUE)
+#anthy<-read.csv("keeler.csv", header = TRUE)
 
 ###Check names and clean
 #library('Taxonstand')
@@ -33,7 +33,7 @@ anthy<-read.csv("keeler.csv", header = TRUE)
 #anthy$name<-clean_names$name
 #clean_names<- filter(clean_names, Plant.Name.Index==TRUE )
 #anthy<-filter(anthy, name %in% clean_names$name)
-#write.csv(anthy, "cleaned_keeler", header=T)
+#write.csv(anthy, "cleaned_keeler.csv")
 
 anthy<-read.csv("cleaned_keeler.csv")
 
@@ -75,8 +75,8 @@ mytree.names<-pruned.by.anthy$tip.label
 
 ###format the data in the same order as the tree
 final.df<-anthy[match(mytree.names, anthy$name),]
-namelist2<-final.df$name
-namelist2==mytree.names
+namelistK<-final.df$name
+namelistK==mytree.names
 final.df$name== mytree.names
 
 ###data wrangle
@@ -153,12 +153,12 @@ goober<-na.omit(final.df)
 
 ####full model 
 final.df<-  final.df %>% remove_rownames %>% column_to_rownames(var="name")
-full.mod<-glm(pro~pol,family = binomial(link="logit"),data=minusoaks)
+full.mod<-glm(pro~pol+flo_time,family = binomial(link="logit"),data=final.df)
 summary(full.mod)
 
-minusoaks<-filter(final.df, Genus!="Quercus")
 
-full.modA<-phyloglm(pro~pol,minusoaks, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+
+full.modA<-phyloglm(pro~pol+flo_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
                     start.beta=NULL, start.alpha=NULL,
                     boot=10,full.matrix = TRUE)
 summary(full.modA)

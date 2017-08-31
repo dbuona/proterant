@@ -24,6 +24,8 @@ is.ultrametric(treee)### is not ultrametric
 anthy<-read.csv("michigantrees_sequence.csv", header = TRUE)
 anthy<-filter(anthy, !is.na(av_fruit_time))
 source("source/prune_tree.R")
+#write.tree(pruned.by.anthy, "pruned_for_mich.tre")
+#write.csv(final.df, "mich_data_full.csv",row.names = FALSE)
 is.ultrametric(pruned.by.anthy)
 #write.tree(pruned.by.anthy, "michigan.phy")
 ########################################################################
@@ -54,16 +56,15 @@ full.mod<-glm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_type+flo_time,fam
 summary(full.mod)
 
 
-
 ####full  phylogentically corrected########### this model seems sensative when to the random additions? sometimes shade is significant 
-full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
-                start.beta=NULL, start.alpha=NULL,
-                 boot=10,full.matrix = TRUE)
-summary(full.modA)
+#full.modA<-phyloglm(pro~pol+class2+shade_bin+fruit_bin+flo_type+flo_time,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+ #               start.beta=NULL, start.alpha=NULL,
+  #               boot=10,full.matrix = TRUE)
+#summary(full.modA)
 
 
 ###model with fruit time and height as continuous, addind flower time this should be main model
-full.modB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_time+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
+full.modB<-phyloglm(pro~pol+heigh_height+shade_bin+av_fruit_time+flo_time+flo_type,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                     start.beta=NULL, start.alpha=NULL,
                     boot=10,full.matrix = TRUE)
 summary(full.modB) ### signifcance and direction does not change with coninuous, height does become signifiant marginally
@@ -104,21 +105,15 @@ inv.phylo <- MCMCglmm::inverseA(pruned.by.anthy, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 
-###Binary###############################################################################
-model <- brm(pro~ pol+class2+fruit_bin+shade_bin +flo_type+ (1|name), data = final.df, 
- family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
- prior = c(prior(normal(0, 5), "b"),
- prior(normal(0, 5), "Intercept"),
- prior(student_t(3, 0, 5), "sd"))) ###why does sigma not appear in my model?? #should list(name or pruned.by.anthy)
-summary(model)
 
-###bayesian and continuous-- main model
+###bayesian and continuous-- main model###############
 modelcont <- brm(pro~ pol+heigh_height+av_fruit_time+shade_bin +flo_type+flo_time+ (1|name), data = final.df, 
              family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=5000,
              prior = c(prior(normal(0, 5), "b"),
                        prior(normal(0, 5), "Intercept"),
                        prior(student_t(3, 0, 5), "sd"))) 
 summary(modelcont)
+summary(full.modB)
 plot(marginal_effects(model, probs = c(0.05, 0.95)))
 
 ########################Visualization####################
