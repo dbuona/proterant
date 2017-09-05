@@ -140,6 +140,13 @@ setdiff(mytree.names,namelist2)
 
 pruned.by.anthy$node.label<-NULL
 
+###output data sheets
+
+#write.csv(final.df, "silv_data_full.csv", row.names=FALSE)
+
+#write.tree(pruned.by.anthy,"pruned_silvics.tre")
+
+
 ########phylo signal###############
 d<-comparative.data(pruned.by.anthy,final.df,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloD <- phylo.d(d, binvar=pro)##D=0.3156129

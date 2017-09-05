@@ -48,7 +48,9 @@ anthy$name[anthy$name == "Amelachier_canadensis"] <- "Amelanchier_canadensis"
 anthy$name[anthy$name == "Quecus_coccinea"] <- "Quercus_coccinea"
 
 ##### Prune
+anthy<-filter(anthy, !is.na(flo_time))
 
+#write.csv(anthy,"cleaned_keeler.csv",row.names=FALSE)
 names.intree<-treee$tip.label
 
 # list of my species myspecies
@@ -146,6 +148,9 @@ final.df$flo_type<-as.integer(final.df$flo_type)
 
 
 pruned.by.anthy$node.label<-NULL
+
+write.csv(final.df,"keeler_cleaned.csv",row.names=FALSE)
+write.tree(pruned.by.anthy,"pruned_keeler.tre")
 goober<-na.omit(final.df)
 
 ##### Models
