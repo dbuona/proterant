@@ -1,0 +1,25 @@
+FLOBUDS README September 2017
+see also git/buds/analysis/flo_buds for other background work
+
+Here are the files in the repo so far:
+
+  species_choices.csv is a scatch paper to figure out which species to include, how much glassware is needed etc.
+
+Below are the two days of collections:
+  DanB_HFPOINTS_JUL_2017.csv
+  DB_HF_Points+AUG_2017.csv
+  
+Which are merged using the script data_merger.R into the list of all my individual names:
+  flobud_datapoints.csv
+  
+To Do as of Sept 2017:
+ Scipt for assigning indviduals to treatment
+ Script for assigning individuals within treatments to glassware
+ Script for randomzing beaker placement
+ Script for scheduling chamber switching
+ Collect materials
+    coolers
+    pole prunners
+    hand prunners
+    big plastic bags
+    
