@@ -52,12 +52,12 @@ michXkeeler.data<-  michXkeeler.data %>% remove_rownames %>% column_to_rownames(
 
 mich1<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=1000,full.matrix = TRUE)
 summary(mich1)
 
 silv1<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=1000,full.matrix = TRUE)
 summary(silv1)
 
 
@@ -72,23 +72,23 @@ summary(keeler1)
 ###ADDING TO MICHIGAN TREES MODELS####
 mich2<-phyloglm(pro~pol+heigh_height+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(mich2)### height and flo_time are significant
 
 mich3<-phyloglm(pro~pol+heigh_height+shade_bin+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(mich3)
 
 mich4<-phyloglm(pro~pol+heigh_height+flo_time+av_fruit_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(mich4)
 ####pollination only become significant when av_fruit_time is in the model
 
 mich5<-phyloglm(pro~pol+heigh_height+flo_time+av_fruit_time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(mich5)
 
 ##########all predictors, no interactions
@@ -100,7 +100,7 @@ summary(mich6)
 #leave out fruit_time from model
 mich7<-phyloglm(pro~pol+heigh_height+flo_time+shade_bin+flo_type,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(mich7) ####as i feared, pollination drops out
 
 #So, pollination is obly significant when aveerage fruit time is in the model does this indicate an interaction?
@@ -109,14 +109,14 @@ summary(mich7) ####as i feared, pollination drops out
 
 silv2<-phyloglm(pro~pol+flower_time+av_fruit_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(silv2) 
 
 
 s##compare to:
 mich8<-phyloglm(pro~pol+av_fruit_time+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(mich8) ###also not
 
 
