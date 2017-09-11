@@ -14,6 +14,7 @@ library(ggplot2)
 #scatterplot(day~ lat| bbch, data=oneoone, main="Pep 101") 
 
 
+##Alnus glutinosa
 
 cor1<-read.csv("buo_102_040_011.csv", header=TRUE)
 cor2<-read.csv("buo_102_040_060.csv",header=TRUE)
@@ -32,6 +33,30 @@ head(cor2)
 cor<-rbind(cor2,cor1)
 table(cor$year)
 
-cor<-filter(cor, year>2010)
+cor<-filter(cor, year>1900)
 
-ggplot(cor,aes(as.numeric(lat),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(col=bbch))+theme()+ggtitle("Alnus glutinosa across latitude")
+ggplot(cor,aes(as.numeric(lat),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(col=bbch))+theme()+ggtitle("Alnus glutinosa across latitude since 1900")
+
+
+cor1<-read.csv("buo_222_xxx_011.csv", header=TRUE)
+cor2<-read.csv("buo_222_xxx_060.csv",header=TRUE)
+
+
+names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+
+names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+
+
+cor<-rbind(cor2,cor1)
+
+
+#cor<-filter(cor, year>1900)
+cor<-filter(cor, lat<55)
+
+ggplot(cor,aes(as.numeric(lat),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(col=bbch))+theme()+ggtitle("Prunus avium latitude since 1900")
+
+
