@@ -43,91 +43,80 @@ namelist<-michXkeeler.data$name
 namelist==mytree.names
 michXkeeler.data$name== mytree.names
 
+#####add a new column for a adjusting for red acorn time
+mich.data$fruiting<-NA
+mich.data$fruiting<-mich.data$av_fruit_time
+mich.data$fruiting[mich.data$fruiting==19]<-7
+
+silv.data$fruiting<-NA
+silv.data$fruiting<-silv.data$av_fruit_time
+silv.data$fruiting[silv.data$fruiting==21]<-9
+
 ###########compare 2 variable models####
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
 keeler.data<-  keeler.data %>% remove_rownames %>% column_to_rownames(var="name")
 michXkeeler.data<-  michXkeeler.data %>% remove_rownames %>% column_to_rownames(var="name")
 
-
-mich1<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+mich.2<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=1000,full.matrix = TRUE)
-summary(mich1)
-
-silv1<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=1000,full.matrix = TRUE)
-summary(silv1)
-
-
-
-keeler1<-phyloglm(pro~pol+flo_time,keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                  start.beta=NULL, start.alpha=NULL,
-                  boot=10,full.matrix = TRUE)
-summary(keeler1)
-
-###WITH ONLY 2 PREDICTORS, flowering time is only significant one############but....
+                boot=100,full.matrix = TRUE)
+summary(mich2)
 
 ###ADDING TO MICHIGAN TREES MODELS####
-mich2<-phyloglm(pro~pol+heigh_height+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+mich3<-phyloglm(pro~pol+heigh_height+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
-summary(mich2)### height and flo_time are significant
+summary(mich3)### height and flo_time are significant
 
-mich3<-phyloglm(pro~pol+heigh_height+shade_bin+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+mich3a<-phyloglm(pro~pol+flo_time+fruiting,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
-summary(mich3)
+summary(mich3a)
 
-mich4<-phyloglm(pro~pol+heigh_height+flo_time+av_fruit_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+cor(mich.data$fruiting,mich.data$flo_time)
+
+mich4<-phyloglm(pro~pol+heigh_height+shade_bin+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
 summary(mich4)
+
+mich4a<-phyloglm(pro~pol+heigh_height+flo_time+fruiting,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                start.beta=NULL, start.alpha=NULL,
+                boot=100,full.matrix = TRUE)
+summary(mich4a)
 ####pollination only become significant when av_fruit_time is in the model
 
-mich5<-phyloglm(pro~pol+heigh_height+flo_time+av_fruit_time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(mich5)
-
-##########all predictors, no interactions
-mich6<-phyloglm(pro~pol+heigh_height+flo_time+av_fruit_time+shade_bin+flo_type,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=10,full.matrix = TRUE)
-summary(mich6)
+summary(mich5)
 
-#leave out fruit_time from model
-mich7<-phyloglm(pro~pol+heigh_height+flo_time+shade_bin+flo_type,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+################Other datasets:
+
+silv2<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
-summary(mich7) ####as i feared, pollination drops out
+summary(silv2)
 
-#So, pollination is obly significant when aveerage fruit time is in the model does this indicate an interaction?
+keeler2<-phyloglm(pro~pol+flo_time,keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                  start.beta=NULL, start.alpha=NULL,
+                  boot=10,full.matrix = TRUE)
+summary(keeler2)
 
-##Does this happen in silvics?
-
-silv2<-phyloglm(pro~pol+flower_time+av_fruit_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+silv3<-phyloglm(pro~pol+flower_time+av_fruit_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
-summary(silv2) 
+summary(silv3) 
 
-
-s##compare to:
-mich8<-phyloglm(pro~pol+av_fruit_time+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+silv3a<-phyloglm(pro~pol+flower_time+fruiting,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
-summary(mich8) ###also not
+summary(silv3a)
 
+###cant fit it with height.
+silv3b<-phyloglm(pro~pol+flower_time+heigh_height,silv.data, silv.tree, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
+                 start.beta=NULL, start.alpha=NULL,
+                 boot=100,full.matrix = TRUE)
+summary(silv3b) 
 
-
-AIC(mich1)
-AIC(mich2)
-AIC(mich3)
-AIC(mich4)####best model fruit time, flower time, height, and pollination
-AIC(mich5)### 2nd best model
-AIC(mich6)
-AIC(mich7)
-AIC(mich8)
-
-###so pollination is significant in the best model
