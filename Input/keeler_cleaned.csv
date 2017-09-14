@@ -1,6 +1,5 @@
 "X","Genus","Species","Pollination","Phen.sequence","heigh_height.ft","flower_class","flo_time","av_fruit_time","name","pro","pro2","pol","class2","flo_type","fruit_bin"
 28,"Sassafras","albidum","insect","syn",15.24,"dioecious",5,NA,"Sassafras_albidum",0,1,0,1,1,NA
-1,"Asimina","triloba","insect","syn",NA,"perfect",4,9.5,"Asimina_triloba",0,1,0,NA,0,1
 35,"Platanus","occidentalis","wind","syn",36.576,"monoecious",5,10,"Platanus_occidentalis",0,1,1,1,1,1
 20,"Liquidambar","styraxiflua","insect","syn",42.672,"monoecious",4,12,"Liquidambar_styraciflua",0,1,0,1,1,1
 2,"Tilia","americana","insect","ser",39.624,"perfect",6.5,10,"Tilia_americana",0,0,0,1,0,1
@@ -17,12 +16,10 @@
 64,"Salix","lucida","ambo","pro",6.096,"monoecious",4,NA,"Salix_lucida",1,1,0,0,1,NA
 62,"Fagus","grandifolia","wind","syn",24.384,"monoecious",4,NA,"Fagus_grandifolia",0,1,1,1,1,NA
 60,"Quercus","imbricaria","wind","syn",18.288,"monoecious",5,NA,"Quercus_imbricaria",0,1,1,1,1,NA
-59,"Quercus","nigra","wind","syn",NA,"monoecious",5,NA,"Quercus_nigra",0,1,1,NA,1,NA
 56,"Quercus","digitata","wind","syn",24.384,"monecious",5,NA,"Quercus_falcata",0,1,1,1,1,NA
 57,"Quercus","palustris","wind","syn",21.336,"monoecious",5,NA,"Quercus_palustris",0,1,1,1,1,NA
 55,"Quercus","velutina","wind","syn",45.72,"monoecious",5,NA,"Quercus_velutina",0,1,1,1,1,NA
 54,"Quercus","rubra","wind","syn",42.672,"monoecious",5,NA,"Quercus_rubra",0,1,1,1,1,NA
-58,"Quercus","ilicifolia","wind","syn",NA,"monoecious",5,NA,"Quercus_ilicifolia",0,1,1,NA,1,NA
 51,"Quercus","prinus","wind","syn",30.48,"monoecious",5,NA,"Quercus_michauxii",0,1,1,1,1,NA
 49,"Quercus","minor","wind","syn",18.288,"monoecious",5,NA,"Quercus_stellata",0,1,1,1,1,NA
 50,"Quercus","macrocarpa","wind","syn",48.768,"monoecious",5,NA,"Quercus_macrocarpa",0,1,1,1,1,NA
@@ -45,13 +42,10 @@
 34,"Maclura","pomifera","wind","ser",18.288,"dioecious",6,NA,"Maclura_pomifera",0,0,1,1,1,NA
 17,"Prunus","serotina","insect","syn",15.24,"perfect",5.5,8.5,"Prunus_serotina",0,1,0,1,0,0
 16,"Prunus","pennsylvanica","insect","ser",12.192,"perfect",5,NA,"Prunus_pensylvanica",0,0,0,0,0,NA
-14,"Cercis","canadensis","insect","pro/syn",NA,"perfect",4.5,12,"Cercis_canadensis",1,1,0,NA,0,1
 13,"Robinia","pseudoacacia","insect","ser",21.336,"perfect",5,11,"Robinia_pseudoacacia",0,0,0,1,0,1
 21,"Nyssa","sylvatica","insect","syn",30.48,"dioecious",5.5,10,"Nyssa_sylvatica",0,1,0,1,1,1
 22,"Mohrodendron","carolinum","insect","syn",27.432,"perfect",5,12,"Halesia_carolina",0,1,0,1,0,1
-4,"Ilex","monticola","insect","syn/ser",NA,"",6,NA,"Ilex_montana",0,0,0,NA,NA,NA
 27,"Chionanthus","virginicus","insect","syn",9.144,"perfect",4.5,NA,"Chionanthus_virginicus",0,1,0,0,0,NA
 25,"Fraxinus","quadrangulata","wind","pro",36.576,"perfect",4,9.5,"Fraxinus_quadrangulata",1,1,1,1,0,1
 24,"Fraxinus","pennsylvanica","wind","syn",12.192,"dioecious",5,12,"Fraxinus_pennsylvanica",0,1,1,0,1,1
 23,"Fraxinus","americana","wind","pro",30.48,"dioecious",5,8.5,"Fraxinus_americana",1,1,1,1,1,0
-26,"Fraxinus","nigra","wind","pro",NA,"perfect",4,9.5,"Fraxinus_nigra",1,1,1,NA,0,1

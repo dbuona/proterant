@@ -89,8 +89,9 @@ summary(mich4a)
 
 mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
+                boot=50,full.matrix = TRUE)
 summary(mich5)
+
 
 ################Other datasets:
 
@@ -99,24 +100,49 @@ silv2<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPL
                 boot=100,full.matrix = TRUE)
 summary(silv2)
 
-keeler2<-phyloglm(pro~pol+flo_time,keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                  start.beta=NULL, start.alpha=NULL,
-                  boot=10,full.matrix = TRUE)
-summary(keeler2)
 
 silv3<-phyloglm(pro~pol+flower_time+av_fruit_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
 summary(silv3) 
 
-silv3a<-phyloglm(pro~pol+flower_time+fruiting,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+silv3a<-phyloglm(pro~pol+flower_time+fruiting+heigh_height,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
 summary(silv3a)
 
-###cant fit it with height.
-silv3b<-phyloglm(pro~pol+flower_time+heigh_height,silv.data, silv.tree, method = "logistic_MPLE", btol = 10, log.alpha.bound = 4,
-                 start.beta=NULL, start.alpha=NULL,
-                 boot=100,full.matrix = TRUE)
-summary(silv3b) 
+##Cant estimate it with height
 
+keeler2<-phyloglm(pro~pol+flo_time,keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                  start.beta=NULL, start.alpha=NULL,
+                  boot=10,full.matrix = TRUE)
+summary(keeler2)
+
+michXkeeler2<-phyloglm(pro~pol+flo_time,michXkeeler.data, michXkeeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                  start.beta=NULL, start.alpha=NULL,
+                  boot=10,full.matrix = TRUE)
+summary(michXkeeler2)
+#### Can't really sink the models, I'll maybe try it with texas tomorrow, in the meantime
+
+#plotting.
+###the tree and variable:
+#plotting
+
+summary(mich5)
+
+coef(mich5)
+est<-as.data.frame(coef(mich5))
+est<-rownames_to_column(est, "name")
+ints<-as.data.frame(confint(mich5,level = 0.95))
+ints<-rownames_to_column(ints, "name")
+colnames(ints)[2] <- "low"
+colnames(ints)[3] <- "high"
+colnames(est)[2] <- "estimate"
+foo<-left_join(est,ints)
+foo<-filter(foo,estimate<10)
+ggplot(foo,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
+
+boot<-read.csv("mich5bootoutput.csv",header=TRUE)
+head(boot)
+boot<-dplyr::filter(boot,Coefficients!="(Intercept)")
+ggplot(boot,aes(Estimate,Coefficients))+geom_point()+geom_segment(aes(y=Coefficients,yend=Coefficients,x=lowerbootCI,xend=upperbootCI))+ggtitle("Main effects of predictors on Hysteranthy with bootstrap")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")

@@ -1,4 +1,5 @@
 ###Dan checks results of main analysis with data from USFS silvics. Main eefects only
+###dont use this to generate data adjustments or you';; delete height column. scroll to botom
 ##23 Aug 2017
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
@@ -210,3 +211,26 @@ modelsilv <- brm(pro~pol+flower_time+av_fruit_time+(1|name), data = final.df,
                        prior(normal(0, 5), "Intercept"),
                        prior(student_t(3, 0, 5), "sd"))) 
 summary(modelsilv)
+
+############################### removing NAs
+d<-read.csv("silv_data_full.csv",header=TRUE)
+d<-na.omit(d)
+
+t<-read.tree("pruned_silvics.tre")
+namelist<-unique(d$name)
+names.intree<-t$tip.label
+##Prune the tree
+to.prune<-which(!names.intree%in%namelist)
+pruned.by.anthy<-drop.tip(t,to.prune)
+
+mytree.names<-pruned.by.anthy$tip.label
+
+intersect(namelist,mytree.names) #55 species include
+
+addins<-setdiff(namelist,mytree.names) #10didn't make it
+
+###make ultrametric
+is.ultrametric(pruned.by.anthy)
+pruned.by.anthy<-chronoMPL(pruned.by.anthy)
+is.ultrametric(pruned.by.anthy)
+write.tree(t,"pruned_silv.tre")

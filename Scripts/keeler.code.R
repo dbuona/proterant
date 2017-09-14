@@ -19,9 +19,11 @@ library(phylolm)
 #https://academic-oup-com.ezp-prod1.hul.harvard.edu/sysbio/article-lookup/doi/10.1093/sysbio/syp074 Garland and Ives 2010
 
 ###read in tree from Zanne et al
-treee<-read.tree("Vascular_Plants_rooted.dated.tre")
-is.ultrametric(treee)### is not ultrametric
+#treee<-read.tree("Vascular_Plants_rooted.dated.tre")
+#is.ultrametric(treee)### is not ultrametric
 #anthy<-read.csv("keeler.csv", header = TRUE)
+#anthy<-filter(anthy, !is.na(heigh_height.ft))
+#anthy<-filter(anthy, !is.na(flo_time))
 
 ###Check names and clean
 #library('Taxonstand')
@@ -49,16 +51,18 @@ anthy$name[anthy$name == "Quecus_coccinea"] <- "Quercus_coccinea"
 
 ##### Prune
 anthy<-filter(anthy, !is.na(flo_time))
+anthy<-filter(anthy, !is.na(heigh_height.ft))
+t<-read.tree("pruned_keeler.tre")
 
-#write.csv(anthy,"cleaned_keeler.csv",row.names=FALSE)
-names.intree<-treee$tip.label
+write.csv(anthy,"cleaned_keeler.csv",row.names=FALSE)
+names.intree<-t$tip.label
 
 # list of my species myspecies
 namelist<-unique(anthy$name)
 
 ##Prune the tree
 to.prune<-which(!names.intree%in%namelist)
-pruned.by.anthy<-drop.tip(treee,to.prune)
+pruned.by.anthy<-drop.tip(t,to.prune)
 #plot(pruned.by.anthy)
 
 ###what are the tip labels in pruned phylogeny?
