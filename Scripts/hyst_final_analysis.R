@@ -31,6 +31,27 @@ keeler.data<-read.csv("keeler_cleaned.csv")
 
 setdiff(keeler.data$name,mich.data$name)
 
+#####Centering
+mich.data$height_cent<-mich.data$heigh_height/mean(mich.data$heigh_height)
+mich.data$fruit_cent<-mich.data$fruiting/mean(mich.data$fruiting)
+mich.data$flo_cent<-mich.data$flo_time/mean(mich.data$flo_time)
+
+silv.data$height_cent<-silv.data$heigh_height/mean(silv.data$heigh_height)
+silv.data$fruit_cent<-silv.data$fruiting/mean(silv.data$fruiting)
+silv.data$flo_cent<-silv.data$flower_time/mean(silv.data$flower_time)
+
+keeler.data$height_cent<-keeler.data$heigh_height.ft/mean(keeler.data$heigh_height.ft)
+keeler.data$flo_cent<-keeler.data$flo_time/mean(keeler.data$flo_time)
+
+#####add a new column for a adjusting for red acorn time
+mich.data$fruiting<-NA
+mich.data$fruiting<-mich.data$av_fruit_time
+mich.data$fruiting[mich.data$fruiting==19]<-7
+
+silv.data$fruiting<-NA
+silv.data$fruiting<-silv.data$av_fruit_time
+silv.data$fruiting[silv.data$fruiting==21]<-9
+
 ######SET UP COMPARISON DATA SETS
 names.intree<-mich.tree$tip.label
 mich.by.keel<-intersect(keeler.data$name,mich.data$name)
@@ -42,15 +63,6 @@ michXkeeler.data<-mich.data[match(mytree.names, mich.data$name),]
 namelist<-michXkeeler.data$name
 namelist==mytree.names
 michXkeeler.data$name== mytree.names
-
-#####add a new column for a adjusting for red acorn time
-mich.data$fruiting<-NA
-mich.data$fruiting<-mich.data$av_fruit_time
-mich.data$fruiting[mich.data$fruiting==19]<-7
-
-silv.data$fruiting<-NA
-silv.data$fruiting<-silv.data$av_fruit_time
-silv.data$fruiting[silv.data$fruiting==21]<-9
 
 ###########compare 2 variable models####
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
@@ -92,6 +104,11 @@ mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich
                 boot=50,full.matrix = TRUE)
 summary(mich5)
 
+###centered full model
+mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                start.beta=NULL, start.alpha=NULL,
+                boot=50,full.matrix = TRUE)
+summary(mich5cent)
 
 ################Other datasets:
 
@@ -106,22 +123,47 @@ silv3<-phyloglm(pro~pol+flower_time+av_fruit_time,silv.data, silv.tree, method =
                 boot=100,full.matrix = TRUE)
 summary(silv3) 
 
-silv3a<-phyloglm(pro~pol+flower_time+fruiting+heigh_height,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+silv4cent<-phyloglm(pro~pol+flo_cent+fruit_cent+height_cent,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(silv3a)
+                boot=10,full.matrix = TRUE)
+summary(silv4cent)
 
+mich4centered<-phyloglm(pro~pol+flo_cent+fruit_cent+height_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=10,full.matrix = TRUE)
+summary(mich4centered)
+coef(mich4centered)
+coef(silv4cent)
 ##Cant estimate it with height
 
 keeler2<-phyloglm(pro~pol+flo_time,keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                   start.beta=NULL, start.alpha=NULL,
                   boot=10,full.matrix = TRUE)
 summary(keeler2)
+keeler3<-phyloglm(pro~pol+flo_cent+height_cent, keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
+                  start.beta=NULL, start.alpha=NULL,
+                  boot=10,full.matrix = TRUE)
+summary(keeler3)
+###compare to mich with same predictors
+mich3cent<-phyloglm(pro~pol+flo_cent+height_cent, mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                  start.beta=NULL, start.alpha=NULL,
+                  boot=10,full.matrix = TRUE)
+summary(mich3cent)
+coef(mich3cent)
+coef(keeler3)
+coef(michXkeeler3)
 
-michXkeeler2<-phyloglm(pro~pol+flo_time,michXkeeler.data, michXkeeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+michXkeeler2<-phyloglm(pro~pol+flo_cent,michXkeeler.data, michXkeeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                   start.beta=NULL, start.alpha=NULL,
                   boot=10,full.matrix = TRUE)
 summary(michXkeeler2)
+michXkeeler3<-phyloglm(pro~pol+flo_cent+height_cent,michXkeeler.data, michXkeeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
+                       start.beta=NULL, start.alpha=NULL,
+                       boot=10,full.matrix = TRUE)
+summary(michXkeeler3)
+
+
+
 #### Can't really sink the models, I'll maybe try it with texas tomorrow, in the meantime
 
 #plotting.
