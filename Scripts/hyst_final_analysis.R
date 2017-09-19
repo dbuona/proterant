@@ -17,6 +17,7 @@ library(picante)
 library(tidyverse)
 library(boot)
 library(phylolm)
+library(ggplot2)
 
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
@@ -188,3 +189,22 @@ boot<-read.csv("mich5bootoutput.csv",header=TRUE)
 head(boot)
 boot<-dplyr::filter(boot,Coefficients!="(Intercept)")
 ggplot(boot,aes(Estimate,Coefficients))+geom_point()+geom_segment(aes(y=Coefficients,yend=Coefficients,x=lowerbootCI,xend=upperbootCI))+ggtitle("Main effects of predictors on Hysteranthy with bootstrap")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
+
+####binomial plots
+ggplot(mich.data, aes(x=fruiting, y=pro)) + geom_point(shape=1, position=position_jitter(width=.05,height=.05))  + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+ggplot(mich.data, aes(x=flo_time, y=pro)) + geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+ggplot(mich.data, aes(x=pol, y=pro)) + 
+  geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+ggplot(mich.data, aes(x=shade_bin, y=pro)) + 
+  geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+ggplot(mich.data, aes(x=heigh_height, y=pro)) + 
+  geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
