@@ -70,11 +70,35 @@ table(cc$assignment)
 #######################################seems good
 
 ###assign to beakers
-X <- block_ra(block_var = dd$assignment, num_arms = 24)
+X <- block_ra(block_var = dd$assignment,condition_names = 1:24)
 dd$group<-X
+table(dd$group)
 
-
-###test itWS0<-filter(dd,assignment=="WS0")
+###test it
+WS0<-filter(dd,assignment=="WS0")
 table(WS0$group)
 ######seems to work but wont be able to tell until there are only 48 individuals per treament.
 
+table(dd$block_var)
+###assign to location in chamber
+dd$block_var <- with(dd, paste(assignment,group, sep = "_"))
+
+
+
+
+####code for placing them in chamber position##############3
+
+
+
+
+position<-dd[!duplicated(dd$block_var),]
+
+X <- block_ra(block_var = position$assignment,condition_names = 1:24)
+position$placement<-X
+position<-dplyr::select(position, assignment,group,block_var,placement)
+
+
+
+WL0<-filter(position, assignment=="WL0")
+table(WL0$block_var)
+table(WL0$placement)

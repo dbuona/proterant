@@ -13,9 +13,9 @@ Which are merged using the script data_merger.R into the list of all my individu
   flobud_datapoints.csv
   
 To Do as of Sept 2017:
- Scipt for assigning indviduals to treatment
- Script for assigning individuals within treatments to glassware
- Script for randomzing beaker placement
+ Scipt for assigning indviduals to treatment √
+ Script for assigning individuals within treatments to glassware√
+ Script for randomzing beaker placement√
  Script for scheduling chamber switching
  Collect materials
     coolers
