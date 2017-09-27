@@ -1,6 +1,6 @@
 ###Dan checks results of main analysis with data from USFS silvics. Main eefects only
-###dont use this to generate data adjustments or you';; delete height column. scroll to botom
 ##23 Aug 2017
+#updated 27 sept 2017
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -35,7 +35,6 @@ anthy$name<-paste(anthy$genus,anthy$species,sep="_")
 
 #fix names
 anthy$name[anthy$name == "Fraxinus_pensylvanica"] <- "Fraxinus_pennsylvanica"
-
 # list of my species myspecies
 namelist<-unique(anthy$name)
 
@@ -129,6 +128,16 @@ final.df$fruit_bin<-NA
 final.df<- within(final.df, fruit_bin[av_fruit_time<=8.5]<-0)
 final.df<- within(final.df, fruit_bin[av_fruit_time>8.5]<-1)
 
+final.df<- within(final.df, shade[shade=="very_tolerant"]<-"tolerant")
+final.df<- within(final.df, shade[shade=="very_intolerant"]<-"intolerant")
+final.df<- within(final.df, shade[shade=="medium"]<-"medium_tolerant")
+unique(final.df$shade)
+
+final.df$shade_bin<-NA
+final.df<- within(final.df, shade_bin[shade=="medium_tolerant"]<-1)
+final.df<- within(final.df, shade_bin[shade=="tolerant"]<-1)
+final.df<- within(final.df, shade_bin[shade=="intolerant"]<-0)
+
 
 
 ##check again
@@ -143,9 +152,9 @@ pruned.by.anthy$node.label<-NULL
 
 ###output data sheets
 
-#write.csv(final.df, "silv_data_full.csv", row.names=FALSE)
+write.csv(final.df, "silv_data_full.csv", row.names=FALSE)
 
-#write.tree(pruned.by.anthy,"pruned_silvics.tre")
+write.tree(pruned.by.anthy,"pruned_silvics.tre")
 
 
 ########phylo signal###############

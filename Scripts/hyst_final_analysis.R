@@ -27,23 +27,11 @@ mich.data<-read.csv("mich_data_full.csv")
 silv.tree<-read.tree("pruned_silvics.tre")
 silv.data<-read.csv("silv_data_full.csv")
 
-keeler.tree<-read.tree("pruned_keeler.tre")
-keeler.data<-read.csv("keeler_cleaned.csv")
 
-setdiff(keeler.data$name,mich.data$name)
+#keeler.tree<-read.tree("pruned_keeler.tre")
+#keeler.data<-read.csv("keeler_cleaned.csv")
 
-#####Centering
-mich.data$height_cent<-mich.data$heigh_height/mean(mich.data$heigh_height)
-mich.data$fruit_cent<-mich.data$fruiting/mean(mich.data$fruiting)
-mich.data$flo_cent<-mich.data$flo_time/mean(mich.data$flo_time)
-
-silv.data$height_cent<-silv.data$heigh_height/mean(silv.data$heigh_height)
-silv.data$fruit_cent<-silv.data$fruiting/mean(silv.data$fruiting)
-silv.data$flo_cent<-silv.data$flower_time/mean(silv.data$flower_time)
-
-keeler.data$height_cent<-keeler.data$heigh_height.ft/mean(keeler.data$heigh_height.ft)
-keeler.data$flo_cent<-keeler.data$flo_time/mean(keeler.data$flo_time)
-
+#setdiff(keeler.data$name,mich.data$name)
 #####add a new column for a adjusting for red acorn time
 mich.data$fruiting<-NA
 mich.data$fruiting<-mich.data$av_fruit_time
@@ -53,119 +41,110 @@ silv.data$fruiting<-NA
 silv.data$fruiting<-silv.data$av_fruit_time
 silv.data$fruiting[silv.data$fruiting==21]<-9
 
-######SET UP COMPARISON DATA SETS
-names.intree<-mich.tree$tip.label
-mich.by.keel<-intersect(keeler.data$name,mich.data$name)
-to.prune<-which(!names.intree%in%mich.by.keel)
-michXkeeler.tree<-drop.tip(mich.tree,to.prune)
+#####Centering
+mich.data$height_cent<-mich.data$heigh_height/mean(mich.data$heigh_height)
+mich.data$fruit_cent<-mich.data$fruiting/mean(mich.data$fruiting)
+mich.data$flo_cent<-mich.data$flo_time/mean(mich.data$flo_time)
 
-mytree.names<-michXkeeler.tree$tip.label
-michXkeeler.data<-mich.data[match(mytree.names, mich.data$name),]
-namelist<-michXkeeler.data$name
-namelist==mytree.names
-michXkeeler.data$name== mytree.names
+silv.data$height_cent<-silv.data$height/mean(silv.data$height)
+silv.data$fruit_cent<-silv.data$fruiting/mean(silv.data$fruiting)
+silv.data$flo_cent<-silv.data$flower_time/mean(silv.data$flower_time)
+
+
 
 ###########compare 2 variable models####
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
-keeler.data<-  keeler.data %>% remove_rownames %>% column_to_rownames(var="name")
-michXkeeler.data<-  michXkeeler.data %>% remove_rownames %>% column_to_rownames(var="name")
 
 mich2<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
+
+sil2<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
+               start.beta=NULL, start.alpha=NULL,
+               boot=50,full.matrix = TRUE)
+summary(sil2)
+
 summary(mich2)
-
-###ADDING TO MICHIGAN TREES MODELS####
-mich3<-phyloglm(pro~pol+heigh_height+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(mich3)### height and flo_time are significant
-
-mich3a<-phyloglm(pro~pol+flo_time+fruiting,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(mich3a)
-
-cor(mich.data$fruiting,mich.data$flo_time)
-
-mich4<-phyloglm(pro~pol+heigh_height+shade_bin+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(mich4)
-
-mich4a<-phyloglm(pro~pol+heigh_height+flo_time+fruiting,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(mich4a)
+coef(sil2)
+coef(mich2)
 ####pollination only become significant when av_fruit_time is in the model
 
 mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=50,full.matrix = TRUE)
 summary(mich5)
+sil5<-phyloglm(pro~pol+flower_time+height_cent+fruiting+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
+         start.beta=NULL, start.alpha=NULL,
+         boot=100,full.matrix = TRUE)
+summary(sil5)
 
+coef(sil5)
+coef(mich5cent)
 ###centered full model
-mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+mich5cent<-phyloglm(pro~pol+height_cent+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=50,full.matrix = TRUE)
+                boot=100,full.matrix = TRUE)
 summary(mich5cent)
 
-################Other datasets:
+###merge
+colnames(mich.data)[which(names(mich.data) == "heigh_height")] <- "height"
+colnames(mich.data)[which(names(mich.data) == "flo_time")] <- "flower_time"
 
-silv2<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(silv2)
+mich.data$ds<-"michigan"
+silv.data$ds<-"silvics"
 
+mich.data<-dplyr::select(mich.data,pro,pol,height,height_cent,flower_time,fruiting, shade_bin,ds)
+silv.data<-dplyr::select(silv.data,pro,pol,height,height_cent,flower_time,fruiting, shade_bin,ds)
+mich.data<-rownames_to_column(mich.data, "name")
+silv.data<-rownames_to_column(silv.data, "name")
+bigdata<-rbind(mich.data,silv.data)
 
-silv3<-phyloglm(pro~pol+flower_time+av_fruit_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-summary(silv3) 
+big1<-glm(pro~pol+height_cent+flower_time+fruiting+shade_bin+ds,family = binomial(link="logit"),data=bigdata)
+summary(big1)
 
-silv4cent<-phyloglm(pro~pol+flo_cent+fruit_cent+height_cent,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=10,full.matrix = TRUE)
-summary(silv4cent)
+###can we do this phylogenetically?
+treee<-read.tree("Vascular_Plants_rooted.dated.tre")
+names.intree<-treee$tip.label
 
-mich4centered<-phyloglm(pro~pol+flo_cent+fruit_cent+height_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                          start.beta=NULL, start.alpha=NULL,
-                          boot=10,full.matrix = TRUE)
-summary(mich4centered)
-coef(mich4centered)
-coef(silv4cent)
-##Cant estimate it with height
+# list of my species myspecies
+namelist<-unique(bigdata$name)
 
-keeler2<-phyloglm(pro~pol+flo_time,keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                  start.beta=NULL, start.alpha=NULL,
-                  boot=10,full.matrix = TRUE)
-summary(keeler2)
-keeler3<-phyloglm(pro~pol+flo_cent+height_cent, keeler.data, keeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
-                  start.beta=NULL, start.alpha=NULL,
-                  boot=10,full.matrix = TRUE)
-summary(keeler3)
-###compare to mich with same predictors
-mich3cent<-phyloglm(pro~pol+flo_cent+height_cent, mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                  start.beta=NULL, start.alpha=NULL,
-                  boot=10,full.matrix = TRUE)
-summary(mich3cent)
-coef(mich3cent)
-coef(keeler3)
-coef(michXkeeler3)
+##Prune the tree
+to.prune<-which(!names.intree%in%namelist)
+pruned.by.anthy<-drop.tip(treee,to.prune)
+#plot(pruned.by.anthy)
 
-michXkeeler2<-phyloglm(pro~pol+flo_cent,michXkeeler.data, michXkeeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                  start.beta=NULL, start.alpha=NULL,
-                  boot=10,full.matrix = TRUE)
-summary(michXkeeler2)
-michXkeeler3<-phyloglm(pro~pol+flo_cent+height_cent,michXkeeler.data, michXkeeler.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
-                       start.beta=NULL, start.alpha=NULL,
-                       boot=10,full.matrix = TRUE)
-summary(michXkeeler3)
+###what are the tip labels in pruned phylogeny?
+mytree.names<-pruned.by.anthy$tip.label
 
+intersect(namelist,mytree.names) #107 species include
 
+addins<-setdiff(namelist,mytree.names) #30 species did not make it
+###
+###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
+is.ultrametric(pruned.by.anthy)
+help(chronoMPL)
+pruned.by.anthy<-chronoMPL(pruned.by.anthy)
+is.ultrametric(pruned.by.anthy)
+#plot(pruned.by.anthy)
+#adding species to tree at root
+species<-addins
+for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anthy,species[i],
+                                                                  where="root")
+mytree.names<-pruned.by.anthy$tip.label
 
-#### Can't really sink the models, I'll maybe try it with texas tomorrow, in the meantime
+intersect(namelist,mytree.names) #107 species include
+final.df<-bigdata[match(mytree.names, bigdata$name),]
+namelist3<-final.df$name
+namelist3==mytree.names
+final.df$name== mytree.names
+
+####it can seem to handele duplicate data
+biggie<-phyloglm(pro~pol+height_cent+flower_time+fruiting+shade_bin+ds,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+         start.beta=NULL, start.alpha=NULL,
+         boot=100,full.matrix = TRUE)
+
 
 #plotting.
 ###the tree and variable:
