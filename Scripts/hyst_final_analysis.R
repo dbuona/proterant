@@ -71,7 +71,7 @@ silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
 keeler.data<-  keeler.data %>% remove_rownames %>% column_to_rownames(var="name")
 michXkeeler.data<-  michXkeeler.data %>% remove_rownames %>% column_to_rownames(var="name")
 
-mich.2<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+mich2<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=100,full.matrix = TRUE)
 summary(mich2)
