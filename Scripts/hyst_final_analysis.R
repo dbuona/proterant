@@ -42,13 +42,14 @@ silv.data$fruiting<-silv.data$av_fruit_time
 silv.data$fruiting[silv.data$fruiting==21]<-9
 
 #####Centering
-mich.data$height_cent<-mich.data$heigh_height/mean(mich.data$heigh_height)
-mich.data$fruit_cent<-mich.data$fruiting/mean(mich.data$fruiting)
-mich.data$flo_cent<-mich.data$flo_time/mean(mich.data$flo_time)
+mich.data$height_cent<-(mich.data$heigh_height-mean(mich.data$heigh_height))/(2*sd(mich.data$heigh_height))
+mich.data$fruit_cent<-(mich.data$fruiting-mean(mich.data$fruiting))/(2*sd(mich.data$fruiting))
+mich.data$flo_cent<-(mich.data$flo_time-mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
+mich.data$pol_cent<-(mich.data$pol-mean(mich.data$pol))/(2*sd(mich.data$pol))
 
-silv.data$height_cent<-silv.data$height/mean(silv.data$height)
-silv.data$fruit_cent<-silv.data$fruiting/mean(silv.data$fruiting)
-silv.data$flo_cent<-silv.data$flower_time/mean(silv.data$flower_time)
+silv.data$height_cent<-(silv.data$height-mean(silv.data$height))/(2*sd(silv.data$height))
+silv.data$fruit_cent<-(silv.data$fruiting-mean(silv.data$fruiting))/(2*sd(silv.data$fruiting))
+silv.data$flo_cent<-(silv.data$flower_time-mean(silv.data$flower_time))/(2*sd(silv.data$flower_time))
 
 
 
@@ -74,17 +75,17 @@ mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich
                 start.beta=NULL, start.alpha=NULL,
                 boot=50,full.matrix = TRUE)
 summary(mich5)
-sil5<-phyloglm(pro~pol+flower_time+height_cent+fruiting+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
+sil5<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
          start.beta=NULL, start.alpha=NULL,
-         boot=100,full.matrix = TRUE)
+         boot=50,full.matrix = TRUE)
 summary(sil5)
 
 coef(sil5)
 coef(mich5cent)
 ###centered full model
-mich5cent<-phyloglm(pro~pol+height_cent+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
+                boot=50,full.matrix = TRUE)
 summary(mich5cent)
 
 ###merge
@@ -94,8 +95,8 @@ colnames(mich.data)[which(names(mich.data) == "flo_time")] <- "flower_time"
 mich.data$ds<-"michigan"
 silv.data$ds<-"silvics"
 
-mich.data<-dplyr::select(mich.data,pro,pol,height,height_cent,flower_time,fruiting, shade_bin,ds)
-silv.data<-dplyr::select(silv.data,pro,pol,height,height_cent,flower_time,fruiting, shade_bin,ds)
+mich.data<-dplyr::select(mich.data,pro,pol,height,height_cent,flower_time,fruiting,fruit_cent,flo_cent, shade_bin,ds)
+silv.data<-dplyr::select(silv.data,pro,pol,height,height_cent,flower_time,fruiting,fruit_cent,flo_cent, shade_bin,ds)
 mich.data<-rownames_to_column(mich.data, "name")
 silv.data<-rownames_to_column(silv.data, "name")
 bigdata<-rbind(mich.data,silv.data)
