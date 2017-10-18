@@ -17,9 +17,9 @@ pruned.by.anthy<-drop.tip(treee,to.prune)
 ###what are the tip labels in pruned phylogeny?
 mytree.names<-pruned.by.anthy$tip.label
 
-intersect(namelist,mytree.names) #107 species include
+intersect(namelist,mytree.names) #159 species include
 
-addins<-setdiff(namelist,mytree.names) #30 species did not make it
+addins<-setdiff(namelist,mytree.names) #45 species did not make it
 ###
 ###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
 is.ultrametric(pruned.by.anthy)
@@ -33,7 +33,7 @@ for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anth
                                                              where="root")
 mytree.names<-pruned.by.anthy$tip.label
 
-intersect(namelist,mytree.names) #107 species include
+intersect(namelist,mytree.names) #195 species include
 setdiff(namelist,mytree.names)
 
 

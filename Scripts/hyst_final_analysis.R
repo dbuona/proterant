@@ -32,10 +32,17 @@ silv.data<-read.csv("silv_data_full.csv")
 #keeler.data<-read.csv("keeler_cleaned.csv")
 
 #setdiff(keeler.data$name,mich.data$name)
+###clean fruiting
+mich.data$fruiting[mich.data$fruiting==19]<-7
+
 #####add a new column for a adjusting for red acorn time
 mich.data$fruiting<-NA
 mich.data$fruiting<-mich.data$av_fruit_time
 mich.data$fruiting[mich.data$fruiting==19]<-7
+mich.data$fruiting[mich.data$fruiting=="persistant"]<-12
+mich.data$fruiting[mich.data$fruiting=="persitant"]<-12
+mich.data$fruiting[mich.data$fruiting=="unreported"]<-9                                      
+mich.data$fruiting<-as.numeric(mich.data$fruiting)
 
 silv.data$fruiting<-NA
 silv.data$fruiting<-silv.data$av_fruit_time
@@ -82,6 +89,7 @@ summary(sil5)
 
 coef(sil5)
 coef(mich5cent)
+coef(mich5)
 ###centered full model
 mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
