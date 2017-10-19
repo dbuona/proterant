@@ -5,17 +5,17 @@ library(dplyr)
 setwd("~/Documents/git/proterant/fLOBUDS")
 
 
-d<-read.csv("flobud_datapoints.csv")
+d<-read.csv("flobud_datapoints.csv") ###read in data
 
-d$classification<-paste(d$Genus,d$species,sep="_")
+d$classification<-paste(d$Genus,d$species,sep="_") ###make a column contains genus_species
 
 ###how many samples need from each individual?
 table(d$classification)
-#8 treatments, 6 cuttings per treatment within species= 48 total cuttings
+#8 treatments, 6 cuttings per treatment within species= 48 total cuttings per pecies
 cuttingper<-as.data.frame(table(d$classification))
 cuttingper$cutting_number<-48/cuttingper$Freq
 
-cuttingper<-filter(cuttingper, Freq>6)
+cuttingper<-filter(cuttingper, Freq>6) ### This sheets says how many cuttings per
 
 #assign treatment
 #sample(seq(from = 1, to = 8, by = 1), size = 8, replace = FALSE)

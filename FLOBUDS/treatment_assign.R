@@ -1,7 +1,11 @@
 ##This code uses fake data to simulate the treatment assignment process in a block.
-setwd("~/Documents/git/proterant/FLOBUDS")
-R<-read.csv("randomize.csv",header=TRUE)
+
+
 library(randomizr)
+setwd("~/Documents/git/proterant/FLOBUDS")
+R<-read.csv("randomize.csv",header=TRUE) 
+R$uniqueID<-paste(R$name,R$number,sep="_")
+
 N<-nrow(R)
 Z <- complete_ra(N = N)
 table(Z)
@@ -28,5 +32,7 @@ table(Cor$assignment)
 L<-filter(R, assignment=="T1")
 
 Z <- complete_ra(N = nrow(L), num_arms = 2)
+
+
 
 

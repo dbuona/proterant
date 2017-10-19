@@ -55,6 +55,7 @@ dd$collected<-""
 
 #### treatment assignment, can also use treatment_assign.R
 table(dd$classification)
+#write.csv(dd,"pre_sample_datasheet.csv", row.names = FALSE)
 
 ###This works,
 Z <- block_ra(block_var = dd$species, condition_names = c("WL0", "WS0", "WL1","WS1","CL0","CS0","CL1","CS1"))
@@ -80,12 +81,15 @@ table(WS0$group)
 ######seems to work but wont be able to tell until there are only 48 individuals per treament.
 
 table(dd$block_var)
-###assign to location in chamber
+
 dd$block_var <- with(dd, paste(assignment,group, sep = "_"))
 
+dd<-group_by(dd,block_var)
+
+label<-dplyr::select(dd,ind_id,block_var)
 
 
-
+###assign to location in chamber
 ####code for placing them in chamber position##############3
 
 
