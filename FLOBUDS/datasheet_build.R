@@ -54,7 +54,10 @@ dd<-dd[,c(13,1,2,3,4,14,5,6,7,8,9,10,11)]
 dd$collected<-""
 
 #### treatment assignment, can also use treatment_assign.R
-table(dd$classification)
+projected<-as.data.frame(table(dd$classification))
+
+combnum<-right_join(projected,cuttingper,by="Var1")
+#write.csv(combnum,"cutting_perspecies_guide.csv",row.names = FALSE)
 #write.csv(dd,"pre_sample_datasheet.csv", row.names = FALSE)
 
 ###This works,
