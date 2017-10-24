@@ -22,3 +22,21 @@ remove<-c("Viburnum_cassinoides","Fagus_grandifolia","Quercus_alba","Quercus_rub
 unique(do$nomen)
       
 write.csv(do,"final_flobud_datapoints.csv",row.names = FALSE)
+
+##post sampling: How did we do?
+ch<-read.csv("final_flobud_datapoints.csv", header=TRUE)
+ch<-dplyr::select(ch,name,nomen,collected)
+ch<-dplyr::group_by(ch,nomen)
+
+##33 Ace_pen
+#48 Ace rub
+#44 Ace sac
+#51 Bet all
+#58 Com per
+#76 Cor Cor
+#43 Ile muc
+#85 Ilever
+#73 prupen
+#39 Pru vir
+#58 Vaccor
+#59 Vibe Ace
