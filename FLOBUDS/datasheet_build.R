@@ -1,4 +1,4 @@
-###This script creates a unique id for each twig that will be cult
+###This script creates a unique id for each twig that will be cult. ignore this and use fateful wednesday instead.
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
