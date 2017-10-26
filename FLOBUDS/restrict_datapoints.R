@@ -25,8 +25,9 @@ write.csv(do,"final_flobud_datapoints.csv",row.names = FALSE)
 
 ##post sampling: How did we do?
 ch<-read.csv("final_flobud_datapoints.csv", header=TRUE)
-ch<-dplyr::select(ch,name,nomen,collected)
+ch<-dplyr::select(sheet,name,nomen,collected)
 ch<-dplyr::group_by(ch,nomen)
+table(ch$nomen)
 
 ##33 Ace_pen
 #48 Ace rub
