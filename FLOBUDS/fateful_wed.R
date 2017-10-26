@@ -79,6 +79,19 @@ write.csv(exper,"final.data.sheet.csv",row.names = FALSE) #final data sheet
 tags<-dplyr::select(exper, name,flask_id)### this can be used to make name tags
 write.csv(tags,"flask_labels.csv")### name tag output
 
+### update to avoid con specifics
+lapel<-read.csv("flask_labels.csv",header=TRUE)
+lapel$good_flaskid<-NA
+changes<-filter(lapel, !is.na(new_num))
+changes$good_flaskid<-paste(changes$treat,changes$new_num,sep="_")
+nochange<-filter(lapel, is.na(new_num))
+nochange$good_flaskid<-nochange$flask_id
+test<-rbind(changes,nochange)
+
+uselabel<-dplyr::select(test,name,good_flaskid)
+
+write.csv(uselabel,"final_labels.csv",row.names = FALSE)
+
 ###Fill flasks with DI water
 ### color 
 
