@@ -50,7 +50,7 @@ set.seed(1800)
 exper<-sample_n(by_cyl, 48, replace = FALSE)
 useful<-table(exper$name)
 useful<-as.data.frame(useful)
-write.csv(useful,"twigstouseinexp.csv",row.names = FALSE)
+#write.csv(useful,"twigstouseinexp.csv",row.names = FALSE)
 
 ####At this point, I will print the above made data sheet lab help goes and pulls the proper # of individuals from each bag, 
 ###defoliate and put in new bags
@@ -74,10 +74,10 @@ exper$group<-X
 table(exper$group)
 exper$flask_id<-paste(exper$assignment,exper$group,sep="_")
 
-write.csv(exper,"final.data.sheet.csv",row.names = FALSE) #final data sheet
+#write.csv(exper,"final.data.sheet.csv",row.names = FALSE) #final data sheet
 
 tags<-dplyr::select(exper, name,flask_id)### this can be used to make name tags
-write.csv(tags,"flask_labels.csv")### name tag output
+#write.csv(tags,"flask_labels.csv")### name tag output
 
 ### update to avoid con specifics
 lapel<-read.csv("flask_labels.csv",header=TRUE)
@@ -90,10 +90,10 @@ test<-rbind(changes,nochange)
 
 uselabel<-dplyr::select(test,name,good_flaskid)
 
-write.csv(uselabel,"final_labels.csv",row.names = FALSE)
+#write.csv(uselabel,"final_labels.csv",row.names = FALSE)
 
 ###Fill flasks with DI water
 ### color 
-
-
-
+goober<-read.csv("final_labels.csv", header = TRUE)
+table(goober$GEN.SPA)
+table(goober$name)
