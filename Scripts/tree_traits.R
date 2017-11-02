@@ -26,6 +26,11 @@ mich.data<-read.csv("mich_data_full.csv")
 mich.data$fruiting<-NA
 mich.data$fruiting<-mich.data$av_fruit_time
 mich.data$fruiting[mich.data$fruiting==19]<-7
+mich.data$fruiting[mich.data$fruiting=="persistant"]<-12
+mich.data$fruiting[mich.data$fruiting=="persitant"]<-12
+mich.data$fruiting[mich.data$fruiting=="unreported"]<-9  
+mich.data$fruiting<-as.numeric(mich.data$fruiting)
+
 ####make variable
 z <- as.factor(mich.data$pol); names(z) <- mich.tree$tip.label
 zz<- as.factor(mich.data$pro); names(z) <- mich.tree$tip.label

@@ -1,3 +1,16 @@
+\documentclass{article}
+\usepackage{Sweave}
+\usepackage{tabularx}
+\usepackage{geometry}
+\geometry{margin=.5in}
+\usepackage{enumerate}
+\usepackage[demo]{graphicx}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+\begin{document}
+
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
 ###This is a tidy analysis compiling and comparing all of Dan B's hysteranthy codes from elsewhere
 ###Began 5 Spet 2017
 
@@ -26,14 +39,6 @@ mich.data<-read.csv("mich_data_full.csv")
 
 silv.tree<-read.tree("pruned_silvics.tre")
 silv.data<-read.csv("silv_data_full.csv")
-##Mich trees phylo D
-d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
-PhyloD <- phylo.d(d, binvar=pro)
-PhyloD
-###Silvics phyloD
-e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
-PhyloE <- phylo.d(e, binvar=pro)
-PhyloE
 
 #keeler.tree<-read.tree("pruned_keeler.tre")
 #keeler.data<-read.csv("keeler_cleaned.csv")
@@ -73,61 +78,58 @@ silv.data$height_cent<-(silv.data$height-mean(silv.data$height))/(2*sd(silv.data
 silv.data$fruit_cent<-(silv.data$fruiting-mean(silv.data$fruiting))/(2*sd(silv.data$fruiting))
 silv.data$flo_cent<-(silv.data$flower_time-mean(silv.data$flower_time))/(2*sd(silv.data$flower_time))
 
+@
 
+\section*{Introduction}
+Hysteranthy, a trait that describes trees that seasonally flower before leafing out, is a common trait in temperate decidious forests. It has been hypothesized that hysteranthy is an adaptation to allow for more effecient wind pollination. An alternative hypothesis posits that hysteranthy is part of an adaptation for early flowering and a product of stronger selection on leaf timing compared to flower timing by late season frost. To begin understand the prevelance and trait associations of hysteranthy, we use published trait data to model the traits the predict hysteranthy.
 
+\section*{Methods}
+Data source:\\ Michigan Trees,Michigan shrubs and vines\\ USFS Silvics mannual\\
+Tree source: Zanne et al 2014\\
+Using R, Modeled hysteranty as a function of other traits, pollination syndrome, shade tolerance, maximum height, timing of flowering, timing of fruiting. We used a pgls model to correct for phylogenetic signal.
 
+\section*{Results}
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
+d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+PhyloD <- phylo.d(d, binvar=pro)
+PhyloD
+
+e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+PhyloE <- phylo.d(e, binvar=pro)
+PhyloE
+
+@
+\caption{PhyloD for Michigan and Silvics Trees}
+\end{figure}
+
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
-
-###########compare 2 variable models####
-mich2<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-
-sil2<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
-               start.beta=NULL, start.alpha=NULL,
-               boot=50,full.matrix = TRUE)
-summary(sil2)
-
-summary(mich2)
-coef(sil2)
-coef(mich2)
-####pollination only become significant when av_fruit_time is in the model
-
-mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=50,full.matrix = TRUE)
-summary(mich5)
-sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
-         start.beta=NULL, start.alpha=NULL,
-         boot=50,full.matrix = TRUE)
-summary(sil5.cent)
-
-coef(sil5)
-coef(mich5cent)
-coef(mich5)
-###centered full model
-mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=50,full.matrix = TRUE)
+mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,start.beta=NULL, start.alpha=NULL,boot=20,full.matrix = TRUE)
 summary(mich5cent)
-##centered full model with oaks original
-mich5centoaks<-phyloglm(pro~pol+height_cent+flo_cent+av_fruit_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                    start.beta=NULL, start.alpha=NULL,
-                    boot=50,full.matrix = TRUE)
-summary(mich5centoaks)
+@
+\caption{model output for michigan data, centered}
+\end{figure}
 
 
-###merge
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
+sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,start.beta=NULL, start.alpha=NULL, boot=20,full.matrix = TRUE)
+summary(sil5.cent)
+@
+\caption{model output for Silvic data, centered}
+\end{figure}
 
-#plotting.
-###the tree and variable:
-#plotting
+\begin{figure}[h!]
+\includegraphics[width=21cm, height=15cm]{tree_full_mich.pdf}\\
+\caption{Phylogeny and trait map for Michigan data}
+\end{figure}
 
-summary(mich5)
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
 library(gridExtra)
-
-coef(mich5cent)
 est<-as.data.frame(coef(mich5cent))
 est<-rownames_to_column(est, "name")
 ints<-as.data.frame(confint(mich5cent,level = 0.95))
@@ -151,14 +153,13 @@ foo2<-left_join(est2,ints2)
 foo2<-filter(foo2,estimate<10)
 plotII<-ggplot(foo2,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: SIlvics")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
 grid.arrange(plotI,plotII, ncol=2)
+@
+\caption{Trait effect sizes}
+\end{figure}
 
-##This plotting is based on bootstrap cint but the data sheet is not updated
-#boot<-read.csv("mich5bootoutput.csv",header=TRUE)
-#head(boot)
-#boot<-dplyr::filter(boot,Coefficients!="(Intercept)")
-#ggplot(boot,aes(Estimate,Coefficients))+geom_point()+geom_segment(aes(y=Coefficients,yend=Coefficients,x=lowerbootCI,xend=upperbootCI))+ggtitle("Main effects of predictors on Hysteranthy with bootstrap")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
 
-####binomial plots
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
 
 plot1<-ggplot(mich.data, aes(x=fruiting, y=pro)) + geom_point(shape=1, position=position_jitter(width=.05,height=.05))  + 
   stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
@@ -179,3 +180,33 @@ plot5<-ggplot(mich.data, aes(x=heigh_height, y=pro)) +
   stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
 
 grid.arrange(plot1, plot2,plot3,plot4,plot5, ncol=2)
+@
+\caption{Michigan binomial plots}
+\end{figure}
+
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
+plot1<-ggplot(silv.data, aes(x=fruiting, y=pro)) + geom_point(shape=1, position=position_jitter(width=.05,height=.05))  + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+plot2<-ggplot(silv.data, aes(x=flower_time, y=pro)) + geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+plot3<-ggplot(silv.data, aes(x=pol, y=pro)) + 
+  geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+plot4<-ggplot(silv.data, aes(x=shade_bin, y=pro)) + 
+  geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+plot5<-ggplot(silv.data, aes(x=height, y=pro)) + 
+  geom_point(shape=1, position=position_jitter(width=.05,height=.05)) + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
+
+grid.arrange(plot1, plot2,plot3,plot4,plot5, ncol=2)
+@
+\caption{Silvics binomial plots}
+\end{figure}
+
+\end{document}

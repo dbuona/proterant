@@ -187,6 +187,64 @@ summary(model2) ### no interactions significant
 table(anthy$Phen.sequence)
 library(rstan)
 
+###if ever I want to try and combine both data sets
+colnames(mich.data)[which(names(mich.data) == "heigh_height")] <- "height"
+colnames(mich.data)[which(names(mich.data) == "flo_time")] <- "flower_time"
+
+mich.data$ds<-"michigan"
+silv.data$ds<-"silvics"
+
+mich.data<-dplyr::select(mich.data,pro,pol,height,height_cent,flower_time,fruiting,fruit_cent,flo_cent, shade_bin,ds)
+silv.data<-dplyr::select(silv.data,pro,pol,height,height_cent,flower_time,fruiting,fruit_cent,flo_cent, shade_bin,ds)
+mich.data<-rownames_to_column(mich.data, "name")
+silv.data<-rownames_to_column(silv.data, "name")
+bigdata<-rbind(mich.data,silv.data)
+
+big1<-glm(pro~pol+height_cent+flower_time+fruiting+shade_bin+ds,family = binomial(link="logit"),data=bigdata)
+summary(big1)
+
+###can we do this phylogenetically?
+treee<-read.tree("Vascular_Plants_rooted.dated.tre")
+names.intree<-treee$tip.label
+
+# list of my species myspecies
+namelist<-unique(bigdata$name)
+
+##Prune the tree
+to.prune<-which(!names.intree%in%namelist)
+pruned.by.anthy<-drop.tip(treee,to.prune)
+#plot(pruned.by.anthy)
+
+###what are the tip labels in pruned phylogeny?
+mytree.names<-pruned.by.anthy$tip.label
+
+intersect(namelist,mytree.names) #107 species include
+
+addins<-setdiff(namelist,mytree.names) #30 species did not make it
+###
+###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
+is.ultrametric(pruned.by.anthy)
+help(chronoMPL)
+pruned.by.anthy<-chronoMPL(pruned.by.anthy)
+is.ultrametric(pruned.by.anthy)
+#plot(pruned.by.anthy)
+#adding species to tree at root
+species<-addins
+for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anthy,species[i],
+                                                                  where="root")
+mytree.names<-pruned.by.anthy$tip.label
+
+intersect(namelist,mytree.names) #107 species include
+final.df<-bigdata[match(mytree.names, bigdata$name),]
+namelist3<-final.df$name
+namelist3==mytree.names
+final.df$name== mytree.names
+
+####it can seem to handele duplicate data
+biggie<-phyloglm(pro~pol+height_cent+flower_time+fruiting+shade_bin+ds,final.df, pruned.by.anthy, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                 start.beta=NULL, start.alpha=NULL,
+                 boot=100,full.matrix = TRUE)
+
 
 
 

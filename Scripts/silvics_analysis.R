@@ -35,6 +35,7 @@ anthy$name<-paste(anthy$genus,anthy$species,sep="_")
 
 #fix names
 anthy$name[anthy$name == "Fraxinus_pensylvanica"] <- "Fraxinus_pennsylvanica"
+anthy$name[anthy$name=="Ailthanthus_altissima"]<-"Ailanthus_altissima"
 # list of my species myspecies
 namelist<-unique(anthy$name)
 
@@ -44,9 +45,9 @@ pruned.by.anthy<-drop.tip(treee,to.prune)
 
 mytree.names<-pruned.by.anthy$tip.label
 
-intersect(namelist,mytree.names) #55 species include
+intersect(namelist,mytree.names) #70 species include
 
-addins<-setdiff(namelist,mytree.names) #10didn't make it
+addins<-setdiff(namelist,mytree.names) #14didn't make it
 
 ###make ultrametric
 is.ultrametric(pruned.by.anthy)
@@ -58,8 +59,8 @@ for(i in 1:length(species)) pruned.by.anthy<-add.species.to.genus(pruned.by.anth
                                                                   where="root")
 mytree.names<-pruned.by.anthy$tip.label
 
-intersect(namelist,mytree.names) #107 species include
-setdiff(namelist,mytree.names)
+intersect(namelist,mytree.names) #82 species include
+setdiff(namelist,mytree.names) #2
 
 
 ##add them back
