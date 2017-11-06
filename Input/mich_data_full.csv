@@ -30,7 +30,6 @@
 "Anacardiaceae","Toxicodendron","vernix","insect","ser",6,"dioecious",6,"9","intolerant","Y","N","Toxicodendron_vernix",0,0,0,"0shrub",0,1,0,1
 "Sapindaceae","Aesculus","glabra","insect","ser",15,"monoecious",4.5,"10","moderately_tolerant","N","N","Aesculus_glabra",0,0,0,"1smalltree",0,1,1,0
 "Sapindaceae","Aesculus","hippocastanum","insect","ser",20,"perfect",6,"10","moderately_tolerant","N","N","Aesculus_hippocastanum",0,0,0,"2talltree",1,0,1,0
-"Sapindaceae","Acer","nigrum","wind","syn",27,"perfect",4.5,"10","tolerant","N","N","Acer_nigrum",0,1,1,"2talltree",1,0,1,0
 "Sapindaceae","Acer","spicatum","insect","ser",9,"monoecious",6,"7.5","tolerant","N","N","Acer_spicatum",0,0,0,"0shrub",0,1,1,0
 "Sapindaceae","Acer","platanoides","wind","pro/syn",18,"dioecious",5.5,"9.5","tolerant","N","N","Acer_platanoides",1,1,1,"1smalltree",1,1,1,1
 "Sapindaceae","Acer","pensylvanicum","insect","syn/ser",12,"dioecious",5.5,"7.5","tolerant","N","N","Acer_pensylvanicum",0,0,0,"1smalltree",0,1,1,0
@@ -41,6 +40,8 @@
 "Simaroubaceae","Ailanthus","altissima","insect","ser",20,"dioecious",6,"10","intolerant","N","N","Ailanthus_altissima",0,0,0,"2talltree",1,1,0,0
 "Rutaceae","Ptelea","trifoliata","insect","syn",5,"perfect",6,"9.5","moderately_tolerant","N","N","Ptelea_trifoliata",0,1,0,"0shrub",0,0,1,1
 "Rutaceae","Zanthoxylum","americanum","insect","pro",5,"dioecious",4.5,"8.5","moderately_tolerant","N","N","Zanthoxylum_americanum",1,1,0,"0shrub",0,1,1,0
+"Celastraceae","Euonymus","obovatus","insect","ser",0.4,"perfect",4.5,"9","tolerant","Y","N","Euonymus_americanus",0,0,0,"0shrub",0,0,1,1
+"Celastraceae","Euonymus","atropurpureus","insect","ser",4,"perfect",6,"9","intolerant","Y","N","Euonymus_atropurpureus",0,0,0,"0shrub",0,0,0,1
 "Celastraceae","Celastrus","scandens","insect","ser",15,"monoecious",4.5,"9.5","intolerant","Y","N","Celastrus_scandens",0,0,0,"1smalltree",0,1,0,1
 "Hypericaceae","Hypericum","kalmianum","insect","ser",0.8,"perfect",7.5,"8.5","intolerant","Y","N","Hypericum_kalmianum",0,0,0,"0shrub",0,0,0,0
 "Hypericaceae","Hypericum","prolificum","insect","ser",2,"perfect",7.5,"8.5","intolerant","Y","N","Hypericum_prolificum",0,0,0,"0shrub",0,0,0,0
@@ -81,13 +82,13 @@
 "Fagaceae","Quercus","alba","wind","syn",28,"monoecious",5.5,"9.5","moderately_tolerant","N","N","Quercus_alba",0,1,1,"2talltree",1,1,1,1
 "Myricaceae","Comptonia","peregrina","wind","pro",1,"monoecious",4.5,"7.5","intolerant","N","N","Comptonia_peregrina",1,1,1,"0shrub",0,1,0,0
 "Myricaceae","Myrica","gale","wind","pro",1.5,"dioecious",4.5,"7.5","intolerant","N","N","Myrica_gale",1,1,1,"0shrub",0,1,0,0
-"Juglandaceae","Carya","lacinosa","wind","syn",25,"monoecious",5.5,"10","tolerant","N","N","Carya_lacinosa",0,1,1,"2talltree",1,1,1,0
+"Juglandaceae","Carya","lacinosa","wind","syn",25,"monoecious",5.5,"10","tolerant","N","N","Carya_laciniosa",0,1,1,"2talltree",1,1,1,0
 "Juglandaceae","Carya","ovata","wind","syn",25,"monoecious",5.5,"10","tolerant","N","N","Carya_ovata",0,1,1,"2talltree",1,1,1,0
 "Juglandaceae","Carya","cordiformis","wind","syn",26,"monoecious",5.5,"10","tolerant","N","N","Carya_cordiformis",0,1,1,"2talltree",1,1,1,0
 "Juglandaceae","Carya","glabra","wind","syn",22,"monoecious",5.5,"10","moderately_tolerant","N","N","Carya_glabra",0,1,1,"2talltree",1,1,1,0
 "Juglandaceae","Juglans","cinerea","wind","syn",18,"monoecious",5,"10","intolerant","N","N","Juglans_cinerea",0,1,1,"1smalltree",1,1,0,0
 "Juglandaceae","Juglans","nigra","wind","syn",28,"monoecious",5,"10","intolerant","N","N","Juglans_nigra",0,1,1,"2talltree",1,1,0,0
-"Betulaceae","Alnus","viridis","wind","syn",3,"monoecious",5.5,"9.5","intolerant","N","N","Alnus_viridis",0,1,1,"0shrub",0,1,0,1
+"Betulaceae","Alnus","viridis","wind","syn",3,"monoecious",5.5,"9.5","intolerant","N","N","Alnus_alnobetula",0,1,1,"0shrub",0,1,0,1
 "Betulaceae","Alnus","incana","wind","pro",8,"monoecious",4,"9","intolerant","N","N","Alnus_incana",1,1,1,"0shrub",0,1,0,1
 "Betulaceae","Alnus","glutinosa","wind","pro/syn",18,"monoecious",4,"9.5","intolerant","N","N","Alnus_glutinosa",1,1,1,"1smalltree",1,1,0,1
 "Betulaceae","Corylus","americana","wind","pro",3,"monoecious",3.5,"8.5","intolerant","N","N","Corylus_americana",1,1,1,"0shrub",0,1,0,0
@@ -111,13 +112,13 @@
 "Ulmaceae","Ulmus","rubra","wind","pro",24,"perfect",3.5,"5","moderately_tolerant","N","N","Ulmus_rubra",1,1,1,"2talltree",1,0,1,0
 "Ulmaceae","Ulmus","pumila","wind","pro",26,"perfect",3.5,"4","moderately_tolerant","N","N","Ulmus_pumila",1,1,1,"2talltree",1,0,1,0
 "Cannabaceae","Celtis","occidentalis","wind","syn/ser",15,"monoecious",5,"9.5","moderately_tolerant","N","N","Celtis_occidentalis",0,0,1,"1smalltree",0,1,1,1
-"Cannabaceae","Celtis","tenufolia","wind","syn/ser",6,"monoecious",5,"9","moderately_tolerant","N","N","Celtis_tenufolia",0,0,1,"0shrub",0,1,1,1
+"Cannabaceae","Celtis","tenufolia","wind","syn/ser",6,"monoecious",5,"9","moderately_tolerant","N","N","Celtis_tenuifolia",0,0,1,"0shrub",0,1,1,1
 "Moraceae","Morus","alba","wind","syn",18,"dioecious",5.5,"6.5","intolerant","N","N","Morus_alba",0,1,1,"1smalltree",1,1,0,0
 "Moraceae","Morus","rubra","wind","syn",15,"dioecious",5.5,"7","moderately_tolerant","N","N","Morus_rubra",0,1,1,"1smalltree",0,1,1,0
 "Moraceae","Maclura","pomifera","wind","ser",18,"dioecious",5.5,"9.5","intolerant","N","N","Maclura_pomifera",0,0,1,"1smalltree",1,1,0,1
-"Rosaceae","Rubus","strigosis","insect","ser",2,"perfect",5.5,"7.5","intolerant","Y","N","Rubus_strigosis",0,0,0,"0shrub",0,0,0,0
 "Rosaceae","Rubus","parviflorus","insect","ser",2.5,"perfect",6.5,"8.5","intolerant","Y","N","Rubus_parviflorus",0,0,0,"0shrub",0,0,0,0
 "Rosaceae","Rubus","occidentalis","insect","ser",4,"perfect",5.5,"7.5","intolerant","Y","N","Rubus_occidentalis",0,0,0,"0shrub",0,0,0,0
+"Rosaceae","Rubus","strigosis","insect","ser",2,"perfect",5.5,"7.5","intolerant","Y","N","Rubus_idaeus",0,0,0,"0shrub",0,0,0,0
 "Rosaceae","Rubus","allegheniensis","insect","ser",3.5,"perfect",5.5,"8","intolerant","Y","N","Rubus_allegheniensis",0,0,0,"0shrub",0,0,0,0
 "Rosaceae","Rubus","hispidus","insect","ser",1.5,"perfect",6.5,"8","intolerant","Y","N","Rubus_hispidus",0,0,0,"0shrub",0,0,0,0
 "Rosaceae","Rubus","flagellaris","insect","ser",4,"perfect",5.5,"7.5","intolerant","Y","N","Rubus_flagellaris",0,0,0,"0shrub",0,0,0,0
@@ -147,6 +148,7 @@
 "Rosaceae","Malus","pumila","insect","syn",12,"perfect",5,"8.5","moderately_tolerant","N","N","Malus_pumila",0,1,0,"1smalltree",0,0,1,0
 "Rosaceae","Malus","coronaria","insect","ser",7,"perfect",5,"10","intolerant","N","N","Malus_coronaria",0,0,0,"0shrub",0,0,0,0
 "Fabaceae","Cercis","canadensis","insect","pro/syn",25,"perfect",4.5,"6.5","moderately_tolerant","N","N","Cercis_canadensis",1,1,0,"2talltree",1,0,1,0
+"Fabaceae","Gymnocladus","dioicus","insect","ser",26,"dioecious",6,"9.5","intolerant","N","N","Gymnocladus_dioica",0,0,0,"2talltree",1,1,0,1
 "Fabaceae","Gleditsia","triacanthos","insect","syn/ser",26,"dioecious",5.5,"9.5","intolerant","N","N","Gleditsia_triacanthos",0,0,0,"2talltree",1,1,0,1
 "Fabaceae","Robinia","pseudoacacia","insect","ser",18,"perfect",5.5,"10","intolerant","N","N","Robinia_pseudoacacia",0,0,0,"1smalltree",1,0,0,0
 "Cornaceae","Cornus","florida","insect","syn",10,"perfect",5.5,"10","tolerant","N","N","Cornus_florida",0,1,0,"1smalltree",0,0,1,0

@@ -5,8 +5,29 @@ names.intree<-treee$tip.label
 
 #dataformat it like Zanne
 anthy$name<-paste(anthy$Genus,anthy$Species,sep="_")
-
+anthy<-filter(anthy,name!="Acer_nigrum")
 # list of my species myspecies
+namelist<-unique(anthy$name)
+####clean
+setdiff(anthy$name,namelist)
+
+
+#taxa <- paste(anthy$Genus,anthy$Species,sep=" ")
+#taxa <- unique(taxa)
+#library("Taxonstand")
+#clean_names <- TPL(taxa) # patience, patience
+#clean_names$name<-paste(clean_names$New.Genus,clean_names$New.Species,sep="_")
+#anthy$name<-clean_names$name
+#setdiff(anthy$name,clean_names$name)
+#setdiff(clean_names$name,anthy$name)
+####change names manually
+anthy$name[anthy$name == "Gymnocladus_dioicus"] <- "Gymnocladus_dioica"
+anthy$name[anthy$name == "Celtis_tenufolia"] <- "Celtis_tenuifolia"
+anthy$name[anthy$name == "Carya_lacinosa"] <- "Carya_laciniosa"
+anthy$name[anthy$name == "Alnus_viridis"] <- "Alnus_alnobetula"
+anthy$name[anthy$name == "Euonymus_obovatus"] <- "Euonymus_americanus"
+anthy$name[anthy$name == "Rubus_strigosis"] <- "Rubus_idaeus"
+
 namelist<-unique(anthy$name)
 
 ##Prune the tree
@@ -17,7 +38,7 @@ pruned.by.anthy<-drop.tip(treee,to.prune)
 ###what are the tip labels in pruned phylogeny?
 mytree.names<-pruned.by.anthy$tip.label
 
-intersect(namelist,mytree.names) #159 species include
+intersect(namelist,mytree.names) #161 species include
 
 addins<-setdiff(namelist,mytree.names) #45 species did not make it
 ###
@@ -170,7 +191,7 @@ nameL<-final.df$name
 pru.labels<-pruned.by.anthy$tip.label
 to.prune<-which(!pru.labels%in%nameL)
 pruned.by.anthy<-drop.tip(pruned.by.anthy,to.prune)
-
+pruned.by.anthy$node.label<-NULL
 
 #final.df<-dplyr::select(final.df, name,pro,pro2,pol,class2,flo_type,fruit_bin,shade_bin)
 

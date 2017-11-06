@@ -10,6 +10,7 @@
 \makeatother
 \begin{document}
 
+
 <<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
 ###This is a tidy analysis compiling and comparing all of Dan B's hysteranthy codes from elsewhere
 ###Began 5 Spet 2017

@@ -27,6 +27,8 @@ mich.data<-read.csv("mich_data_full.csv")
 silv.tree<-read.tree("pruned_silvics.tre")
 silv.data<-read.csv("silv_data_full.csv")
 ##Mich trees phylo D
+set.seed(122)
+mich.tree$node.label<-NULL
 d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloD <- phylo.d(d, binvar=pro)
 PhyloD
@@ -79,25 +81,17 @@ silv.data$flo_cent<-(silv.data$flower_time-mean(silv.data$flower_time))/(2*sd(si
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
 
-###########compare 2 variable models####
-mich2<-phyloglm(pro~pol+flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=100,full.matrix = TRUE)
-
-sil2<-phyloglm(pro~pol+flower_time,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
-               start.beta=NULL, start.alpha=NULL,
-               boot=50,full.matrix = TRUE)
-summary(sil2)
-
-summary(mich2)
-coef(sil2)
-coef(mich2)
 ####pollination only become significant when av_fruit_time is in the model
 
 mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=50,full.matrix = TRUE)
 summary(mich5)
+mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                    start.beta=NULL, start.alpha=NULL,
+                    boot=50,full.matrix = TRUE)
+summary(mich5cent)
+
 sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
          start.beta=NULL, start.alpha=NULL,
          boot=50,full.matrix = TRUE)
@@ -107,10 +101,7 @@ coef(sil5)
 coef(mich5cent)
 coef(mich5)
 ###centered full model
-mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                start.beta=NULL, start.alpha=NULL,
-                boot=50,full.matrix = TRUE)
-summary(mich5cent)
+
 ##centered full model with oaks original
 mich5centoaks<-phyloglm(pro~pol+height_cent+flo_cent+av_fruit_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                     start.beta=NULL, start.alpha=NULL,
@@ -118,13 +109,10 @@ mich5centoaks<-phyloglm(pro~pol+height_cent+flo_cent+av_fruit_time_cent+shade_bi
 summary(mich5centoaks)
 
 
-###merge
-
 #plotting.
 ###the tree and variable:
 #plotting
 
-summary(mich5)
 library(gridExtra)
 
 coef(mich5cent)

@@ -25,6 +25,7 @@ anthy<-read.csv("michigantrees_sequence.csv", header = TRUE)
 anthy<-filter(anthy,Phen.sequence!="evergreen")
 anthy<-filter(anthy,Phen.sequence!="non_woody")
 anthy<-filter(anthy,Phen.sequence!="unknown")
+
 source("source/prune_tree.R")
 write.tree(pruned.by.anthy, "pruned_for_mich.tre")
 write.csv(final.df, "mich_data_full.csv",row.names = FALSE)
