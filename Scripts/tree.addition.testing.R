@@ -31,9 +31,7 @@ names.intree<-treee$tip.label
 anthy$name<-paste(anthy$Genus,anthy$Species,sep="_")
 
 # list of my species myspecies
-namelist<-unique(anthy$name))
-
-
+namelist<-unique(anthy$name)
 
 ##Prune the tree
 to.prune<-which(!names.intree%in%namelist)
