@@ -30,17 +30,17 @@ silv.data<-read.csv("silv_data_full.csv")
 set.seed(122)
 mich.tree$node.label<-NULL
 d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
-PhyloD <- phylo.d(d, binvar=pro)
+PhyloD <- phylo.d(d, binvar=pro) ###Physiological hysteranthy
 PhyloD
+##functionalhysteranthy
+PhyloPro2<-phylo.d(d,binvar=pro2)
+PhyloPro2
 ###Silvics phyloD
 e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloE <- phylo.d(e, binvar=pro)
 PhyloE
 
-#keeler.tree<-read.tree("pruned_keeler.tre")
-#keeler.data<-read.csv("keeler_cleaned.csv")
-
-#setdiff(keeler.data$name,mich.data$name)
+#######Michigan cleaning######################
 #clean av fruit time
 mich.data$av_fruit_time[mich.data$av_fruit_time=="persistant"]<-12
 mich.data$av_fruit_time[mich.data$av_fruit_time=="persitant"]<-12
@@ -59,9 +59,26 @@ mich.data$fruiting[mich.data$fruiting=="persitant"]<-12
 mich.data$fruiting[mich.data$fruiting=="unreported"]<-9                                      
 mich.data$fruiting<-as.numeric(mich.data$fruiting)
 
+####Silvics cleaning
+###fruiting
 silv.data$fruiting<-NA
 silv.data$fruiting<-silv.data$av_fruit_time
 silv.data$fruiting[silv.data$fruiting==21]<-9
+
+###functional hysteranthy
+silv.data["pro2"]<-NA
+silv.data$pro2[silv.data$silvic_phen_seq== "pro"] <- 1
+silv.data$pro2[silv.data$silvic_phen_seq== "pro/syn"] <- 1
+silv.data$pro2[silv.data$silvic_phen_seq== "syn"] <- 1
+silv.data$pro2[silv.data$silvic_phen_seq== "syn/ser"] <- 0
+silv.data$pro2[silv.data$silvic_phen_seq== "ser"] <- 0 
+silv.data$pro2[silv.data$silvic_phen_seq== "hyst"] <- 0
+silv.data$pro2[silv.data$name == "Quercus_laurifolia"] <- 1
+
+###functional phylo.D for suilvics
+e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+PhyloSilv2<-phylo.d(e,binvar=pro2)
+PhyloSilv2
 
 #####Centering
 mich.data$height_cent<-(mich.data$heigh_height-mean(mich.data$heigh_height))/(2*sd(mich.data$heigh_height))
@@ -81,25 +98,35 @@ silv.data$flo_cent<-(silv.data$flower_time-mean(silv.data$flower_time))/(2*sd(si
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
 
-####pollination only become significant when av_fruit_time is in the model
 
+###uncentered
 mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                 start.beta=NULL, start.alpha=NULL,
                 boot=50,full.matrix = TRUE)
 summary(mich5)
+###centered for comparision between bianry and continuous
 mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                     start.beta=NULL, start.alpha=NULL,
                     boot=50,full.matrix = TRUE)
 summary(mich5cent)
+###Functional hysteranthy-centered
+Mich5cent.funct<-phyloglm(pro2~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=50,full.matrix = TRUE)
+summary(Mich5cent.funct)
 
 sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
          start.beta=NULL, start.alpha=NULL,
          boot=50,full.matrix = TRUE)
 summary(sil5.cent)
 
-coef(sil5)
-coef(mich5cent)
-coef(mich5)
+#### functional silvics
+sil5.cent.funct<-phyloglm(pro2~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
+                    start.beta=NULL, start.alpha=NULL,
+                    boot=50,full.matrix = TRUE)
+summary(sil5.cent.funct)
+
+
 ###centered full model
 
 ##centered full model with oaks original
