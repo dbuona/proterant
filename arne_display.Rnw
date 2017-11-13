@@ -41,10 +41,8 @@ mich.data<-read.csv("mich_data_full.csv")
 silv.tree<-read.tree("pruned_silvics.tre")
 silv.data<-read.csv("silv_data_full.csv")
 
-#keeler.tree<-read.tree("pruned_keeler.tre")
-#keeler.data<-read.csv("keeler_cleaned.csv")
 
-#setdiff(keeler.data$name,mich.data$name)
+#######Michigan cleaning######################
 #clean av fruit time
 mich.data$av_fruit_time[mich.data$av_fruit_time=="persistant"]<-12
 mich.data$av_fruit_time[mich.data$av_fruit_time=="persitant"]<-12
@@ -63,9 +61,22 @@ mich.data$fruiting[mich.data$fruiting=="persitant"]<-12
 mich.data$fruiting[mich.data$fruiting=="unreported"]<-9                                      
 mich.data$fruiting<-as.numeric(mich.data$fruiting)
 
+####Silvics cleaning
+###fruiting
 silv.data$fruiting<-NA
 silv.data$fruiting<-silv.data$av_fruit_time
 silv.data$fruiting[silv.data$fruiting==21]<-9
+
+###functional hysteranthy
+silv.data["pro2"]<-NA
+silv.data$pro2[silv.data$silvic_phen_seq== "pro"] <- 1
+silv.data$pro2[silv.data$silvic_phen_seq== "pro/syn"] <- 1
+silv.data$pro2[silv.data$silvic_phen_seq== "syn"] <- 1
+silv.data$pro2[silv.data$silvic_phen_seq== "syn/ser"] <- 0
+silv.data$pro2[silv.data$silvic_phen_seq== "ser"] <- 0 
+silv.data$pro2[silv.data$silvic_phen_seq== "hyst"] <- 0
+silv.data$pro2[silv.data$name == "Quercus_laurifolia"] <- 1
+
 
 #####Centering
 mich.data$height_cent<-(mich.data$heigh_height-mean(mich.data$heigh_height))/(2*sd(mich.data$heigh_height))
@@ -93,12 +104,18 @@ Using R, Modeled hysteranty as a function of other traits, pollination syndrome,
 \begin{figure}[h!]
 <<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
 d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
-PhyloD <- phylo.d(d, binvar=pro)
+PhyloD <- phylo.d(d, binvar=pro) ###Physiological hysteranthy
 PhyloD
-
+##functionalhysteranthy
+PhyloPro2<-phylo.d(d,binvar=pro2)
+PhyloPro2
+###Silvics phyloD
 e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloE <- phylo.d(e, binvar=pro)
 PhyloE
+
+PhyloSilv2<-phylo.d(e,binvar=pro2)
+PhyloSilv2
 
 @
 \caption{PhyloD for Michigan and Silvics Trees}
@@ -114,6 +131,16 @@ summary(mich5cent)
 \caption{model output for michigan data, centered}
 \end{figure}
 
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
+Mich5cent.funct<-phyloglm(pro2~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=50,full.matrix = TRUE)
+summary(Mich5cent.funct)
+@
+\caption{model output for FUNCTIONAL hysteranthy michigan data, centered}
+\end{figure}
+
 
 \begin{figure}[h!]
 <<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
@@ -121,6 +148,16 @@ sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data,
 summary(sil5.cent)
 @
 \caption{model output for Silvic data, centered}
+\end{figure}
+
+\begin{figure}[h!]
+<<figs.only=TRUE,echo=FALSE,message=FALSE,warning=FALSE>>=
+sil5.cent.funct<-phyloglm(pro2~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
+                    start.beta=NULL, start.alpha=NULL,
+                    boot=50,full.matrix = TRUE)
+summary(sil5.cent.funct)
+@
+\caption{model output for FUNCTIONAL Silvic data, centered}
 \end{figure}
 
 \begin{figure}[h!]
