@@ -75,10 +75,37 @@ silv.data$pro2[silv.data$silvic_phen_seq== "ser"] <- 0
 silv.data$pro2[silv.data$silvic_phen_seq== "hyst"] <- 0
 silv.data$pro2[silv.data$name == "Quercus_laurifolia"] <- 1
 
+###super bio hysteranthy for silvics
+silv.data["pro3"]<-NA
+silv.data$pro3[silv.data$silvic_phen_seq== "pro"] <- 1
+silv.data$pro3[silv.data$silvic_phen_seq== "pro/syn"] <- 0
+silv.data$pro3[silv.data$silvic_phen_seq== "syn"] <- 0
+silv.data$pro3[silv.data$silvic_phen_seq== "syn/ser"] <- 0
+silv.data$pro3[silv.data$silvic_phen_seq== "ser"] <- 0 
+silv.data$pro3[silv.data$silvic_phen_seq== "hyst"] <- 0
+silv.data$pro3[silv.data$name == "Quercus_laurifolia"] <- 1
+
+###super biological hysreanthy
+mich.data["pro3"]<-NA
+mich.data$pro3[mich.data$Phen.sequence == "pro"] <- 1
+mich.data$pro3[mich.data$Phen.sequence == "pro/syn"] <- 0
+mich.data$pro3[mich.data$Phen.sequence== "syn"] <- 0
+mich.data$pro3[mich.data$Phen.sequence== "syn/ser"] <- 0
+mich.data$pro3[mich.data$Phen.sequence== "ser"] <- 0 
+mich.data$pro3[mich.data$Phen.sequence== "hyst"] <- 0
+##super biological for michigan trees
+d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+PhyloPro3<-phylo.d(d,binvar=pro3)
+PhyloPro3
+
+
 ###functional phylo.D for suilvics
 e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloSilv2<-phylo.d(e,binvar=pro2)
 PhyloSilv2
+
+PhyloSilv3<-phylo.d(e,binvar=pro3)
+PhyloSilv3
 
 #####Centering
 mich.data$height_cent<-(mich.data$heigh_height-mean(mich.data$heigh_height))/(2*sd(mich.data$heigh_height))
@@ -115,6 +142,11 @@ Mich5cent.funct<-phyloglm(pro2~pol+height_cent+flo_cent+fruit_cent+shade_bin,mic
                           boot=50,full.matrix = TRUE)
 summary(Mich5cent.funct)
 
+Mich5cent.super<-phyloglm(pro3~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=50,full.matrix = TRUE)
+summary(Mich5cent.super)
+
 sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
          start.beta=NULL, start.alpha=NULL,
          boot=50,full.matrix = TRUE)
@@ -125,6 +157,11 @@ sil5.cent.funct<-phyloglm(pro2~pol+flo_cent+height_cent+fruit_cent+shade_bin,sil
                     start.beta=NULL, start.alpha=NULL,
                     boot=50,full.matrix = TRUE)
 summary(sil5.cent.funct)
+
+sil5.cent.super<-phyloglm(pro3~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=50,full.matrix = TRUE)
+summary(sil5.cent.super)
 
 
 ###centered full model
