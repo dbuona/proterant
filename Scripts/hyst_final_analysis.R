@@ -5,19 +5,18 @@ rm(list=ls())
 options(stringsAsFactors = FALSE)
 graphics.off()
 setwd("~/Documents/git/proterant/input")
-library(ape)
-library(phytools)
-library(geiger)
-library(gbm)
-library(pez)
-library(dplyr)
-library(tidyr)
+library("ape")
+library("phytools")
+library("geiger")
+library("gbm")
+library("pez")
 library(caper)
 library(picante)
-library(tidyverse)
+library("tidyverse")
 library(boot)
-library(phylolm)
-library(ggplot2)
+library("phylolm")
+library("ggplot2")
+library(arm)
 
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
@@ -131,11 +130,39 @@ mich5<-phyloglm(pro~pol+heigh_height+flo_time+fruiting+shade_bin,mich.data, mich
                 start.beta=NULL, start.alpha=NULL,
                 boot=50,full.matrix = TRUE)
 summary(mich5)
+
+#centering just height to  compare with silvics
+mich.data$height10<-mich.data$heigh_height-mean(mich.data$heigh_height)
+mich5h<-phyloglm(pro~pol+height10+flo_time+fruiting+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                start.beta=NULL, start.alpha=NULL,
+                boot=50,full.matrix = TRUE)
+summary(mich5h)
+
+###average predictive comparisons (These are very sensative to adjusting)
+beta<-coef(mich5h)
+hi<-1
+lo<-0
+###for [pollination syndrome]
+delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*mich.data$height10+beta[4]*mich.data$flo_time+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*lo+beta[3]*mich.data$height10+beta[4]*mich.data$flo_time+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)
+print(mean(delta))
+
+###for flowering
+earl<-4
+mid<-5
+delta<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height10+beta[4]*earl+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height10+beta[4]*mid+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)
+
+print(mean(delta))
+
+
 ###centered for comparision between bianry and continuous
 mich5cent<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                     start.beta=NULL, start.alpha=NULL,
                     boot=50,full.matrix = TRUE)
 summary(mich5cent)
+
+
 ###Functional hysteranthy-centered
 Mich5cent.funct<-phyloglm(pro2~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
@@ -147,6 +174,38 @@ Mich5cent.super<-phyloglm(pro3~pol+height_cent+flo_cent+fruit_cent+shade_bin,mic
                           boot=50,full.matrix = TRUE)
 summary(Mich5cent.super)
 
+###uncentered silvics doesn't run with normal height, subtract mean
+silv.data$height10<-silv.data$height-mean(silv.data$height)
+sil5h<-phyloglm(pro~pol+flower_time+height10+fruiting+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 400, log.alpha.bound = 1,
+                start.beta=NULL, start.alpha=NULL,
+                boot=50,full.matrix = TRUE)
+summary(sil5h)
+beta<-coef(sil5h)
+hi<-1
+lo<-0
+###for [pollination syndrome]
+delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*silv.data$flower_time+beta[4]*silv.data$height10+beta[5]*silv.data$fruiting+beta[6]*silv.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*lo+beta[3]*silv.data$flower_time+beta[4]*silv.data$height10+beta[5]*silv.data$fruiting+beta[6]*silv.data$shade_bin)
+print(mean(delta))
+
+###for flowering
+earl<-4
+mid<-5
+
+delta<-invlogit(beta[1]+beta[2]*silv.data$pol+beta[3]*earl+beta[4]*silv.data$height10+beta[5]*silv.data$fruiting+beta[6]*silv.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*silv.data$pol+beta[3]*mid+beta[4]*silv.data$height10+beta[5]*silv.data$fruiting+beta[6]*silv.data$shade_bin)
+print(mean(delta))
+
+#fruiting
+summer<-8
+winter<-11
+
+delta<-invlogit(beta[1]+beta[2]*silv.data$pol+beta[3]*silv.data$flower_time+beta[4]*silv.data$height10+beta[5]*summer+beta[6]*silv.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*silv.data$pol+beta[3]*silv.data$flower_time+beta[4]*silv.data$height10+beta[5]*winter+beta[6]*silv.data$shade_bin)
+print(mean(delta))
+
+
+###centered silvics
 sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
          start.beta=NULL, start.alpha=NULL,
          boot=50,full.matrix = TRUE)
