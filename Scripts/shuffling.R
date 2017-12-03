@@ -83,6 +83,8 @@ silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
 ###
 min(mich.data$flo_time)
 max(mich.data$flo_time)
+
+####or run  hyst final analysis to here
 nsp<-nrow(mich.data)
 
 set.seed(202)
