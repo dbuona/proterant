@@ -61,7 +61,7 @@
 \setkeys{Gin}{width=0.8\textwidth}
 \setlength{\captionmargin}{30pt}
 \setlength{\abovecaptionskip}{0pt}
-\setlength{\belowcaptionskip}{10pt}
+\setlength{\belowcaptionskip}{1pt}
 \topmargin -1cm        
 \oddsidemargin -0.04cm   
 \evensidemargin -0.04cm
@@ -100,6 +100,16 @@ We performed all statistical analysis using R 2.14. To assess the phylogenetic s
 Average timing of flowering was the strongest predictor of hysteranthy, with the likilihood of hysteranthy increasing substantially with earlier flower. Average flowering time was the only predictor with 95$\%$ confindence intervals that did not overlap zero in both datasets (see figure). For the MTSV dataset, pollination syndrome also had a substantial effect, with the likelinhood of hysteranthy increasing in wind pollinated taxa. For the Silvics dataset,we see a small effect of average time of fruit maturation, with earlier fruit maturation increasing the likelihood a species would be hysteranthous. The results of our modified Gotelli resampling (\textit{different name for it? Cupid Shuffle}) show a substantial decrease in the magnitude of effect size of average flowering time after only 2 resamples, indicating that there is something unique about the flowering time of hysteranthous species when compared to other non-hysteranthous but early flowering species.
 \section*{Discussion}
 \section*{Figures}
+\begin{figure}[h!]
+\includegraphics[width=20cm, height=20cm]{../figure/mich_phylo_alltraits.pdf}\\
+\caption{I can't figure out how to make this figure more better to look at. Ideas: Just hysteranthy, and/or no tip labels}
+\end{figure}
+\begin{figure}[h!]
+\includegraphics[width=20cm, height=20cm]{../figure/silvics_phylo_alltraits.pdf}\\
+\caption{Eventaully these two figures will be side by side}
+\end{figure}
+
+
 \begin{figure}[h!]
 \includegraphics[width=8cm, height=8cm]{../figure/booteffect_MTSV.jpeg}\\
 \caption{Eventaully these two figures will be side by side}

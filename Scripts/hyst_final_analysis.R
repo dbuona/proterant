@@ -332,3 +332,17 @@ plot5<-ggplot(mich.data, aes(x=heigh_height, y=pro)) +
   stat_smooth(method="glm", method.args=list(family="binomial"), se=TRUE)+theme_minimal()
 
 grid.arrange(plot1, plot2,plot3,plot4,plot5, ncol=2)
+
+###trying to plot hysteranthy as binary adn ugly af
+z <- as.factor(mich.data$pro); names(z)<-mich.tree$tip.label
+#create a vector to be filled with colors for plotting purposes, matching the diel activity pattern
+mycol<-character(length(z))
+mycol[mich.data$pro==1]<-"black"
+mycol[mich.data$pro==0]<-"red"
+
+#make very narrow margins
+par(mar=c(0,0,0,0))
+
+#and now plot the phylogeny and the info on diel activity pattern
+plot(mich.tree,x.lim=c(0,400),show.tip.label=FALSE)
+tiplabels(pch=22, col="black", bg=mycol, cex=.5)
