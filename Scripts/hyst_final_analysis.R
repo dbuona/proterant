@@ -210,6 +210,7 @@ sil5.cent<-phyloglm(pro~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data,
          start.beta=NULL, start.alpha=NULL,
          boot=50,full.matrix = TRUE)
 summary(sil5.cent)
+cor(silv.data$fruit_cent,silv.data$flo_cent)
 
 #### functional silvics
 sil5.cent.funct<-phyloglm(pro2~pol+flo_cent+height_cent+fruit_cent+shade_bin,silv.data, silv.tree, method = "logistic_MPLE", btol = 60, log.alpha.bound = 4,
@@ -237,8 +238,9 @@ summary(mich5centoaks)
 #plotting
 
 library(gridExtra)
+summary(mich5cent)
 
-coef(mich5cent)
+###Non-boot strapped
 est<-as.data.frame(coef(mich5cent))
 est<-rownames_to_column(est, "name")
 ints<-as.data.frame(confint(mich5cent,level = 0.95))
@@ -248,7 +250,7 @@ colnames(ints)[3] <- "high"
 colnames(est)[2] <- "estimate"
 foo<-left_join(est,ints)
 foo<-filter(foo,estimate<10)
-plotI<-ggplot(foo,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: Michigan")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
+plotI<-ggplot(foo,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: MTSV")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
 
 ###plot for silvics
 est2<-as.data.frame(coef(sil5.cent))
@@ -260,8 +262,48 @@ colnames(ints2)[3] <- "high"
 colnames(est2)[2] <- "estimate"
 foo2<-left_join(est2,ints2)
 foo2<-filter(foo2,estimate<10)
-plotII<-ggplot(foo2,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: SIlvics")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
+plotII<-ggplot(foo2,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: Silvics")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
 grid.arrange(plotI,plotII, ncol=2)
+###bootstrapped
+bootest<-as.data.frame(mich5cent$coefficients)
+bootconf<-as.data.frame(mich5cent$bootconfint95)
+bootconf<-as.data.frame(t(bootconf))
+
+bootest<-rownames_to_column(bootest, "name")
+bootconf<-rownames_to_column(bootconf, "name")
+bootmich<-full_join(bootconf,bootest, by="name")
+colnames(bootmich)<-c("name","low","high","estimate")
+bootmich<-dplyr::filter(bootmich, name!="alpha")
+bootmich<-dplyr::filter(bootmich, name!="(Intercept)")
+###names
+bootmich$name[bootmich$name=="shade_bin"]<-"shade tolerance"
+bootmich$name[bootmich$name=="pol"]<-"pollination syndrome"
+bootmich$name[bootmich$name=="height_cent"]<-"max height"
+bootmich$name[bootmich$name=="fruit_cent"]<-"fruit timing"
+bootmich$name[bootmich$name=="flo_cent"]<-"flower timing"
+
+ggplot(bootmich,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: MTSV")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
+
+#### do it for silvics
+bootest<-as.data.frame(sil5.cent$coefficients)
+bootconf<-as.data.frame(sil5.cent$bootconfint95)
+bootconf<-as.data.frame(t(bootconf))
+bootest<-rownames_to_column(bootest, "name")
+bootconf<-rownames_to_column(bootconf, "name")
+bootsil<-full_join(bootconf,bootest, by="name")
+colnames(bootsil)<-c("name","low","high","estimate")
+bootsil<-dplyr::filter(bootsil, name!="alpha")
+bootsil<-dplyr::filter(bootsil, name!="(Intercept)")
+
+bootsil$name[bootsil$name=="shade_bin"]<-"shade tolerance"
+bootsil$name[bootsil$name=="pol"]<-"pollination syndrome"
+bootsil$name[bootsil$name=="height_cent"]<-"max height"
+bootsil$name[bootsil$name=="fruit_cent"]<-"fruit timing"
+bootsil$name[bootsil$name=="flo_cent"]<-"flower timing"
+
+ggplot(bootsil,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: Silvics")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
+
+
 
 ##This plotting is based on bootstrap cint but the data sheet is not updated
 #boot<-read.csv("mich5bootoutput.csv",header=TRUE)
