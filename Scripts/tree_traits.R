@@ -77,5 +77,57 @@ text(263, length(mich.tree$tip.label)+1.5, "Height", pos=4, cex=0.4)
 legend(x = c(1, 60),y=c(110,130),legend=c("hysteranthous","non-hysteranthous","wind pollinated","insect pollinated","shade intolerant","shade tolerant","relative height"),col=ourcol,fill=ourcol, cex=0.5,
        box.lty=0)
 
+####now do it for silvics
 
+silv.tree<-read.tree("pruned_silvics.tre")
+silv.data<-read.csv("silv_data_full.csv")
 
+silv.data$fruiting<-NA
+silv.data$fruiting<-silv.data$av_fruit_time
+silv.data$fruiting[silv.data$fruiting==21]<-9
+
+####make variable
+z <- as.factor(silv.data$pol); names(z) <- silv.tree$tip.label
+zz<- as.factor(silv.data$pro); names(z) <- silv.tree$tip.label
+zzz<-as.factor(silv.data$shade_bin); names(z) <- silv.tree$tip.label
+
+mycol<-character(length(z))
+mycol[silv.data$pro==0]<-"green"
+mycol[silv.data$pro==1]<-"red"
+
+mycol2<-character(length(zz))
+mycol2[silv.data$pol==0]<-"yellow"
+mycol2[silv.data$pol==1]<-"lightblue"
+
+mycol3<-character(length(zzz))
+mycol3[silv.data$shade_bin==0]<-"white"
+mycol3[silv.data$shade_bin==1]<-"black"
+
+fr <- silv.data$fruiting
+names(fr) <- silv.tree$tip.label
+
+fl <- silv.data$flower_time
+names(fl) <- silv.tree$tip.label
+
+H <- silv.data$height
+names(H) <- silv.tree$tip.label
+
+ourcol<-c("red","green","lightblue","yellow","white","black","blue")
+
+par(mar=c(1,0,0,1))
+
+plot(silv.tree, cex=0.4,,x.lim=c(0,300))
+points(rep(210, length(silv.tree$tip.label)), 1:length(silv.tree$tip.label), pch=22, bg=mycol, cex=.7) 
+text(200, length(silv.tree$tip.label)+1.5, "Hysteranthy",pos=4, cex=0.4)
+points(rep(220, length(silv.tree$tip.label)), 1:length(silv.tree$tip.label), pch=22, bg=mycol2, cex=.7) 
+text(213, length(silv.tree$tip.label)+1.5, "Syndrome",pos=4, cex=0.4)
+points(rep(230, length(silv.tree$tip.label)), 1:length(silv.tree$tip.label), pch=22, bg=mycol3, cex=.7) 
+text(225, length(silv.tree$tip.label)+1.5, "Shade",pos=4, cex=0.4)
+segments(238, 1:nrow(silv.data), (238+fl), 1:nrow(silv.data), lwd=1, col="dark gray")
+text(233, length(silv.tree$tip.label)+1.5, "Flower time", pos=4, cex=0.4)
+segments(250, 1:nrow(silv.data), (250+fr), 1:nrow(silv.data), lwd=1, col="dark gray")
+text(248, length(silv.tree$tip.label)+1.5, "Fruit time", pos=4, cex=0.4)
+points(rep(270, nrow(silv.data)), 1:nrow(silv.data), pch=21, bg="blue", col="white", lwd=0.25, cex=H/12)
+text(263, length(silv.tree$tip.label)+1.5, "Height", pos=4, cex=0.4)
+legend(x = c(1, 60),y=c(110,130),legend=c("hysteranthous","non-hysteranthous","wind pollinated","insect pollinated","shade intolerant","shade tolerant","relative height"),col=ourcol,fill=ourcol, cex=0.5,
+       box.lty=0)
