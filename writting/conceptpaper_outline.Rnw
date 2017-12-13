@@ -1,0 +1,23 @@
+\documentclass{article}
+
+\begin{document}
+Concept paper outline:\\
+Hysteranthy has been long observed but poorly examined.\\
+Present Hypothesizes. There is suggestive evidence only...Modeling, pollen interception at differnt succession stages, 1 comparative anatomy study in Cornus. There has been little empirical investigation into these hypothesizes, especially whether there are any effects on fitness. \\
+Some Challenges:\\
+Linguistic: Hysteranthy, proteranthy, protanthy, precocious. Note the hysteranthy and proteranthy are antonyms that describe the same phenomonon and precocious flowering also means early ontogeny flowering\\
+Descriptive: Flowering before leafout... but what exactly does that mean? Physiological hysteranthy, functional hysteranthy. Harvard forest graphs. Emphasize hysteranthy would only be adaptive at the community level. ie selection should be on advancing flowering rather than delaying leafing.\\
+Example of descriptive differences: MTSV models. Show results for physiological hysteranthy vs. functional hysteranthy. Point could be effects change significanty based on criteria\\
+It might not just be descriptions that are ambiguous. Because flowering and leafing are rarely observed together, we have no broadscale sense of the reaction norm for interanual or population level differces, but we think its probably significant. Look at interanual and between population differences for tree spotters vs. O'Keefe data or Dan Flynn data. 
+
+Mechansims\\ Are these patterns incidental or inherent?\\
+Will these patterns be stable in a era of global change?\\
+
+
+
+
+
+
+
+
+\end{document}
