@@ -145,6 +145,7 @@ lo<-0
 ###for [pollination syndrome]
 delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*mich.data$height10+beta[4]*mich.data$flo_time+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)-
   invlogit(beta[1]+beta[2]*lo+beta[3]*mich.data$height10+beta[4]*mich.data$flo_time+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)
+
 print(mean(delta))
 
 ###for flowering
@@ -153,6 +154,14 @@ mid<-5
 delta<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height10+beta[4]*earl+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)-
   invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height10+beta[4]*mid+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)
 
+print(mean(delta))
+
+#fruiting
+summer<-8
+winter<-11
+
+delta<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$flo_time+beta[4]*mich.data$height10+beta[5]*summer+beta[6]*mich.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$flo_time+beta[4]*mich.data$height10+beta[5]*winter+beta[6]*mich.data$shade_bin)
 print(mean(delta))
 
 
