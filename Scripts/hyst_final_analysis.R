@@ -273,7 +273,8 @@ foo2<-left_join(est2,ints2)
 foo2<-filter(foo2,estimate<10)
 plotII<-ggplot(foo2,aes(estimate,name))+geom_point()+geom_segment(aes(y=name,yend=name,x=low,xend=high))+ggtitle("Main effects of predictors on Hysteranthy: Silvics")+theme_light()+geom_vline(aes(xintercept=0,color="red"))+guides(color="none")
 grid.arrange(plotI,plotII, ncol=2)
-###bootstrapped
+
+###bootstrapped for michgan trees
 bootest<-as.data.frame(mich5cent$coefficients)
 bootconf<-as.data.frame(mich5cent$bootconfint95)
 bootconf<-as.data.frame(t(bootconf))

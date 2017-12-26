@@ -32,7 +32,11 @@
 %\linenumbers
 \begin{document}
 Concept paper outline:
-Green is the color of spring (cite Shwartz nature 1998 Green-wave Phenology), but any keen observer walking the Eastern deciduous forests early in the season would readily notice that it is often the subtle reds and yellows of emerging tree flowers that are the first harbingers of the season. Why do some tree species seasonally flower before leafing out? This trait, known as hysteranthy, is a feature common to deciduous forests that has long been noted by botanists (cite old papers from 1900s), but there has been little empirical investigation into the origins or significance of this phenological pattern. In this paper we aim to:
+Green is the color of spring (cite Shwartz nature 1998 Green-wave Phenology), but any keen observer walking the Eastern deciduous forests early in the season would readily notice that it is often the subtle reds and yellows of emerging tree flowers that are the first harbingers of the season. Why do some tree species seasonally flower before leafing out? This trait, known as hysteranthy, is a feature common to deciduous forests, apparent in many commerically and ecologically important woody species, that has long been noted by botanists (cite old papers from 1900s). Several hypothesizes have been put forth, suggesting that this temporal trait is critial for the reproductive success of these species. but there has been little empirical investigation into the origins or significance of this pattern. Further, while the study of phenology, the timing of seasonal lifecycle events, has received increased attention in the past decades for it link to anthropogenic climate change, floral and leaf phenology have long been treated as disparate processes, and few studies incorperating observations of both, which could b applied to aid our understainding of hysteranthy, are available. Flowers and leaves share resource partitioning, and It has been shown that interactions between temperature and day length are cue of both floral and foliar phenology in trees (cite lots of people).  We have already seen significant shifts in phenology due to anthropogenic climate change. (cite a lot of people), but have no baseline degree will hysteranthous for evaluating how hysternathy has altered.This gap in the literature is particularly alarming, as  seasonal temperatures are projected to continue to change dramatically as a result of human industrial activity (cite any reasonable cliamte science). If hysteranthy is affected by climate change, this could have negative reproductive consequences and ultimately demographic consequences on many important species.
+
+ 
+
+In this paper we aim to:
 \begin{itemize}
 \item Present and evaluate the current hypotheses relating to the origins and significance of hysteranthy 
 \item Develop an empirical framework for identifying hysteranthous species
@@ -89,6 +93,20 @@ We must aim our scientific inquiry to better understand:
 \item Harvard forest fuctional vs. physiological hysteranthy plots (already made)
 \item Tree spotter hysteranthy interanual variation (Cat made something similar) compared to Harvard forest interanual variation of the same species in the same year.
 \item effect size plots for MTSV model.(1 made). Could make 2 more to compare result for other kinds of hysteranthy (ie physiological)
+\begin{figure}
+    \centering
+    \begin{subfigure}
+        \includegraphics[width=0.8\textwidth]{phys_effect.jpeg}
+        \caption{some effect sizes}}
+        \label{fig:phys_effect.jpeg}
+    \end{subfigure}\begin{subfigure}
+        \includegraphics[width=0.8\textwidth]{fuct_effect.jpeg}
+        \caption{others}
+        \label{fig:fuct_effect.jpeg}
+    \end{subfigure}
+\end{figure}
+
+
 \item either conceptual figure of loss of hysteranthy or figure from Dan F's shrubs (alreadt made for CSEE)
 \end{itemize}
 
