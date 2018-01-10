@@ -11,6 +11,9 @@ phys
 #customize symbol
 #elimiate entries missing a phenophase?
 ###figure 2: tree with hysteranthy information
+source("make_circle_tree.R")
+p
+
 
 ###Figure 3:effect plots
 ##3a full dataset
@@ -34,7 +37,7 @@ bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+ggtitle("Functional Hysteranthy")+theme_classic()+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
 functplot
 #3b restricted early data
-source("earlyfloweronly.R")
+source("earlyfloweronly.R") ### I think you have to run this line by line, sourcing drops all the tips
 bootest<-as.data.frame(earlycent$coefficients)
 bootconf<-as.data.frame(earlycent$bootconfint95)
 bootconf<-as.data.frame(t(bootconf))

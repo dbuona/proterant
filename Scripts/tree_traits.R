@@ -25,7 +25,7 @@ mich.data<-read.csv("mich_data_full.csv")
 ####adjust red oak group
 mich.data$fruiting<-NA
 mich.data$fruiting<-mich.data$av_fruit_time
-mich.data$fruiting[mich.data$fruiting==19]<-7
+#mich.data$fruiting[mich.data$fruiting==19]<-7
 mich.data$fruiting[mich.data$fruiting=="persistant"]<-12
 mich.data$fruiting[mich.data$fruiting=="persitant"]<-12
 mich.data$fruiting[mich.data$fruiting=="unreported"]<-9  
@@ -37,8 +37,8 @@ zz<- as.factor(mich.data$pro); names(z) <- mich.tree$tip.label
 zzz<-as.factor(mich.data$shade_bin); names(z) <- mich.tree$tip.label
 
 mycol<-character(length(z))
-mycol[mich.data$pro==0]<-"green"
-mycol[mich.data$pro==1]<-"red"
+mycol[mich.data$pro2==0]<-"green"
+mycol[mich.data$pro2==1]<-"red"
 
 mycol2<-character(length(zz))
 mycol2[mich.data$pol==0]<-"yellow"
@@ -59,11 +59,13 @@ names(H) <- mich.tree$tip.label
 
 ourcol<-c("red","green","lightblue","yellow","white","black","blue")
 
-par(mar=c(1,0,0,1))
+par(mar=c(0,0,0,0))
 
-plot(mich.tree, cex=0.4,,x.lim=c(0,300))
+plot(mich.tree,type = "fan", cex=0.4,,x.lim=c(0,300))
 points(rep(210, length(mich.tree$tip.label)), 1:length(mich.tree$tip.label), pch=22, bg=mycol, cex=.7) 
 text(200, length(mich.tree$tip.label)+1.5, "Hysteranthy",pos=4, cex=0.4)
+
+
 points(rep(220, length(mich.tree$tip.label)), 1:length(mich.tree$tip.label), pch=22, bg=mycol2, cex=.7) 
 text(213, length(mich.tree$tip.label)+1.5, "Syndrome",pos=4, cex=0.4)
 points(rep(230, length(mich.tree$tip.label)), 1:length(mich.tree$tip.label), pch=22, bg=mycol3, cex=.7) 

@@ -4,7 +4,7 @@ mean(mich.data$flo_time)
 earlymich<-filter(mich.data,flo_time<=5.5)
 
 ###prune tree
-#mich.data<-rownames_to_column(mich.data, "name")
+mich.data<-rownames_to_column(mich.data, "name")
 namelist<-earlymich$name
 names.intree<-mich.tree$tip.label
 
