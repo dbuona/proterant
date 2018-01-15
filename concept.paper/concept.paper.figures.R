@@ -34,7 +34,7 @@ bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="fruit_cent"]<-"fruit timing"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 
-functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+ggtitle("Functional Hysteranthy")+theme_classic()+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
+functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+ggtitle("Functional Hysteranthy")+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
 functplot
 #3b restricted early data
 source("earlyfloweronly.R") ### I think you have to run this line by line, sourcing drops all the tips
@@ -55,7 +55,7 @@ bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="fruit_cent"]<-"fruit timing"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 
-earlplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+ggtitle("Functional Hysteranthy:Early Only")+theme_classic()+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
+earlplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+ggtitle("Functional Hysteranthy:Early Only")+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
 earlplot
 
 ###Suppliment
@@ -77,5 +77,7 @@ bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="fruit_cent"]<-"fruit timing"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 
-physplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+ggtitle("Physiological Hysteranthy")+theme_classic()+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
+physplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+ggtitle("Physiological Hysteranthy")+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
 physplot
+###
+source("make_hypothetical.R")

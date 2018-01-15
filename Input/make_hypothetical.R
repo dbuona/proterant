@@ -1,0 +1,12 @@
+library("ggthemes")
+phenophase<-c("flowering","leaf expansion")
+ex<-as.data.frame(phenophase)
+ex$"Baseline"<-c(85,95)
+ex$"Scenario 1"<-c(82,92)
+ex$"Scenario 2a"<-c(80,95)
+ex$"Scenario 2b"<-c(85,90)
+ex$"Scenario 3"<-c(89,87)
+ex<-gather(ex,"scenario","DOY",2:6)
+
+p<-ggplot(ex,aes(0,DOY))+geom_point(aes(color=phenophase,shape=phenophase))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+expand_limits(x=c(-.1,.1),y = c(75, 105))
+p+facet_wrap(~scenario,nrow=1)+theme(axis.ticks.x = element_blank(),axis.text.x=element_blank(),axis.title.x = element_blank())
