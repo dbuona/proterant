@@ -1,4 +1,5 @@
 setwd("~/Documents/git/proterant/concept.paper/")
+library(ggthemes)
 source("concept.paper.analysis.R")
 ###run concept.paper.analysis.R all the way line by line. Sources yeilds an error
 #Figure 1: Harvard forest hysteranthy changes
@@ -81,3 +82,4 @@ physplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=t
 physplot
 ###
 source("make_hypothetical.R")
+citation("phylolm")
