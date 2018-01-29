@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{Sweave}
+\usepackage{tabularx}
+\usepackage{geometry}
+\geometry{margin=.5in}
+\usepackage{enumerate}
+\usepackage{subfig}
+\usepackage[demo]{graphicx}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\begin{figure}[!tbp]
+  \centering
+  \subfloat[Physioloical Hysteranthy:floral budburst and leaf budburst]{\includegraphics[width=0.8\textwidth]{HF_phys.jpeg}\label{fig:f1}}
+  \hfill
+  \subfloat[Functional Hysteranthy:first flower opening and leaves 75 percent full size]{\includegraphics[width=0.8\textwidth]{HF_funct.jpeg}\label{fig:f2}}
+  \caption{Average Phenology at Harvard Forest.}
+\end{figure}
+
+
+%%%%%
+\begin{figure}[!tbp]
+  \centering
+  \subfloat[Full Dataset]{\includegraphics[width=0.5\textwidth]{full_functional_effectplot.jpeg}\label{fig:f3}}
+  \hfill
+  \subfloat[Early flowering only]{\includegraphics[width=0.5\textwidth]{early_functional_effectplot.jpeg}\label{fig:f4}}
+  \caption{Estimaded effect sizes and 95 confidence intervals indicate that in both the full MTSV dataset and restricted dataset, wind pollination and early flowering are the strongest predictors of hysteranthy.}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=0.5\textwidth]{hypothetic_plot.jpeg}
+   \caption{Schematic diagram on how hysteranthous patterns could shift with climate change}
+\end{figure}
+
+
+\end{document}
