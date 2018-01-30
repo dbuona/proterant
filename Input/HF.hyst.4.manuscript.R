@@ -52,13 +52,15 @@ bb<-gather(sum,phenophase, DOY,3:6)
 bb<-filter(bb,phenophase==c("increasing leaf size","flower open"))
 meanleaf<-filter(bb,phenophase=="increasing leaf size")
 summary(meanleaf)
-fun<-ggplot(bb,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+geom_abline(slope=0,intercept=142,color="green")+geom_abline(slope=0,intercept=148,color="dark green")+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(angle = 300, hjust = 0))
+fun<-ggplot(bb,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(size=14,angle = 300, hjust = 0))
 fun
+#+geom_abline(slope=0,intercept=142,color="green")+geom_abline(slope=0,intercept=148,color="dark green")
 
 ####physiological hysteranthy
 bb<-gather(sum,phenophase,DOY,3:6)
 bb2<-filter(bb,phenophase==c("leaf budburst","flower budburst"))
 meanlb<-filter(bb,phenophase=="leaf budburst")
 summary(meanlb)
-phys<-ggplot(bb2,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+geom_abline(slope=0,intercept=119,color="green")+geom_abline(slope=0,intercept=125,color="dark green")+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(angle = 300, hjust = 0))
+  phys<-ggplot(bb2,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(size=14,angle = 300, hjust = 0))
 phys
+#geom_abline(slope=0,intercept=119,color="green")+geom_abline(slope=0,intercept=125,color="dark green")

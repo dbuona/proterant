@@ -35,7 +35,7 @@ bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="fruit_cent"]<-"fruit timing"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 
-functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
+functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 functplot
 #3b restricted early data
 source("earlyfloweronly.R") ### I think you have to run this line by line, sourcing drops all the tips
@@ -56,7 +56,7 @@ bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="fruit_cent"]<-"fruit timing"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 
-earlplot<-ggplot(bootmich,aes(estimate,trait))+geom_point()+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(plot.title = element_text(hjust = 0.5))+guides(color="none")
+earlplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 earlplot
 
 ###Suppliment
