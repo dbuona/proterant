@@ -120,8 +120,35 @@ unique(dx$flophase)
 dx<-separate(dx,flophase,c("mixphase","femphase","malephase"),sep=",")
 dx<-gather(dx,flotype,flophase,15:17)
 
-#############CREATE A DATA SHEET THAT HAS THE THREE FLOWER TYPES IN SEPARATE COLUMNS
-#################THIS WILL BE USEFUL FOR COMPARING CHANGES IN PROTANDRY OR PROTOGYNY
+###### make everything 60######## for computation sake this way if first flower was score at 65 (etc) it makes the analysis.
+dx$flophase[dx$flophase=="61"]<-"60"
+dx$flophase[dx$flophase=="62"]<-"60"
+dx$flophase[dx$flophase=="63"]<-"60"
+dx$flophase[dx$flophase=="64"]<-"60"
+dx$flophase[dx$flophase=="65"]<-"60"
+dx$flophase[dx$flophase=="67"]<-"60"
+
+dx$flophase[dx$flophase=="61-F"]<-"60-F"
+dx$flophase[dx$flophase=="62-F"]<-"60-F"
+dx$flophase[dx$flophase=="63-F"]<-"60-F"
+dx$flophase[dx$flophase=="64-F"]<-"60-F"
+dx$flophase[dx$flophase=="65-F"]<-"60-F"
+dx$flophase[dx$flophase=="67-F"]<-"60-F"
+
+dx$flophase[dx$flophase=="61-M"]<-"60-M"
+dx$flophase[dx$flophase=="62-M"]<-"60-M"
+dx$flophase[dx$flophase=="63-M"]<-"60-M"
+dx$flophase[dx$flophase=="64-M"]<-"60-M"
+dx$flophase[dx$flophase=="65-M"]<-"60-M"
+dx$flophase[dx$flophase=="67-M"]<-"60-M"
+
+#to do:
+#clean individuals amalanchier and bet lenta snuck in. Make sure that is accounted for
+#clean treatment switch WSO and WLO to accuarate reflect.
+#put in treatment values (IE 8 and 12 photoperiod)
+
+#############CREATE A DATA SHEET THAT HAS THE THREE FLOWER TYPES IN SEPARATE COLUMNS#########################
+#################THIS WILL BE USEFUL FOR COMPARING CHANGES IN PROTANDRY OR PROTOGYNY######################
 
 ####find the first day when species reached 15
 d.leaf<-filter(dx,leafphase==15)
@@ -169,5 +196,27 @@ Fl1<-aggregate(Fl$doy.adjusted, by = list(Fl$id), min)
 colnames(Fl1)<-c("id","flo_day")
 datUM<-full_join(datUM,Fl1,by="id")
 great.dat<-left_join(datUM,dxx)
+great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 #####################################
 ###good.dat, great.dat are the files to analyze
+########################################################################
+### metrics for great date##############################################
+###how many entries have full entries?
+full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
+nrow(full)#54 our of 576
+table(full$GEN.SPA)
+table(full$treatment)
+### how many have flowering?
+flowerfun<-subset(great.dat,!is.na(great.dat$flo_day))
+nrow(flowerfun) #100 out of 576
+table(flowerfun$GEN.SPA)
+table(flowerfun$treatment)
+
+#one or the other:
+something<-subset(great.dat, !is.na(great.dat$leaf_day)|!is.na(great.dat$flo_day))
+nrow(something) #214
+table(something$GEN.SPA)
+table(something$treatment)
+### take away 1/31, so far can really only do analysis on Prupen, Vaccor, Comper, eventually maybe corcor and ilemuc
+##not optimistic about any others
+############################################################################################################
