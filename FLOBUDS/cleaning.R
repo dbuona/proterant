@@ -203,20 +203,19 @@ great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 ### metrics for great date##############################################
 ###how many entries have full entries?
 full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
-nrow(full)#54 our of 576
+nrow(full)#67 our of 576
 table(full$GEN.SPA)
 table(full$treatment)
 ### how many have flowering?
 flowerfun<-subset(great.dat,!is.na(great.dat$flo_day))
-nrow(flowerfun) #100 out of 576
+nrow(flowerfun) #109 out of 576
 table(flowerfun$GEN.SPA)
 table(flowerfun$treatment)
 
 #one or the other:
 something<-subset(great.dat, !is.na(great.dat$leaf_day)|!is.na(great.dat$flo_day))
-nrow(something) #214
+nrow(something) #242
 table(something$GEN.SPA)
 table(something$treatment)
-### take away 1/31, so far can really only do analysis on Prupen, Vaccor, Comper, eventually maybe corcor and ilemuc
-##not optimistic about any others
+
 ############################################################################################################
