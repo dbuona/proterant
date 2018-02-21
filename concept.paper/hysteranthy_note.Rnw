@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage{Sweave}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{siunitx}
+\usepackage{mdframed}
+\usepackage{cite}
+\usepackage{natbib}
+\bibliographystyle{..//refs/styles/besjournals.bst}
+\usepackage[small]{caption}
+\setkeys{Gin}{width=0.8\textwidth}
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+\topmargin -1.5cm        
+\oddsidemargin -0.04cm   
+\evensidemargin -0.04cm
+\textwidth 16.59cm
+\textheight 21.94cm 
+%&\pagestyle{empty} %comment if want page numbers
+\parskip 0pt
+\renewcommand{\baselinestretch}{1.5}
+\parindent 20pt
+
+\newmdenv[
+  topline=true,
+  bottomline=true,
+  skipabove=\topsep,
+  skipbelow=\topsep
+  ]{siderules}
+\usepackage{lineno}
+\linenumbers
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\title{ Flowering before leafout: Hysteranthy is a signature wind pollination in Eastern decidious forest communites of North America}
+\author{Daniel Buonaiuto, Ignacio Morales Castilla, Lizzie Wolkovich}
+\maketitle{}
+\section{}
+\indent Green is the color of spring \citep{Schwartz1998}, but any keen observer walking the Eastern deciduous forests of North America early in the season would readily notice that it is often the subtle reds and yellows of emerging tree flowers that are the first harbingers of the season.\\
+\indent While the study of phenology, the timing of seasonal life cycle events, has received increased attention in the past decades for it link to anthropogenic climate change, floral and leaf phenology have long been treated as disparate processes, and have been rarely observed in tandem \citep{Wolkovich2014}.\\
+\indent Significant shifts in phenology due to anthropogenic climate change have already been observed, \citep{Menzel2006}, but there is little baseline data for evaluating if and how hysteranthy has been altered \citep{Lechowicz1995}.\\
+\indent In this paper we begin to lay a groundwork for a thorough investigation of hysteranthous flowering.\\
+\subsection*{Hypothesizes of hysteranthy}
+\indent One challenge to identfying the major hypotheses relating to hysteranthy in the ecological literature is that the terms to describe this phenological pattern are often used variably and imprecisely \citep{Dyer1953}. \\
+\indent Despite the infrequent and ambiguous descriptions of hysteranthy in the literature, several hypotheses for the origins and significance of the this phenological trait have emerged.\\ 
+\subsection*{Functional hypotheses}
+\indent\textbf{Wind pollination effeciency:}Perhaps the most common explanation for the seemingly high rate of occurrence of hysteranthy in temperate deciduous species is that this phenological pattern is an adaptation critical for wind pollination, with leafless flowering allowing for more efficient pollen transfer \citep{Whitehead1969,Rathcke1985, Spurr1980}.\\
+\indent\textbf{Pollinator visibility hypothesis:} A related, pollination effeciency hypothesis emerges from the dry tropics, where hysteranthy is also common, but the significant majority of woody plant taxa are biotically pollinated \citep*{Janzen1967,Franklin2016}.\\
+\indent\textbf{Differential selection hypothesis:} A third functional hypothesis which we refer to as the "differential selection hypothesis" comes out of an application of life history theory.\\
+\indent For all of these functional hypotheses, species must exhibit physiological independence between flowering and leafing, which is certainly not the case in all temperate woody species, such as species with floral phenologies constrained by the requirement to build flower tissue from the current years photosynthate, or species with flower buds contained within leaf buds.\\ (Bolmgrim links early flowering with wind pollination. should we look for this correlation in the model?)
+\subsection*{Physiological hypotheses}
+\indent\textbf{Water stress hyopthesis:} The predominant physiological hypothesis suggests that hysteranthous flowering is an adaptive partitioning strategy in areas prone to water stress.\\
+\indent It is also possible that hysteranthy is a highly conserved trait, and the preponderance of this phenological pattern in the temperate zone is a product of phylogenetic representation of the region rather than an adaptive quality to the trait.\\
+\indent None of these hypotheses are necessarily mutually exclusive, it is is certainly possible that hysteranthy has arisen multiple times in different selection environments. In this analysis we are primarily interested in exploring hysteranthy in temperate forests rather than trying to draw broad conclusion about this trait globally. Therefore, our analysis will primarily address the relevant functional hypotheses.\\
+
+\subsection*{A precise definition of hysteranthy}
+\indent Given the lack of explicit research attention in the literature, the most detailed descriptions of hysteranthous flowering come from regional Flora and botanical guidebooks.\\
+\indent We suggest that an appropriate empirical definition of hysteranthy is largely dependent on which hypotheses are of interest.\\
+\indent While direct tests of each of the hysteranthy hypotheses should still be pursued, we can deduce much about the strength of the hypotheses by examining the relationship between hysteranthy and other relevant plant traits.
+\indent Based on the hypotheses in the literature, we expect that wind pollination syndrome and early flowering will be a strong predictor of hysteranthy in our model.\\
+\section*{Methods}
+\subsection*{Data}
+\indent We obtained species level descriptions of floral-foliate sequences from the regional guidebook Michigan Trees \citep{Barnes2004} and its companion volume Michigan Shrubs and Vines \citep{Barnes2016}, hereafter: MTSV.
+\subsection*{Statistical analysis}
+\indent To investigated the phylogenetic signal of hysteranthy and control for phylogenetic structure in our dataset, we used a published angiosperm phylogenetic tree \citep{Zanne2013} pruned to match the species list from the MTSV data.
+\indent To illustrate that the our analysis is sensitive to how hysteranthy is defined, we also built a model using a physiological definition of hysteranthy in which only the descriptor "flowers: before leaves" was coded as hysteranthous and all other descriptors were coded as non-hysteranthous.
+\indent Because hysteranthous species must flower before their leaves, they can never flower late in the season. To evaluate whether hysteranthous species flower uniquly early even when early flowering non-hysteranthous species, we re-ran our model on a restricted dataset which only included species that flowered between mid-March and mid-May.
+\section*{Results}
+\subsection*{Phylogenetic signal}
+In our analysis, 101 out of 194 species were classified as hysteranthous the phylogenetic signal for hysteranthy was low (see figure 2) with a D statistics of 0.06.\\
+\subsection*{Trait associations}
+Average timing of flowering was the strongest predictor of hysteranthy, with the likelihood of hysteranthy increasing substantially with earlier flowering.\\
+\section*{Discussion}
+\indent Our finding suggest that hysteranthous flowering is strongly associated with wind pollination and early flowering. (Average predictive comparisions here).\\
+\indent These results are consistent with the the wind pollination hypothesis, but cannot identify the mechanism. (Discussion of male and female fitness here) \\
+\indent Hysteranthy could be adaptive for male fitness by increasing the likelihood of long distance pollen dispersal\\.
+\indent  Hysteranthous flowering would be adaptive female fitness if it were to reduce pollen limitation.\\
+\indent Until these fitness benefits are evaluated directly, we must consider the major implication of the functional hypotheses of hysteranthy, which is that the leafless period of flowering is critical for the reproductive success of these species. Therefore, we would expect that any substantial shifts in timing or duration of the hysteranthous period could have significant effects on the reproductive success of hysteranthous species.\\ 
+It has been shown that for temperate species floral and foliate phenology responds to the same combination environmental cues, therefore changes in the cues affect phenological responses. (absolute changes see, but relative changes poorly doccuments. These relative changes should be explored in 2 ecologically contexts: Interannual variability and long term climate change).\\ 
+\indent It is feasible that interannual variability in hysteranthy could related to variability in reproductive output that has been widely observed in wind pollinated trees.
+\indent It is also feasible that significant changes in seasonal temperatures associated with anthropogenic climate change could dramatically alter hysteranthous flowering patterns.
+\indent Climate change may also affect the life history trade off inherent to the differential selection hypothesis, which also found support in our analysis.
+\indent With the current existing body of research, we cannot assess the likelihood and impact of these scenarios.
+\indent In conclusion, our analysis suggests that in North American temperate forest, hysteranthy is common, lacks phylgenetic structure, and is associated with a wind pollination syndrome and extremely early flowering.
+
+
+\end{document}
