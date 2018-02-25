@@ -141,7 +141,7 @@ dx$flophase[dx$flophase=="63-M"]<-"60-M"
 dx$flophase[dx$flophase=="64-M"]<-"60-M"
 dx$flophase[dx$flophase=="65-M"]<-"60-M"
 dx$flophase[dx$flophase=="67-M"]<-"60-M"
-
+dx$flophase[dx$flophase=="60M"]<-"60-M"
 #to do:
 #clean individuals amalanchier and bet lenta snuck in. Make sure that is accounted for
 #clean treatment switch WSO and WLO to accuarate reflect.
@@ -203,18 +203,18 @@ great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 ### metrics for great date##############################################
 ###how many entries have full entries?
 full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
-nrow(full)#67 our of 576
+nrow(full)#101 our of 576
 table(full$GEN.SPA)
 table(full$treatment)
 ### how many have flowering?
 flowerfun<-subset(great.dat,!is.na(great.dat$flo_day))
-nrow(flowerfun) #109 out of 576
+nrow(flowerfun) #127 out of 576
 table(flowerfun$GEN.SPA)
 table(flowerfun$treatment)
 
 #one or the other:
 something<-subset(great.dat, !is.na(great.dat$leaf_day)|!is.na(great.dat$flo_day))
-nrow(something) #242
+nrow(something) #313
 table(something$GEN.SPA)
 table(something$treatment)
 
