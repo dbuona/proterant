@@ -245,4 +245,7 @@ table(something$treatment)
 ###plot the raw data
 
 an.data<-gather(great.dat,Phenophase,DOY,2:3)
-ggplot(an.data, aes(x=treatment, y=DOY, color=Phenophase))+stat_summary()+facet_wrap(~GEN.SPA)
+
+
+bigsp<-filter(an.data, GEN.SPA %in% c( "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
+ggplot(bigsp, aes(x=treatment, y=DOY, color=Phenophase))+stat_summary()+facet_wrap(~GEN.SPA)
