@@ -21,6 +21,19 @@ start<-yday("2017/11/21")
 d$doy.adjusted<-ifelse(d$year==17,d$doy-start,40+(d$doy))
 unique(d$doy.adjusted)
 
+#cold treatment wen in Dec/19/2017
+start2<-yday("2017/12/19")
+d$doy.adjusted2<-ifelse(d$year==17,d$doy-start2,(d$doy))
+unique(d$doy.adjusted2)
+
+d$doy.final<-ifelse(d$Chill==0,d$doy.final<-d$doy.adjusted,d$doy.final<-d$doy.adjusted2)
+
+d<-filter(d,doy.final>=0)
+unique(d$doy.final)
+
+###TO DO, adjust start of 2 month chilling
+
+
 ###give each entry a unique id
 d<-unite(d,id,name,good_flaskid,sep="_",remove = FALSE)
 
@@ -116,9 +129,19 @@ dx$flophase[dx$flophase=="69-F,65-M"]<-"0,69-F,65-M"
 dx$flophase[dx$flophase=="15"]<-"15?,0,0"
 dx$flophase[dx$flophase=="59-F"]<-"0,59-F,0"
 unique(dx$flophase)
+###more cleaning
+dx$flophase[dx$flophase=="0,69-F,67-F"]<-"0,69-F,67-M"
+dx$flophase[dx$flophase=="0,065-F,0"]<-"0,65-F,0"
+dx$flophase[dx$flophase=="0,60-F,65-N"]<-"0,60-F,65-M"
+dx$flophase[dx$flophase=="0,60-F,060-M"]<-"0,60-F,60-M"
+dx$flophase[dx$flophase=="0,69-F,690M"]<-"0,69-F,69-M"
+dx$flophase[dx$flophase=="0,69-M,69-M"]<-"0,69-F,69-M"
+dx$flophase[dx$flophase=="0,60-F,60M"]<-"0,60-F,60-M"
+dx$flophase[dx$flophase=="0,69-F,065-M"]<-"0,69-F,65-M"
+unique(dx$flophase)
 
 dx<-separate(dx,flophase,c("mixphase","femphase","malephase"),sep=",")
-dx<-gather(dx,flotype,flophase,15:17)
+dx<-gather(dx,flotype,flophase,17:19)
 
 ###### make everything 60######## for computation sake this way if first flower was score at 65 (etc) it makes the analysis.
 dx$flophase[dx$flophase=="61"]<-"60"
@@ -152,7 +175,7 @@ dx$flophase[dx$flophase=="60M"]<-"60-M"
 
 ####find the first day when species reached 15
 d.leaf<-filter(dx,leafphase==15)
-first<-aggregate(d.leaf$doy.adjusted, by = list(d.leaf$id), min)
+first<-aggregate(d.leaf$doy.final, by = list(d.leaf$id), min)
 ####combine with all data
 dater<-as.data.frame(unique(dx$id))
 colnames(dater)<- c("id")
@@ -160,17 +183,17 @@ colnames(first)<-c("id","leaf_day")
 dater<-full_join(dater,first,by="id") ###now you have a data set with first leaves
 ### flowers (currrently mixed only)
 d.flo<-filter(dx,flophase==60)
-firstflo<-aggregate(d.flo$doy.adjusted, by = list(d.flo$id), min)
+firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id), min)
 colnames(firstflo)<-c("id","flo_day")
 dater<-full_join(dater,firstflo,by="id")
 ###add female
 d.flo<-filter(dx,flophase=="60-F")
-firstflo<-aggregate(d.flo$doy.adjusted, by = list(d.flo$id), min)
+firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id), min)
 colnames(firstflo)<-c("id","flo_dayF")
 dater<-full_join(dater,firstflo,by="id")
 ###add male
 d.flo<-filter(dx,flophase=="60-M")
-firstflo<-aggregate(d.flo$doy.adjusted, by = list(d.flo$id), min)
+firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id), min)
 colnames(firstflo)<-c("id","flo_dayM")
 dater<-full_join(dater,firstflo,by="id")
 ##### pull experimenta; information to merge. THis give a full data sheet 
@@ -183,7 +206,7 @@ good.dat<-left_join(dater,dxx)
 ############MAKE A DATE SHEET THAT AGGREGATES ALL FLOWER TO EVALUATE COARSE HYSTERANTHY############
 DAT<-separate(dx,flophase,c("abosolute_flower","sex_ind"),sep="-")
 L<-filter(DAT,leafphase==15)
-L1<-aggregate(L$doy.adjusted, by = list(L$id), min)
+L1<-aggregate(L$doy.final, by = list(L$id), min)
 
 datUM<-as.data.frame(unique(DAT$id))
 colnames(datUM)<- c("id")
@@ -192,7 +215,7 @@ datUM<-full_join(datUM,L1,by="id") ###now you have a data set with first leaves
 
 ### flowers (currrently mixed only)
 Fl<-filter(DAT,abosolute_flower==60)
-Fl1<-aggregate(Fl$doy.adjusted, by = list(Fl$id), min)
+Fl1<-aggregate(Fl$doy.final, by = list(Fl$id), min)
 colnames(Fl1)<-c("id","flo_day")
 datUM<-full_join(datUM,Fl1,by="id")
 great.dat<-left_join(datUM,dxx)
@@ -219,3 +242,7 @@ table(something$GEN.SPA)
 table(something$treatment)
 
 ############################################################################################################
+###plot the raw data
+
+an.data<-gather(great.dat,Phenophase,DOY,2:3)
+ggplot(an.data, aes(x=treatment, y=DOY, color=Phenophase))+stat_summary()+facet_wrap(~GEN.SPA)
