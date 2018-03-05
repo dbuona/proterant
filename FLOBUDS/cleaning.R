@@ -140,6 +140,7 @@ dx$flophase[dx$flophase=="0,60-F,60M"]<-"0,60-F,60-M"
 dx$flophase[dx$flophase=="0,69-F,065-M"]<-"0,69-F,65-M"
 unique(dx$flophase)
 
+
 dx<-separate(dx,flophase,c("mixphase","femphase","malephase"),sep=",")
 dx<-gather(dx,flotype,flophase,17:19)
 
@@ -226,18 +227,18 @@ great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 ### metrics for great date##############################################
 ###how many entries have full entries?
 full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
-nrow(full)#101 our of 576
+nrow(full)#112 our of 576
 table(full$GEN.SPA)
 table(full$treatment)
 ### how many have flowering?
 flowerfun<-subset(great.dat,!is.na(great.dat$flo_day))
-nrow(flowerfun) #127 out of 576
+nrow(flowerfun) #130 out of 576
 table(flowerfun$GEN.SPA)
 table(flowerfun$treatment)
 
 #one or the other:
 something<-subset(great.dat, !is.na(great.dat$leaf_day)|!is.na(great.dat$flo_day))
-nrow(something) #313
+nrow(something) #328
 table(something$GEN.SPA)
 table(something$treatment)
 
@@ -248,4 +249,6 @@ an.data<-gather(great.dat,Phenophase,DOY,2:3)
 
 
 bigsp<-filter(an.data, GEN.SPA %in% c( "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
-ggplot(bigsp, aes(x=treatment, y=DOY, color=Phenophase))+stat_summary()+facet_wrap(~GEN.SPA)
+ggplot(an.data, aes(x=treatment, y=DOY, color=Phenophase))+stat_summary()+facet_wrap(~GEN.SPA)
+
+ggplot(an.data, aes(x=treatment, y=DOY, color=Phenophase))+geom_point()+facet_wrap(~GEN.SPA)
