@@ -31,7 +31,7 @@ d$doy.final<-ifelse(d$Chill==0,d$doy.final<-d$doy.adjusted,d$doy.final<-d$doy.ad
 
 d<-filter(d,doy.final>=0)
 unique(d$doy.final)
-
+max(d$doy.final)
 
 
 
@@ -149,7 +149,7 @@ unique(dx$flophase)
 
 dx<-separate(dx,flophase,c("mixphase","femphase","malephase"),sep=",")
 dx<-gather(dx,flotype,flophase,17:19)
-
+unique(dx$flophase)
 ###### make everything 60######## for computation sake this way if first flower was score at 65 (etc) it makes the analysis.
 dx$flophase[dx$flophase=="61"]<-"60"
 dx$flophase[dx$flophase=="62"]<-"60"
@@ -172,10 +172,18 @@ dx$flophase[dx$flophase=="64-M"]<-"60-M"
 dx$flophase[dx$flophase=="65-M"]<-"60-M"
 dx$flophase[dx$flophase=="67-M"]<-"60-M"
 dx$flophase[dx$flophase=="60M"]<-"60-M"
+table(dx$flophase)
+
+### clean flophase
+dx$flotype<-ifelse(dx$GEN.SPA=="VAC.COR","mixphase",dx$flotype)
+dx$flotype<-ifelse(dx$GEN.SPA=="PRUN.PEN","mixphase",dx$flotype)
+dx$flotype<-ifelse(dx$GEN.SPA=="PRU.VIR","mixphase",dx$flotype)
+
 #to do:
 #clean individuals amalanchier and bet lenta snuck in. Make sure that is accounted for
-#clean treatment switch WSO and WLO to accuarate reflect.
+#clean the few COM.PERs that are reported as mixphase
 #put in treatment values (IE 8 and 12 photoperiod)
+#Calculate chilling
 
 #############CREATE A DATA SHEET THAT HAS THE THREE FLOWER TYPES IN SEPARATE COLUMNS#########################
 #################THIS WILL BE USEFUL FOR COMPARING CHANGES IN PROTANDRY OR PROTOGYNY######################
