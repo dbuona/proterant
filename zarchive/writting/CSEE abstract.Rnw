@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{Sweave}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{siunitx}
+\usepackage{mdframed}
+\usepackage{natbib}
+\bibliographystyle{..//refs/styles/besjournals.bst}
+\usepackage[small]{caption}
+\setkeys{Gin}{width=0.8\textwidth}
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+\topmargin -1.5cm        
+\oddsidemargin -0.04cm   
+\evensidemargin -0.04cm
+\textwidth 16.59cm
+\textheight 21.94cm 
+%\pagestyle{empty} %comment if want page numbers
+\parskip 0pt
+\renewcommand{\baselinestretch}{1.5}
+\parindent 15pt
+
+\newmdenv[
+  topline=true,
+  bottomline=true,
+  skipabove=\topsep,
+  skipbelow=\topsep
+]{siderules}
+\begin{document}
+\title{Memory effects in tree phenology}
+\author{Daniel Buonaiuto}
+
+\begin{document}
+Title: I need a title \\
+Author: Daniel Buonaiuto \\
+Abstract:\\
+In many deciduous tree species, spring flowering proceeds leaf development (proteranthy), while in others, it is leaf expansion that occurs first (seranthy). It has been suggested that these floral-foliate phenological patterns may, in and of themselves, be adaptive, but there have been few empirical investigations into the relationship between floral and foliate phenophases. Using growth chambers experiments and field observations, I investigate the nature of floral-foliate patterns in several woody plant species from eastern deciduous forests. My study indicates that floral and foliate phenological responses are differentially affected by changing environmental cues, and that the degree of divergence of these responses vary among species. This work demonstrates significant variability in the temporal offset of floral-foliate phenophases and in some cases, changes in environmental conditions can even result in complete reversals the floral-foliate sequence. These results suggest that climate change is likely to significantly alter floral-foliate phenological sequences, which may have detrimental demographic consequences for many temperate tree species. A better understanding of the biological mechanisms that produce floral-foliate patterns observed in deciduous trees and the adaptive significance of these patterns is imperative for understanding and predicting forest community dynamics in the Anthropocene.
+\end{document}
