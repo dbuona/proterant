@@ -48,14 +48,14 @@
 "Salicaceae","Populus","heterophylla","wind","pro",18,"dioecious",3.5,5.5,"intolerant","N","N","Populus_heterophylla",1,1,1,"1smalltree",1,1,0,5.5,1
 "Salicaceae","Populus","deltoides","wind","pro",32,"dioecious",4.5,5.5,"intolerant","N","N","Populus_deltoides",1,1,1,"2talltree",1,1,0,5.5,1
 "Salicaceae","Populus","balsamifera","wind","pro",30,"dioecious",4.5,5.5,"intolerant","N","N","Populus_balsamifera",1,1,1,"2talltree",1,1,0,5.5,1
-"Salicaceae","Populus","nigra",NA,"pro",20,"dioecious",4.5,NA,"intolerant","N","N","Populus_nigra",1,1,0,"2talltree",1,1,0,NA,1
+"Salicaceae","Populus","nigra",NA,"pro",20,"dioecious",4.5,NA,"intolerant","N","N","Populus_nigra",1,1,0,"2talltree",1,1,0,5.5,1
 "Salicaceae","Populus","grandidentata","wind","pro",32,"dioecious",4,5.5,"intolerant","N","N","Populus_grandidentata",1,1,1,"2talltree",1,1,0,5.5,1
 "Salicaceae","Populus","tremuloides","wind","pro",32,"dioecious",3.5,5.5,"intolerant","N","N","Populus_tremuloides",1,1,1,"2talltree",1,1,0,5.5,1
 "Salicaceae","Populus","alba","wind","pro",24,"dioecious",4.5,5.5,"intolerant","N","N","Populus_alba",1,1,1,"2talltree",1,1,0,5.5,1
 "Salicaceae","Salix","serissima","ambo","ser",4,"dioecious",5.5,9,"intolerant","N","N","Salix_serissima",0,0,0,"0shrub",0,1,0,9,0
 "Salicaceae","Salix","petiolaris","ambo","syn",3,"dioecious",5,5,"intolerant","N","N","Salix_petiolaris",0,1,0,"0shrub",0,1,0,5,0
 "Salicaceae","Salix","pedicellaris","ambo","syn",1,"dioecious",5.5,6.5,"intolerant","N","N","Salix_pedicellaris",0,1,0,"0shrub",0,1,0,6.5,0
-"Salicaceae","Salix","myricoides","ambo","pro/syn",2.5,"dioecious",5.5,5.5,"","N","N","Salix_myricoides",1,1,0,"0shrub",0,1,NA,5.5,0
+"Salicaceae","Salix","myricoides","ambo","pro/syn",2.5,"dioecious",5.5,5.5,"","N","N","Salix_myricoides",1,1,0,"0shrub",0,1,0,5.5,0
 "Salicaceae","Salix","humilis","ambo","pro",3,"dioecious",4,5,"intolerant","N","N","Salix_humilis",1,1,0,"0shrub",0,1,0,5,1
 "Salicaceae","Salix","candida","ambo","pro/syn",1.5,"dioecious",5,6,"intolerant","N","N","Salix_candida",1,1,0,"0shrub",0,1,0,6,0
 "Salicaceae","Salix","nigra","ambo","syn",20,"dioecious",4.5,6,"intolerant","N","N","Salix_nigra",0,1,0,"2talltree",1,1,0,6,0

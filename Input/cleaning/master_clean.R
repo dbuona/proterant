@@ -32,6 +32,7 @@ source("cleaning/prune_tree.R")
 #makes tree ultrametri
 #Converts predictors to 1s and 0s
 write.tree(pruned.by.anthy, "pruned_for_mich.tre")
-write.csv(final.df, "mich_data_full.csv",row.names = FALSE)
+write.csv(final.df, "mich_data_full_clean.csv",row.names = FALSE)
 source("cleaning/clean_misc.R")
+final.df$name==mich.data$name
 write.csv(mich.data,"mich_data_full_clean.csv",row.names=FALSE)

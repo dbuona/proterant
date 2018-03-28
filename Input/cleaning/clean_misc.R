@@ -23,3 +23,9 @@ mich.data$pro3[mich.data$Phen.sequence== "syn"] <- 0
 mich.data$pro3[mich.data$Phen.sequence== "syn/ser"] <- 0
 mich.data$pro3[mich.data$Phen.sequence== "ser"] <- 0 
 mich.data$pro3[mich.data$Phen.sequence== "hyst"] <- 0
+
+##clean remaining NA's
+subset(mich.data, Genus=="Populus")
+##coding salix myriocides to be intorlerant of shade as the rest of the genus
+mich.data$shade_bin[mich.data$name == "Salix_myricoides"] <- 0
+mich.data$fruiting[mich.data$name == "Populus_nigra"] <- 5.5
