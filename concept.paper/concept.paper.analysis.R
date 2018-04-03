@@ -146,6 +146,7 @@ physplot<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segmen
 physplot
 plotty.all<-gridExtra::grid.arrange(functplot, interplot,physplot, ncol=3)
 
+############
 
 ##Unscale paramenters. You can rescale them by dividing betas by 2*sd corresponding x
     ##more work, but might allow for more reasonable average predictive comps
@@ -179,6 +180,25 @@ scale3<-spread(scale2,cont,scaledconf)
 scale<-rownames_to_column(scale, "pred")
 goober<-full_join(scale,scale3, by="pred")
 ggplot(goober,aes(scaledestimates,pred))+geom_point(size=2.5)+geom_segment(aes(y=pred,yend=pred,x=low,xend=high))+xlim(-1,1)+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
+
+###I don't think that was totally worth it.
+
+#######side bar#################################################################
+#Does pollination syndrome predict early flowering?
+?phylolm()
+a<-phylolm(flo_time~pol+fruit_cent+pro2+height_cent+shade_bin,data=mich.data,phy=mich.tree)
+summary(a)
+b<-phylolm(flo_time~pol+fruit_cent+pro+height_cent+shade_bin,data=mich.data,phy=mich.tree)
+summary(b)
+c<-phylolm(flo_time~pol+fruit_cent+pro3+height_cent+shade_bin,data=mich.data,phy=mich.tree)
+summary(c)
+d<-phylolm(flo_time~pol+fruit_cent+pro2,data=mich.data,phy=mich.tree)
+summary(d)
+###Alt approach:
+Mich.cent.funct_winter<-phyloglm(pro2~pol*flo_cent+height_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
+summary(Mich.cent.funct_winter)
 
 ###########################################################################################
 
