@@ -19,12 +19,14 @@ d$Date<-as.Date(d$Date,format =  "%m/%d/%y")
 d$doy<-yday(d$Date)
 unique(d$doy)
 start<-yday("2017/11/21")
+365-325
 d$doy.adjusted<-ifelse(d$year==17,d$doy-start,40+(d$doy))
 unique(d$doy.adjusted)
 
 #cold treatment wen in Dec/19/2017
 start2<-yday("2017/12/19")
-d$doy.adjusted2<-ifelse(d$year==17,d$doy-start2,(d$doy))
+365-353
+d$doy.adjusted2<-ifelse(d$year==17,d$doy-start2,12+(d$doy))
 unique(d$doy.adjusted2)
 
 d$doy.final<-ifelse(d$Chill==0,d$doy.final<-d$doy.adjusted,d$doy.final<-d$doy.adjusted2)
@@ -32,9 +34,10 @@ d$doy.final<-ifelse(d$Chill==0,d$doy.final<-d$doy.adjusted,d$doy.final<-d$doy.ad
 d<-filter(d,doy.final>=0)
 unique(d$doy.final)
 max(d$doy.final)
-
-
-
+q<-filter(d,Chill==1)
+r<-filter(d,Chill==0)
+unique(q$doy.final)
+unique(r$doy.final)
 ###give each entry a unique id
 d<-unite(d,id,name,good_flaskid,sep="_",remove = FALSE)
 
@@ -219,7 +222,7 @@ good.dat<-left_join(dater,dxx)
 good.dat<-gather(good.dat,sex,DOY,2:5)
 good.dat<-unite(good.dat,treatment,Force,Light,Chill,sep="" )
 
-ggplot(good.dat,aes(x=treatment,y=flo_day_Mon, color=sex))+geom_point()+facet_wrap(~GEN.SPA)
+#ggplot(good.dat,aes(x=treatment,y=flo_day_Mon, color=sex))+geom_point()+facet_wrap(~GEN.SPA)
 ggplot(good.dat,aes(x=treatment,y=DOY))+stat_summary(aes(color=sex))+geom_point(size=0.5,aes(color=sex))+facet_wrap(~GEN.SPA)
 ##########################################################################################
 
@@ -246,18 +249,19 @@ great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 ### metrics for great date##############################################
 ###how many entries have full entries?
 full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
-nrow(full)#125 our of 576
+nrow(full)#128 our of 576
 table(full$GEN.SPA)
 table(full$treatment)
 ### how many have flowering?
 flowerfun<-subset(great.dat,!is.na(great.dat$flo_day))
-nrow(flowerfun) #138 out of 576
+nrow(flowerfun) #141 out of 576
 table(flowerfun$GEN.SPA)
 table(flowerfun$treatment)
 
 #one or the other:
 something<-subset(great.dat, !is.na(great.dat$leaf_day)|!is.na(great.dat$flo_day))
-nrow(something) #343
+nrow(something) #352
+352/576
 table(something$GEN.SPA)
 table(something$treatment)
 
@@ -270,4 +274,6 @@ an.data<-gather(great.dat,Phenophase,DOY,2:3)
 bigsp<-filter(an.data, GEN.SPA %in% c( "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
 ggplot(bigsp, aes(x=treatment, y=DOY,color=Phenophase))+stat_summary()+geom_point(size=.25)+facet_wrap(~GEN.SPA)
 
-ggplot(an.data, aes(x=treatment, y=DOY,))+geom_point()+facet_wrap(~GEN.SPA)
+berries<-filter(an.data, GEN.SPA=="VAC.COR")
+ggplot(berries, aes(x=treatment, y=DOY,color=Phenophase))+stat_summary()+geom_point(size=.25)
+ggplot(an.data, aes(x=treatment, y=DOY,))+geom_point(aes(color=Phenophase))+facet_wrap(~GEN.SPA)
