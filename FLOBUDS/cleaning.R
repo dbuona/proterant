@@ -249,19 +249,21 @@ great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 ### metrics for great date##############################################
 ###how many entries have full entries?
 full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
-nrow(full)#128 our of 576
+nrow(full)#129 our of 576
 table(full$GEN.SPA)
 table(full$treatment)
 ### how many have flowering?
 flowerfun<-subset(great.dat,!is.na(great.dat$flo_day))
-nrow(flowerfun) #141 out of 576
+nrow(flowerfun) #142 out of 576
 table(flowerfun$GEN.SPA)
 table(flowerfun$treatment)
 
 #one or the other:
 something<-subset(great.dat, !is.na(great.dat$leaf_day)|!is.na(great.dat$flo_day))
-nrow(something) #352
-352/576
+som<-gather(something,phenophase,DOY,2:3)
+
+nrow(something) #353
+353/576
 table(something$GEN.SPA)
 table(something$treatment)
 
@@ -277,3 +279,19 @@ ggplot(bigsp, aes(x=treatment, y=DOY,color=Phenophase))+stat_summary()+geom_poin
 berries<-filter(an.data, GEN.SPA=="VAC.COR")
 ggplot(berries, aes(x=treatment, y=DOY,color=Phenophase))+stat_summary()+geom_point(size=.25)
 ggplot(an.data, aes(x=treatment, y=DOY,))+geom_point(aes(color=Phenophase))+facet_wrap(~GEN.SPA)
+
+###raw data 
+x<-subset(great.dat, !is.na(flo_day))
+y<-subset(great.dat,!is.na(leaf_day))
+table(x$GEN.SPA)
+table(y$GEN.SPA)
+
+xx<-rbind(x,y)
+xx<-gather(xx,phenophase,DOY,2:3)
+
+
+p<-ggplot(x,aes(treatment))+stat_count(color="pink",geom="bar")+facet_wrap(~GEN.SPA)
+pp<- ggplot(y,aes(treatment))+stat_count(color="green",geom="bar")+facet_wrap(~GEN.SPA)
+ggplot(p+pp)
+library(gridExtra)
+grid.arrange(p, pp)
