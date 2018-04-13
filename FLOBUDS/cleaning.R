@@ -46,9 +46,22 @@ d<-unite(d,treatcode,Force,Light,Chill,sep="_",remove = FALSE)
 d$Light<-ifelse(d$treatcode=="W_S_0","L",d$Light)
 d$Light<-ifelse(d$treatcode=="W_L_0","S",d$Light)
 d<-dplyr::select(d,-treatcode)## we'll add this later, but in the meantime it will mess up all the gather() commands if we dont drop it
+
+###clean species
+colnames(d)
+p<-filter(d, GEN.SPA=="PRU.PEN")
+unique(p$name)
+d$GEN.SPA[d$name=="PRUVIR 7 HF DB"]<-"AME.SPP"
+d$GEN.SPA[d$name=="PRUPEN 21 HF DB"]<-"BET.SPP"
+
+
 #### gather locations so it is informative but not catagorical
 dx<-gather(d,"flower_location","flophase",c(8,10))
 dx<-gather(dx,"leaf_location","leafphase",c(8,9))
+
+
+####clean extra data points from first experiemnt
+dx<-filter(dx,doy.final<=112)
 
 ####clean flowering
 unique(dx$flophase)####this needs alot of cleaning!!!!
@@ -153,14 +166,17 @@ unique(dx$flophase)
 dx<-separate(dx,flophase,c("mixphase","femphase","malephase"),sep=",")
 dx<-gather(dx,flotype,flophase,17:19)
 unique(dx$flophase)
-###### make everything 60######## for computation sake this way if first flower was score at 65 (etc) it makes the analysis.
-dx$flophase[dx$flophase=="61"]<-"60"
-dx$flophase[dx$flophase=="62"]<-"60"
-dx$flophase[dx$flophase=="63"]<-"60"
-dx$flophase[dx$flophase=="64"]<-"60"
-dx$flophase[dx$flophase=="65"]<-"60"
-dx$flophase[dx$flophase=="67"]<-"60"
 
+
+###### make everything 60######## for computation sake this way if first flower was score at 65 (etc) it makes the analysis.
+dx$flophase[dx$flophase=="61"]<-60
+dx$flophase[dx$flophase=="62"]<-60
+dx$flophase[dx$flophase=="63"]<-60
+dx$flophase[dx$flophase=="64"]<-60
+dx$flophase[dx$flophase=="65"]<-60
+dx$flophase[dx$flophase=="67"]<-60
+
+dx$flophase[dx$flophase=="60-F"]<-"60-F"
 dx$flophase[dx$flophase=="61-F"]<-"60-F"
 dx$flophase[dx$flophase=="62-F"]<-"60-F"
 dx$flophase[dx$flophase=="63-F"]<-"60-F"
@@ -168,6 +184,7 @@ dx$flophase[dx$flophase=="64-F"]<-"60-F"
 dx$flophase[dx$flophase=="65-F"]<-"60-F"
 dx$flophase[dx$flophase=="67-F"]<-"60-F"
 
+dx$flophase[dx$flophase=="60-M"]<-"60-M"
 dx$flophase[dx$flophase=="61-M"]<-"60-M"
 dx$flophase[dx$flophase=="62-M"]<-"60-M"
 dx$flophase[dx$flophase=="63-M"]<-"60-M"
@@ -182,116 +199,14 @@ dx$flotype<-ifelse(dx$GEN.SPA=="VAC.COR","mixphase",dx$flotype)
 dx$flotype<-ifelse(dx$GEN.SPA=="PRUN.PEN","mixphase",dx$flotype)
 dx$flotype<-ifelse(dx$GEN.SPA=="PRU.VIR","mixphase",dx$flotype)
 
+##Comper
+dx$flophase<-ifelse(dx$id=="COMPER 1 HF DB_CL1_24" &dx$flophase==60,"60-F",dx$flophase)
+dx$flophase<-ifelse(dx$id=="COMPER 6 HF DB_WS0_21" &dx$flophase==60,"60-F",dx$flophase)
+dx$flophase<-ifelse(dx$id=="COMPER 2 HF DB_CL0_1" &dx$flophase==60,"60-F",dx$flophase)
+
+
 #to do:
-#clean individuals amalanchier and bet lenta snuck in. Make sure that is accounted for
-#clean the few COM.PERs that are reported as mixphase
-#put in treatment values (IE 8 and 12 photoperiod)
-#Calculate chilling
+#put in treatment values (IE 8 and 12 photoperiod)?
+#Calculate chilling?
+#restrict to 112 days for both chilling treatment
 
-#############CREATE A DATA SHEET THAT HAS THE THREE FLOWER TYPES IN SEPARATE COLUMNS#########################
-#################THIS WILL BE USEFUL FOR COMPARING CHANGES IN PROTANDRY OR PROTOGYNY######################
-
-####find the first day when species reached 15
-d.leaf<-filter(dx,leafphase==15)
-first<-aggregate(d.leaf$doy.final, by = list(d.leaf$id), min)
-####combine with all data
-dater<-as.data.frame(unique(dx$id))
-colnames(dater)<- c("id")
-colnames(first)<-c("id","leaf_day")
-dater<-full_join(dater,first,by="id") ###now you have a data set with first leaves
-### flowers (currrently mixed only)
-d.flo<-filter(dx,flophase==60)
-firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id), min)
-colnames(firstflo)<-c("id","flo_day")
-dater<-full_join(dater,firstflo,by="id")
-###add female
-d.flo<-filter(dx,flophase=="60-F")
-firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id), min)
-colnames(firstflo)<-c("id","flo_dayF")
-dater<-full_join(dater,firstflo,by="id")
-###add male
-d.flo<-filter(dx,flophase=="60-M")
-firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id), min)
-colnames(firstflo)<-c("id","flo_dayM")
-dater<-full_join(dater,firstflo,by="id")
-##### pull experimenta; information to merge. THis give a full data sheet 
-###in which male, female and mixd flowering can be compared
-dxx<-select(dx,1:7)
-dxx<-distinct(dxx)
-good.dat<-left_join(dater,dxx)
-good.dat<-gather(good.dat,sex,DOY,2:5)
-good.dat<-unite(good.dat,treatment,Force,Light,Chill,sep="" )
-
-#ggplot(good.dat,aes(x=treatment,y=flo_day_Mon, color=sex))+geom_point()+facet_wrap(~GEN.SPA)
-ggplot(good.dat,aes(x=treatment,y=DOY))+stat_summary(aes(color=sex))+geom_point(size=0.5,aes(color=sex))+facet_wrap(~GEN.SPA)
-##########################################################################################
-
-############MAKE A DATE SHEET THAT AGGREGATES ALL FLOWER TO EVALUATE COARSE HYSTERANTHY############
-DAT<-separate(dx,flophase,c("abosolute_flower","sex_ind"),sep="-")
-L<-filter(DAT,leafphase==15)
-L1<-aggregate(L$doy.final, by = list(L$id), min)
-
-datUM<-as.data.frame(unique(DAT$id))
-colnames(datUM)<- c("id")
-colnames(L1)<-c("id","leaf_day")
-datUM<-full_join(datUM,L1,by="id") ###now you have a data set with first leaves
-
-### flowers (currrently mixed only)
-Fl<-filter(DAT,abosolute_flower==60)
-Fl1<-aggregate(Fl$doy.final, by = list(Fl$id), min)
-colnames(Fl1)<-c("id","flo_day")
-datUM<-full_join(datUM,Fl1,by="id")
-great.dat<-left_join(datUM,dxx)
-great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
-#####################################
-###good.dat, great.dat are the files to analyze
-########################################################################
-### metrics for great date##############################################
-###how many entries have full entries?
-full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
-nrow(full)#129 our of 576
-table(full$GEN.SPA)
-table(full$treatment)
-### how many have flowering?
-flowerfun<-subset(great.dat,!is.na(great.dat$flo_day))
-nrow(flowerfun) #142 out of 576
-table(flowerfun$GEN.SPA)
-table(flowerfun$treatment)
-
-#one or the other:
-something<-subset(great.dat, !is.na(great.dat$leaf_day)|!is.na(great.dat$flo_day))
-som<-gather(something,phenophase,DOY,2:3)
-
-nrow(something) #353
-353/576
-table(something$GEN.SPA)
-table(something$treatment)
-
-############################################################################################################
-###plot the raw data
-
-an.data<-gather(great.dat,Phenophase,DOY,2:3)
-
-
-bigsp<-filter(an.data, GEN.SPA %in% c( "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
-ggplot(bigsp, aes(x=treatment, y=DOY,color=Phenophase))+stat_summary()+geom_point(size=.25)+facet_wrap(~GEN.SPA)
-
-berries<-filter(an.data, GEN.SPA=="VAC.COR")
-ggplot(berries, aes(x=treatment, y=DOY,color=Phenophase))+stat_summary()+geom_point(size=.25)
-ggplot(an.data, aes(x=treatment, y=DOY,))+geom_point(aes(color=Phenophase))+facet_wrap(~GEN.SPA)
-
-###raw data 
-x<-subset(great.dat, !is.na(flo_day))
-y<-subset(great.dat,!is.na(leaf_day))
-table(x$GEN.SPA)
-table(y$GEN.SPA)
-
-xx<-rbind(x,y)
-xx<-gather(xx,phenophase,DOY,2:3)
-
-
-p<-ggplot(x,aes(treatment))+stat_count(color="pink",geom="bar")+facet_wrap(~GEN.SPA)
-pp<- ggplot(y,aes(treatment))+stat_count(color="green",geom="bar")+facet_wrap(~GEN.SPA)
-ggplot(p+pp)
-library(gridExtra)
-grid.arrange(p, pp)
