@@ -11,10 +11,18 @@ library(arm)
 library(rstanarm)
 library(tibble)
 library(ggstance)
+library(survival)
+library(survminer)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
 
-d<-read.csv("first.flobud.data.csv",header=TRUE)
+d<-read.csv("first.event.dat.csv",header=TRUE)
+###get rid of useless colummns
+colnames(d)
+d<-dplyr::select(d, -X.1)
+d<-dplyr::select(d, -X)
+
+#### make light differsent so variables  appear in order
 d$Light<-ifelse(d$Light=="L","xL","S")
 ###name treatments numeric/continuous
 d$photoperiod<-ifelse(d$Light=="xL",12,8)
@@ -30,7 +38,63 @@ d$c_cent<-d$chilldays/mean(d$chilldays)
 ###what is the distrbution of response variables
 ggplot(d,aes(flo_day))+geom_density()
 ggplot(d,aes(leaf_day))+geom_density()
+ggplot(d,aes(Lbb_day))+geom_density()
+ggplot(d,aes(Lexpand_day))+geom_density()
+d<-unite(d, treatment, Force,Light, Chill, sep= "_",remove = FALSE)
 
+###Basic plots for each phenophase#############################################
+phased<-gather(d,phase,DOY,8:12)
+
+bbview<-filter(phased, phase %in% c("Lbb_day","flo_day"))
+expview<-filter(phased, phase %in% c("Lexpand_day","flo_day"))
+leafview<-filter(phased, phase %in% c("leaf_day","flo_day"))
+
+
+##filter to species that have goodish flowering and BB
+bigsp<-filter(bbview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
+ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+ggtitle("budburst vs. flower")+facet_wrap(~GEN.SPA)
+
+###expansion and flowering
+bigsp<-filter(expview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
+ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+ggtitle("expansion vs. flower")+facet_wrap(~GEN.SPA)
+
+###leafout and flowering
+bigsp<-filter(leafview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
+ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+ggtitle("leafout vs. flower")+facet_wrap(~GEN.SPA)
+
+###################survival analysis###########Kaplan-Meier########################
+vivo<-filter(d,Dead.alive %in% c("A","?"))
+table(vivo$treatment)
+
+vivo$Lbb_day<-ifelse(is.na(vivo$Lbb_day),120,vivo$Lbb_day)
+vivo$surv<-ifelse(vivo$Lbb==120,0,1)
+table(vivo$treatment)
+table(d$treatment) 
+surv_object<-Surv(time=vivo$Lbb_day, event = vivo$surv,type="right")
+s1<-survfit(surv_object ~ treatment, data = vivo)
+summary(s1)
+ggsurvplot(s1, data =vivo, fun = "event")
+m1<-survreg(Surv(time =vivo$Lbb_day, event = vivo$surv)~Chill+Light+Force+Chill:Light+Chill:Force+Light:Force,data=vivo, dist="gaussian")
+summary(m1)
+
+m1a<-lm(Lbb_day~Chill+Light+Force+Chill:Light+Chill:Force+Light:Force,data=vivo)
+summary(m1a)
+#compare to bayes
+vivo2<-filter(d,Dead.alive %in% c("A","?"))
+bayes1<-brm(Lbb_day ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill,
+            data = vivo2, family = gaussian, 
+            iter= 3000,
+            warmup = 2000,
+            cores = 4)
+summary(bayes1)
+pp_check(bayes1)
+
+
+
+
+####survival analysis workish, similar to
+
+#######################################################################
 ###first models: All predictors as catagorical treatment variables
 modflo<-brm((flo_day) ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill+(Light +Chill+Force+Light:Chill+Light:Force+Force:Chill|p|GEN.SPA),
                data = d, family = gaussian, 
@@ -41,7 +105,7 @@ modflo<-brm((flo_day) ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill+(L
 summary(modflo) # 2 divergent
 coef(modflo)
 
-modleaf<-brm(leaf_day ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill+(Light +Chill+Force+Light:Chill+Light:Force+Force:Chill|p|GEN.SPA),
+modleaf<-brm(leaf_day ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill+(Light +Chill+Force+Light:Chill+Light:Force+Force:Chill|GEN.SPA),
             data = d, family = gaussian, 
             iter= 3000,
             warmup = 2000,

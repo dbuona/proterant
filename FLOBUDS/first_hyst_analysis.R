@@ -33,31 +33,31 @@ colnames(firstfloM)<-c("id","flo_dayM")
 dater<-full_join(dater,firstfloM,by="id")
 ##### pull experimenta; information to merge. THis give a full data sheet 
 ###in which male, female and mixd flowering can be compared
-dxx<-select(dx,1:7)
+dxx<-dplyr::select(dx,1:7)
 dxx<-distinct(dxx)
 good.dat<-left_join(dater,dxx)
+###make a dichogamy sheet
+mono<-filter(good.dat, GEN.SPA %in% c( "COM.PER","COR.COR"))
+#write.csv(mono,"dicogamy.csv")
+###continue
 good.dat<-gather(good.dat,sex,DOY,2:5)
-good.dat<-unite(good.dat,treatment,Force,Light,Chill,sep="" )
+#good.dat<-unite(good.dat,treatment,Force,Light,Chill,sep="" )
 
 #ggplot(good.dat,aes(x=treatment,y=flo_day_Mon, color=sex))+geom_point()+facet_wrap(~GEN.SPA)
-ggplot(good.dat,aes(x=treatment,y=DOY))+stat_summary(aes(color=sex))+geom_point(size=0.2,aes(color=sex))+facet_wrap(~GEN.SPA)
+#ggplot(good.dat,aes(x=treatment,y=DOY))+stat_summary(aes(color=sex))+geom_point(size=0.2,aes(color=sex))+facet_wrap(~GEN.SPA)
 
-####how is protogyny effect
-mono<-filter(good.dat, GEN.SPA %in% c( "COM.PER","COR.COR"))
-unique(mono$sex)
-mon<-dplyr::filter(mono, sex %in% c("flo_dayF","flo_dayM"))
-ggplot(mon,aes(x=treatment,y=DOY))+stat_summary(aes(color=sex))+geom_point(size=0.2,aes(color=sex))+facet_wrap(~GEN.SPA)
+
 
 ##########################################################################################
 
 ############MAKE A DATE SHEET THAT AGGREGATES ALL FLOWER TO EVALUATE COARSE HYSTERANTHY############
 DAT<-separate(dx,flophase,c("abosolute_flower","sex_ind"),sep="-")
-L<-filter(DAT,leafphase==15)
+L<-filter(DAT,leafphase==9)
 L1<-aggregate(L$doy.final, by = list(L$id), min)
 
 datUM<-as.data.frame(unique(DAT$id))
 colnames(datUM)<- c("id")
-colnames(L1)<-c("id","leaf_day")
+colnames(L1)<-c("id","Lbb_day")
 datUM<-full_join(datUM,L1,by="id") ###now you have a data set with first leaves
 
 ### flowers (currrently mixed only)
@@ -66,13 +66,47 @@ Fl1<-aggregate(Fl$doy.final, by = list(Fl$id), min)
 colnames(Fl1)<-c("id","flo_day")
 datUM<-full_join(datUM,Fl1,by="id")
 great.dat<-left_join(datUM,dxx)
+
+##add leeaf out
+LLL<-filter(DAT,leafphase==15)
+L3<-aggregate(LLL$doy.final, by = list(LLL$id), min)
+
+datUM3<-as.data.frame(unique(DAT$id))
+colnames(datUM3)<- c("id")
+colnames(L3)<-c("id","leaf_day")
+great.dat<-left_join(great.dat,L3)
+###add expansion
+LL<-filter(DAT,leafphase==11)
+L2<-aggregate(LL$doy.final, by = list(LL$id), min)
+
+datUM2<-as.data.frame(unique(DAT$id))
+colnames(datUM2)<- c("id")
+colnames(L2)<-c("id","Lexpand_day")
+great.dat<-left_join(great.dat,L2)
+ncol(great.dat)
+great.dat<-great.dat[,c(1,4,5,6,7,8,9,3,2,10,11)]
+###add survival analysis columns
+surv<-read.csv("flobuds.eval.csv",header=TRUE)
+colnames(surv)
+colnames(great.dat)
+surv<-unite(surv,treatcode,Force,Light,Chill,sep="_",remove = FALSE)
+surv$Light<-ifelse(surv$treatcode=="W_S_0","L",surv$Light)
+surv$Light<-ifelse(surv$treatcode=="W_L_0","S",surv$Light)
+###clean this
+
+head(great.dat)
+surv<-unite(surv,id,name,good_flaskid,sep="_")
+intersect(surv$id,great.dat$id) 
+datty<-left_join(great.dat,surv)
+##a data sheet for first analysis
+write.csv(datty,"first.event.dat.csv") 
 #great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 #####################################
 ###good.dat, great.dat are the files to analyze
 ########################################################################
 ### metrics for great date##############################################
 ###how many entries have full entries?
-full<-subset(great.dat, !is.na(great.dat$leaf_day)&!is.na(great.dat$flo_day))
+full<-subset(great.dat, !is.na(great.dat$bb_day)&!is.na(great.dat$flo_day))
 nrow(full)#129 our of 576
 table(full$GEN.SPA)
 table(full$treatment)
@@ -125,8 +159,4 @@ ggplot(great.dat,aes(as.factor(Chill),leaf_day))+geom_point(aes(color=Force,shap
 ggplot(great.dat,aes(flo_day))+geom_density() ### not so normal
 ggplot(great.dat,aes(leaf_day))+geom_density() ### not so normal
 
-library(lme4)
-mod.A<-lmer(flo_day~Chill+Force+Light+Chill:Force+Chill:Light+Light:Force+(1+Chill+Force+Light+Chill:Force+Chill:Light+Light:Force|GEN.SPA), data=great.dat)
-summary(mod.A)
-ranef(mod.A)
-coef(mod.A)
+
