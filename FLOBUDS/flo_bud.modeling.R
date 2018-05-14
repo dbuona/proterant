@@ -5,7 +5,7 @@ graphics.off()
 
 library(ggplot2)
 library(tidyverse)
-library(brms)
+library("brms")
 library(rstan)
 library(arm)
 library(rstanarm)
@@ -66,35 +66,38 @@ ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.
 vivo<-filter(d,Dead.alive %in% c("A","?"))
 table(vivo$treatment)
 
-vivo$Lbb_day<-ifelse(is.na(vivo$Lbb_day),120,vivo$Lbb_day)
-vivo$surv<-ifelse(vivo$Lbb==120,0,1)
 table(vivo$treatment)
 table(d$treatment) 
-surv_object<-Surv(time=vivo$Lbb_day, event = vivo$surv,type="right")
+
+vivo<-gather(vivo,phase,DOY,9:12)
+
+###do it for bud burst
+vivo<-filter(vivo, phase %in% c("Lbb_day","flo_day"))
+vivo$DOY<-ifelse(is.na(vivo$DOY),120,vivo$DOY)
+vivo$surv<-ifelse(vivo$DOY==120,0,1)
+
+
+surv_object<-Surv(time=vivo$DOY, event = vivo$surv,type="right")
 s1<-survfit(surv_object ~ treatment, data = vivo)
 summary(s1)
 ggsurvplot(s1, data =vivo, fun = "event")
-m1<-survreg(Surv(time =vivo$Lbb_day, event = vivo$surv)~Chill+Light+Force+Chill:Light+Chill:Force+Light:Force,data=vivo, dist="gaussian")
+m1<-survreg(Surv(time=vivo$DOY ,event=vivo$surv)~phase+Chill+Light+Force+Chill:phase+phase:Force+Light:phase,data=vivo, dist="gaussian")
 summary(m1)
 
-m1a<-lm(Lbb_day~Chill+Light+Force+Chill:Light+Chill:Force+Light:Force,data=vivo)
-summary(m1a)
-#compare to bayes
-vivo2<-filter(d,Dead.alive %in% c("A","?"))
-bayes1<-brm(Lbb_day ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill,
-            data = vivo2, family = gaussian, 
-            iter= 3000,
-            warmup = 2000,
-            cores = 4)
-summary(bayes1)
-pp_check(bayes1)
+##survival model in brms Not working from work computer but brms is wonky here.
+
+
+m1a<- brm(DOY | cens(surv) ~ phase+Light+Chill+Force,
+          data = vivo, family = gaussian,inits = "0") 
+??isFALSE()   
+?brm()
 
 
 
 
 ####survival analysis workish, similar to
 
-#######################################################################
+))#######################################################################
 ###first models: All predictors as catagorical treatment variables
 modflo<-brm((flo_day) ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill+(Light +Chill+Force+Light:Chill+Light:Force+Force:Chill|p|GEN.SPA),
                data = d, family = gaussian, 
