@@ -76,7 +76,14 @@ vivo<-filter(vivo, phase %in% c("Lbb_day","flo_day"))
 vivo$DOY<-ifelse(is.na(vivo$DOY),120,vivo$DOY)
 vivo$surv<-ifelse(vivo$DOY==120,0,1)
 
+vivo$floposs<-ifelse(vivo$Flo.poss.=="N",0,1)
 
+###This is only twigs where we deemed flowering to even bee possible
+vivo2<-filter(vivo,floposs==1)
+
+###try model with both flow poss
+
+####first survival model
 surv_object<-Surv(time=vivo$DOY, event = vivo$surv,type="right")
 s1<-survfit(surv_object ~ treatment, data = vivo)
 summary(s1)
