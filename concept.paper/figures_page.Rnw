@@ -11,13 +11,13 @@
 \makeatother
 \begin{document}
 \SweaveOpts{concordance=TRUE}
-
+%updated May 16 2016
 \begin{figure}[!tbp]
   \centering
   \fbox{\subfloat[Physioloical Hysteranthy: Average floral and foliar budburst]{\includegraphics[width=0.5\textwidth]{HF_phys.jpeg}\label{fig:f1}}
   \hfill
   \subfloat[Functional Hysteranthy: Average first flowering and leaves expansion to 75 percent]{\includegraphics[width=0.5\textwidth]{HF_funct.jpeg}\label{fig:f2}}}
-  \caption{Average Floral and Leaf Phenology at Harvard Forest 1990-2014. As seen through comparision, species classifications of hysteranthy vary greatly depending on whether physiologicial or functional definitions are used. Dark green lines indicate m }
+  \caption{Average Floral and Leaf Phenology at Harvard Forest 1990-2014. As seen through comparision, species classifications of hysteranthy vary greatly depending on whether physiologicial or functional definitions are used.}
 \end{figure}
 
 
@@ -29,18 +29,18 @@
 
 \begin{figure}[!tbp]
   \centering
- \fbox{ \subfloat[Full Dataset]{\includegraphics[width=0.5\textwidth]{full_functional_effectplot.jpeg}\label{fig:f3}}
+ \fbox{ \subfloat[Full Dataset]{\includegraphics[width=0.5\textwidth]{funct_effect_fill.jpeg}\label{fig:f3}}
   \hfill
-  \subfloat[Early flowering only]{\includegraphics[width=0.5\textwidth]{early_functional_effectplot.jpeg}\label{fig:f4}}}
-  \caption{Model estimated effect sizes and 95 confidence intervals for biological predictors of hysteranthy.  In both the full MTSV dataset and restricted dataset, wind pollination and early flowering are the strongest predictors.}
+  \subfloat[Early flowering only]{\includegraphics[width=0.5\textwidth]{early_effectplot.jpeg}\label{fig:f4}}}
+  \caption{Model estimated effect sizes and 95 resampling intervals for biological predictors of hysteranthy.  In both the full MTSV dataset and restricted dataset, wind pollination and early flowering are the strongest predictors.}
 \end{figure}
-
 
 \begin{figure}[h!]
   \centering
-   \fbox{ \includegraphics[width=0.5\textwidth]{hypothetic_plot.jpeg}}
-   \caption{Possible alterations to hysteranthous patterning due to climate change. Scenario 1: Proportionate shift with no change in hysteranthy. Scenario 2a: extension of hysteranthous period. Secenario 2b: contraction of hysteranthous period. Scenario 3: Pattern reversal and loss of hysteranthy.}
+   \fbox{ \includegraphics[width=0.95\textwidth]{phys_effect_fill.jpeg}}
+   \caption{Suppliment: Model estimated effect sizes and 95 resampling intervals for biological predictors of hysteranthy using MTSV statement "flowers before leaves" only to define hysteranthy. There is no change in direction of the significant predictors from the classification scheme we used. }
 \end{figure}
+
 
 
 \end{document}

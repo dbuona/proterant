@@ -20,6 +20,8 @@ dd <- data.frame(taxa  = again$name, hysteranthy = as.character(again$pro2 ))
 row.names(dd) <- NULL
 print(dd)
 
+jpeg("cicle.tree.jpeg")
 p <- p %<+% dd + geom_tiplab2(size=2)+geom_tippoint(aes(color=hysteranthy,shape=hysteranthy))
 p+theme(legend.position="right")
+dev.off()
 
