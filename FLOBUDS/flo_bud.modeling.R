@@ -12,6 +12,7 @@ library(rstanarm)
 library(tibble)
 library(ggstance)
 library(survival)
+library(sur)
 library(survminer)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
@@ -74,7 +75,7 @@ vivo<-gather(vivo,phase,DOY,9:12)
 ###do it for bud burst
 vivo<-filter(vivo, phase %in% c("Lbb_day","flo_day"))
 vivo$DOY<-ifelse(is.na(vivo$DOY),120,vivo$DOY)
-vivo$surv<-ifelse(vivo$DOY==120,0,1)
+vivo$surv<-ifelse(vivo$DOY==120,1,0)
 
 vivo$floposs<-ifelse(vivo$Flo.poss.=="N",0,1)
 
@@ -83,26 +84,21 @@ vivo2<-filter(vivo,floposs==1)
 
 ###try model with both flow poss
 
-####first survival model
-surv_object<-Surv(time=vivo$DOY, event = vivo$surv,type="right")
-s1<-survfit(surv_object ~ treatment, data = vivo)
-summary(s1)
-ggsurvplot(s1, data =vivo, fun = "event")
-m1<-survreg(Surv(time=vivo$DOY ,event=vivo$surv)~phase+Chill+Light+Force+Chill:phase+phase:Force+Light:phase,data=vivo, dist="gaussian")
-summary(m1)
-
-##survival model in brms Not working from work computer but brms is wonky here.
 
 
-m1a<- brm(DOY | cens(surv) ~ phase+Light+Chill+Force,
-          data = vivo, family = gaussian,inits = "0") 
-??isFALSE()   
-?brm()
+##### survival model in brms
+m1a<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
+          data = vivo, family = weibull,inits = "0",
+          iter= 3000,
+          warmup = 2000,
+          prior = prior) 
+prior<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
+           data = vivo, family = weibull)   
 
 
+coef(m1a)
+summary(m1a)
 
-
-####survival analysis workish, similar to
 
 ))#######################################################################
 ###first models: All predictors as catagorical treatment variables
@@ -364,3 +360,12 @@ Z3<-rbind(Z,Z2)
 colnames(Z3)
 ggplot(Z3, aes(effect,predictor))+geom_point(position=pd,aes(color=class))+geom_errorbarh(aes(color=class,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+facet_wrap(~GEN.SPA)
 
+
+###survival model
+####first survival model
+surv_object<-Surv(time=vivo$DOY, event = vivo$surv,type="right")
+s1<-survfit(surv_object ~ treatment, data = vivo)
+summary(s1)
+ggsurvplot(s1, data =vivo, fun = "event")
+m1<-survreg(Surv(time=vivo$DOY ,event=vivo$surv)~phase+Chill+Light+Force+Chill:phase+phase:Force+Light:phase,data=vivo, dist="gaussian")
+summary(m1)
