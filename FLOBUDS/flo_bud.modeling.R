@@ -87,13 +87,15 @@ vivo2<-filter(vivo,floposs==1)
 
 
 ##### survival model in brms
+prior<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
+                 data = vivo, family = weibull) 
+
 m1a<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
           data = vivo, family = weibull,inits = "0",
           iter= 3000,
           warmup = 2000,
           prior = prior) 
-prior<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
-           data = vivo, family = weibull)   
+  
 
 
 coef(m1a)

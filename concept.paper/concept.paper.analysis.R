@@ -47,6 +47,8 @@ plot(Wind)
 ##functionalhysteranthy
 PhyloPro2<-phylo.d(d,binvar=pro2)
 PhyloPro2
+plot(PhyloPro2)
+?phylo.d()
 #d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloPro3<-phylo.d(d,binvar=pro3)
 PhyloPro3
@@ -54,7 +56,7 @@ PhyloPro3
 ###phlosignal for continuous trait
 phylosig(mich.tree, mich.data$flo_time, method="lambda", test=TRUE, nsim=999)
 phylosig(mich.tree, mich.data$dev.time, method="lambda", test=TRUE, nsim=999)
-
+phylosig(mich.tree, mich.data$heigh_height, method="lambda", test=TRUE, nsim=999)
 ###centering
 mich.data$height_cent<-(mich.data$heigh_height-mean(mich.data$heigh_height))/(2*sd(mich.data$heigh_height))
 mich.data$fruit_cent<-(mich.data$fruiting-mean(mich.data$fruiting))/(2*sd(mich.data$fruiting))
@@ -137,10 +139,10 @@ bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 
-jpeg("funct.effect.fill.jpeg")
+#jpeg("funct.effect.fill.jpeg")
 functplot1<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 functplot1
-dev.off()
+#dev.off()
 #####model 2 intermediate
 
 #Mich.cent.intermed<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
@@ -244,9 +246,10 @@ bootmich2$trait[bootmich2$trait=="height_cent"]<-"max height"
 bootmich2$trait[bootmich2$trait=="dev_time_cent"]<-"seed development"
 bootmich2$trait[bootmich2$trait=="flo_cent"]<-"flower timing"
 library(ggplot2)
-physplot<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
+jpeg("phys_effect_fill.jpeg")
+physplot1<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 physplot1
-
+dev.off()
 plotty.all<-gridExtra::grid.arrange(functplot1, interplot1,physplot1,functplot,interplot,physplot, ncol=3,nrow=2)
 
 ############
@@ -256,32 +259,35 @@ plotty.all<-gridExtra::grid.arrange(functplot1, interplot1,physplot1,functplot,i
 Mich.funct<-phyloglm(pro2~pol+heigh_height+flo_time+dev.time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
                        boot=599,full.matrix = TRUE)
+M2<-arm::standardize(Mich.funct)
+
+summary(M2)
 summary(Mich.funct)
 ###this is one way to rescale estimates
-#scaledestimates<-c(coef(Mich.funct)[2]/2*sd(mich.data$pol),
-#coef(Mich.funct)[3]/2*sd(mich.data$heigh_height),
-#coef(Mich.funct)[4]/2*sd(mich.data$flo_time),
-#coef(Mich.funct)[5]/2*sd(mich.data$dev.time),
-#coef(Mich.funct)[6]/2*sd(mich.data$shade_bin))
-#scale<-as.data.frame(scaledestimates)
+scaledestimates<-c(coef(Mich.funct)[2]/2*sd(mich.data$pol),
+coef(Mich.funct)[3]/2*sd(mich.data$heigh_height),
+coef(Mich.funct)[4]/2*sd(mich.data$flo_time),
+coef(Mich.funct)[5]/2*sd(mich.data$dev.time),
+coef(Mich.funct)[6]/2*sd(mich.data$shade_bin))
+scale<-as.data.frame(scaledestimates)
 
-#scaledconf<-c(Mich.funct$bootconfint95[3]/2*sd(mich.data$pol),
-#Mich.funct$bootconfint95[4]/2*sd(mich.data$pol),
-#Mich.funct$bootconfint95[5]/2*sd(mich.data$heigh_height),
-#Mich.funct$bootconfint95[6]/2*sd(mich.data$heigh_height),
-#Mich.funct$bootconfint95[7]/2*sd(mich.data$flo_time),
-#Mich.funct$bootconfint95[8]/2*sd(mich.data$flo_time),
-#Mich.funct$bootconfint95[9]/2*sd(mich.data$dev.time),
-#Mich.funct$bootconfint95[10]/2*sd(mich.data$dev.time),
-#Mich.funct$bootconfint95[11]/2*sd(mich.data$shade_bin),
-#Mich.funct$bootconfint95[12]/2*sd(mich.data$shade_bin))
-#scale2<-as.data.frame(scaledconf)
-#scale2$pred<-c("pol","pol","heigh_height","heigh_height","flo_time","flo_time","dev.time","dev.time","shade_bin","shade_bin")
-#scale2$cont<-c("low","high","low","high","low","high","low","high","low","high")
-#scale3<-spread(scale2,cont,scaledconf)
-#scale<-rownames_to_column(scale, "pred")
-#goober<-full_join(scale,scale3, by="pred")
-#ggplot(goober,aes(scaledestimates,pred))+geom_point(size=2.5)+geom_segment(aes(y=pred,yend=pred,x=low,xend=high))+xlim(-1,1)+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
+scaledconf<-c(Mich.funct$bootconfint95[3]/2*sd(mich.data$pol),
+Mich.funct$bootconfint95[4]/2*sd(mich.data$pol),
+Mich.funct$bootconfint95[5]/2*sd(mich.data$heigh_height),
+Mich.funct$bootconfint95[6]/2*sd(mich.data$heigh_height),
+Mich.funct$bootconfint95[7]/2*sd(mich.data$flo_time),
+Mich.funct$bootconfint95[8]/2*sd(mich.data$flo_time),
+Mich.funct$bootconfint95[9]/2*sd(mich.data$dev.time),
+Mich.funct$bootconfint95[10]/2*sd(mich.data$dev.time),
+Mich.funct$bootconfint95[11]/2*sd(mich.data$shade_bin),
+Mich.funct$bootconfint95[12]/2*sd(mich.data$shade_bin))
+scale2<-as.data.frame(scaledconf)
+scale2$pred<-c("pol","pol","heigh_height","heigh_height","flo_time","flo_time","dev.time","dev.time","shade_bin","shade_bin")
+scale2$cont<-c("low","high","low","high","low","high","low","high","low","high")
+scale3<-spread(scale2,cont,scaledconf)
+scale<-rownames_to_column(scale, "pred")
+goober<-full_join(scale,scale3, by="pred")
+ggplot(goober,aes(scaledestimates,pred))+geom_point(size=2.5)+geom_segment(aes(y=pred,yend=pred,x=low,xend=high))+xlim(-1,1)+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 
 ###I don't think that was totally worth it.
 
@@ -318,17 +324,25 @@ delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*mich.data$height_cent+beta[4]*mich.da
 print(mean(delta))  #0.41
 
 
-###for flowering 
-earl<-4
-mid<-6
-delta2<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height_cent+beta[4]*earl+beta[5]*mich.data$dev_time_cent+beta[6]*mich.data$shade_bin)-
-  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height_cent+beta[4]*mid+beta[5]*mich.data$dev_time_cent+beta[6]*mich.data$shade_bin)
+###for flowering
+april<-(4-mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
+may<-(5-mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
+earl<-2*sd(mich.data$flo_time)*april+mean(mich.data$flo_time)
+mid<-2*sd(mich.data$flo_time)*may+mean(mich.data$flo_time)   
 
-mean(delta2)###how do I unscale this to make it meaningful this?
-#maybe multiply the betas by this#2sd(z)+M=
+delta2<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height_cent+beta[4]*april+beta[5]*mich.data$dev_time_cent+beta[6]*mich.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height_cent+beta[4]*may+beta[5]*mich.data$dev_time_cent+beta[6]*mich.data$shade_bin)
 
+mean(delta2) ##.24 which is right! yay
 
-
+2*sd(mich.data$flo_time)*(-0.697978)+mean(mich.data$flo_time)
+2*sd(mich.data$flo_time)*(-0.1677311)+mean(mich.data$flo_time)                                            
+ 
+###how do I unscale this to make it meaningful this?
+#=#z score = X-m/sd
+#rescale SD(z) + M
+#I did mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
+#so I should do 2sd(z)+M
 
 
 ###APC unscaled#########################################
@@ -340,19 +354,15 @@ hi<-1
 lo<-0
 ###for [pollination syndrome]
 beta[2]
-delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*mich.data$heigh_height+beta[4]*mich.data$flo_time+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)-
-  invlogit(beta[1]+beta[2]*lo+beta[3]*mich.data$heigh_height+beta[4]*mich.data$flo_time+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)
+delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*mich.data$heigh_height+beta[4]*mich.data$flo_time+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*lo+beta[3]*mich.data$heigh_height+beta[4]*mich.data$flo_time+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)
 
 mean(delta)  #0.40
 
 ###for flowering 
 earl<-4
 mid<-5
-delta2<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+beta[4]*earl+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)-
-  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+beta[4]*mid+beta[5]*mich.data$fruiting+beta[6]*mich.data$shade_bin)
+delta2<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+beta[4]*earl+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)-
+  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+beta[4]*mid+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)
 
-mean(delta2*sd)
-#z score = X-m/sd
-#rescale SD(z) + M
-#I did mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
-#so I should do 2sd(z)+M
+mean(delta2)
