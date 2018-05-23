@@ -82,14 +82,14 @@ vivo$floposs<-ifelse(vivo$Flo.poss.=="N",0,1)
 ###This is only twigs where we deemed flowering to even bee possible
 vivo2<-filter(vivo,floposs==1)
 
-###try model with both flow poss
-
+##### The models below are for budburst and flower open, should try it for leaf out and flowering
 
 
 ##### survival model in brms
 prior<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
                  data = vivo, family = weibull) 
 
+###this model only expludes things that died not couldn't ahve flowered
 m1a<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
           data = vivo, family = weibull,inits = "0",
           iter= 3000,
@@ -100,274 +100,116 @@ m1a<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+
 
 coef(m1a)
 summary(m1a)
+launch_shinystan(m1a)
 
-
-))#######################################################################
-###first models: All predictors as catagorical treatment variables
-modflo<-brm((flo_day) ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill+(Light +Chill+Force+Light:Chill+Light:Force+Force:Chill|p|GEN.SPA),
-               data = d, family = gaussian, 
-               iter= 3000,
-               warmup = 2000,
-               cores = 4)
-
-summary(modflo) # 2 divergent
-coef(modflo)
-
-modleaf<-brm(leaf_day ~ Light+Chill+Force+Light:Chill+Light:Force+Force:Chill+(Light +Chill+Force+Light:Chill+Light:Force+Force:Chill|GEN.SPA),
-            data = d, family = gaussian, 
-            iter= 3000,
-            warmup = 2000,
-            cores = 4)
-
-summary(modleaf) #2 divergent
-#########Extract mean estimate
-Q<-as.data.frame(coef(modleaf))
+Q<-as.data.frame(coef(m1a))
 colnames(Q)
 
-R<-dplyr::select(Q, "GEN.SPA.Estimate.LightxL","GEN.SPA.Estimate.Chill","GEN.SPA.Estimate.ForceW",
-                              "GEN.SPA.Estimate.LightxL.Chill","GEN.SPA.Estimate.LightxL.ForceW","GEN.SPA.Estimate.Chill.ForceW")
+R<-dplyr::select(Q,"GEN.SPA.Estimate.phaseLbb_day", "GEN.SPA.Estimate.phaseflo_day.LightxL","GEN.SPA.Estimate.phaseLbb_day.LightxL","GEN.SPA.Estimate.phaseflo_day.Chill","GEN.SPA.Estimate.phaseflo_day.ForceW","GEN.SPA.Estimate.phaseLbb_day.Chill","GEN.SPA.Estimate.phaseLbb_day.ForceW")
 R<-rownames_to_column(R,"GEN.SPA")
 colnames(R)
-colnames(R)<-c("GEN.SPA","Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-R<-gather(R,"predictor","effect",2:7)
-#ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
-
-############## Extract credible invervals
-X<-dplyr::select(Q, contains(".2.5.ile"))
-colnames(X)
-X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
-ncol(X)
-colnames(X)<-c("GEN.SPA.Estimate.LightxL","GEN.SPA.Estimate.Chill","GEN.SPA.Estimate.ForceW",
-               "GEN.SPA.Estimate.LightxL.Chill","GEN.SPA.Estimate.LightxL.ForceW","GEN.SPA.Estimate.Chill.ForceW")
-
-colnames(X)<-c("Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-
-X<-rownames_to_column(X,"GEN.SPA")
-X<-gather(X,"predictor","CIlow",2:7)
-
-######now high CI
-XX<-dplyr::select(Q, contains(".97.5.ile"))
-colnames(XX)
-XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
-ncol(XX)
-colnames(XX)<-c("GEN.SPA.Estimate.LightxL","GEN.SPA.Estimate.Chill","GEN.SPA.Estimate.ForceW",
-               "GEN.SPA.Estimate.LightxL.Chill","GEN.SPA.Estimate.LightxL.ForceW","GEN.SPA.Estimate.Chill.ForceW")
-colnames(XX)<-c("Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-
-XX<-rownames_to_column(XX,"GEN.SPA")
-XX<-gather(XX,"predictor","CIhigh",2:7)
-
-XXX<-full_join(X,XX)
-
-Z<-full_join(XXX,R)
-#ggplot(Z, aes(effect,predictor))+geom_point()+geom_point(size=2.5)+geom_segment(aes(y=predictor,yend=predictor,x=CIlow,xend=CIhigh))+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
-### Instad of faceting try ggstance pack pd function made by harold in code cat sent
-
-pd<- position_dodgev(height = 1)
-#ggplot(Z, aes(effect,predictor))+geom_point(position=pd,aes(color=GEN.SPA))+geom_errorbarh(aes(color=GEN.SPA,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))
-
-
-#####Try with flowers
-Q<-as.data.frame(coef(modflo))
-colnames(Q)
-
-R<-dplyr::select(Q, "GEN.SPA.Estimate.LightxL","GEN.SPA.Estimate.Chill","GEN.SPA.Estimate.ForceW",
-          "GEN.SPA.Estimate.LightxL.Chill","GEN.SPA.Estimate.LightxL.ForceW","GEN.SPA.Estimate.Chill.ForceW")
-
-R<-rownames_to_column(R,"GEN.SPA")
-colnames(R)<-c("GEN.SPA","Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-R<-gather(R,"predictor","Feffect",2:7)
-#ggplot(R, aes(Feffect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
-
-############## Extract credible invervals
-X<-dplyr::select(Q, contains(".2.5.ile"))
-colnames(X)
-X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
-ncol(X)
-colnames(X)<-c("GEN.SPA.Estimate.LightxL","GEN.SPA.Estimate.Chill","GEN.SPA.Estimate.ForceW",
-               "GEN.SPA.Estimate.LightxL.Chill","GEN.SPA.Estimate.LightxL.ForceW","GEN.SPA.Estimate.Chill.ForceW")
-
-
-X<-rownames_to_column(X,"GEN.SPA")
-colnames(X)<-c("GEN.SPA","Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-X<-gather(X,"predictor","FCIlow",2:7)
-
-######now high CI
-XX<-dplyr::select(Q, contains(".97.5.ile"))
-colnames(XX)
-XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
-ncol(XX)
-colnames(XX)<-c("GEN.SPA.Estimate.LightxL","GEN.SPA.Estimate.Chill","GEN.SPA.Estimate.ForceW",
-                "GEN.SPA.Estimate.LightxL.Chill","GEN.SPA.Estimate.LightxL.ForceW","GEN.SPA.Estimate.Chill.ForceW")
-
-
-XX<-rownames_to_column(XX,"GEN.SPA")
-colnames(XX)<-c("GEN.SPA","Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-
-XX<-gather(XX,"predictor","FCIhigh",2:7)
-
-XXX<-full_join(X,XX)
-
-Z2<-full_join(XXX,R)
-#ggplot(Z2, aes(Feffect,predictor))+geom_point()+geom_point(size=2.5)+geom_segment(aes(y=predictor,yend=predictor,x=FCIlow,xend=FCIhigh))+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
-### Instad of faceting try ggstance pack pd function made by harold in code cat sent
-colnames(Z2)<-c("GEN.SPA","predictor","CIlow","CIhigh","effect")
-Z2$class<-"flower"
-#ggplot(Z2, aes(effect,predictor))+geom_point(position=pd,aes(color=GEN.SPA))+geom_errorbarh(aes(color=GEN.SPA,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))
-colnames(Z)
-Z$class<-"leaves"
-colnames(Z)
-
-Z3<-rbind(Z,Z2)
-colnames(Z3)
-
-ggplot(Z3, aes(effect,predictor))+geom_point(position=pd,aes(color=class))+geom_errorbarh(aes(color=class,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+facet_wrap(~GEN.SPA)
-
-#just species with lots of flowering: 
-Zsub<-filter(Z3, GEN.SPA %in% c("ACE.PEN","COM.PER","ILE.MUC","COR.COR","PRU.PEN","VAC.COR"))
-ggplot(Zsub, aes(effect,predictor))+geom_point(position=pd,aes(color=class))+geom_errorbarh(aes(color=class,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+facet_wrap(~GEN.SPA)
-
-
-#####more quantitative model#######
-
-modAL<-brm(leaf_day ~ photoperiod +chilldays+temp_day+photoperiod:chilldays+photoperiod:temp_day+temp_day:chilldays+(photoperiod +chilldays+temp_day+photoperiod:chilldays+photoperiod:temp_day+temp_day:chilldays|GEN.SPA),
-                   data = d, family = gaussian, 
-                  iter= 3500,
-                  warmup = 3000,
-                  cores = 4)
-summary(modAL) #11 divergent transitions
-coef(modAL)
-
-modAF<-brm(flo_day ~ photoperiod +chilldays+temp_day+photoperiod:chilldays+photoperiod:temp_day+temp_day:chilldays+(photoperiod +chilldays+temp_day+photoperiod:chilldays+photoperiod:temp_day+temp_day:chilldays|GEN.SPA),
-           data = d, family = gaussian, 
-           iter= 4500,
-           warmup = 4000,
-           cores = 4)
-coef(modAF) #42 diverge
-pp_check(modAF)
-pp_check (modAL)
-###plot them as above:
-
-
-
-mod.centF<-brm(flo_day ~ p_cent +c_cent+f_cent+p_cent:c_cent+p_cent:f_cent+f_cent:c_cent+(1+ p_cent +c_cent+f_cent+p_cent:c_cent+p_cent:f_cent+f_cent:c_cent|p|GEN.SPA),
-          data = d, family = gaussian, 
-          iter= 4000,
-          warmup = 3500,
-          cores = 4)
-summary(mod.centF) ##3 divergent
-mod.centL<-brm(leaf_day ~ p_cent +c_cent+f_cent+p_cent:c_cent+p_cent:f_cent+f_cent:c_cent+(1+ p_cent +c_cent+f_cent+p_cent:c_cent+p_cent:f_cent+f_cent:c_cent|p|GEN.SPA),
-               data = d, family = gaussian, 
-               iter= 4000,
-               warmup = 3500,
-               cores = 4)
-summary(mod.centL) #9 divergent
-bayes_R2(mod.centF)
-
-######plot it
-Q<-as.data.frame(coef(mod.centL))
-colnames(Q)
-
-R<-dplyr::select(Q, "GEN.SPA.Estimate.p_cent","GEN.SPA.Estimate.c_cent",
-          "GEN.SPA.Estimate.f_cent","GEN.SPA.Estimate.p_cent.c_cent",
-          "GEN.SPA.Estimate.p_cent.f_cent","GEN.SPA.Estimate.c_cent.f_cent")
-
-R<-rownames_to_column(R,"GEN.SPA")
-colnames(R)
-colnames(R)<-c("GEN.SPA","Main:Photo","Main:Force","Main:Chill","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-R<-gather(R,"predictor","effect",2:7)
+colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Force:Flo","Chill:Leaf","Force:Leaf")
+R<-gather(R,"predictor","effect",2:8)
 ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
 
-############## Extract credible invervals
 X<-dplyr::select(Q, contains(".2.5.ile"))
 colnames(X)
 X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
 ncol(X)
-
-colnames(X)
-colnames(X)<-c("Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-
 X<-rownames_to_column(X,"GEN.SPA")
-X<-gather(X,"predictor","CIlow",2:7)
+colnames(X)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+X<-gather(X,"predictor","CIlow",2:8)
 
-######now high CI
+###high
 XX<-dplyr::select(Q, contains(".97.5.ile"))
 colnames(XX)
 XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
 ncol(XX)
-
-colnames(XX)<-c("Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-
 XX<-rownames_to_column(XX,"GEN.SPA")
-XX<-gather(XX,"predictor","CIhigh",2:7)
+colnames(XX)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+XX<-gather(XX,"predictor","CIhigh",2:8)
 
 XXX<-full_join(X,XX)
 
 Z<-full_join(XXX,R)
-#### Do it for flowers
-Q<-as.data.frame(coef(mod.centF))
+
+pd<- position_dodgev(height = 1)
+ggplot(Z, aes(effect,predictor))+geom_point(position=pd,aes(color=GEN.SPA))+geom_errorbarh(aes(color=GEN.SPA,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))
+ggplot(Z,aes(effect,predictor))+geom_point()+geom_errorbarh(aes(xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+facet_wrap(~GEN.SPA)
+
+Z$class<-NA
+Z$class<-ifelse(Z$predictor=="Light:Flo",0,2)
+Z$class<-ifelse(Z$predictor=="Light:Leaf",0,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Chill:Leaf",1,Z$class)
+Z$class<-ifelse(Z$predictor=="Chill:Flo",1,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Phase",4,Z$class)
+
+ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1a:")+facet_wrap(~GEN.SPA)
+
+
+Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
+ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1a")+facet_wrap(~GEN.SPA)
+
+
+#####now try to use offset as a variable
+
+prior2<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
+                 data = vivo2, family = weibull) 
+
+###this model only expludes things that died not couldn't ahve flowered
+m1b<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
+          data = vivo2, family = weibull,inits = "0",
+          iter= 3000,
+          warmup = 2000,
+          prior = prior2) 
+summary(m1b)
+
+Q<-as.data.frame(coef(m1b))
 colnames(Q)
 
-R<-dplyr::select(Q, "GEN.SPA.Estimate.p_cent","GEN.SPA.Estimate.c_cent",
-                 "GEN.SPA.Estimate.f_cent","GEN.SPA.Estimate.p_cent.c_cent",
-                 "GEN.SPA.Estimate.p_cent.f_cent","GEN.SPA.Estimate.c_cent.f_cent")
-
+R<-dplyr::select(Q,"GEN.SPA.Estimate.phaseLbb_day", "GEN.SPA.Estimate.phaseflo_day.LightxL","GEN.SPA.Estimate.phaseLbb_day.LightxL","GEN.SPA.Estimate.phaseflo_day.Chill","GEN.SPA.Estimate.phaseflo_day.ForceW","GEN.SPA.Estimate.phaseLbb_day.Chill","GEN.SPA.Estimate.phaseLbb_day.ForceW")
 R<-rownames_to_column(R,"GEN.SPA")
-colnames(R)<-c("GEN.SPA","Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-R<-gather(R,"predictor","Feffect",2:7)
-#ggplot(R, aes(Feffect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
+colnames(R)
+colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Force:Flo","Chill:Leaf","Force:Leaf")
+R<-gather(R,"predictor","effect",2:8)
+ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
 
-############## Extract credible invervals
 X<-dplyr::select(Q, contains(".2.5.ile"))
 colnames(X)
 X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
 ncol(X)
-colnames(X)<-c("GEN.SPA.Estimate.p_cent","GEN.SPA.Estimate.c_cent",
-          "GEN.SPA.Estimate.f_cent","GEN.SPA.Estimate.p_cent.c_cent",
-               "GEN.SPA.Estimate.p_cent.f_cent","GEN.SPA.Estimate.c_cent.f_cent")
-
-
 X<-rownames_to_column(X,"GEN.SPA")
-colnames(X)<-c("GEN.SPA","Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-X<-gather(X,"predictor","FCIlow",2:7)
+colnames(X)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+X<-gather(X,"predictor","CIlow",2:8)
 
-######now high CI
+###high
 XX<-dplyr::select(Q, contains(".97.5.ile"))
 colnames(XX)
 XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
 ncol(XX)
-colnames(XX)<-c("GEN.SPA.Estimate.p_cent","GEN.SPA.Estimate.c_cent",
-          "GEN.SPA.Estimate.f_cent","GEN.SPA.Estimate.p_cent.c_cent",
-                "GEN.SPA.Estimate.p_cent.f_cent","GEN.SPA.Estimate.c_cent.f_cent")
-
-
 XX<-rownames_to_column(XX,"GEN.SPA")
-colnames(XX)<-c("GEN.SPA","Main:Photo","Main:Chill","Main:Force","Int:PhotoxChill","Int:PhotoxForce","Int:ChillxForce")
-
-XX<-gather(XX,"predictor","FCIhigh",2:7)
+colnames(XX)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+XX<-gather(XX,"predictor","CIhigh",2:8)
 
 XXX<-full_join(X,XX)
 
-Z2<-full_join(XXX,R)
-#ggplot(Z2, aes(Feffect,predictor))+geom_point()+geom_point(size=2.5)+geom_segment(aes(y=predictor,yend=predictor,x=FCIlow,xend=FCIhigh))+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
-### Instad of faceting try ggstance pack pd function made by harold in code cat sent
-colnames(Z2)<-c("GEN.SPA","predictor","CIlow","CIhigh","effect")
-Z2$class<-"flower"
-#ggplot(Z2, aes(effect,predictor))+geom_point(position=pd,aes(color=GEN.SPA))+geom_errorbarh(aes(color=GEN.SPA,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))
-colnames(Z)
-Z$class<-"leaves"
-colnames(Z)
+Z<-full_join(XXX,R)
 
-Z3<-rbind(Z,Z2)
-colnames(Z3)
-ggplot(Z3, aes(effect,predictor))+geom_point(position=pd,aes(color=class))+geom_errorbarh(aes(color=class,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+facet_wrap(~GEN.SPA)
+pd<- position_dodgev(height = 1)
+Z$class<-NA
+Z$class<-ifelse(Z$predictor=="Light:Flo",0,2)
+Z$class<-ifelse(Z$predictor=="Light:Leaf",0,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Chill:Leaf",1,Z$class)
+Z$class<-ifelse(Z$predictor=="Chill:Flo",1,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Phase",4,Z$class)
+
+ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1b:")+facet_wrap(~GEN.SPA)
+
+Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
+ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1b")+facet_wrap(~GEN.SPA)
 
 
-###survival model
-####first survival model
-surv_object<-Surv(time=vivo$DOY, event = vivo$surv,type="right")
-s1<-survfit(surv_object ~ treatment, data = vivo)
-summary(s1)
-ggsurvplot(s1, data =vivo, fun = "event")
-m1<-survreg(Surv(time=vivo$DOY ,event=vivo$surv)~phase+Chill+Light+Force+Chill:phase+phase:Force+Light:phase,data=vivo, dist="gaussian")
-summary(m1)
