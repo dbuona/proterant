@@ -21,7 +21,6 @@ library("randomForest")
 
 mich.tree<-read.tree("pruned_for_mich.tre")
 mich.data<-read.csv("mich_data_full_clean.csv")
-
 mich.data$dev.time<-NA
 mich.data$dev.time<-mich.data$fruiting-mich.data$flo_time
 
@@ -49,15 +48,18 @@ PhyloPro2<-phylo.d(d,binvar=pro2)
 PhyloPro2
 plot(PhyloPro2)
 ?phylo.d()
+print(PhyloPro2)
 #d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloPro3<-phylo.d(d,binvar=pro3)
 PhyloPro3
 
 ###phlosignal for continuous trait
-phylosig(mich.tree, mich.data$flo_time, method="lambda", test=TRUE, nsim=999)
+?phylosig()
+phylosig(mich.tree, mich.data$flo_time, method="lambda", test=TRUE, nsim=999,se=NULL)
 phylosig(mich.tree, mich.data$dev.time, method="lambda", test=TRUE, nsim=999)
 phylosig(mich.tree, mich.data$heigh_height, method="lambda", test=TRUE, nsim=999)
-###centering
+
+###Rescale predictors
 mich.data$height_cent<-(mich.data$heigh_height-mean(mich.data$heigh_height))/(2*sd(mich.data$heigh_height))
 mich.data$fruit_cent<-(mich.data$fruiting-mean(mich.data$fruiting))/(2*sd(mich.data$fruiting))
 mich.data$flo_cent<-(mich.data$flo_time-mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
