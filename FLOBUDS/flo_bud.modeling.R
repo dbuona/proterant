@@ -16,7 +16,7 @@ library(sur)
 library(survminer)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
-
+load(.Rdata)
 d<-read.csv("first.event.dat.csv",header=TRUE)
 ###get rid of useless colummns
 colnames(d)
@@ -64,16 +64,16 @@ bigsp<-filter(leafview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC",
 ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+ggtitle("leafout vs. flower")+facet_wrap(~GEN.SPA)
 
 ###################survival analysis###########Kaplan-Meier########################
-vivo<-filter(d,Dead.alive %in% c("A","?"))
-table(vivo$treatment)
+viv<-filter(d,Dead.alive %in% c("A","?"))
+table(viv$treatment)
 
-table(vivo$treatment)
+table(viv$treatment)
 table(d$treatment) 
 
-vivo<-gather(vivo,phase,DOY,9:12)
+vivo.full<-gather(viv,phase,DOY,9:12)
 
 ###do it for bud burst
-vivo<-filter(vivo, phase %in% c("Lbb_day","flo_day"))
+vivo<-filter(vivo.full, phase %in% c("Lbb_day","flo_day"))
 vivo$DOY<-ifelse(is.na(vivo$DOY),120,vivo$DOY)
 vivo$surv<-ifelse(vivo$DOY==120,1,0)
 
@@ -212,4 +212,108 @@ ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_
 Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
 ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1b")+facet_wrap(~GEN.SPA)
 
+####DO this again with leaf out vs. flowering
+vivo.full<-gather(vivo,phase,DOY,9:12)
 
+###do it for bud burst
+hayim<-filter(vivo.full, phase %in% c("leaf_day","flo_day"))
+hayim$DOY<-ifelse(is.na(hayim$DOY),120,hayim$DOY)
+hayim$surv<-ifelse(hayim$DOY==120,1,0)
+
+hayim$floposs<-ifelse(hayim$Flo.poss.=="N",0,1)
+
+###This is only twigs where we deemed flowering to even bee possible
+hayim2<-filter(hayim,floposs==1)
+prior3<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
+                  data = hayim2, family = weibull) 
+
+###this model only expludes things that died not couldn't ahve flowered
+###do I need main effects for interpretation?
+m2b<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
+          data = hayim2, family = weibull,inits = "0",
+          iter= 3000,
+          warmup = 2000,
+          prior = prior3) 
+summary(m2b)
+
+Q<-as.data.frame(coef(m2b))
+colnames(Q)
+
+R<-dplyr::select(Q,"GEN.SPA.Estimate.phaseleaf_day", "GEN.SPA.Estimate.phaseflo_day.LightxL","GEN.SPA.Estimate.phaseleaf_day.LightxL","GEN.SPA.Estimate.phaseflo_day.Chill","GEN.SPA.Estimate.phaseflo_day.ForceW","GEN.SPA.Estimate.phaseleaf_day.Chill","GEN.SPA.Estimate.phaseleaf_day.ForceW")
+R<-rownames_to_column(R,"GEN.SPA")
+colnames(R)
+colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Force:Flo","Chill:Leaf","Force:Leaf")
+R<-gather(R,"predictor","effect",2:8)
+ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
+
+X<-dplyr::select(Q, contains(".2.5.ile"))
+colnames(X)
+X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
+ncol(X)
+X<-rownames_to_column(X,"GEN.SPA")
+colnames(X)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+X<-gather(X,"predictor","CIlow",2:8)
+
+###high
+XX<-dplyr::select(Q, contains(".97.5.ile"))
+colnames(XX)
+XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
+ncol(XX)
+XX<-rownames_to_column(XX,"GEN.SPA")
+colnames(XX)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+XX<-gather(XX,"predictor","CIhigh",2:8)
+
+XXX<-full_join(X,XX)
+
+Z<-full_join(XXX,R)
+
+pd<- position_dodgev(height = 1)
+Z$class<-NA
+Z$class<-ifelse(Z$predictor=="Light:Flo",0,2)
+Z$class<-ifelse(Z$predictor=="Light:Leaf",0,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Chill:Leaf",1,Z$class)
+Z$class<-ifelse(Z$predictor=="Chill:Flo",1,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Phase",4,Z$class)
+
+ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M2b:")+facet_wrap(~GEN.SPA)
+
+Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
+ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M2b")+facet_wrap(~GEN.SPA)
+summary(m2b)
+###Attempt to transform the real values
+goober<-dplyr::select(Q, contains(".Estimate"))
+goober<-rownames_to_column(goober,"GEN.SPA")
+ncol(goober)
+colnames(goober)<-c("GEN.SPA","Intercept","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+goober<-gather(goober,"predictor","effect",2:9)
+goober$adj_effect<-exp(goober$effect)
+
+summary(m2b) ###WHen exponentiated the #s are very high. Let's see if we just do a leaf based model
+viv<-filter(d,Dead.alive %in% c("A","?"))
+table(viv$treatment)
+
+table(viv$treatment)
+table(d$treatment) 
+
+vivo.full<-gather(viv,phase,DOY,9:12)
+
+###do it for bud burst
+vivoo<-filter(vivo.full, phase %in% c("Lbb_day"))
+vivoo$DOY<-ifelse(is.na(vivoo$DOY),120,vivoo$DOY)
+vivoo$surv<-ifelse(vivoo$DOY==120,1,0)
+table(vivoo$DOY) #182 out of 501 are censored
+
+priorz<-get_prior(DOY | cens(surv) ~ Light+Chill+Force,
+                  data = vivoo, family = weibull) 
+
+###this model only expludes things that died not couldn't ahve flowered
+###do I need main effects for interpretation?
+mLonly<- brm(DOY | cens(surv) ~ Light+Chill+Force+(1+Light+Chill+Force|GEN.SPA),
+          data = vivoo, family = weibull,inits = "0",
+          iter= 3000,
+          warmup = 2000,
+          prior = priorz) 
+summary(mLonly)
+exp(5.39)

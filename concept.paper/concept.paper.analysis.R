@@ -144,6 +144,31 @@ bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 #jpeg("funct.effect.fill.jpeg")
 functplot1<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 functplot1
+
+
+cent.funct.seed.winter<-phyloglm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin+pol:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
+summary(cent.funct.seed.winter)
+bootest<-as.data.frame(cent.funct.seed.winter$coefficients)
+bootconf<-as.data.frame(cent.funct.seed.winter$bootconfint95)
+bootconf<-as.data.frame(t(bootconf))
+
+bootest<-rownames_to_column(bootest, "trait")
+bootconf<-rownames_to_column(bootconf, "trait")
+bootmich<-full_join(bootconf,bootest, by="trait")
+colnames(bootmich)<-c("trait","low","high","estimate")
+bootmich<-dplyr::filter(bootmich, trait!="alpha")
+bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
+###names
+bootmich$trait[bootmich$trait=="shade_bin"]<-"shade tolerance"
+bootmich$trait[bootmich$trait=="pol"]<-"pollination syndrome"
+bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
+bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
+bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
+bootmich$trait[bootmich$trait=="pol:flo_cent"]<-"Syndrome x Flower phenology"
+
+
 #dev.off()
 #####model 2 intermediate
 
