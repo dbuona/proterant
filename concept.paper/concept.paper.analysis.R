@@ -23,6 +23,10 @@ mich.tree<-read.tree("pruned_for_mich.tre")
 mich.data<-read.csv("mich_data_full_clean.csv")
 mich.data$dev.time<-NA
 mich.data$dev.time<-mich.data$fruiting-mich.data$flo_time
+###one more cleaninging tax
+mich.data$pol<-ifelse(mich.data$Species=="quadrangulata",1,mich.data$pol)
+
+mich.data$pol<-ifelse(mich.data$Genus=="Populus"& mich.data$Species=="nigra",1,mich.data$pol)
 
 #pro<- hysteranthy= before, and before with leaves 
   #phyloD =0.18 with 49 species hysteranthous
@@ -47,12 +51,11 @@ plot(Wind)
 PhyloPro2<-phylo.d(d,binvar=pro2)
 PhyloPro2
 plot(PhyloPro2)
-?phylo.d()
-print(PhyloPro2)
+
 #d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloPro3<-phylo.d(d,binvar=pro3)
 PhyloPro3
-
+plot(PhyloPro3)
 ###phlosignal for continuous trait
 ?phylosig()
 phylosig(mich.tree, mich.data$flo_time, method="lambda", test=TRUE, nsim=999,se=NULL)
@@ -124,6 +127,12 @@ cent.funct.seed<-phyloglm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
 summary(cent.funct.seed)
+cent.funct.seed.nophylo<-glm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin+flo_cent:pol, data=mich.data, family=binomial())
+summary(cent.funct.seed.nophylo)
+#### dev time is the only thing that changes (stronger in phylocorrected)
+
+
+
 bootest<-as.data.frame(cent.funct.seed$coefficients)
 bootconf<-as.data.frame(cent.funct.seed$bootconfint95)
 bootconf<-as.data.frame(t(bootconf))
@@ -146,7 +155,7 @@ functplot1<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segme
 functplot1
 
 
-cent.funct.seed.winter<-phyloglm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin+pol:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+cent.funct.seed.winter<-phyloglm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin+pol:flo_cent+dev_time_cent:flo_cent+height_cent:flo_cent+shade_bin:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
 summary(cent.funct.seed.winter)
@@ -166,9 +175,13 @@ bootmich$trait[bootmich$trait=="pol"]<-"pollination syndrome"
 bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
-bootmich$trait[bootmich$trait=="pol:flo_cent"]<-"Syndrome x Flower phenology"
+bootmich$trait[bootmich$trait=="pol:flo_cent"]<-"flower phenology x syndrome "
+bootmich$trait[bootmich$trait=="flo_cent:dev_time_cent"]<-"flower phenology x development time"
+bootmich$trait[bootmich$trait=="height_cent:flo_cent"]<-"flower phenology x height"
+bootmich$trait[bootmich$trait=="flo_cent:shade_bin"]<-"flower phenology x tolerance"
 
-
+functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,7)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
+functplot
 #dev.off()
 #####model 2 intermediate
 
@@ -198,12 +211,12 @@ bootmich$trait[bootmich$trait=="pol:flo_cent"]<-"Syndrome x Flower phenology"
 #interplot<-ggplot(bootmich1,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+xlim(-7,5)+guides(color="none")+ggtitle("Intermediate catagory")
 #interplot
 
-cent.intermed.seed<-phyloglm(pro~pol+height_cent+flo_cent+dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+cent.intermed.seed.winter<-phyloglm(pro~pol+height_cent+flo_cent+dev_time_cent+shade_bin+pol:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                             start.beta=NULL, start.alpha=NULL,
                             boot=599,full.matrix = TRUE)
-summary(cent.intermed.seed)
-bootest1<-as.data.frame(cent.intermed.seed$coefficients)
-bootconf1<-as.data.frame(cent.intermed.seed$bootconfint95)
+summary(cent.intermed.seed.winter)
+bootest1<-as.data.frame(cent.intermed.seed.winter$coefficients)
+bootconf1<-as.data.frame(cent.intermed.seed.winter$bootconfint95)
 bootconf1<-as.data.frame(t(bootconf1))
 
 bootest1<-rownames_to_column(bootest1, "trait")
@@ -218,6 +231,7 @@ bootmich1$trait[bootmich1$trait=="pol"]<-"pollination syndrome"
 bootmich1$trait[bootmich1$trait=="height_cent"]<-"max height"
 bootmich1$trait[bootmich1$trait=="dev_time_cent"]<-"seed development"
 bootmich1$trait[bootmich1$trait=="flo_cent"]<-"flower timing"
+bootmich1$trait[bootmich1$trait=="pol:flo_cent"]<-"syndrome x flower phenology"
 
 interplot1<-ggplot(bootmich1,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+xlim(-7,5)+guides(color="none")
 interplot1
@@ -280,43 +294,6 @@ dev.off()
 plotty.all<-gridExtra::grid.arrange(functplot1, interplot1,physplot1,functplot,interplot,physplot, ncol=3,nrow=2)
 
 ############
-
-##Unscale paramenters. You can rescale them by dividing betas by 2*sd corresponding x
-    ##more work, but might allow for more reasonable average predictive comps
-Mich.funct<-phyloglm(pro2~pol+heigh_height+flo_time+dev.time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                         start.beta=NULL, start.alpha=NULL,
-                       boot=599,full.matrix = TRUE)
-M2<-arm::standardize(Mich.funct)
-
-summary(M2)
-summary(Mich.funct)
-###this is one way to rescale estimates
-scaledestimates<-c(coef(Mich.funct)[2]/2*sd(mich.data$pol),
-coef(Mich.funct)[3]/2*sd(mich.data$heigh_height),
-coef(Mich.funct)[4]/2*sd(mich.data$flo_time),
-coef(Mich.funct)[5]/2*sd(mich.data$dev.time),
-coef(Mich.funct)[6]/2*sd(mich.data$shade_bin))
-scale<-as.data.frame(scaledestimates)
-
-scaledconf<-c(Mich.funct$bootconfint95[3]/2*sd(mich.data$pol),
-Mich.funct$bootconfint95[4]/2*sd(mich.data$pol),
-Mich.funct$bootconfint95[5]/2*sd(mich.data$heigh_height),
-Mich.funct$bootconfint95[6]/2*sd(mich.data$heigh_height),
-Mich.funct$bootconfint95[7]/2*sd(mich.data$flo_time),
-Mich.funct$bootconfint95[8]/2*sd(mich.data$flo_time),
-Mich.funct$bootconfint95[9]/2*sd(mich.data$dev.time),
-Mich.funct$bootconfint95[10]/2*sd(mich.data$dev.time),
-Mich.funct$bootconfint95[11]/2*sd(mich.data$shade_bin),
-Mich.funct$bootconfint95[12]/2*sd(mich.data$shade_bin))
-scale2<-as.data.frame(scaledconf)
-scale2$pred<-c("pol","pol","heigh_height","heigh_height","flo_time","flo_time","dev.time","dev.time","shade_bin","shade_bin")
-scale2$cont<-c("low","high","low","high","low","high","low","high","low","high")
-scale3<-spread(scale2,cont,scaledconf)
-scale<-rownames_to_column(scale, "pred")
-goober<-full_join(scale,scale3, by="pred")
-ggplot(goober,aes(scaledestimates,pred))+geom_point(size=2.5)+geom_segment(aes(y=pred,yend=pred,x=low,xend=high))+xlim(-1,1)+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
-
-###I don't think that was totally worth it.
 
 #######side bar#################################################################
 #Does pollination syndrome predict early flowering?
@@ -393,3 +370,14 @@ delta2<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+be
   invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+beta[4]*mid+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)
 
 mean(delta2)
+
+#Whixh species are insect pollinated but not hysteranthous
+buggy<-filter(mich.data, pol==0 & pro3==1)
+unique(buggy$Family)
+###tropical Rhamnaceae, Lauraceae, Anacardiaceae, Rutaceae
+phy<-as.data.frame(coef(cent.funct.seed.winter))
+phy<- phy %>%  rownames_to_column(var="effect")
+
+nophy<-as.data.frame(coef(cent.funct.seed.nophylo))
+nophy<- nophy %>%  rownames_to_column(var="effect")
+phycom<-left_join(phy,nophy)
