@@ -69,7 +69,7 @@ mich.data$flo_cent<-(mich.data$flo_time-mean(mich.data$flo_time))/(2*sd(mich.dat
 mich.data$pol_cent<-(mich.data$pol-mean(mich.data$pol))/(2*sd(mich.data$pol))
 mich.data$av_fruit_time_cent<-(mich.data$av_fruit_time-mean(mich.data$av_fruit_time))/(2*sd(mich.data$av_fruit_time))
 mich.data$dev_time_cent<-(mich.data$dev.time-mean(mich.data$dev.time))/(2*sd(mich.data$dev.time))
-
+mich.data$tol_cent<-(mich.data$shade_bin-mean(mich.data$shade_bin))/(2*sd(mich.data$shade_bin))
 
 ###prepare for modeling
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
@@ -84,12 +84,7 @@ mich.data$height10<-mich.data$heigh_height/10
 
 #number of bootstraps from Wilcox, R. R. (2010). Fundamentals of modern statistical methods: Substantially improving power and accuracy. Springer.
 
-#Mich.cent.funct<-phyloglm(pro2~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-#                          start.beta=NULL, start.alpha=NULL,
- #                         boot=599,full.matrix = TRUE)
 
-
-#summary(Mich.cent.funct)
 ######do fruit and flo time covary? If yes removing one from the model should greatly change the effect
 #test1<-phyloglm(pro2~pol+height_cent+flo_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
  #                         start.beta=NULL, start.alpha=NULL,
@@ -103,25 +98,6 @@ mich.data$height10<-mich.data$heigh_height/10
 #summary(test2)
 ####The effect sizes remain relatively stable there fore we assume there is not a collinearity issue
 
-#### Plot this
-#bootest<-as.data.frame(Mich.cent.funct$coefficients)
-#bootconf<-as.data.frame(Mich.cent.funct$bootconfint95)
-#bootconf<-as.data.frame(t(bootconf))
-
-#bootest<-rownames_to_column(bootest, "trait")
-#bootconf<-rownames_to_column(bootconf, "trait")
-#bootmich<-full_join(bootconf,bootest, by="trait")
-#colnames(bootmich)<-c("trait","low","high","estimate")
-#bootmich<-dplyr::filter(bootmich, trait!="alpha")
-#bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
-###names
-#bootmich$trait[bootmich$trait=="shade_bin"]<-"shade tolerance"
-#bootmich$trait[bootmich$trait=="pol"]<-"pollination syndrome"
-#bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
-#bootmich$trait[bootmich$trait=="fruit_cent"]<-"fruit timing"
-#bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
-#functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
-#functplot
 ############ main analysis plot using seed development as a predictor
 cent.funct.seed<-phyloglm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
@@ -130,11 +106,16 @@ summary(cent.funct.seed)
 cent.funct.seed.nophylo<-glm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin+flo_cent:pol, data=mich.data, family=binomial())
 summary(cent.funct.seed.nophylo)
 #### dev time is the only thing that changes (stronger in phylocorrected)
+####s, I didn't use the standardized bianary predictor: THis is the model I should use, though nothing changes that much
+z.funct.seed<-phyloglm(pro2~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
 
+summary(z.funct.seed)
+summary(cent.funct.seed)
 
-
-bootest<-as.data.frame(cent.funct.seed$coefficients)
-bootconf<-as.data.frame(cent.funct.seed$bootconfint95)
+bootest<-as.data.frame(z.funct.seed$coefficients)
+bootconf<-as.data.frame(z.funct.seed$bootconfint95)
 bootconf<-as.data.frame(t(bootconf))
 
 bootest<-rownames_to_column(bootest, "trait")
@@ -144,8 +125,8 @@ colnames(bootmich)<-c("trait","low","high","estimate")
 bootmich<-dplyr::filter(bootmich, trait!="alpha")
 bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
 ###names
-bootmich$trait[bootmich$trait=="shade_bin"]<-"shade tolerance"
-bootmich$trait[bootmich$trait=="pol"]<-"pollination syndrome"
+bootmich$trait[bootmich$trait=="tol_cent"]<-"shade tolerance"
+bootmich$trait[bootmich$trait=="pol_cent"]<-"pollination syndrome"
 bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
@@ -153,14 +134,14 @@ bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 #jpeg("funct.effect.fill.jpeg")
 functplot1<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 functplot1
-
-
-cent.funct.seed.winter<-phyloglm(pro2~pol+height_cent+flo_cent+dev_time_cent+shade_bin+pol:flo_cent+dev_time_cent:flo_cent+height_cent:flo_cent+shade_bin:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+#dev.off()
+####
+z.funct.seed.winter<-phyloglm(pro2~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent+pol_cent:flo_cent+dev_time_cent:flo_cent+height_cent:flo_cent+tol_cent:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
-summary(cent.funct.seed.winter)
-bootest<-as.data.frame(cent.funct.seed.winter$coefficients)
-bootconf<-as.data.frame(cent.funct.seed.winter$bootconfint95)
+summary(z.funct.seed.winter)
+bootest<-as.data.frame(z.funct.seed.winter$coefficients)
+bootconf<-as.data.frame(z.funct.seed.winter$bootconfint95)
 bootconf<-as.data.frame(t(bootconf))
 
 bootest<-rownames_to_column(bootest, "trait")
@@ -170,100 +151,24 @@ colnames(bootmich)<-c("trait","low","high","estimate")
 bootmich<-dplyr::filter(bootmich, trait!="alpha")
 bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
 ###names
-bootmich$trait[bootmich$trait=="shade_bin"]<-"shade tolerance"
-bootmich$trait[bootmich$trait=="pol"]<-"pollination syndrome"
+bootmich$trait[bootmich$trait=="tol_cent"]<-"shade tolerance"
+bootmich$trait[bootmich$trait=="pol_cent"]<-"pollination syndrome"
 bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
 bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
 bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
-bootmich$trait[bootmich$trait=="pol:flo_cent"]<-"flower phenology x syndrome "
+bootmich$trait[bootmich$trait=="pol_cent:flo_cent"]<-"flower phenology x syndrome "
 bootmich$trait[bootmich$trait=="flo_cent:dev_time_cent"]<-"flower phenology x development time"
 bootmich$trait[bootmich$trait=="height_cent:flo_cent"]<-"flower phenology x height"
-bootmich$trait[bootmich$trait=="flo_cent:shade_bin"]<-"flower phenology x tolerance"
+bootmich$trait[bootmich$trait=="flo_cent:tol_cent"]<-"flower phenology x tolerance"
 
-functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,7)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
+functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=1.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,7)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")+ggthemes::theme_few()
 functplot
-#dev.off()
-#####model 2 intermediate
 
-#Mich.cent.intermed<-phyloglm(pro~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-#                          start.beta=NULL, start.alpha=NULL,
-#                          boot=599,full.matrix = TRUE)
-
-#summary(Mich.cent.intermed)
-#### Now Plot this
-#bootest1<-as.data.frame(Mich.cent.intermed$coefficients)
-#bootconf1<-as.data.frame(Mich.cent.intermed$bootconfint95)
-#bootconf1<-as.data.frame(t(bootconf1))
-
-#bootest1<-rownames_to_column(bootest1, "trait")
-#bootconf1<-rownames_to_column(bootconf1, "trait")
-#bootmich1<-full_join(bootconf1,bootest1, by="trait")
-#colnames(bootmich1)<-c("trait","low","high","estimate")
-#bootmich1<-dplyr::filter(bootmich1, trait!="alpha")
-#bootmich1<-dplyr::filter(bootmich1, trait!="(Intercept)")
-###names
-#bootmich1$trait[bootmich1$trait=="shade_bin"]<-"shade tolerance"
-#bootmich1$trait[bootmich1$trait=="pol"]<-"pollination syndrome"
-#bootmich1$trait[bootmich1$trait=="height_cent"]<-"max height"
-#bootmich1$trait[bootmich1$trait=="fruit_cent"]<-"fruit timing"
-#bootmich1$trait[bootmich1$trait=="flo_cent"]<-"flower timing"
-
-#interplot<-ggplot(bootmich1,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+xlim(-7,5)+guides(color="none")+ggtitle("Intermediate catagory")
-#interplot
-
-cent.intermed.seed.winter<-phyloglm(pro~pol+height_cent+flo_cent+dev_time_cent+shade_bin+pol:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                            start.beta=NULL, start.alpha=NULL,
-                            boot=599,full.matrix = TRUE)
-summary(cent.intermed.seed.winter)
-bootest1<-as.data.frame(cent.intermed.seed.winter$coefficients)
-bootconf1<-as.data.frame(cent.intermed.seed.winter$bootconfint95)
-bootconf1<-as.data.frame(t(bootconf1))
-
-bootest1<-rownames_to_column(bootest1, "trait")
-bootconf1<-rownames_to_column(bootconf1, "trait")
-bootmich1<-full_join(bootconf1,bootest1, by="trait")
-colnames(bootmich1)<-c("trait","low","high","estimate")
-bootmich1<-dplyr::filter(bootmich1, trait!="alpha")
-bootmich1<-dplyr::filter(bootmich1, trait!="(Intercept)")
-###names
-bootmich1$trait[bootmich1$trait=="shade_bin"]<-"shade tolerance"
-bootmich1$trait[bootmich1$trait=="pol"]<-"pollination syndrome"
-bootmich1$trait[bootmich1$trait=="height_cent"]<-"max height"
-bootmich1$trait[bootmich1$trait=="dev_time_cent"]<-"seed development"
-bootmich1$trait[bootmich1$trait=="flo_cent"]<-"flower timing"
-bootmich1$trait[bootmich1$trait=="pol:flo_cent"]<-"syndrome x flower phenology"
-
-interplot1<-ggplot(bootmich1,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+theme(axis.text = element_text(size=14, hjust = .5))+xlim(-7,5)+guides(color="none")
-interplot1
-
+###
 
 ######model 3
 #pro3 is response
 
-#Mich.cent.phys<-phyloglm(pro3~pol+height_cent+flo_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-#                        start.beta=NULL, start.alpha=NULL,
-#                        boot=599,full.matrix = TRUE)
-#summary(Mich.cent.phys)
-###and now this:
-#bootest2<-as.data.frame(Mich.cent.phys$coefficients)
-#bootconf2<-as.data.frame(Mich.cent.phys$bootconfint95)
-#bootconf2<-as.data.frame(t(bootconf2))#
-
-#bootest2<-rownames_to_column(bootest2, "trait")
-#bootconf2<-rownames_to_column(bootconf2, "trait")
-#bootmich2<-full_join(bootconf2,bootest2, by="trait")
-#colnames(bootmich2)<-c("trait","low","high","estimate")
-#bootmich2<-dplyr::filter(bootmich2, trait!="alpha")
-#bootmich2<-dplyr::filter(bootmich2, trait!="(Intercept)")
-####names
-#bootmich2$trait[bootmich2$trait=="shade_bin"]<-"shade tolerance"
-#bootmich2$trait[bootmich2$trait=="pol"]<-"pollination syndrome"
-#bootmich2$trait[bootmich2$trait=="height_cent"]<-"max height"
-#bootmich2$trait[bootmich2$trait=="fruit_cent"]<-"fruit timing"
-#bootmich2$trait[bootmich2$trait=="flo_cent"]<-"flower timing"
-
-#physplot<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
-#physplot
 
 cent.phys.seed<-phyloglm(pro3~pol+height_cent+flo_cent+dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
@@ -287,31 +192,14 @@ bootmich2$trait[bootmich2$trait=="height_cent"]<-"max height"
 bootmich2$trait[bootmich2$trait=="dev_time_cent"]<-"seed development"
 bootmich2$trait[bootmich2$trait=="flo_cent"]<-"flower timing"
 library(ggplot2)
-jpeg("phys_effect_fill.jpeg")
+#jpeg("phys_effect_fill.jpeg")
 physplot1<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 physplot1
-dev.off()
+#dev.off()
 plotty.all<-gridExtra::grid.arrange(functplot1, interplot1,physplot1,functplot,interplot,physplot, ncol=3,nrow=2)
-
 ############
 
-#######side bar#################################################################
-#Does pollination syndrome predict early flowering?
-
-#a<-phylolm(flo_time~pol+fruit_cent+pro2+height_cent+shade_bin,data=mich.data,phy=mich.tree)
-#summary(a)
-#b<-phylolm(flo_time~pol+fruit_cent+pro+height_cent+shade_bin,data=mich.data,phy=mich.tree)
-#summary(b)
-#c<-phylolm(flo_time~pol+fruit_cent+pro3+height_cent+shade_bin,data=mich.data,phy=mich.tree)
-#summary(c)
-#d<-phylolm(flo_time~pol*pro,data=mich.data,phy=mich.tree)
-#summary(d)
-###Alt approach:
-#Mich.cent.funct_winter<-phyloglm(pro2~pol*flo_cent+height_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-#                          start.beta=NULL, start.alpha=NULL,
-#                          boot=599,full.matrix = TRUE)
-#summary(Mich.cent.funct_winter)
-
+save(file="hystmodels.RData")
 stop("not an error, just ending the sourcing")
 ###########################################################################################
 
