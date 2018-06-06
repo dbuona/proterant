@@ -57,7 +57,7 @@ PhyloPro3<-phylo.d(d,binvar=pro3)
 PhyloPro3
 plot(PhyloPro3)
 ###phlosignal for continuous trait
-?phylosig()
+
 phylosig(mich.tree, mich.data$flo_time, method="lambda", test=TRUE, nsim=999,se=NULL)
 phylosig(mich.tree, mich.data$dev.time, method="lambda", test=TRUE, nsim=999)
 phylosig(mich.tree, mich.data$heigh_height, method="lambda", test=TRUE, nsim=999)
@@ -164,7 +164,63 @@ bootmich$trait[bootmich$trait=="flo_cent:tol_cent"]<-"flower phenology x toleran
 functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=1.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,7)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")+ggthemes::theme_few()
 functplot
 
-###
+funct.seed.winter<-phyloglm(pro2~pol+heigh_height+flo_time+dev.time+shade_bin+pol:flo_time+dev.time:flo_time+heigh_height:flo_time+shade_bin:flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                              start.beta=NULL, start.alpha=NULL,
+                              boot=59,full.matrix = TRUE)
+
+summary(funct.seed.winter)
+####marginal effects of flowering time on pollination
+z.funct.seed.winter<-phyloglm(pro2~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent+pol_cent:flo_cent+dev_time_cent:flo_cent+height_cent:flo_cent+tol_cent:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                              start.beta=NULL, start.alpha=NULL,
+                              boot=599,full.matrix = TRUE)
+vels<-seq(0,1,1)
+slopes <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[7]*vels
+cbind(vels,slopes)
+plot(vels, slopes, type = "l", lty = 1, ylim = c(-5, 0), xlab = "syndrome", ylab = "Marginal Effect of flower time")
+
+###height
+z.funct.seed.winter$coefficients
+range(mich.data$height_cent)
+height<-seq(-0.5603846, 1.0484774,0.1)
+slopes2 <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[9]*height
+cbind(height,slopes2)
+plot(height, slopes2, type = "l", lty = 1, ylim = c(-7, 0), xlab = "height centered", ylab = "Marginal Effect of flower time")
+
+
+###shade
+z.funct.seed.winter$coefficients
+
+shade<-seq(0,1,1)
+slopes3 <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[10]*shade
+cbind(shade,slopes3)
+plot(shade, slopes3, type = "l", lty = 1, ylim = c(-4, 0), xlab = "shade centered", ylab = "Marginal Effect of flower time")
+
+###seed development
+z.funct.seed.winter$coefficients
+range(mich.data$dev_time_cent)
+seed<-seq(-0.7,2.1,0.2)
+slopes4 <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[8]*seed
+cbind(seed,slopes4)
+plot(seed, slopes4, type = "l", lty = 1, ylim = c(-7, 2), xlab = "seed centered", ylab = "Marginal Effect of flower time")
+
+
+###More plots for understanding interactions
+interaction.plot(mich.data$pol,mich.data$flo_time,mich.data$pro2)
+interaction.plot(mich.data$shade_bin,mich.data$flo_time,mich.data$pro2)
+
+interaction.plot(mich.data$class,mich.data$flo_time,mich.data$pro2)
+
+qplot(x = pol, y = pro2, data = mich.data, color = as.factor(flo_time)) +
+  geom_smooth(method = "lm",se=FALSE), se=FALSE)+ggtitle("flower time X syndrome") 
+
+qplot(x = shade_bin, y = pro2, data = mich.data, color = as.factor(flo_time)) +
+  geom_smooth(method = "lm",se=FALSE)+ggtitle("flower time X shade tolerance") 
+
+qplot(x = dev.time, y = pro2, data = mich.data, color = as.factor(flo_time)) +
+  geom_smooth(method = "lm",se=FALSE)+ggtitle("flower time X development time") 
+
+qplot(x = heigh_height ,y = pro2, data = mich.data, color = as.factor(flo_time)) +geom_smooth(method = "lm",se=FALSE)+ggtitle("flower time X height") 
+
 
 ######model 3
 #pro3 is response
