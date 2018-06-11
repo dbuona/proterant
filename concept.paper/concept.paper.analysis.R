@@ -16,7 +16,10 @@ library("phylolm")
 library("ggplot2")
 library(arm)
 library("randomForest")
+library(car)
 
+#if you dont want to run the model: 
+load("hystmodels.RData")
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
 mich.tree<-read.tree("pruned_for_mich.tre")
@@ -164,15 +167,13 @@ bootmich$trait[bootmich$trait=="flo_cent:tol_cent"]<-"flower phenology x toleran
 functplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=1.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,7)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")+ggthemes::theme_few()
 functplot
 
-funct.seed.winter<-phyloglm(pro2~pol+heigh_height+flo_time+dev.time+shade_bin+pol:flo_time+dev.time:flo_time+heigh_height:flo_time+shade_bin:flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+#funct.seed.winter<-phyloglm(pro2~pol+heigh_height+flo_time+dev.time+shade_bin+pol:flo_time+dev.time:flo_time+heigh_height:flo_time+shade_bin:flo_time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                               start.beta=NULL, start.alpha=NULL,
                               boot=59,full.matrix = TRUE)
 
 summary(funct.seed.winter)
 ####marginal effects of flowering time on pollination
-z.funct.seed.winter<-phyloglm(pro2~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent+pol_cent:flo_cent+dev_time_cent:flo_cent+height_cent:flo_cent+tol_cent:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                              start.beta=NULL, start.alpha=NULL,
-                              boot=599,full.matrix = TRUE)
+
 vels<-seq(0,1,1)
 slopes <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[7]*vels
 cbind(vels,slopes)
@@ -221,42 +222,147 @@ qplot(x = dev.time, y = pro2, data = mich.data, color = as.factor(flo_time)) +
 
 qplot(x = heigh_height ,y = pro2, data = mich.data, color = as.factor(flo_time)) +geom_smooth(method = "lm",se=FALSE)+ggtitle("flower time X height") 
 
+###residuals and stuff
 
-######model 3
-#pro3 is response
+resid1<-as.data.frame(z.funct.seed.winter$fitted.values)
+resid1<-rownames_to_column(resid1, "name")
 
+resid2<-as.data.frame(z.funct.seed.winter$residuals)
 
-cent.phys.seed<-phyloglm(pro3~pol+height_cent+flo_cent+dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+resid2<-rownames_to_column(resid2, "name")
+resid2$residuals<-resid$z.funct.seed.winter$residual
+resid<-left_join(resid1,resid2)
+qplot(z.funct.seed.winter$fitted.values,z.funct.seed.winter$residuals,data=resid)+geom_point()
+
+goober<-filter(resid2,z.funct.seed.winter$residuals>=0.7)
+goober2<-filter(resid2,z.funct.seed.winter$residuals<=-0.7)
+
+residual.list<-rbind(goober,goober2)
+write.csv(residual.list,"extreme.resid.csv")
+
+#cent.phys.seed<-phyloglm(pro3~pol+height_cent+flo_cent+dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
                          boot=599,full.matrix = TRUE)
 summary(cent.phys.seed)
 
-bootest2<-as.data.frame(cent.phys.seed$coefficients)
-bootconf2<-as.data.frame(cent.phys.seed$bootconfint95)
-bootconf2<-as.data.frame(t(bootconf2))
+z.phys.seed.winter<-phyloglm(pro3~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent+pol_cent:flo_cent+dev_time_cent:flo_cent+height_cent:flo_cent+tol_cent:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                             start.beta=NULL, start.alpha=NULL,
+                             boot=599,full.matrix = TRUE)
+summary(z.phys.seed.winter)
+bootest<-as.data.frame(z.phys.seed.winter$coefficients)
+bootconf<-as.data.frame(z.phys.seed.winter$bootconfint95)
+bootconf<-as.data.frame(t(bootconf))
 
-bootest2<-rownames_to_column(bootest2, "trait")
-bootconf2<-rownames_to_column(bootconf2, "trait")
-bootmich2<-full_join(bootconf2,bootest2, by="trait")
-colnames(bootmich2)<-c("trait","low","high","estimate")
-bootmich2<-dplyr::filter(bootmich2, trait!="alpha")
-bootmich2<-dplyr::filter(bootmich2, trait!="(Intercept)")
+
+bootest<-rownames_to_column(bootest, "trait")
+bootconf<-rownames_to_column(bootconf, "trait")
+bootmich<-full_join(bootconf,bootest, by="trait")
+colnames(bootmich)<-c("trait","low","high","estimate")
+bootmich<-dplyr::filter(bootmich, trait!="alpha")
+bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
 ###names
-bootmich2$trait[bootmich2$trait=="shade_bin"]<-"shade tolerance"
-bootmich2$trait[bootmich2$trait=="pol"]<-"pollination syndrome"
-bootmich2$trait[bootmich2$trait=="height_cent"]<-"max height"
-bootmich2$trait[bootmich2$trait=="dev_time_cent"]<-"seed development"
-bootmich2$trait[bootmich2$trait=="flo_cent"]<-"flower timing"
+bootmich$trait[bootmich$trait=="tol_cent"]<-"shade tolerance"
+bootmich$trait[bootmich$trait=="pol_cent"]<-"pollination syndrome"
+bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
+bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
+bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
+bootmich$trait[bootmich$trait=="pol_cent:flo_cent"]<-"flower phenology x syndrome "
+bootmich$trait[bootmich$trait=="flo_cent:dev_time_cent"]<-"flower phenology x development time"
+bootmich$trait[bootmich$trait=="height_cent:flo_cent"]<-"flower phenology x height"
+bootmich$trait[bootmich$trait=="flo_cent:tol_cent"]<-"flower phenology x tolerance"
+
+
 library(ggplot2)
 #jpeg("phys_effect_fill.jpeg")
-physplot1<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
+physplot1<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")+ggtitle("physical hyst")
 physplot1
 #dev.off()
 plotty.all<-gridExtra::grid.arrange(functplot1, interplot1,physplot1,functplot,interplot,physplot, ncol=3,nrow=2)
 ############
+work<-ls()
+save(list =work, file="hystmodels.RData")
 
-save(file="hystmodels.RData")
+###Which species are super early
+superearl<-filter(mich.data, flo_time=="3.5")
+superearl2<-filter(mich.data, flo_time=="4")
+superearl3<-filter(mich.data, flo_time=="4.5")
+
 stop("not an error, just ending the sourcing")
+
+####question should I bin flowering time different
+mich.data$smooth_flo<-mich.data$flo_time
+
+mich.data$smooth_flo[which(mich.data$flo_time==3.5 )] <- 3
+mich.data$smooth_flo[which(mich.data$flo_time==4.5 )] <- 4
+mich.data$smooth_flo[which(mich.data$flo_time==5.5 )] <- 5
+mich.data$smooth_flo[which(mich.data$flo_time==6.5 )] <- 6
+mich.data$smooth_flo[which(mich.data$flo_time==7.5 )] <- 7
+mich.data$smooth_flo[which(mich.data$flo_time==10.5 )] <- 10
+
+colnames(mich.data)
+mich.data$smoothflo_cent<-(mich.data$smooth_flo-mean(mich.data$smooth_flo))/(2*sd(mich.data$smooth_flo))
+z.funct.smooth.winter<-phyloglm(pro2~pol_cent+height_cent+smoothflo_cent+dev_time_cent+tol_cent+pol_cent:smoothflo_cent+height_cent:smoothflo_cent+dev_time_cent:smoothflo_cent+tol_cent:smoothflo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 40, log.alpha.bound = 4,
+                              start.beta=NULL, start.alpha=NULL,
+                              boot=599,full.matrix = TRUE)
+
+summary(z.funct.smooth.winter)
+bootest<-as.data.frame(z.funct.smooth.winter$coefficients)
+bootconf<-as.data.frame(z.funct.smooth.winter$bootconfint95)
+bootconf<-as.data.frame(t(bootconf))
+
+
+bootest<-rownames_to_column(bootest, "trait")
+bootconf<-rownames_to_column(bootconf, "trait")
+bootmich<-full_join(bootconf,bootest, by="trait")
+colnames(bootmich)<-c("trait","low","high","estimate")
+bootmich<-dplyr::filter(bootmich, trait!="alpha")
+bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
+###names
+bootmich$trait[bootmich$trait=="tol_cent"]<-"shade tolerance"
+bootmich$trait[bootmich$trait=="pol_cent"]<-"pollination syndrome"
+bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
+bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
+bootmich$trait[bootmich$trait=="smoothflo_cent"]<-"flower timing"
+bootmich$trait[bootmich$trait=="pol_cent:smoothflo_cent"]<-"flower phenology x syndrome "
+bootmich$trait[bootmich$trait=="smoothflo_cent:dev_time_cent"]<-"flower phenology x development time"
+bootmich$trait[bootmich$trait=="height_cent:smoothflo_cent"]<-"flower phenology x height"
+bootmich$trait[bootmich$trait=="smoothflo_cent:tol_cent"]<-"flower phenology x tolerance"
+funcsmooth<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")+ggtitle("smooth hyst")
+funcsmooth
+
+####phsically smooth
+z.inter.smooth.winter<-phyloglm(pro~pol_cent+height_cent+smoothflo_cent+dev_time_cent+tol_cent+pol_cent:smoothflo_cent+height_cent:smoothflo_cent+dev_time_cent:smoothflo_cent+tol_cent:smoothflo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 40, log.alpha.bound = 4,
+                                start.beta=NULL, start.alpha=NULL,
+                                boot=599,full.matrix = TRUE)
+
+summary(z.inter.smooth.winter)
+bootest<-as.data.frame(z.inter.smooth.winter$coefficients)
+bootconf<-as.data.frame(z.inter.smooth.winter$bootconfint95)
+bootconf<-as.data.frame(t(bootconf))
+
+
+bootest<-rownames_to_column(bootest, "trait")
+bootconf<-rownames_to_column(bootconf, "trait")
+bootmich<-full_join(bootconf,bootest, by="trait")
+colnames(bootmich)<-c("trait","low","high","estimate")
+bootmich<-dplyr::filter(bootmich, trait!="alpha")
+bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
+###names
+bootmich$trait[bootmich$trait=="tol_cent"]<-"shade tolerance"
+bootmich$trait[bootmich$trait=="pol_cent"]<-"pollination syndrome"
+bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
+bootmich$trait[bootmich$trait=="dev_time_cent"]<-"seed development"
+bootmich$trait[bootmich$trait=="smoothflo_cent"]<-"flower timing"
+bootmich$trait[bootmich$trait=="pol_cent:smoothflo_cent"]<-"flower phenology x syndrome "
+bootmich$trait[bootmich$trait=="smoothflo_cent:dev_time_cent"]<-"flower phenology x development time"
+bootmich$trait[bootmich$trait=="height_cent:smoothflo_cent"]<-"flower phenology x height"
+bootmich$trait[bootmich$trait=="smoothflo_cent:tol_cent"]<-"flower phenology x tolerance"
+intersmooth<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")+ggtitle("smooth inter hyst")
+intersmooth
+
+
+
+save(list =work, file="hystmodels.RData")
 ###########################################################################################
 
 ###average predictive comparsons(I dont think these are working yet.) Can I use divide by 4 rule?
