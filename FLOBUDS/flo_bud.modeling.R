@@ -32,9 +32,9 @@ d$temp_night<-ifelse(d$Force=="W",18,12)
 d$chilldays<-ifelse(d$Chill==0,28,56)
 
 ###center predictors
-d$p_cent<-d$photoperiod/mean(d$photoperiod)
-d$f_cent<-d$temp_day/mean(d$temp_day)
-d$c_cent<-d$chilldays/mean(d$chilldays)
+d$p_cent<-d$photoperiod-mean(d$photoperiod)
+d$f_cent<-d$temp_day-mean(d$temp_day)
+d$c_cent<-d$chilldays-mean(d$chilldays)
 
 ###what is the distrbution of response variables
 ggplot(d,aes(flo_day))+geom_density()
@@ -84,81 +84,10 @@ vivo2<-filter(vivo,floposs==1)
 
 ##### The models below are for budburst and flower open, should try it for leaf out and flowering
 
-
-##### survival model in brms
-prior<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
-                 data = vivo, family = weibull) 
-
-###this model only expludes things that died not couldn't ahve flowered
-m1a<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
-          data = vivo, family = weibull,inits = "0",
-          iter= 3000,
-          warmup = 2000,
-          prior = prior) 
-  
-
-
-coef(m1a)
-summary(m1a)
-launch_shinystan(m1a)
-
-Q<-as.data.frame(coef(m1a))
-colnames(Q)
-
-R<-dplyr::select(Q,"GEN.SPA.Estimate.phaseLbb_day", "GEN.SPA.Estimate.phaseflo_day.LightxL","GEN.SPA.Estimate.phaseLbb_day.LightxL","GEN.SPA.Estimate.phaseflo_day.Chill","GEN.SPA.Estimate.phaseflo_day.ForceW","GEN.SPA.Estimate.phaseLbb_day.Chill","GEN.SPA.Estimate.phaseLbb_day.ForceW")
-R<-rownames_to_column(R,"GEN.SPA")
-colnames(R)
-colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Force:Flo","Chill:Leaf","Force:Leaf")
-R<-gather(R,"predictor","effect",2:8)
-ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
-
-X<-dplyr::select(Q, contains(".2.5.ile"))
-colnames(X)
-X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
-ncol(X)
-X<-rownames_to_column(X,"GEN.SPA")
-colnames(X)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
-X<-gather(X,"predictor","CIlow",2:8)
-
-###high
-XX<-dplyr::select(Q, contains(".97.5.ile"))
-colnames(XX)
-XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
-ncol(XX)
-XX<-rownames_to_column(XX,"GEN.SPA")
-colnames(XX)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
-XX<-gather(XX,"predictor","CIhigh",2:8)
-
-XXX<-full_join(X,XX)
-
-Z<-full_join(XXX,R)
-
-pd<- position_dodgev(height = 1)
-ggplot(Z, aes(effect,predictor))+geom_point(position=pd,aes(color=GEN.SPA))+geom_errorbarh(aes(color=GEN.SPA,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))
-ggplot(Z,aes(effect,predictor))+geom_point()+geom_errorbarh(aes(xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+facet_wrap(~GEN.SPA)
-
-Z$class<-NA
-Z$class<-ifelse(Z$predictor=="Light:Flo",0,2)
-Z$class<-ifelse(Z$predictor=="Light:Leaf",0,Z$class)
-
-Z$class<-ifelse(Z$predictor=="Chill:Leaf",1,Z$class)
-Z$class<-ifelse(Z$predictor=="Chill:Flo",1,Z$class)
-
-Z$class<-ifelse(Z$predictor=="Phase",4,Z$class)
-
-ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1a:")+facet_wrap(~GEN.SPA)
-
-
-Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
-ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1a")+facet_wrap(~GEN.SPA)
-
-
-#####now try to use offset as a variable
-
 prior2<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
                  data = vivo2, family = weibull) 
 
-###this model only expludes things that died not couldn't ahve flowered
+###this model expludes things that died and couldn't have flowered
 m1b<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
           data = vivo2, family = weibull,inits = "0",
           iter= 3000,
@@ -212,22 +141,21 @@ ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_
 Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
 ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1b")+facet_wrap(~GEN.SPA)
 
-####DO this again with leaf out vs. flowering
-vivo.full<-gather(vivo,phase,DOY,9:12)
+##########binary flower leaf or no model on suggestion of Lizzie
 
-###do it for bud burst
-hayim<-filter(vivo.full, phase %in% c("leaf_day","flo_day"))
+
+####Full model again leaf out vs. flowering
+
+unique(vivo.full$phase)
+hayim<-dplyr::filter(vivo.full, phase %in% c("leaf_day","flo_day"))
 hayim$DOY<-ifelse(is.na(hayim$DOY),120,hayim$DOY)
 hayim$surv<-ifelse(hayim$DOY==120,1,0)
-
 hayim$floposs<-ifelse(hayim$Flo.poss.=="N",0,1)
-
 ###This is only twigs where we deemed flowering to even bee possible
 hayim2<-filter(hayim,floposs==1)
 prior3<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
                   data = hayim2, family = weibull) 
-
-###this model only expludes things that died not couldn't ahve flowered
+###this model is best survivial
 ###do I need main effects for interpretation?
 m2b<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
           data = hayim2, family = weibull,inits = "0",
@@ -299,7 +227,7 @@ table(d$treatment)
 
 vivo.full<-gather(viv,phase,DOY,9:12)
 
-###do it for bud burst
+###do it for bud burst only######################################
 vivoo<-filter(vivo.full, phase %in% c("Lbb_day"))
 vivoo$DOY<-ifelse(is.na(vivoo$DOY),120,vivoo$DOY)
 vivoo$surv<-ifelse(vivoo$DOY==120,1,0)
@@ -317,3 +245,61 @@ mLonly<- brm(DOY | cens(surv) ~ Light+Chill+Force+(1+Light+Chill+Force|GEN.SPA),
           prior = priorz) 
 summary(mLonly)
 exp(5.39)
+######################
+hayim2$bin<-ifelse(hayim2$DOY==120,0,1)
+prior4<-get_prior(bin ~ phase+Light:phase+Chill:phase+Force:phase,
+                  data = hayim2, family=bernoulli(link = "logit") ) 
+?brmsfamily()
+###this model is best survivial
+###do I need main effects for interpretation?
+mbinom<- brm(bin ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
+          data = hayim2, family =bernoulli(link = "logit"),
+          iter= 3000,
+          warmup = 2000,
+          prior = prior4)
+summary(mbinom)
+coef(mbinom)
+Q<-as.data.frame(coef(mbinom))
+colnames(Q)
+
+R<-dplyr::select(Q,"GEN.SPA.Estimate.phaseleaf_day", "GEN.SPA.Estimate.phaseflo_day.LightxL","GEN.SPA.Estimate.phaseleaf_day.LightxL","GEN.SPA.Estimate.phaseflo_day.Chill","GEN.SPA.Estimate.phaseflo_day.ForceW","GEN.SPA.Estimate.phaseleaf_day.Chill","GEN.SPA.Estimate.phaseleaf_day.ForceW")
+R<-rownames_to_column(R,"GEN.SPA")
+colnames(R)
+colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Force:Flo","Chill:Leaf","Force:Leaf")
+R<-gather(R,"predictor","effect",2:8)
+ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
+
+X<-dplyr::select(Q, contains(".2.5.ile"))
+colnames(X)
+X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
+ncol(X)
+X<-rownames_to_column(X,"GEN.SPA")
+colnames(X)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+X<-gather(X,"predictor","CIlow",2:8)
+
+###high
+XX<-dplyr::select(Q, contains(".97.5.ile"))
+colnames(XX)
+XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
+ncol(XX)
+XX<-rownames_to_column(XX,"GEN.SPA")
+colnames(XX)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
+XX<-gather(XX,"predictor","CIhigh",2:8)
+
+XXX<-full_join(X,XX)
+
+Z<-full_join(XXX,R)
+
+pd<- position_dodgev(height = 1)
+Z$class<-NA
+Z$class<-ifelse(Z$predictor=="Light:Flo",0,2)
+Z$class<-ifelse(Z$predictor=="Light:Leaf",0,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Chill:Leaf",1,Z$class)
+Z$class<-ifelse(Z$predictor=="Chill:Flo",1,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Phase",4,Z$class)
+
+ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model binom")+facet_wrap(~GEN.SPA)
+
+###questions: Equivlency between chilling and other treatments?
