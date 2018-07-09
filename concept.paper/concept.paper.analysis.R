@@ -79,6 +79,7 @@ mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 mich.data$height10<-mich.data$heigh_height/10
 ###models:
 
+
 #####Mich.cent.funct uses pro2
 ##cent.funct.seed uses seed maturation duration rather than dispersal time
 ######Mich.cent.interm uses pro
@@ -431,3 +432,65 @@ phy<- phy %>%  rownames_to_column(var="effect")
 nophy<-as.data.frame(coef(cent.funct.seed.nophylo))
 nophy<- nophy %>%  rownames_to_column(var="effect")
 phycom<-left_join(phy,nophy)
+
+#-------------------------------------------------------#
+#okay no to see if I can replicate the results of the scoop
+###different hysteranthy definition
+####different predictors
+###didn't z-score (they log transformed continuous variables)
+###reduced species list
+#no interaactions
+### they conflate early flowering hypotheses with hysteranthous hypotheses
+
+### also I think they maybe ran a seperate model for each hypothesis
+
+#1 ###take out flower time and compare functional to physiological
+#predictor seed dev should be big and pol samall
+funct.check<-phyloglm(pro2~pol+heigh_height+dev.time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=10,full.matrix = TRUE)
+summary(funct.check)
+phys.check<-phyloglm(pro3~pol+heigh_height+dev.time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                     start.beta=NULL, start.alpha=NULL,
+                     boot=10,full.matrix = TRUE)
+summary(phys.check)
+##its true that dev time is increasing in importance and syndrome decreasing with different definitions
+#### try it z scored
+z.check.funct<-phyloglm(pro2~pol+height_cent++dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=10,full.matrix = TRUE)
+summary(z.check.funct)
+#pol 2.88, dev -0.5
+z.check.phys<-phyloglm(pro3~pol+height_cent++dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                        start.beta=NULL, start.alpha=NULL,
+                        boot=10,full.matrix = TRUE)
+summary(z.check.phys)
+#pol 2.01 dev -1.7
+
+####lets look at dev time flower time and polinaton
+z.check.funct2<-phyloglm(pro2~pol+flo_cent+dev_time_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                        start.beta=NULL, start.alpha=NULL,
+                        boot=10,full.matrix = TRUE)
+
+z.check.phys2<-phyloglm(pro3~pol+flo_cent+dev_time_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                        start.beta=NULL, start.alpha=NULL,
+                        boot=10,full.matrix = TRUE)
+summary(z.check.funct2)
+##pol 2.69, flo, -2.98, dev time -0.9
+summary(z.check.phys2) 
+##pol 1.5, flo -4.11, dev -1.43
+
+funct.check2<-phyloglm(pro2~pol+flo_time+dev.time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                      start.beta=NULL, start.alpha=NULL,
+                      boot=10,full.matrix = TRUE)
+summary(funct.check2)
+#pol 2.7, flo -1.86 dev -0.18
+
+phys.check2<-phyloglm(pro3~pol+flo_time+dev.time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                       start.beta=NULL, start.alpha=NULL,
+                       boot=10,full.matrix = TRUE)
+summary(phys.check2)
+#pol 0.99, flo -2.46 dev -.22
+
+####summary accross the board, polination syndrome decrease with phys definition
+
