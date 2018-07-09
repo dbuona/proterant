@@ -22,32 +22,39 @@
 
 \begin{figure}[!tbp]
   \centering
- \fbox{ \subfloat[Acer rubrum]{\includegraphics[width=0.3\textwidth]{ACRU.jpeg}\label{fig:f3}}
+ \fbox{ \subfloat[Acer rubrum]{\includegraphics[width=0.33\textwidth]{ACRU.jpeg}\label{fig:f3}}
   \hfill
-  \subfloat[Quercus rubra]{\includegraphics[width=0.3\textwidth]{QURU.jpeg}\label{fig:f4}}
-  \subfloat[Betula populifolia]{\includegraphics[width=0.3\textwidth]{BEPO.jpeg}\label{fig:f5}}}
+  \subfloat[Quercus rubra]{\includegraphics[width=0.33\textwidth]{QURU.jpeg}\label{fig:f4}}
+  \subfloat[Betula populifolia]{\includegraphics[width=0.33\textwidth]{BEPO.jpeg}\label{fig:f5}}}
   \caption{Annual variation in degree of hysteranthy for individals in Harvard forest 1900-2001.}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-   \fbox{ \includegraphics[width=0.95\textwidth]{circle_tree.jpeg}}
-   \caption{Phylogenetic relationships between the 194 species included in this analysis. Hysteranthous species are indicated with blue traiangles and non-hysteranthous with red circles.}
 \end{figure}
 
 \begin{figure}[!tbp]
   \centering
- \fbox{ \subfloat[Full Dataset]{\includegraphics[width=0.5\textwidth]{funct_effect_fill.jpeg}\label{fig:f6}}
+  \fbox{\subfloat[MTSV]{\includegraphics[width=0.5\textwidth]{New_circle_tree.pdf}\label{fig:f1}}
   \hfill
-  \subfloat[Early flowering only]{\includegraphics[width=0.5\textwidth]{early_effectplot.jpeg}\label{fig:f7}}}
-  \caption{Model estimated effect sizes and 95 resampling intervals for biological predictors of hysteranthy.  In both the full MTSV dataset and restricted dataset, wind pollination and early flowering are the strongest predictors.}
+  \subfloat[Silvics]{\includegraphics[width=0.5\textwidth]{Circle_tree_silvics.pdf}\label{fig:f2}}}
+  \caption{Phylogenies for the two data sets and hysteranthy traits. Blue indicates a reclassification of hysteranthy depeding on which binning metrics used. I should add phyloD values to this figure}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-   \fbox{ \includegraphics[width=0.95\textwidth]{phys_effect_fill.jpeg}}
-   \caption{Suppliment: Model estimated effect sizes and 95 resampling intervals for biological predictors of hysteranthy using MTSV statement "flowers before leaves" only to define hysteranthy. There is no change in direction of the significant predictors from the classification scheme we used. }
+   \fbox{ \includegraphics[width=\textwidth]{New_circle_tree.pdf}}
+   \caption{Phylogenetic relationships for MTSV data. Blue species get redefined as hysteranthous as when a different definiton is applied. I should add the Phylo D values to this figure}
 \end{figure}
+
+\begin{figure}[h!]
+  \centering
+   \fbox{ \includegraphics[width=\textwidth]{Circle_tree_silvics.pdf}}
+   \caption{Phylogenetic relationships for MTSV data. Blue species get redefined as hysteranthous as when a different definiton is applied}
+\end{figure}
+
+\begin{figure}[!tbp]
+  \centering
+ \fbox{ \includegraphics[width=0.95\textwidth]{Data_comparision_plot.jpeg}\label{fig:f6}}
+\caption{Golly, we get different outputs.}
+\end{figure}
+
 
 
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  9 JUL 2018 07:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  9 JUL 2018 17:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -262,53 +262,21 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-(./new_concept-concordance.tex)
+(./new_concept-concordance.tex) [1
 
-! LaTeX Error: \begin{enumerate} on input line 9 ended by \end{emumerate}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.16 \end{emumerate}
-                    
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-[1
-
-{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2]
-
-! LaTeX Error: \begin{enumerate} on input line 7 ended by \end{document}.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.54 \end{document}
-                   
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-[3] (./new_concept.aux) )
-(\end occurred inside a group at level 1)
-
-### semi simple group (level 1) entered at line 7 (\begingroup)
-### bottom level 
+{/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+ (./new_concept.aux) ) 
 Here is how much of TeX's memory you used:
- 2634 strings out of 492995
- 38111 string characters out of 6132704
+ 2633 strings out of 492995
+ 38099 string characters out of 6132704
  95295 words of memory out of 5000000
- 6165 multiletter control sequences out of 15000+600000
+ 6164 multiletter control sequences out of 15000+600000
  6552 words of font info for 18 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,4n,25p,432b,254s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr10.pfb>
-Output written on new_concept.pdf (3 pages, 31131 bytes).
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr10.pfb>
+Output written on new_concept.pdf (3 pages, 31243 bytes).
 PDF statistics:
  19 PDF objects out of 1000 (max. 8388607)
  11 compressed objects within 1 object stream

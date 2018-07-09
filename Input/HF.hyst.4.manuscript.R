@@ -1,4 +1,6 @@
 ####This is the produces output of harvard forest. Jan 8 2018.
+setwd("~/Documents/git/proterant/Data")
+library(tidyverse)
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 d.spp<-read.csv("hf003-06-mean-spp.csv",header = TRUE)
 
@@ -47,12 +49,16 @@ sum$species[sum$species=="VACO"]<-"Vaccinium corymbosum"
 sum$species[sum$species=="VIAL"]<-"Viburnum alnifolium"
 sum$species[sum$species=="VICA"]<-"Viburnum cassinoides"
 
+
 ###functional hysteranthy for harvard forest
 bb<-gather(sum,phenophase, DOY,3:6)
-bb<-filter(bb,phenophase==c("increasing leaf size","flower open"))
-meanleaf<-filter(bb,phenophase=="increasing leaf size")
-summary(meanleaf)
-fun<-ggplot(bb,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(size=14,angle = 300, hjust = 0))
+#bb$class<-NA
+#bb$class<-ifelse(bb$phenophase %in% c("bb.jd","fbb.jd"),"physiological","functional")
+
+bbX<-filter(bb,phenophase==c("increasing leaf size","flower open"))
+bbX$class<-"functional"
+
+fun<-ggplot(bbX,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(size=14,angle = 300, hjust = 0))
 fun
 #+geom_abline(slope=0,intercept=142,color="green")+geom_abline(slope=0,intercept=148,color="dark green")
 
@@ -61,6 +67,11 @@ bb<-gather(sum,phenophase,DOY,3:6)
 bb2<-filter(bb,phenophase==c("leaf budburst","flower budburst"))
 meanlb<-filter(bb,phenophase=="leaf budburst")
 summary(meanlb)
-  phys<-ggplot(bb2,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+theme_tufte()+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(size=14,angle = 300, hjust = 0))
-phys
+  phys<-ggplot(bb2,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(size=14,angle = 300, hjust = 0))
+bb2$class<-"physiological"
+
+BBB<-rbind(bb2,bbX)
+ggplot(BBB,aes(species,DOY))+stat_summary(aes(shape=phenophase,color=phenophase))+theme(panel.border=element_rect(aes(color=blue)))+theme(axis.text.x = element_text(size=14,angle = 300, hjust = 0))
+
 #geom_abline(slope=0,intercept=119,color="green")+geom_abline(slope=0,intercept=125,color="dark green")
+
