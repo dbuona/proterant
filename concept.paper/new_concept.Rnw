@@ -4,42 +4,48 @@
 \SweaveOpts{concordance=TRUE}
 
 \begin{enumerate}
-\item FLS is important:
+\item Phenology, the study of seasonal life cycle events, has long been studied, and recently drawn increasing scientific attention. Recent work is beginning to show that it is not only individual phenophases that are important, but also the realtionship between them, even if they are seemingly disperate. Examples: Phenology shifts can change life history ie winter to sumemr annual or others. But this work is really just beggining.
+\item One phenological sequennce that has attracted some attention is the flower leaf sequence (FLS). Why do some species flower before leaves while other produce leaves first?
+\item It has been suggest that flowering first, also known as hysteranthy, proteranthy, or precicious flowering, may be an important mediator of reproductive or physiological functioning, and several hypotheses have emerged.
 \begin{enumerate}
-\item FLS have been hypothesize to mediate important life history and physiological processes. Here are the hypotheses:
-\item Wind Pollination effeciency: This is the dominant temperate hypothesis.
-\item Hydration issues, and insect variability , there are hypotheses primarily emerging from research in dry tropics.
+\item  Here are the hypotheses:
+\item Wind Pollination effeciency: This is the dominant temperate hypothesis. It has a  corrilary in the tropics: insect visability.
+\item Hydration issues, the primary idea emerging from research in dry tropics.
 \item Several other hypotheses of hysteranthy are actually just hypotheses for early flowering, ie. seed size, cold tolerance, others mentioned in "the paper". These would imply the FLS is a a byproduct of differential selection regimes on leaves and flower.
 \item or phylogenetic conservatism.
-\item Cliamte change is altering phenology. This could alter FLS. If FLS is truly impotant, which we assume it is, alterations might be bad for plants, and we should know more about this.
+\item It is clear that climate change is altering phenology. This could alter FLS. If FLS is truly impotant, which we assume it is, alterations might be bad for plants, and we should know more about this.
 \end{enumerate}
-\item There is limited available data about FLS.
+\item Despite the rich theory begind it, there is limited, quality, empirical data about FLS.
 \begin{enumerate} 
 \item Why? Flowering and leafing are often observed seperately, we don't have good phenological records.
 \item The best data are verbal description from guide books like "flowers before leaves" etc.
-\item Sadly, these verbal descriptions are incompatible with the quantitative phenologywe use. There are three major limitation to using these data in a meaningful way-- 1] Definitional ambiguity, 2] ambiguity in researcher interpretation, 3] natural variation, each of which we will discuss in detail below.
+\item Sadly, these verbal descriptions are incompatible with the quantitative phenology we use. There are three major sources of uncertainty in these data, limiting their use in a meaningful way-- 1]natural variation 2] Definitional ambiguity with the observer, and 3] ambiguity in researcher interpretation. Each of which we will discuss in detail below.
 \end{enumerate}
-\item Ambiguity in definition and interpretation
+\item Natural variation
 \begin{enumerate}
-\item  What does an author mean when they say "flowers before leaves?". There are different ways to characterize this as we seem from other studies (cite some or talk about BBCH). Maybe here also: Do "or" statements like  "Flowers before or with leaves" reflect interanual variation, variation between individuals, branches or over a region or overlap?
-\item Using harvard forest data we demonstate that choices about how to interpret these choices changes which species we would classify to which FLS. [FIGURE OR TABLE 1] This could explain differences between sources, but does rule out there are regional differences. It makes it difficult to validate these descriptions with other phenological observation that speficially specify budburst, leafout etc.
-\item These descriptions allow for the FLS to be characterized binary or catagorical approximations only, when in fact, it is a continuous trait. Where to draw the line between catagories is up to researcher interpretation, and these choices could affect downstream analysis.
-\item These choices might be influenced by our bias. If I favor the wind pollination hypothesis, I would be biologically justified for choosing the more expansive definition, but if I think it hysteranthy is a physiological constraint, a more conservative physiological definiton would be appropriate.
-\end{enumerate}
-\item Okay, so we we have seen ambiguity of the initial observation, AND interpretation choice could effect our understanding of the hypothesis. But there is also biology:
-\begin{enumerate}
-\item We do not have a great sense about the range of interannual variation, or interpopulation difference in FLS which could be really important. Perhaps species with short lag times in their FLS may switch between year, or life stages, or have different FLS across their range. None of this can be captured with the data sources we have.
+\item We do not have a great sense about the range of interannual variation, or interpopulation difference in FLS which could be really important. Perhaps species with short lag times in their FLS may switch between year, or life stages, or have different FLS across their range. None of this can be captured with the data sources we have-- we don't know if "or" statements like  "Flowers before or with leaves" reflect interanual variation, variation between individuals, branches or over a region or overlap?
 \item Why might there be varaibility? *Think more about this*?
 \ Differnt cues are more reliable for differnt phenophases, some year cues converges or diverges and the patterns respond.
 \item adaptive reasons?
 \item We dont know, but understanding this would be huge for actually testing hypotheses. You could ask questions like in years of more extreme FLS seperation, do we see more pollination success, or are they droughtier?
 \item To get a baseline sense of this, we looked at a few species from harvard forest again. And look there is considerable variation between trees and years.
 \item It is considerable. [FIGURE 2]
+\item We also don't know if differences between sources can be attributed to biological differences or definitonal ones which we will discuss below.
+\end{enumerate}
+\item Ambiguity in definition
+\begin{enumerate}
+\item  What does an author mean when they say "flowers before leaves?". There are different ways to characterize this as we seem from other studies (cite some or talk about BBCH). 
+\item Using harvard forest data we demonstate this matters. If an author means flower bud burst before leaf budburst you get a very different species list than flowers open before leaf expansion. [FIGURE OR TABLE 1] This could explain differences between sources, but does rule out there are biological differences mentioned above, and this ambiguity limits our ability to understand this trait across space and time and it makes it difficult to validate these descriptions with other phenological observation that speficially specify budburst, leafout etc.
+\end{enumerate}
+\item Ambiguity in interpretation and modeling choices
+\begin{enumerate}
+\item For modeling, these descriptions allow for the FLS to be characterized binary or at best, catagorical approximations only, when in fact, it is a continuous trait. Where to draw the line between catagories is up to researcher interpretation, and these choices could affect downstream analysis.
+\item These choices might be influenced by our bias. If I favor the wind pollination hypothesis, I would be biologically justified for choosing the more expansive definition, but if I think it hysteranthy is a physiological constraint, a more conservative physiological definiton would be appropriate.
 \end{enumerate}
 \item Do these sources of error matter to how we understand FLS? We illustrate the implications of all of this uncertaintly through modeling. We show the support for the various hypotheses is sensative to researcher choices using our analysis from MTSV and Silvics.
 \begin{enumerate}
-\item Look! Both the phylogenetic signal and trait strengths change based on our decision [FIGURE 3 phylogeny figures]. This is also apparent in "the papers" random forest suppliment models. Not only that, we see that the result reinforce the model choices and data sources, ie the more expaisve definition strengthens wind pollination effect [FIGURE 4].
-\item Our analysis shows that generally early flowering, pollination snydrome and seed characteristics are consistant predictors of hysteranthy, though the strength the of these effects, and the phylogenetic signals, are sensative to choices made during analysis that could be entagled in the three levels of data ambiguity discussed above. 
+\item Look! The phylogenetic signal changes with our choices and between data sources  [FIGURE 3 phylogeny figures]. This is also discuss in "the paper's" random forest suppliment models. Not only that, we see that the result reinforce the model choices and data sources, ie the more expaisve definition strengthens wind pollination effect [FIGURE 4].
+\item Our analysis shows that generally early flowering, pollination snydrome and seed characteristics are decent predictors of hysteranthy, though the strength the of these effects, and the phylogenetic signals, are sensative to choices made during analysis that could be entagled in the three levels of data ambiguity discussed above. 
 \item This makes its hard to conclusively favor a single hypothesis from the ones laid out at the beginning
 \item But that's okay, because it is likely hysteranthy didn't evolve for a single function but may serve different functions for different life histories, biogeographic origins etc (Lizzie had a better way of saying this and some citations I think).
 \item What we can say right now is that there is good eveidence that FLS and other phenological sequences are impotant beyound the phases they contain, and study of these patterns and the relationship between them should continue and be improved.
