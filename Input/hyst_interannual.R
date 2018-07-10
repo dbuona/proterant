@@ -47,29 +47,45 @@ a<-gather(a, phase,DOY,4:7)
 a<-filter(a, phase %in% c("fopn.jd","l75.jd"))
 ggplot(a,aes(year,DOY))+geom_point(aes(color=phase))+facet_wrap(~species)
 
-hys<-filter(d
-hys$offset<-NA
-hys$offset<-hys$l75.jd-hys$fopn.jd
-hys<-filter(hys, year<=2001)
 
-ACRU<-filter(hys, species=="ACRU")
-ACSA<-filter(hys, species=="ACSA")
-BEAL<-filter(hys, species=="BEAL")
-FRAM<-filter(hys, species=="FRAM")
-QURU<-filter(hys, species=="QURU")
-QUVE<-filter(hys, species=="QUVE")
-POTR<-filter(hys, species=="POTR")
-BEPO<-filter(hys, species=="BEPO")
-QUER<-filter(hys, species %in% c("QUVE","QURU"))
+
+ACRU<-filter(d, species=="ACRU")
+ACSA<-filter(d, species=="ACSA")
+BEAL<-filter(d, species=="BEAL")
+FRAM<-filter(d, species=="FRAM")
+QURU<-filter(d, species=="QURU")
+QUVE<-filter(d, species=="QUVE")
+POTR<-filter(d, species=="POTR")
+BEPO<-filter(d, species=="BEPO")
+QUER<-filter(d, species %in% c("QUVE","QURU"))
 ggplot(ACRU,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
-#ggplot(ACSA,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
-#ggplot(BEAL,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
-#ggplot(FRAM,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
+ggplot(ACSA,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
+ggplot(BEAL,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
+ggplot(FRAM,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
 ggplot(QURU,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
 ggplot(POTR,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
 ggplot(BEPO,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
 ggplot(QUVE,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,l75.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+facet_wrap(~tree.id)
-### Best
+## do these for budf burst
+ggplot(ACRU,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red")+geom_point(aes(year,bb.jd), color="dark green")+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=bb.jd))+facet_wrap(~tree.id)
+library("ggthemes")
+
+QURU4<-filter(QURU,tree.id=="QURU-04")
+ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fbb.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers bud burst with leaf budburst")+facet_wrap(~tree.id)
+ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
+ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,l75.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
+??ggtitle
+?shape()
+
+##one tree only
+##Fram-04
+fram4<-filter(FRAM,tree.id=="FRAM-04")
+ggplot(fram4,aes(year,fopn.jd))+geom_point(aes(year,fbb.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers bud burst with leaf budburst")+facet_wrap(~tree.id)
+ggplot(fram4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
+ggplot(fram4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,l75.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
+
+
+ß### Best
 var<-filter(hys, species %in% c("QURU","ACRU","BEPO","POTR"))
 var<-filter(var,!is.na(offset))
 var<- var %>% group_by(tree.id) %>% summarise(sd(offset))
@@ -85,3 +101,14 @@ ggplot(QUER,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd), color="pink")+geom_po
 ggplot(ACRU,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd), color="pink")+geom_point(aes(year,bb.jd), color="green")+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd))+facet_wrap(~tree.id)
 ggplot(BEPO,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd), color="pink")+geom_point(aes(year,bb.jd), color="green")+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd))+facet_wrap(~tree.id)
 ggplot(QUVU,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd), color="pink")+geom_point(aes(year,bb.jd), color="green")+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd))+facet_wrap(~tree.id)
+
+###Individual interannual variability
+d$offset<-d$fbb.jd-d$bb.jd
+indies<-d %>% group_by(tree.id) %>% summarise(variation=sd(offset, na.rm=TRUE))
+###withing year between individuals
+years<-d%>% group_by(species,year) %>% summarise(physiological_variation = sd(offset,na.rm=TRUE)) 
+d$offset2<-d$fopn.jd-d$l75.jd
+indies2<-d %>% group_by(tree.id) %>% summarise(variation=sd(offset2, na.rm=TRUE))
+years2<-d%>% group_by(species,year) %>% summarise(functional_variation = sd(offset2,na.rm=TRUE)) 
+
+pop<-cbind(years,years2)
