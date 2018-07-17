@@ -73,7 +73,7 @@ library("ggthemes")
 QURU4<-filter(QURU,tree.id=="QURU-04")
 ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fbb.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers bud burst with leaf budburst")+facet_wrap(~tree.id)
 ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,l75.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
+ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,l75.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+theme_base()+ggtitle("Flowers open with leaf expansion")+facet_wrap(~tree.id)
 ??ggtitle
 ?shape()
 
@@ -82,7 +82,7 @@ ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=
 fram4<-filter(FRAM,tree.id=="FRAM-04")
 ggplot(fram4,aes(year,fopn.jd))+geom_point(aes(year,fbb.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers bud burst with leaf budburst")+facet_wrap(~tree.id)
 ggplot(fram4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,bb.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=bb.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
-ggplot(fram4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,l75.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+theme_base()+ggtitle("Flowers open with leaf budburst")+facet_wrap(~tree.id)
+ggplot(fram4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8)+geom_point(aes(year,l75.jd), color="dark green",shape=18)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd))+theme_base()+ggtitle("Flowers open with leaf expansion")+facet_wrap(~tree.id)
 
 
 ß### Best
