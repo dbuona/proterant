@@ -94,17 +94,24 @@ head(cor2)
 cor<-rbind(cor2,cor1)
 table(cor$year)
 
-cor<-filter(cor, year>1900)
+
 colnames(cor)
 cor<-unite(cor,locale,lat,lon,sep=",")
 most<-count(cor,s_id)
 
-most<-filter(most,n>100)
+most<-filter(most,n>128)
 stations<-most$s_id
-filted<-filter(cor, s_id %in% c(stations))
+filted<-filter(cor, s_id %in% c(4495))
+filted2<-filter(cor, s_id %in% c(4172))
+table(filted$bbch)
 
 #ggplot(filted,aes(as.numeric(year),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(linetype=bbch,color=s_id))
 ggplot(filted,aes(as.numeric(year),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(col=bbch))+theme()+ggtitle("Fraxinus excelsior phenology since 1900")
+ggplot(filted2,aes(as.numeric(year),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(col=bbch))+theme()+ggtitle("Fraxinus excelsior phenology since 1900")
+
+##dig more into faxinus
+table(cor$s_id)
+
 
 ####other species
 cor1<-read.csv("buo_106_xxx_011.csv", header=TRUE)
@@ -128,13 +135,12 @@ cor<-filter(cor, year>1900)
 colnames(cor)
 cor<-unite(cor,locale,lat,lon,sep=",")
 most<-count(cor,s_id)
-
-most<-filter(most,n>85)
+most<-filter(most,n>100)
 stations<-most$s_id
 filted<-filter(cor, s_id %in% c(stations))
 
 #ggplot(filted,aes(as.numeric(year),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(linetype=bbch,color=s_id))
-ggplot(filted,aes(as.numeric(year),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(col=bbch))+theme()+ggtitle("Betula pendula phenology since 1900")
+ggplot(filted,aes(as.numeric(year),as.numeric(day)))+geom_point(aes(shape=bbch))+geom_smooth(method='lm',aes(col=bbch))+theme()+ggtitle("Betula pendula phenology since 1961, Zagreb, Croatia")
 
 ####other species
 

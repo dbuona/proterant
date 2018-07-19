@@ -1,21 +1,4 @@
-####Use harvard forest to evaluate annual variability hysteranthy
-rm(list=ls()) 
-options(stringsAsFactors = FALSE)
-graphics.off()
-setwd("~/Documents/git/proterant/input")
-library("ape")
-library("phytools")
-library("geiger")
-library("gbm")
-library("pez")
-library(caper)
-library(picante)
-library("tidyverse")
-library(boot)
-library("phylolm")
-library("ggplot2")
-library(arm)
-library("randomForest")
+
 
 ####c### This is the final analysis file for hysteranthy anaylsis on MTSV as of 3/28/18.
 rm(list=ls()) 
@@ -35,6 +18,7 @@ library("phylolm")
 library("ggplot2")
 library(arm)
 library("randomForest")
+library(ggthemes)
 
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
@@ -45,8 +29,9 @@ a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO"
 
 a<-gather(a, phase,DOY,4:7)
 #a<-filter(a, phase %in% c("fopn.jd","l75.jd"))
-ggplot(a,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))
-ggplot(a,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+facet_wrap(~species)
+bet<-filter(a, species %in% c("BEAL"))
+ggplot(bet,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+theme_base()
+ggplot(bet,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+facet_wrap(~species)
 
 
 ACRU<-filter(d, species=="ACRU")
