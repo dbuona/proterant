@@ -39,14 +39,14 @@ library("randomForest")
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
 
-a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO","FAGR","FRAM","POTR","PRSE","QUAL" ,"QURU" ,"QUVE","NYSY"))
+a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO","FRAM","POTR" ,"QURU" ,"QUVE"))
 
 #unique(hys$species) ##15 hysteranthous species (pro and syn)
 
 a<-gather(a, phase,DOY,4:7)
-a<-filter(a, phase %in% c("fopn.jd","l75.jd"))
-ggplot(a,aes(year,DOY))+geom_point(aes(color=phase))+facet_wrap(~species)
-
+#a<-filter(a, phase %in% c("fopn.jd","l75.jd"))
+ggplot(a,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))
+ggplot(a,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+facet_wrap(~species)
 
 
 ACRU<-filter(d, species=="ACRU")

@@ -54,6 +54,8 @@ sum$species[sum$species=="VICA"]<-"Viburnum cassinoides"
 bb<-gather(sum,phenophase, DOY,3:6)
 #bb$class<-NA
 #bb$class<-ifelse(bb$phenophase %in% c("bb.jd","fbb.jd"),"physiological","functional")
+ggplot(bb,aes(year,DOY))+geom_point(aes(shape=phenophase))+geom_smooth(method='lm',aes(,color=phenophase))
+ggplot(bb,aes(year,DOY))+geom_point(aes(shape=phenophase))+geom_smooth(method='lm',aes(,color=phenophase))+facet_wrap(~species)
 
 bbX<-filter(bb,phenophase==c("increasing leaf size","flower open"))
 bbX$class<-"functional"
