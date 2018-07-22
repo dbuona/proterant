@@ -1,4 +1,4 @@
-###A script to see if hysteranthy is changing for betula
+###A script to see if hysteranthy is changing in pep data
 
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
@@ -93,8 +93,11 @@ range<-intersect(sitystations,Ohstations)
 compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
 compy<-filter(compy, year>1960)
 
+write.csv(compy,"alnus_delta_hyst.csv")
+
 plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=s_id),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Alnus glutinosa")+theme_base()
 
+### hing model
 
 ######slope
 library("nlme")
