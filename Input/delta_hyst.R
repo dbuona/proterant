@@ -3,7 +3,7 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 getOption("device")
-options(device="quartz"  )
+options(device="RStudioGD")
 sessionInfo()
 
 setwd("~/Documents/git/proterant/input")
@@ -81,7 +81,8 @@ compy$offset<-compy$leaf-compy$flower
 compy<-filter(compy,offset<70)
 compy<-filter(compy,offset>(-70))
 
-sixty<-filter(compy, year==1961)
+###select only stations with data from 1961 and 2000 which i dont need I think if fitting mixed model
+sixty<-filter(compy, year==1951)
 oh<-filter(compy,year==2000)
 
 
@@ -95,95 +96,9 @@ compy<-filter(compy, year>1960)
 
 write.csv(compy,"alnus_delta_hyst.csv")
 
-plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=s_id),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Alnus glutinosa")+theme_base()
+ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=s_id),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Alnus glutinosa")+theme_base()
 
-### hing model
-
-######slope
-library("nlme")
-dat<-coef(lmList(offset~as.numeric(year)|s_id , data = compy))
-dat<-rownames_to_column(dat, var = "s_id")
-colnames(dat)<-c("s_id","intercept","coef")
-dat$trend<-ifelse(dat$coef>0,"+","-")
-dat1<-right_join(compy,dat)
-dat1$lat<-as.numeric(dat1$lat)
-dat1$lon<-as.numeric(dat1$lon)
-library("ggmap")
-library(mapproj)
-myLocation<-c(lon=9.8050,lat=51.9)
-myMap<-get_map(location=myLocation,source="google",maptype="terrain",zoom=5)
-mappy<-ggmap(myMap)+geom_point(aes(x = lon, y = lat, color=trend), data = dat1,alpha = .5, size = 2)
-
-library(gridExtra)
-Alnus<-grid.arrange(plotty,mappy,ncol=2, nrow=1)
-######corylus
-#############################Corylus avenula trends in pep
-cor1<-read.csv("buo_106_xxx_011.csv", header=TRUE)
-cor2<-read.csv("buo_106_xxx_060.csv",header=TRUE)
-#cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
-
-names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
-#try seperation again
-cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
-head(sep_rec1)
-
-names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
-#try seperation again
-cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
-head(cor2)
-
-
-cor<-rbind(cor2,cor1)
-
-cor<-unite(cor,locale,lat,lon,sep=",",remove=FALSE)
-
-compy<-cor
-#ggplot(compy,aes(as.numeric(year),as.numeric(day)))+geom_point(aes())+geom_smooth(method='lm',aes(col=bbch))+theme_base()+ggtitle("Betula phenology since since 1960")+facet_wrap(~locale)
-compy$pheno<-ifelse(compy$bbch=="11","leaf","flower")
-compy<-dplyr::select(compy,-bbch)
-compy<-spread(compy,pheno,day)
-compy$leaf<-as.numeric(compy$leaf)
-compy$flower<-as.numeric(compy$flower)
-
-compy$offset<-compy$leaf-compy$flower
-
-compy<-filter(compy,offset<70)
-compy<-filter(compy,offset>(-70))
-table(compy$year)
-seven<-filter(compy, year==1990)
-oh<-filter(compy,year==2000)
-
-
-seven<-filter(seven, !is.na(offset))
-sitystations<-seven$s_id
-Ohstations<-oh$s_id
-range<-intersect(sitystations,Ohstations)
-
-compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
-compy<-filter(compy, year>1960)
-
-plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Betula")
-
-
-######slope
-library("nlme")
-dat<-coef(lmList(offset~as.numeric(year)|s_id , data = compy))
-dat<-rownames_to_column(dat, var = "s_id")
-colnames(dat)<-c("s_id","intercept","coef")
-dat$trend<-ifelse(dat$coef>0,"+","-")
-dat1<-right_join(compy,dat)
-dat1$lat<-as.numeric(dat1$lat)
-dat1$lon<-as.numeric(dat1$lon)
-library("ggmap")
-library(mapproj)
-myLocation<-c(lon=9.8050,lat=51.9)
-myMap<-get_map(location=myLocation,source="google",maptype="terrain",zoom=5)
-mappy<-ggmap(myMap)+geom_point(aes(x = lon, y = lat, color=trend), data = dat1,alpha = .5, size = 2)
-
-library(gridExtra)
-Betula<-grid.arrange(plotty,mappy,ncol=2, nrow=1)
-#############################Fraxinus excell
-
+###Fraxinus
 cor1<-read.csv("buo_120_000_011.csv", header=TRUE)
 cor2<-read.csv("buo_120_000_060.csv",header=TRUE)
 #cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
@@ -216,7 +131,7 @@ compy$offset<-compy$leaf-compy$flower
 compy<-filter(compy,offset<70)
 compy<-filter(compy,offset>(-70))
 table(compy$year)
-seven<-filter(compy, year==1961)
+seven<-filter(compy, year==1951)
 oh<-filter(compy,year==2000)
 
 
@@ -225,32 +140,13 @@ sitystations<-seven$s_id
 Ohstations<-oh$s_id
 range<-intersect(sitystations,Ohstations)
 
-compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
+#compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
 compy<-filter(compy, year>1960)
+write.csv(compy,"fraxinus_delta_hyst.csv")
 
 plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Fraxinus")
 
-
-######slope
-library("nlme")
-dat<-coef(lmList(offset~as.numeric(year)|s_id , data = compy))
-dat<-rownames_to_column(dat, var = "s_id")
-colnames(dat)<-c("s_id","intercept","coef")
-dat$trend<-ifelse(dat$coef>0,"+","-")
-dat1<-right_join(compy,dat)
-dat1$lat<-as.numeric(dat1$lat)
-dat1$lon<-as.numeric(dat1$lon)
-library("ggmap")
-library(mapproj)
-myLocation<-c(lon=9.8050,lat=51.9)
-myMap<-get_map(location=myLocation,source="google",maptype="terrain",zoom=5)
-mappy<-ggmap(myMap)+geom_point(aes(x = lon, y = lat, color=trend), data = dat1,alpha = .5, size = 2)
-
-library(gridExtra)
-Fraxinus<-grid.arrange(plotty,mappy,ncol=2, nrow=1)
-
 ###########Aesculus
-
 
 cor1<-read.csv("buo_101_000_011.csv", header=TRUE)
 cor2<-read.csv("buo_101_000_060.csv",header=TRUE)
@@ -284,8 +180,58 @@ compy$offset<-compy$leaf-compy$flower
 compy<-filter(compy,offset<70)
 compy<-filter(compy,offset>(-70))
 table(compy$year)
-seven<-filter(compy, year==1961)
+seven<-filter(compy, year==1951)
 oh<-filter(compy,year==2000)
+
+
+seven<-filter(seven, !is.na(offset))
+sitystations<-seven$s_id
+Ohstations<-oh$s_id
+range<-intersect(sitystations,Ohstations)
+compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
+compy<-filter(compy, year>1960)
+
+write.csv(compy,"aes_delta_hyst.csv")
+
+plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Aesculus")
+
+
+
+#####fagus
+cor1<-read.csv("buo_108_010_011.csv", header=TRUE)
+cor2<-read.csv("buo_108_010_060.csv",header=TRUE)
+#cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
+
+names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(sep_rec1)
+
+names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(cor2)
+
+
+cor<-rbind(cor2,cor1)
+
+cor<-unite(cor,locale,lat,lon,sep=",",remove=FALSE)
+
+compy<-cor
+#ggplot(compy,aes(as.numeric(year),as.numeric(day)))+geom_point(aes())+geom_smooth(method='lm',aes(col=bbch))+theme_base()+ggtitle("Betula phenology since since 1960")+facet_wrap(~locale)
+compy$pheno<-ifelse(compy$bbch=="11","leaf","flower")
+compy<-dplyr::select(compy,-bbch)
+compy<-spread(compy,pheno,day)
+compy$leaf<-as.numeric(compy$leaf)
+compy$flower<-as.numeric(compy$flower)
+
+compy$offset<-compy$leaf-compy$flower
+
+compy<-filter(compy,offset<70)
+compy<-filter(compy,offset>(-70))
+table(compy$year)
+seven<-filter(compy, year==1951)
+oh<-filter(compy,year==1990) #### not enough for 2000
 
 
 seven<-filter(seven, !is.na(offset))
@@ -296,24 +242,52 @@ range<-intersect(sitystations,Ohstations)
 compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
 compy<-filter(compy, year>1960)
 
-plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Aesculus")
+write.csv(compy,"fag_delta_hyst.csv")
+
+#####Tilia
+cor1<-read.csv("buo_129_070_011.csv", header=TRUE)
+cor2<-read.csv("buo_129_070_060.csv",header=TRUE)
+#cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
+
+names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(sep_rec1)
+
+names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(cor2)
 
 
-######slope
-library("nlme")
-dat<-coef(lmList(offset~as.numeric(year)|s_id , data = compy))
-dat<-rownames_to_column(dat, var = "s_id")
-colnames(dat)<-c("s_id","intercept","coef")
-dat$trend<-ifelse(dat$coef>0,"+","-")
-dat1<-right_join(compy,dat)
-dat1$lat<-as.numeric(dat1$lat)
-dat1$lon<-as.numeric(dat1$lon)
-library("ggmap")
-library(mapproj)
-myLocation<-c(lon=9.8050,lat=51.9)
-myMap<-get_map(location=myLocation,source="google",maptype="terrain",zoom=5)
-mappy<-ggmap(myMap)+geom_point(aes(x = lon, y = lat, color=trend), data = dat1,alpha = .5, size = 2)
+cor<-rbind(cor2,cor1)
 
-library(gridExtra)
-Aesculus<-grid.arrange(plotty,mappy,ncol=2, nrow=1)
+cor<-unite(cor,locale,lat,lon,sep=",",remove=FALSE)
+
+compy<-cor
+#ggplot(compy,aes(as.numeric(year),as.numeric(day)))+geom_point(aes())+geom_smooth(method='lm',aes(col=bbch))+theme_base()+ggtitle("Betula phenology since since 1960")+facet_wrap(~locale)
+compy$pheno<-ifelse(compy$bbch=="11","leaf","flower")
+compy<-dplyr::select(compy,-bbch)
+compy<-spread(compy,pheno,day)
+compy$leaf<-as.numeric(compy$leaf)
+compy$flower<-as.numeric(compy$flower)
+
+compy$offset<-compy$leaf-compy$flower
+
+compy<-filter(compy,offset<70)
+compy<-filter(compy,offset>(-70))
+table(compy$year)
+seven<-filter(compy, year==1951)
+oh<-filter(compy,year==1990) #### not enough for 2000
+
+
+seven<-filter(seven, !is.na(offset))
+sitystations<-seven$s_id
+Ohstations<-oh$s_id
+range<-intersect(sitystations,Ohstations)
+
+compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
+compy<-filter(compy, year>1960)
+
+write.csv(compy,"tilia_delta_hyst.csv")
 

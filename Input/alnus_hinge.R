@@ -1,7 +1,9 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
+graphics.off()
 setwd("~/Documents/git/proterant/input")
 
+load(file="stan/fit.hinge.aln.Rda") #skip to line 103
 ####cant get stan code to run
 runstan = TRUE
 mapsandsummaries = TRUE # these are just summaries for mapping (they're slow but not terribly), note that right now they run for the 10+ year dataset
@@ -19,7 +21,7 @@ library(lubridate)
 library(rstan)
 library(arm)
 library(shinystan)
-
+library(ggthemes)
 aln<-read.csv("alnus_delta_hyst.csv",header=TRUE)
 
 
@@ -99,17 +101,91 @@ year <- aln$YEAR.hin
 
 }  
 save(fit.hinge.aln, file="stan/fit.hinge.aln.Rda")
-summary(fit.hinge.aln)
-launch_shinystan(fit.hinge.aln)
-class(fit.hinge.aln)
-list_of_draws <- extract(fit.hinge.aln)
-print(names(list_of_draws))
+sumera <- summary(fit.hinge.aln)$summary
+sumera[grep("mu_", rownames(sumera)),] ###this give you the overall
+mean(aln$year)
+sumera<-as.data.frame(sumera)
+sumera<-rownames_to_column(sumera, var = "peporder")
 
-fit_summary <- summary(fit.hinge.aln)
-print(names(fit_summary))
-mu_tau_summary <- summary(fit.hinge.aln, pars = c("mu_b","sigma_b"), probs = c(0.1, 0.9))$summary
-print(mu_tau_summary)
-plot(fit.hinge.aln, pars="mu_b", show_density = TRUE, ci_level = 0.95, fill_color = "purple")
-posterior_predict(fit.hinge.aln)
+
+
+####plot
+a <- 29.7411191
+b <- 0.2780304
+x0 <- 1960
+x1 <- 1980
+
+# graph
+plot(c(1960,2010), c(0,69), type = "n", xlab = "", ylab = "", bty='l')
+segments(x0=1960,y0=a, x1=1980,y1=a)
+segments(x0=1980,y0=a, x1=2015,y1=a+b*35)
+
+
+
+
+
+#########################
+getstanpred <- function(dat, sitecolname, stansummary, predyear){
+  siteslist <- unlist(unique(dat[sitecolname]))
+  sumer.ints <- stansummary[grep("a\\[", rownames(stansummary)),]
+  sumer.slopes <- stansummary[grep("b\\[", rownames(stansummary)),]
+  stanfit <- data.frame(m=as.numeric(rep(NA, length(siteslist))),
+                        pred=as.numeric(rep(NA, length(siteslist))), site=siteslist)
+  for (sitehere in c(1:length(siteslist))){
+    stanfit$m[sitehere] <- sumer.slopes[sitehere]
+    stanfit$pred[sitehere] <- sumer.ints[sitehere]+sumer.slopes[sitehere]*predyear
+  }
+  return(stanfit)
+}
+predaln <- getstanpred(aln, "s_id", sumera, 3)
+
+getlinpred <- function(dat, sitecolname, predyear){
+  siteslist <- unique(dat[sitecolname])
+  linfit <- data.frame(m=as.numeric(rep(NA, nrow(siteslist))),
+                       pred=as.numeric(rep(NA, nrow(siteslist))))
+  for (sitehere in c(1:nrow(siteslist))){
+    subby <- subset(dat, s_id==siteslist[sitehere,])
+    mod <- lm(offset~YEAR.hin, data=subby)
+    linfit$m[sitehere] <- coef(mod)[2]
+    linfit$pred[sitehere] <- coef(mod)[1]+coef(mod)[2]*predyear
+  }
+  return(linfit)
+}
+
+alnpred.lin <- getlinpred(aln, "s_id", 3)
+
+plot(predaln$pred~alnpred.lin$pred, asp=1)
+abline(lm(predaln$pred~alnpred.lin$pred))
+ggplot(aln,aes(year,offset))+geom_point()+geom_abline(intercept=1960,slope=1)
+
+#######just do it in brms
 library(brms)
 fit.aln.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=aln) 
+dat<-as.data.frame(coef(fit.aln.brms))
+library(tibble)
+dat<-rownames_to_column(dat, var = "peporder")
+newdat<-merge(dat,aln)
+colnames(newdat)
+names(newdat)[1]<-"peporder"
+names(newdat)[2]<-"Intercept"
+names(newdat)[6]<-"slope"
+newdata<-dplyr::select(newdat,peporder,Intercept,slope,s_id,year,offset,YEAR.hin)
+newdata$hinge<-ifelse(newdata$YEAR.hin>0,1,0)
+Enewdata$slope<-ifelse(newdata$YEAR.hin==0,0,newdata$slope)
+
+alpha<-mean(newdata$Intercept)
+beta<-mean(newdata$slope)
+ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha,yend=alpha,x=1960, xend=1980),color="red")
+ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha,yend=alpha+35*beta),color="red")
+
+ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha,yend=alpha,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha,yend=alpha+35*beta),color="red")+theme_base()+theme(legend.position="none")
+
+
+plotty+geom_segment(aes(y=mean(Intercept),yend=alpha,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=mean(Intercept),yend=alpha+35*beta),color="red")
+alpha<-mean(newdata$Intercept)
+beta<-mean(newdata$slope)
+alpha+35*beta
+
+
+
+
