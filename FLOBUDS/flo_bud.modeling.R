@@ -82,7 +82,84 @@ vivo$floposs<-ifelse(vivo$Flo.poss.=="N",0,1)
 ###This is only twigs where we deemed flowering to even bee possible
 vivo2<-filter(vivo,floposs==1)
 
-##### The models below are for budburst and flower open, should try it for leaf out and flowering
+###vivo2 is main datasheet for buds and flower
+###chayim 2 is for leaf out and flowering
+unique(vivo.full$phase)
+hayim<-dplyr::filter(vivo.full, phase %in% c("leaf_day","flo_day"))
+hayim$DOY<-ifelse(is.na(hayim$DOY),120,hayim$DOY)
+hayim$surv<-ifelse(hayim$DOY==120,1,0)
+hayim$floposs<-ifelse(hayim$Flo.poss.=="N",0,1)
+###This is only twigs where we deemed flowering to even bee possible
+hayim2<-filter(hayim,floposs==1)
+
+####ofset analysis
+offset1<-spread(vivo2,phase,DOY)
+offset1$offset<-offset1$Lbb_day-offset1$flo_day
+offset1<-dplyr::filter(offset1,flo_day!=120)
+offset1<-dplyr::filter(offset1,Lbb_day!=120)
+prior.offset<-get_prior(offset~Light+Chill+Force,
+                  data = offset1, family = gaussian()) 
+###cant do a weibull of there is a zero response
+m1.offset<- brm(offset ~Light+Chill+Force+(1+Light+Chill+Force|GEN.SPA),
+          data = offset1, family = gaussian(),
+          iter= 3000,
+          warmup = 2000,
+          prior = prior.offset) 
+summary(m1.offset)
+coef(m1.offset)
+####plot it
+Q<-as.data.frame(coef(m1.offset))
+colnames(Q)
+
+R<-dplyr::select(Q,c(1,5,9,13))
+R<-rownames_to_column(R,"GEN.SPA")
+colnames(R)
+colnames(R)<-c("GEN.SPA","Intercept","Light","Chill","Force")
+R<-gather(R,"predictor","effect",2:5)
+ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
+
+X<-dplyr::select(Q, contains("Q2.5"))
+colnames(X)
+
+X<-rownames_to_column(X,"GEN.SPA")
+colnames(X)<-c("GEN.SPA","Intercept","Light","Chill","Force")
+X<-gather(X,"predictor","CIlow",2:5)
+
+###high
+XX<-dplyr::select(Q, contains("Q97.5"))
+colnames(XX)
+XX<-rownames_to_column(XX,"GEN.SPA")
+colnames(XX)<-c("GEN.SPA","Intercept","Light","Chill","Force")
+XX<-gather(XX,"predictor","CIhigh",2:5)
+
+XXX<-full_join(X,XX)
+
+Z<-full_join(XXX,R)
+
+pd<- position_dodgev(height = 1)
+Z$class<-NA
+Z$class<-ifelse(Z$predictor=="Light:Flo",0,2)
+Z$class<-ifelse(Z$predictor=="Light:Leaf",0,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Chill:Leaf",1,Z$class)
+Z$class<-ifelse(Z$predictor=="Chill:Flo",1,Z$class)
+
+Z$class<-ifelse(Z$predictor=="Phase",4,Z$class)
+
+ggplot(Z,aes(effect,predictor))+geom_point()+geom_errorbarh(aes(,xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("OFFSET MODEL:")+facet_wrap(~GEN.SPA)
+
+Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
+ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1b")+facet_wrap(~GEN.SPA)
+
+
+
+
+
+
+
+
+#### this model(above) is going to treat everything that didn't flower or leaf out as if the did at the same time :\
+
 
 prior2<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
                  data = vivo2, family = weibull) 
@@ -146,13 +223,7 @@ ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom
 
 ####Full model again leaf out vs. flowering
 
-unique(vivo.full$phase)
-hayim<-dplyr::filter(vivo.full, phase %in% c("leaf_day","flo_day"))
-hayim$DOY<-ifelse(is.na(hayim$DOY),120,hayim$DOY)
-hayim$surv<-ifelse(hayim$DOY==120,1,0)
-hayim$floposs<-ifelse(hayim$Flo.poss.=="N",0,1)
-###This is only twigs where we deemed flowering to even bee possible
-hayim2<-filter(hayim,floposs==1)
+
 prior3<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
                   data = hayim2, family = weibull) 
 ###this model is best survivial
