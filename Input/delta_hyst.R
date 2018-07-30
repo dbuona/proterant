@@ -24,7 +24,7 @@ library(ggthemes)
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
 
-a<-(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO","FRAM","POTR" ,"QURU" ,"QUVE"))
+a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO","FRAM","POTR" ,"QURU" ,"QUVE"))
 
 #unique(hys$species) ##15 hysteranthous species (pro and syn)
 a$offset<-a$l75.jd-a$fopn.jd
@@ -49,6 +49,104 @@ bet$year<-as.character(bet$year)
 bet$day<-as.character(bet$day)
 bet$s_id<-bet$species
 #############################Alnus glutinosa trends in pep
+
+###Fraxinus
+cor1<-read.csv("buo_120_000_011.csv", header=TRUE)
+cor2<-read.csv("buo_120_000_060.csv",header=TRUE)
+#cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
+
+names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(sep_rec1)
+
+names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(cor2)
+
+
+cor<-rbind(cor2,cor1)
+
+cor<-unite(cor,locale,lat,lon,sep=",",remove=FALSE)
+
+compy<-cor
+#ggplot(compy,aes(as.numeric(year),as.numeric(day)))+geom_point(aes())+geom_smooth(method='lm',aes(col=bbch))+theme_base()+ggtitle("Betula phenology since since 1960")+facet_wrap(~locale)
+compy$pheno<-ifelse(compy$bbch=="11","leaf","flower")
+compy<-dplyr::select(compy,-bbch)
+compy<-spread(compy,pheno,day)
+compy$leaf<-as.numeric(compy$leaf)
+compy$flower<-as.numeric(compy$flower)
+
+compy$offset<-compy$leaf-compy$flower
+
+compy<-filter(compy,offset<70)
+compy<-filter(compy,offset>(-70))
+table(compy$year)
+fraxagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
+                    FUN=length)
+
+
+frax50 <- subset(fraxagg, year>50)
+compy<- compy[which(compy$s_id %in% frax50$s_id),]
+
+
+
+
+#compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
+#compy<-filter(compy, year>1960)
+write.csv(compy,"fraxinus_delta_hyst.csv")
+
+plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Fraxinus")
+
+###########Aesculus
+
+cor1<-read.csv("buo_101_000_011.csv", header=TRUE)
+cor2<-read.csv("buo_101_000_060.csv",header=TRUE)
+#cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
+
+names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(sep_rec1)
+
+names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
+#try seperation again
+cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
+head(cor2)
+
+
+cor<-rbind(cor2,cor1)
+
+cor<-unite(cor,locale,lat,lon,sep=",",remove=FALSE)
+
+compy<-cor
+#ggplot(compy,aes(as.numeric(year),as.numeric(day)))+geom_point(aes())+geom_smooth(method='lm',aes(col=bbch))+theme_base()+ggtitle("Betula phenology since since 1960")+facet_wrap(~locale)
+compy$pheno<-ifelse(compy$bbch=="11","leaf","flower")
+compy<-dplyr::select(compy,-bbch)
+compy<-spread(compy,pheno,day)
+compy$leaf<-as.numeric(compy$leaf)
+compy$flower<-as.numeric(compy$flower)
+
+compy$offset<-compy$leaf-compy$flower
+
+compy<-filter(compy,offset<70)
+compy<-filter(compy,offset>(-70))
+table(compy$year)
+
+aesagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
+                     FUN=length)
+
+
+aes50 <- subset(aesagg, year>50)
+compy<- compy[which(compy$s_id %in% aes50$s_id),]
+
+
+
+write.csv(compy,"aes_delta_hyst.csv")
+
+plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Aesculus")
+
 cor1<-read.csv("buo_102_040_011.csv", header=TRUE)
 cor2<-read.csv("buo_102_040_060.csv",header=TRUE)
 #cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
@@ -97,104 +195,6 @@ compy<-filter(compy, year>1960)
 write.csv(compy,"alnus_delta_hyst.csv")
 
 ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=s_id),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Alnus glutinosa")+theme_base()
-
-###Fraxinus
-cor1<-read.csv("buo_120_000_011.csv", header=TRUE)
-cor2<-read.csv("buo_120_000_060.csv",header=TRUE)
-#cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
-
-names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
-#try seperation again
-cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
-head(sep_rec1)
-
-names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
-#try seperation again
-cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
-head(cor2)
-
-
-cor<-rbind(cor2,cor1)
-
-cor<-unite(cor,locale,lat,lon,sep=",",remove=FALSE)
-
-compy<-cor
-#ggplot(compy,aes(as.numeric(year),as.numeric(day)))+geom_point(aes())+geom_smooth(method='lm',aes(col=bbch))+theme_base()+ggtitle("Betula phenology since since 1960")+facet_wrap(~locale)
-compy$pheno<-ifelse(compy$bbch=="11","leaf","flower")
-compy<-dplyr::select(compy,-bbch)
-compy<-spread(compy,pheno,day)
-compy$leaf<-as.numeric(compy$leaf)
-compy$flower<-as.numeric(compy$flower)
-
-compy$offset<-compy$leaf-compy$flower
-
-compy<-filter(compy,offset<70)
-compy<-filter(compy,offset>(-70))
-table(compy$year)
-seven<-filter(compy, year==1951)
-oh<-filter(compy,year==2000)
-
-
-seven<-filter(seven, !is.na(offset))
-sitystations<-seven$s_id
-Ohstations<-oh$s_id
-range<-intersect(sitystations,Ohstations)
-
-#compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
-compy<-filter(compy, year>1960)
-write.csv(compy,"fraxinus_delta_hyst.csv")
-
-plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Fraxinus")
-
-###########Aesculus
-
-cor1<-read.csv("buo_101_000_011.csv", header=TRUE)
-cor2<-read.csv("buo_101_000_060.csv",header=TRUE)
-#cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
-
-names(cor1)[names(cor1)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
-#try seperation again
-cor1<-separate(cor1,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
-head(sep_rec1)
-
-names(cor2)[names(cor2)=="s_id.lon.lat.alt.plant_id.cult_id.bbch.year.day"] <- "s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day" #alternative method
-#try seperation again
-cor2<-separate(cor2,"s_id;lon;lat;alt;plant_id;cult_id;bbch;year;day",into= c("s_id","lon","lat","alt","plant_id","cult_id","bbch","year","day"), sep=";" )
-head(cor2)
-
-
-cor<-rbind(cor2,cor1)
-
-cor<-unite(cor,locale,lat,lon,sep=",",remove=FALSE)
-
-compy<-cor
-#ggplot(compy,aes(as.numeric(year),as.numeric(day)))+geom_point(aes())+geom_smooth(method='lm',aes(col=bbch))+theme_base()+ggtitle("Betula phenology since since 1960")+facet_wrap(~locale)
-compy$pheno<-ifelse(compy$bbch=="11","leaf","flower")
-compy<-dplyr::select(compy,-bbch)
-compy<-spread(compy,pheno,day)
-compy$leaf<-as.numeric(compy$leaf)
-compy$flower<-as.numeric(compy$flower)
-
-compy$offset<-compy$leaf-compy$flower
-
-compy<-filter(compy,offset<70)
-compy<-filter(compy,offset>(-70))
-table(compy$year)
-seven<-filter(compy, year==1951)
-oh<-filter(compy,year==2000)
-
-
-seven<-filter(seven, !is.na(offset))
-sitystations<-seven$s_id
-Ohstations<-oh$s_id
-range<-intersect(sitystations,Ohstations)
-compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
-compy<-filter(compy, year>1960)
-
-write.csv(compy,"aes_delta_hyst.csv")
-
-plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Aesculus")
-
 
 
 #####fagus

@@ -22,11 +22,12 @@ p<-ggtree(tr,layout="circular")
 
 dd <- data.frame(taxa  = mich.data$name, hysteranthy = mich.data$synth2 )
 #row.names(dd) <- NULL
-print(dd)
 
-p <- p %<+% dd + geom_tiplab2(size=1.8)+geom_tippoint(aes(color=hysteranthy,shape=hysteranthy))
-p+theme(legend.position="right")
+p <- p %<+% dd +geom_tippoint(aes(color=hysteranthy,shape=hysteranthy),size=2)
+p<-p+theme(legend.position="null")
+#+ geom_tiplab2(size=1.8)
 
+###run concept.paper.analysis.r
 
 silv.data$synth<-silv.data$pro2+silv.data$pro3
 silv.data$synth2[which(silv.data$synth==0)] <- "always seranthous"
@@ -35,9 +36,13 @@ silv.data$synth2[which(silv.data$synth==2)] <- "always hysteranthous"
 
 #### make a tree for svics
 
+par(mar=c(.1,.1,.1,.1))
 tr1 <-silv.tree
 q<-ggtree(tr1,layout="circular")
 dd1 <- data.frame(taxa  = silv.data$name, hysteranthy = silv.data$synth2 )
 
-q <- q %<+% dd1 + geom_tiplab2(size=1.8)+geom_tippoint(aes(color=hysteranthy,shape=hysteranthy))
-q+theme(legend.position="right")
+q <- q %<+% dd1 +geom_tippoint(aes(color=hysteranthy,shape=hysteranthy))
+q<-q+theme(legend.position="null")
+grid.arrange(p,q,nrow=1,ncol=2)
+p+ggtitle("MTSV Phylogeny")
+q+ggtitle("USFS Phylogeny")

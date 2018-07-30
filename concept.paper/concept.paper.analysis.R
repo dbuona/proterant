@@ -340,7 +340,7 @@ PhyloSilv2
 
 PhyloSilv3<-phylo.d(e,binvar=pro3)
 PhyloSilv3
-silv.data<-  silv.data %>% remove_rownames %>% column_to_rownames(var="name")
+silv.data<- silv.data %>% remove_rownames %>% column_to_rownames(var="name")
 
 
 ###models
@@ -398,8 +398,23 @@ pd=position_dodgev(height=0.25)
 ggplot(bootdatasilv,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
 
 fullcomp<-rbind(bootdata.nointer,bootdatasilv)
+
+fullcomp$cat<-NA
+fullcomp$cat[which(fullcomp$class=="physiological-Silvics")] <- "physiological"
+fullcomp$cat[which(fullcomp$class=="physiological-MTSV")] <- "physiological"
+fullcomp$cat[which(fullcomp$class=="functional-Silvics")] <- "functional"
+fullcomp$cat[which(fullcomp$class=="functional-MTSV")] <- "functional"
+
+fullcomp$data<-NA
+fullcomp$data[which(fullcomp$class=="physiological-Silvics")] <- "USFS"
+fullcomp$data[which(fullcomp$class=="physiological-MTSV")] <- "MTSV"
+fullcomp$data[which(fullcomp$class=="functional-Silvics")] <- "USFS"
+fullcomp$data[which(fullcomp$class=="functional-MTSV")] <- "MTSV"
+
+library(ggstance)
 pd=position_dodgev(height=0.4)
-ggplot(fullcomp,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
+
+ggplot(fullcomp,aes(estimate,trait))+geom_point(size=2.5,aes(color=cat,shape=data),position=pd,data=fullcomp)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=cat,group=class))+geom_vline(aes(xintercept=0))+theme_bw()
 ###phyosig summary for 
 
 (PhyloPro2) #0.06

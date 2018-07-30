@@ -1,4 +1,7 @@
 ####brms hinge models
+
+####only fraxinus and aes data has been updated using agood standard (stations with 50 or more years of data)
+####if you want to run other models, fix the data on delta_hyst.R first
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -84,25 +87,34 @@ plotty<-ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Inter
 ####put them on a map
 
 ####Fraxinus model
+library(brms)
 fit.frax.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=frax) 
 dat1<-as.data.frame(coef(fit.frax.brms))
 dat1<-rownames_to_column(dat1, var = "peporder")
 newdat1<-merge(dat1,frax)
 colnames(newdat1)
 names(newdat1)[1]<-"peporder"
+names(newdat1)[4]<-"Intercept.2.5"
+names(newdat1)[5]<-"Intercept.97.5"
 names(newdat1)[2]<-"Intercept"
 names(newdat1)[6]<-"slope"
-newdata1<-dplyr::select(newdat1,peporder,Intercept,slope,s_id,year,offset,YEAR.hin,lat,lon)
+names(newdat1)[7]<-"slope.2.5"
+names(newdat1)[8]<-"slope.97.5"
+newdata1<-dplyr::select(newdat1,peporder,Intercept,Intercept.2.5,Intercept.97.5,slope,slope.2.5,slope.97.5,s_id,year,offset,YEAR.hin,lat,lon)
 newdata1$hinge<-ifelse(newdata1$YEAR.hin>0,1,0)
 
 
 alpha1<-mean(newdata1$Intercept)
+alphalow<-mean(newdata1$Intercept.2.5)
+alphahigh<-mean(newdata1$Intercept.97.5)
 beta1<-mean(newdata1$slope)
+
 
 #ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha1,yend=alpha1,x=1960, xend=1980),color="red")
 #ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha1,yend=alpha1+35*beta1),color="red")
 
-plotty2<-ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha1,yend=alpha1,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha1,yend=alpha1+35*beta1),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Fraxinus")
+plotty2<-ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alpha1,yend=alpha1,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alpha1,yend=alpha1+35*beta1),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Fraxinus")
+plottyfrax<-plotty2+geom_segment(aes(y=alphalow,yend=alphalow,x=1960, xend=2015),data=newdat1,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alphahigh,yend=alphahigh,x=1960, xend=2015),data=newdat1,color="blue",linetype="dashed",size=0.5)
 
 ###Aesculus model
 
@@ -112,19 +124,28 @@ dat2<-rownames_to_column(dat2, var = "peporder")
 newdat2<-merge(dat2,aes)
 colnames(newdat2)
 names(newdat2)[1]<-"peporder"
+names(newdat2)[4]<-"Intercept.2.5"
+names(newdat2)[5]<-"Intercept.97.5"
 names(newdat2)[2]<-"Intercept"
 names(newdat2)[6]<-"slope"
-newdata2<-dplyr::select(newdat2,peporder,Intercept,slope,s_id,year,offset,YEAR.hin,lat,lon)
+
+names(newdat2)[7]<-"slope.2.5"
+names(newdat2)[8]<-"slope.97.5"
+newdata2<-dplyr::select(newdat2,peporder,Intercept,Intercept.2.5,Intercept.97.5,slope,slope.2.5,slope.97.5,s_id,year,offset,YEAR.hin,lat,lon)
+
+
 newdata2$hinge<-ifelse(newdata2$YEAR.hin>0,1,0)
 
 
 alpha2<-mean(newdata2$Intercept)
 beta2<-mean(newdata2$slope)
+alpha2low<-mean(newdata2$Intercept.2.5)
+alpha2high<-mean(newdata2$Intercept.97.5)
 
-#ggplot(newdata2,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha2,yend=alpha2,x=1960, xend=1980),color="red")
-ggplot(newdata2,aes(year,offset,group=peporder))+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha2,yend=alpha2+35*beta2),color="red")
 
-plotty3<-ggplot(newdata2,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha2,yend=alpha2,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha2,yend=alpha2+35*beta2),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Aesculus")
+plotty3<-ggplot(newdata2,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alpha2,yend=alpha2,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alpha2,yend=alpha2+35*beta2),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Aesculus")
+plottyaes<-plotty3+geom_segment(aes(y=alpha2low,yend=alpha2low,x=1960, xend=2015),data=newdat2,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alpha2high,yend=alpha2high,x=1960, xend=2015),data=newdat2,color="blue",linetype="dashed",size=0.5)
+
 
 ####Fagus model
 fit.fag.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=fag) 
@@ -184,8 +205,8 @@ mappy4<-ggmap(myMap)+geom_point(aes(x = lon, y = lat, color=slope), data = newda
 
 library(gridExtra)
 Alna<-grid.arrange(plotty,mappy,ncol=2, nrow=1)
-fraxer<-grid.arrange(plotty2,mappy1,ncol=2, nrow=1)
-aescu<-grid.arrange(plotty3,mappy2,ncol=2, nrow=1)
+fraxer<-grid.arrange(plottyfrax,mappy1,ncol=2, nrow=1)
+aescu<-grid.arrange(plottyaes,mappy2,ncol=2, nrow=1)
 fagus<-grid.arrange(plotty4,mappy3,ncol=2, nrow=1)
 tilia<-grid.arrange(plotty5,mappy4,ncol=2, nrow=1)
 

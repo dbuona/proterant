@@ -25,7 +25,7 @@ a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO"
 #ggplot(bet,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+facet_wrap(~species)
 
 
-QURU4<-filter(d,tree.id %in%c("QURU-04"))
+QURU4<-filter(d,tree.id %in%c("FRAM-04"))
 QURU4$budding<-QURU4$fbb.jd-QURU4$bb.jd
 QURU4$bud2<-ifelse(QURU4$budding<0,"hysteranthous","seranthous")
 b<-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fbb.jd), color="red",shape=10, size=1.5)+geom_point(aes(year,bb.jd), color="dark green",shape=1,size=3)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=bud2))+theme_base()+facet_wrap(~tree.id)+theme(legend.position="none")
@@ -40,7 +40,7 @@ e<-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",sha
 
 y<-grid.arrange(b,c,e,ncol=3)
 
-QURU4<-filter(d,tree.id %in%c("QURU-01"))
+QURU4<-filter(d,tree.id %in%c("QURU-04"))
 QURU4$budding<-QURU4$fbb.jd-QURU4$bb.jd
 QURU4$bud2<-ifelse(QURU4$budding<0,"hysteranthous","seranthous")
 f<-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fbb.jd), color="red",shape=10, size=1.5)+geom_point(aes(year,bb.jd), color="dark green",shape=1,size=3)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=bud2))+theme_base()+facet_wrap(~tree.id)+theme(legend.position="none")
@@ -52,7 +52,6 @@ g<-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",sha
 QURU4$dev<-QURU4$fopn.jd-QURU4$l75.jd
 QURU4$bud5<-ifelse(QURU4$dev<0,"hysteranthous","seranthous")
 h<-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8, size=2)+geom_point(aes(year,l75.jd), color="dark green",shape=5,size=3)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=l75.jd, linetype=bud5))+theme_base()+facet_wrap(~tree.id)+theme(legend.position="none")
-
 x<-grid.arrange(f,g,h,ncol=3)
 
 
