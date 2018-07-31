@@ -16,7 +16,7 @@ library(sur)
 library(survminer)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
-load(.Rdata)
+
 d<-read.csv("first.event.dat.csv",header=TRUE)
 ###get rid of useless colummns
 colnames(d)
@@ -32,9 +32,9 @@ d$temp_night<-ifelse(d$Force=="W",18,12)
 d$chilldays<-ifelse(d$Chill==0,28,56)
 
 ###center predictors
-d$p_cent<-d$photoperiod-mean(d$photoperiod)
-d$f_cent<-d$temp_day-mean(d$temp_day)
-d$c_cent<-d$chilldays-mean(d$chilldays)
+d$p_scale<-d$photoperiod-mean(d$photoperiod)/2*(sd(d$photoperiod))
+d$f_scale<-d$temp_day-mean(d$temp_day)/2*(sd(d$temp_day))
+d$c_scale<-d$chilldays-mean(d$chilldays)/2*(sd(d$chilldays))
 
 ###what is the distrbution of response variables
 ggplot(d,aes(flo_day))+geom_density()
@@ -97,6 +97,7 @@ offset1<-spread(vivo2,phase,DOY)
 offset1$offset<-offset1$Lbb_day-offset1$flo_day
 offset1<-dplyr::filter(offset1,flo_day!=120)
 offset1<-dplyr::filter(offset1,Lbb_day!=120)
+
 prior.offset<-get_prior(offset~Light+Chill+Force,
                   data = offset1, family = gaussian()) 
 ###cant do a weibull of there is a zero response
@@ -245,18 +246,18 @@ colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Force:Flo
 R<-gather(R,"predictor","effect",2:8)
 ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
 
-X<-dplyr::select(Q, contains(".2.5.ile"))
+X<-dplyr::select(Q, contains("2.5"))
 colnames(X)
-X<-dplyr::select(X, -GEN.SPA.2.5.ile.Intercept)
+X<-dplyr::select(X, -GEN.SPA.Q2.5.Intercept)
 ncol(X)
 X<-rownames_to_column(X,"GEN.SPA")
 colnames(X)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
 X<-gather(X,"predictor","CIlow",2:8)
 
 ###high
-XX<-dplyr::select(Q, contains(".97.5.ile"))
+XX<-dplyr::select(Q, contains("97.5"))
 colnames(XX)
-XX<-dplyr::select(XX, -GEN.SPA.97.5.ile.Intercept)
+XX<-dplyr::select(XX, -GEN.SPA.Q97.5.Intercept)
 ncol(XX)
 XX<-rownames_to_column(XX,"GEN.SPA")
 colnames(XX)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
@@ -281,6 +282,20 @@ ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_
 Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
 ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M2b")+facet_wrap(~GEN.SPA)
 summary(m2b)
+pp_check(m2b)
+
+########try it with scaled data
+prior4.scale<-get_prior(DOY | cens(surv) ~ phase+p_scale:phase+c_scale:phase+f_scale:phase,
+                  data = hayim2, family = weibull) 
+
+m2b.scaled<- brm(DOY | cens(surv) ~ phase+p_scale:phase+c_scale:phase+f_scale:phase+(1+phase+p_scale:phase+c_scale:phase+f_scale:phase|GEN.SPA),
+          data = hayim2, family = weibull,inits = "0",
+          iter= 3000,
+          warmup = 2000,
+          prior = prior4.scale) 
+summary(m2b.scaled)
+
+pairs(m2b.scaled)
 ###Attempt to transform the real values
 goober<-dplyr::select(Q, contains(".Estimate"))
 goober<-rownames_to_column(goober,"GEN.SPA")
