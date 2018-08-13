@@ -353,7 +353,6 @@ bootestS<-as.data.frame(z.funct.silv$coefficients)
 bootconfS<-as.data.frame(z.funct.silv$bootconfint95)
 bootconfS<-as.data.frame(t(bootconfS))
 
-
 bootestS<-rownames_to_column(bootestS, "trait")
 bootconfS<-rownames_to_column(bootconfS, "trait")
 bootsilvF<-full_join(bootconfS,bootestS, by="trait")
@@ -375,6 +374,7 @@ z.phys.silv<-phyloglm(pro3~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,
 summary(z.phys.silv)
 bootestS1<-as.data.frame(z.phys.silv$coefficients)
 bootconfS1<-as.data.frame(z.phys.silv$bootconfint95)
+
 bootconfS1<-as.data.frame(t(bootconfS1))
 
 

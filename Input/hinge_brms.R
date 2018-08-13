@@ -1,7 +1,7 @@
 ####brms hinge models
 
-####only fraxinus and aes data has been updated using agood standard (stations with 50 or more years of data)
-####if you want to run other models, fix the data on delta_hyst.R first
+####only fraxinus, alnus, fagus, tilia and aesculus data has been updated using agood standard (stations with 50 or more years of data)
+####if you want to run other models, fix the data on delta_hyst.R first. But only alnus, ausculus and frax have more than 1 or 2 stations
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -21,7 +21,7 @@ library(tibble)
 aln<-read.csv("alnus_delta_hyst.csv",header=TRUE)
 frax<-read.csv("fraxinus_delta_hyst.csv",header=TRUE)
 aes<-read.csv("aes_delta_hyst.csv",header=TRUE)
-fag<-read.csv("fag_delta_hyst.csv",header=TRUE)
+#fag<-read.csv("fag_delta_hyst.csv",header=TRUE)
 til<-read.csv("tilia_delta_hyst.csv",header=TRUE)
 
 pepnumber <- function(dat, sitecolname){
@@ -70,19 +70,29 @@ dat<-as.data.frame(coef(fit.aln.brms))
 dat<-rownames_to_column(dat, var = "peporder")
 newdat<-merge(dat,aln)
 colnames(newdat)
+
 names(newdat)[1]<-"peporder"
+names(newdat)[4]<-"Intercept.2.5"
+names(newdat)[5]<-"Intercept.97.5"
 names(newdat)[2]<-"Intercept"
 names(newdat)[6]<-"slope"
-newdata<-dplyr::select(newdat,peporder,Intercept,slope,s_id,year,offset,YEAR.hin,lat,lon)
+names(newdat)[7]<-"slope.2.5"
+names(newdat)[8]<-"slope.97.5"
+newdata<-dplyr::select(newdat,peporder,Intercept,Intercept.2.5,Intercept.97.5,slope,slope.2.5,slope.97.5,s_id,year,offset,YEAR.hin,lat,lon)
+
 newdata$hinge<-ifelse(newdata$YEAR.hin>0,1,0)
 
-alpha<-mean(newdata$Intercept)
-beta<-mean(newdata$slope)
+alphaX<-mean(newdata$Intercept)
+alphaXlow<-mean(newdata$Intercept.2.5)
+alphaXhigh<-mean(newdata$Intercept.97.5)
+betaX<-mean(newdata$slope)
 
 #ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha,yend=alpha,x=1960, xend=1980),color="red")
 #ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha,yend=alpha+35*beta),color="red")
 
-plotty<-ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha,yend=alpha,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha,yend=alpha+35*beta),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Alnus")
+
+plottyX<-ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alphaX,yend=alphaX,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alphaX,yend=alphaX+35*betaX),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Alnus glutinosa")
+plottyalnus<-plottyX+geom_segment(aes(y=alphaXlow,yend=alphaXlow,x=1960, xend=2015),data=newdat,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alphaXhigh,yend=alphaXhigh,x=1960, xend=2015),data=newdat,color="blue",linetype="dashed",size=0.5)
 
 ####put them on a map
 
@@ -113,7 +123,7 @@ beta1<-mean(newdata1$slope)
 #ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha1,yend=alpha1,x=1960, xend=1980),color="red")
 #ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha1,yend=alpha1+35*beta1),color="red")
 
-plotty2<-ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alpha1,yend=alpha1,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alpha1,yend=alpha1+35*beta1),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Fraxinus")
+plotty2<-ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alpha1,yend=alpha1,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alpha1,yend=alpha1+35*beta1),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Fraxinus excelsior")
 plottyfrax<-plotty2+geom_segment(aes(y=alphalow,yend=alphalow,x=1960, xend=2015),data=newdat1,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alphahigh,yend=alphahigh,x=1960, xend=2015),data=newdat1,color="blue",linetype="dashed",size=0.5)
 
 ###Aesculus model
@@ -143,10 +153,13 @@ alpha2low<-mean(newdata2$Intercept.2.5)
 alpha2high<-mean(newdata2$Intercept.97.5)
 
 
-plotty3<-ggplot(newdata2,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alpha2,yend=alpha2,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alpha2,yend=alpha2+35*beta2),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Aesculus")
-plottyaes<-plotty3+geom_segment(aes(y=alpha2low,yend=alpha2low,x=1960, xend=2015),data=newdat2,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alpha2high,yend=alpha2high,x=1960, xend=2015),data=newdat2,color="blue",linetype="dashed",size=0.5)
+plotty3<-ggplot(newdata2,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alpha2,yend=alpha2,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alpha2,yend=alpha2+35*beta2),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Aesculus hippocastanum")
+plotty3+geom_segment(aes(y=alpha2low,yend=alpha2low,x=1960, xend=2015),data=newdat2,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alpha2high,yend=alpha2high,x=1960, xend=2015),data=newdat2,color="blue",linetype="dashed",size=0.5)
 
 
+
+save.image(file="hinges.Rdata")
+###STOP HERE FOR NOW--maps below arent usable and other species don't have much data
 ####Fagus model
 fit.fag.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=fag) 
 dat3<-as.data.frame(coef(fit.fag.brms))

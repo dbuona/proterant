@@ -34,8 +34,8 @@ a$offset2<-a$bb.jd-a$fopn.jd
 
 ggplot(a,aes(year,offset))+geom_point()+facet_wrap(~species)
 a1<-filter(a, species %in% c("ACPE","ACRU","ACSA","BEAL" ,"FRAM" ,"QURU"))
-ggplot(a1,aes(year,offset))+geom_smooth(method="lm",aes(group=species,linetype=species),color="black")+geom_smooth(method="lm",color="red",size=1)+theme_base()
-ggplot(a1,aes(year,offset2))+geom_smooth(method="lm",aes(group=tree.id,col=species),se=FALSE,size=0.25)+geom_smooth(method="lm",aes(color=species),size=1.5,se=FALSE)+geom_smooth(method="lm",color="red",size=2,linetype="dashed")+theme_base()+scale_color_brewer(palette="Dark2")
+ggplot(a1,aes(year,offset))+geom_smooth(method="lm",aes(group=tree.id,col=species),linetype="dashed",se=FALSE,size=0.5)+geom_smooth(method="lm",aes(color=species),size=1.5,se=FALSE)+geom_smooth(method="lm",color="red",size=2,linetype="twodash")+theme_tufte()+scale_color_brewer(palette="Dark2")
+ggplot(a1,aes(year,offset2))+geom_smooth(method="lm",aes(group=tree.id,col=species),linetype="dashed",se=FALSE,size=0.5)+geom_smooth(method="lm",aes(color=species),size=1.5,se=FALSE)+geom_smooth(method="lm",color="red",size=2,linetype="twodash")+theme_tufte()+scale_color_brewer(palette="Dark2")
 
 #a<-gather(a, phase,day,4:7)
 #a<-filter(a, phase %in% c("fopn.jd","l75.jd"))
@@ -147,6 +147,8 @@ write.csv(compy,"aes_delta_hyst.csv")
 
 plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Aesculus")
 
+
+####Alnus glutinosa
 cor1<-read.csv("buo_102_040_011.csv", header=TRUE)
 cor2<-read.csv("buo_102_040_060.csv",header=TRUE)
 #cor3<-read.csv("buo_106_020_010.csv",header=TRUE)
@@ -178,19 +180,14 @@ compy$offset<-compy$leaf-compy$flower
 
 compy<-filter(compy,offset<70)
 compy<-filter(compy,offset>(-70))
+table(compy$year)
+alnusagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
+                     FUN=length)
 
-###select only stations with data from 1961 and 2000 which i dont need I think if fitting mixed model
-sixty<-filter(compy, year==1951)
-oh<-filter(compy,year==2000)
 
+alnus50 <- subset(alnusagg, year>50)
+compy<- compy[which(compy$s_id %in% alnus50$s_id),]
 
-sixty<-filter(sixty, !is.na(offset))
-sitystations<-sixty$s_id
-Ohstations<-oh$s_id
-range<-intersect(sitystations,Ohstations)
-
-compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
-compy<-filter(compy, year>1960)
 
 write.csv(compy,"alnus_delta_hyst.csv")
 
@@ -230,17 +227,13 @@ compy$offset<-compy$leaf-compy$flower
 compy<-filter(compy,offset<70)
 compy<-filter(compy,offset>(-70))
 table(compy$year)
-seven<-filter(compy, year==1951)
-oh<-filter(compy,year==1990) #### not enough for 2000
+fagagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
+                      FUN=length)
 
 
-seven<-filter(seven, !is.na(offset))
-sitystations<-seven$s_id
-Ohstations<-oh$s_id
-range<-intersect(sitystations,Ohstations)
+fag50 <- subset(fagagg, year>50)
+compy<- compy[which(compy$s_id %in% fag50$s_id),]
 
-compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
-compy<-filter(compy, year>1960)
 
 write.csv(compy,"fag_delta_hyst.csv")
 
@@ -277,17 +270,12 @@ compy$offset<-compy$leaf-compy$flower
 compy<-filter(compy,offset<70)
 compy<-filter(compy,offset>(-70))
 table(compy$year)
-seven<-filter(compy, year==1951)
-oh<-filter(compy,year==1990) #### not enough for 2000
+tiliaagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
+                    FUN=length)
 
 
-seven<-filter(seven, !is.na(offset))
-sitystations<-seven$s_id
-Ohstations<-oh$s_id
-range<-intersect(sitystations,Ohstations)
-
-compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
-compy<-filter(compy, year>1960)
+til50 <- subset(tiliaagg, year>50)
+compy<- compy[which(compy$s_id %in% til50$s_id),]
 
 write.csv(compy,"tilia_delta_hyst.csv")
 
