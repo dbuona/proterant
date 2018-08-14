@@ -6,7 +6,7 @@ rm(list=ls())
 options(stringsAsFactors = FALSE)
 graphics.off()
 setwd("~/Documents/git/proterant/input")
-#load("hinges.Rdata")
+load("hinges.Rdata")
 library(plyr)
 library(dplyr)
 library(tidyr)
@@ -159,7 +159,16 @@ plotty3+geom_segment(aes(y=alpha2low,yend=alpha2low,x=1960, xend=2015),data=newd
 
 
 save.image(file="hinges.Rdata")
-###STOP HERE FOR NOW--maps below arent usable and other species don't have much data
+
+### are there any clines
+FRAXINUS.DATA<-newdata1
+unique(FRAXINUS.DATA$lat)
+quantile(FRAXINUS.DATA$lat)
+median(FRAXINUS.DATA$lat)
+
+
+
+###STOP HERE FOR NOW--maps below arent usable and other species don't have much data#########################
 ####Fagus model
 fit.fag.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=fag) 
 dat3<-as.data.frame(coef(fit.fag.brms))
