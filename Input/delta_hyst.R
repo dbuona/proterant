@@ -25,13 +25,21 @@ library(ggthemes)
 
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
+### offset functional
+d$offset<-d$l75.jd-d$fopn.jd
+###0ffset physiological
+d$offset2<-d$bb.jd-d$fbb.jd
+###intermediate
+d$offset3<-d$bb.jd-d$fopn.jd
+
+sum<-d%>% group_by(species) %>% summarise(avg.offset = mean(offset,na.rm=TRUE))
+sum2<-d%>% group_by(species) %>% summarise(avg.offset2 = mean(offset2,na.rm=TRUE))
+sum3<-d%>% group_by(species) %>% summarise(avg.offset3 = mean(offset3,na.rm=TRUE))
 
 a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO","FRAM","POTR" ,"QURU" ,"QUVE"))
 
 #unique(hys$species) ##15 hysteranthous species (pro and syn)
-a$offset<-a$l75.jd-a$fopn.jd
-###budburst to 
-a$offset2<-a$bb.jd-a$fopn.jd
+
 
 
 ggplot(a,aes(year,offset))+geom_point()+facet_wrap(~species)
