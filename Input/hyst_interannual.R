@@ -24,15 +24,26 @@ a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO"
 #ggplot(bet,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+theme_base()
 #ggplot(bet,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+facet_wrap(~species)
 
+###Alll Quercus and Fraxinus indivudals for proposal
+QURU<-filter(d,species %in%c("QURU"))
 
-QURU4<-filter(d,tree.id %in%c("FRAM-04"))
-QURU4$budding<-QURU4$fbb.jd-QURU4$bb.jd
-QURU4$bud2<-ifelse(QURU4$budding<0,"hysteranthous","seranthous")
-b<-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fbb.jd), color="red",shape=10, size=1.5)+geom_point(aes(year,bb.jd), color="dark green",shape=1,size=3)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=bud2))+theme_base()+facet_wrap(~tree.id)+theme(legend.position="none")
+QURU$budding<-QURU$fbb.jd-QURU$bb.jd
+QURU<-filter(QURU,tree.id!="QURU-02")
+QURU$bud2<-ifelse(QURU$budding<0,"hysteranthous","seranthous")
+b<-ggplot(QURU,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd), color="red",shape=10, size=1.5)+geom_point(aes(year,bb.jd), color="dark green",shape=1,size=3)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=bud2))+theme_base()+labs(y = "Day of year")+facet_wrap(~tree.id)+theme(legend.position = "FALSE")
 
-QURU4$flobud<-QURU4$fopn.jd-QURU4$bb.jd
-QURU4$bud3<-ifelse(QURU4$flobud<0,"hysteranthous","seranthous")
-c<-ggplot(QURU4,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8, size=2)+geom_point(aes(year,bb.jd), color="dark green",shape=1,size=3)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=bb.jd, linetype=bud3))+theme_base()+facet_wrap(~tree.id)+theme(legend.position="none")
+FRAM<-filter(d,species %in%c("FRAM"))
+
+FRAM$budding<-FRAM$fbb.jd-FRAM$bb.jd
+FRAM$bud2<-ifelse(FRAM$budding<0,"hysteranthous","seranthous")
+bb<-ggplot(FRAM,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd), color="red",shape=10, size=1.5)+geom_point(aes(year,bb.jd), color="dark green",shape=1,size=3)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=bud2))+theme_base()+labs(y = "Day of year")+facet_wrap(~tree.id)+theme(legend.position = "FALSE")
+
+
+
+#### other hysteranth definitions
+QURU$flobud<-QURU$fopn.jd-QURU$bb.jd
+QURU$bud3<-ifelse(QURU$flobud<0,"hysteranthous","seranthous")
+c<-ggplot(QURU,aes(year,fopn.jd))+geom_point(aes(year,fopn.jd), color="red",shape=8, size=2)+geom_point(aes(year,bb.jd), color="dark green",shape=1,size=3)+geom_linerange(aes(x=year,ymin=fopn.jd,ymax=bb.jd, linetype=bud3))+theme_base()+facet_wrap(~tree.id)+theme(legend.position="none")
 
 QURU4$dev<-QURU4$fopn.jd-QURU4$l75.jd
 QURU4$bud5<-ifelse(QURU4$dev<0,"hysteranthous","seranthous")

@@ -14,6 +14,7 @@ library(ggstance)
 library(survival)
 library(sur)
 library(survminer)
+library(ggthemes)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
 
@@ -24,9 +25,9 @@ d<-dplyr::select(d, -X.1)
 d<-dplyr::select(d, -X)
 
 #### make light differsent so variables  appear in order
-d$Light<-ifelse(d$Light=="L","xL","S")
+#d$Light<-ifelse(d$Light=="L","xL","S")
 ###name treatments numeric/continuous
-d$photoperiod<-ifelse(d$Light=="xL",12,8)
+d$photoperiod<-ifelse(d$Light=="L",12,8)
 d$temp_day<-ifelse(d$Force=="W",24,18)
 d$temp_night<-ifelse(d$Force=="W",18,12)
 d$chilldays<-ifelse(d$Chill==0,28,56)
@@ -41,7 +42,7 @@ ggplot(d,aes(flo_day))+geom_density()
 ggplot(d,aes(leaf_day))+geom_density()
 ggplot(d,aes(Lbb_day))+geom_density()
 ggplot(d,aes(Lexpand_day))+geom_density()
-d<-unite(d, treatment, Force,Light, Chill, sep= "_",remove = FALSE)
+d<-unite(d, treatment, Force,Light, Chill, sep= ".",remove = FALSE)
 
 ###Basic plots for each phenophase#############################################
 phased<-gather(d,phase,DOY,8:12)
@@ -61,7 +62,7 @@ ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.
 
 ###leafout and flowering
 bigsp<-filter(leafview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
-ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+ggtitle("leafout vs. flower")+facet_wrap(~GEN.SPA)
+ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+facet_wrap(~GEN.SPA)+labs(y="Day of Experiment")+theme_base()
 
 ###################survival analysis###########Kaplan-Meier########################
 viv<-filter(d,Dead.alive %in% c("A","?"))
@@ -225,11 +226,12 @@ ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom
 ####Full model again leaf out vs. flowering
 
 
-prior3<-get_prior(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase,
+prior3<-get_prior(DOY | cens(surv) ~ phase+photoperiod:phase+chilldays:phase+temp_day:phase,
                   data = hayim2, family = weibull) 
 ###this model is best survivial
 ###do I need main effects for interpretation?
-m2b<- brm(DOY | cens(surv) ~ phase+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
+####do it with continuous variables
+m2b<- brm(DOY | cens(surv) ~ phase+photoperiod:phase+chilldays:phase+temp_day:phase+(1+phase+photoperiod:phase+chilldays:phase+temp_day:phase|GEN.SPA),
           data = hayim2, family = weibull,inits = "0",
           iter= 3000,
           warmup = 2000,
@@ -239,10 +241,11 @@ summary(m2b)
 Q<-as.data.frame(coef(m2b))
 colnames(Q)
 
-R<-dplyr::select(Q,"GEN.SPA.Estimate.phaseleaf_day", "GEN.SPA.Estimate.phaseflo_day.LightxL","GEN.SPA.Estimate.phaseleaf_day.LightxL","GEN.SPA.Estimate.phaseflo_day.Chill","GEN.SPA.Estimate.phaseflo_day.ForceW","GEN.SPA.Estimate.phaseleaf_day.Chill","GEN.SPA.Estimate.phaseleaf_day.ForceW")
+R<-dplyr::select(Q,contains("Estimate"))
 R<-rownames_to_column(R,"GEN.SPA")
 colnames(R)
-colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Force:Flo","Chill:Leaf","Force:Leaf")
+R<-dplyr::select(R,-GEN.SPA.Estimate.Intercept)
+colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
 R<-gather(R,"predictor","effect",2:8)
 ggplot(R, aes(effect,predictor))+geom_point()+geom_vline(aes(xintercept=0,color="red"))+facet_wrap(~GEN.SPA)
 

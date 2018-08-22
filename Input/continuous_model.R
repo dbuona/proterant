@@ -142,7 +142,13 @@ bootmich2<-dplyr::filter(bootmich2, trait!="sigma2")
 bootmich2<-dplyr::filter(bootmich2, trait!="sigma2_error")
 bootmich2<-dplyr::filter(bootmich2, trait!="(Intercept)")
 
-functplot2<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-60,60)+theme_base()
+bootmich2$trait[bootmich2$trait=="tol_cent"]<-"shade tolerance"
+bootmich2$trait[bootmich2$trait=="pol_cent"]<-"pollination syndrome"
+bootmich2$trait[bootmich2$trait=="height_cent"]<-"max height"
+bootmich2$trait[bootmich2$trait=="dev_time_cent"]<-"seed development"
+bootmich2$trait[bootmich2$trait=="flo_cent"]<-"flower timing"
+
+functplot2<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0),color="red")+xlim(-60,60)+theme_bw()
 functplot2
 
 summary(fit)
