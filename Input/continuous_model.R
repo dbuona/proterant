@@ -224,25 +224,99 @@ full.cont<-rbind(bootmich,bootmich2,bootsilvP)
 
 
 pd=position_dodgev(height=0.4)
-contplot.full<-ggplot(full.cont,aes(estimate,trait))+geom_point(size=2.5,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0),color="black")+xlim(-58,60)+theme_bw()+annotate("text", x = 52, y = 5.5, label = "Flowers first",fontface =2)+annotate("text", x = -51, y = 5.5, label = "Leaves first",fontface =2)
-
+contplot.full<-ggplot(full.cont,aes(estimate,trait))+geom_point(size=2.5,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,height=0,aes(xmin=low,xmax=high,color=category))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0),color="black")+xlim(-58,60)+theme_bw()+annotate("text", x = 52, y = 5.5, label = "Flowers first",fontface =2)+annotate("text", x = -51, y = 5.5, label = "Leaves first",fontface =2)
+contplot.full
 ##########now do harvard forest as binary
 final.df$hyst.inter<-ifelse(final.df$avg.offset>0,1,0)
 final.df$hyst.func<-ifelse(final.df$avg.offset.func>0,1,0)
 final.df$hyst.phys<-ifelse(final.df$avg.offset.phys>0,1,0)
 
 ######## binary models
-funct.HF<-phyloglm(hyst.func~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,final.df, HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+funct.HF<-phyloglm(hyst.func~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,final.df, HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                       start.beta=NULL, start.alpha=NULL,
-                      boot=599,full.matrix = TRUE)
+                      boot=10,full.matrix = TRUE)
+summary(funct.HF)
+bootestA<-as.data.frame(funct.HF$coefficients)
+bootconfA<-as.data.frame(funct.HF$bootconfint95)
+bootconfA<-as.data.frame(t(bootconfA))
 
-phys.HF<-phyloglm(hyst.phys~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,final.df, HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+bootestA<-rownames_to_column(bootestA, "trait")
+bootconfA<-rownames_to_column(bootconfA, "trait")
+bootmichA<-full_join(bootconfA,bootestA, by="trait")
+colnames(bootmichA)<-c("trait","low","high","estimate")
+bootmichA<-dplyr::filter(bootmichA, trait!="sigma2")
+bootmichA<-dplyr::filter(bootmichA, trait!="sigma2_error")
+bootmichA<-dplyr::filter(bootmichA, trait!="(Intercept)")
+
+bootmichA$trait[bootmichA$trait=="tol_cent"]<-"shade tolerance"
+bootmichA$trait[bootmichA$trait=="pol_cent"]<-"pollination syndrome"
+bootmichA$trait[bootmichA$trait=="height_cent"]<-"max height"
+bootmichA$trait[bootmichA$trait=="dev_time_cent"]<-"seed development"
+bootmichA$trait[bootmichA$trait=="flo_cent"]<-"flower timing"
+bootmichA$category<-"functional"
+phys.HF<-phyloglm(hyst.phys~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,final.df, HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                    start.beta=NULL, start.alpha=NULL,
-                   boot=599,full.matrix = TRUE)
+                   boot=10,full.matrix = TRUE)
+summary(phys.HF)
+bootestB<-as.data.frame(phys.HF$coefficients)
+bootconfB<-as.data.frame(phys.HF$bootconfint95)
+bootconfB<-as.data.frame(t(bootconfB))
 
-inter.HF<-phyloglm(hyst.phys~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,final.df, HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+bootestB<-rownames_to_column(bootestB, "trait")
+bootconfB<-rownames_to_column(bootconfB, "trait")
+bootmichB<-full_join(bootconfB,bootestB, by="trait")
+colnames(bootmichB)<-c("trait","low","high","estimate")
+bootmichB<-dplyr::filter(bootmichB, trait!="sigma2")
+bootmichB<-dplyr::filter(bootmichB, trait!="sigma2_error")
+bootmichB<-dplyr::filter(bootmichB, trait!="(Intercept)")
+
+bootmichB$trait[bootmichB$trait=="tol_cent"]<-"shade tolerance"
+bootmichB$trait[bootmichB$trait=="pol_cent"]<-"pollination syndrome"
+bootmichB$trait[bootmichB$trait=="height_cent"]<-"max height"
+bootmichB$trait[bootmichB$trait=="dev_time_cent"]<-"seed development"
+bootmichB$trait[bootmichB$trait=="flo_cent"]<-"flower timing"
+bootmichB$category<-"physiological"
+inter.HF<-phyloglm(hyst.inter~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,final.df, HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 4,
                   start.beta=NULL, start.alpha=NULL,
-                  boot=599,full.matrix = TRUE)
+                  boot=10,full.matrix = TRUE) ###THis worked
+summary(inter.HF)
+bootestC<-as.data.frame(inter.HF$coefficients)
+bootconfC<-as.data.frame(inter.HF$bootconfint95)
+bootconfC<-as.data.frame(t(bootconfC))
 
+bootestC<-rownames_to_column(bootestC, "trait")
+bootconfC<-rownames_to_column(bootconfC, "trait")
+bootmichC<-full_join(bootconfC,bootestC, by="trait")
+colnames(bootmichC)<-c("trait","low","high","estimate")
+bootmichC<-dplyr::filter(bootmichC, trait!="sigma2")
+bootmichC<-dplyr::filter(bootmichC, trait!="sigma2_error")
+bootmichC<-dplyr::filter(bootmichC, trait!="(Intercept)")
 
+bootmichC$trait[bootmichC$trait=="tol_cent"]<-"shade tolerance"
+bootmichC$trait[bootmichC$trait=="pol_cent"]<-"pollination syndrome"
+bootmichC$trait[bootmichC$trait=="height_cent"]<-"max height"
+bootmichC$trait[bootmichC$trait=="dev_time_cent"]<-"seed development"
+bootmichC$trait[bootmichC$trait=="flo_cent"]<-"flower timing"
+bootmichC$category<-"intermediate"
+HF.bin<-rbind(bootmichA,bootmichB,bootmichC)
+HF.bin<-filter(HF.bin, trait!="alpha")
 
+HF.bin$low<-ifelse(HF.bin$trait==c("flower timing"),-(HF.bin$low),HF.bin$low)
+HF.bin$high<-ifelse(HF.bin$trait==c("flower timing"),-(HF.bin$high),HF.bin$high)
+HF.bin$estimate<-ifelse(HF.bin$trait==c("flower timing"),-(HF.bin$estimate),HF.bin$estimate)
+
+HF.bin$trait[HF.bin$trait=="flower timing"]<-"earlier flowering"
+HF.bin$trait[HF.bin$trait=="seed development"]<-"seed development period"
+
+pd=position_dodgev(height=0.4)
+binplot.full<-ggplot(HF.bin,aes(estimate,trait))+geom_point(size=2.5,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,height=0,aes(xmin=low,xmax=high,color=category))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0),color="black")+xlim(-5,5.5)+theme_bw()+annotate("text", x = 5, y = 5.5, label = "Flowers first",fontface =2)+annotate("text", x = -4.2, y = 5.5, label = "Leaves first",fontface =2)
+binplot.full
+
+library(gridExtra)
+grid.arrange(binplot.full,contplot.full, ncol=2)
+
+save.image(file="contmodels.RData")
+?phyloglm()
+phys<-binaryPGLMM(hyst.phys~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,data=final.df,HF.tree) 
+inter<-binaryPGLMM(hyst.inter~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,data=final.df,HF.tree)
+func<-binaryPGLMM(hyst.func~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,data=final.df,HF.tree)

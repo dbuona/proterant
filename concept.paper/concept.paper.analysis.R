@@ -100,25 +100,25 @@ z.funct.seed<-phyloglm(pro2~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent
 
 summary(z.funct.seed)
 
-bootest2<-as.data.frame(z.funct.seed$coefficients)
-bootconf2<-as.data.frame(z.funct.seed$bootconfint95)
-bootconf2<-as.data.frame(t(bootconf2))
+bootestZ<-as.data.frame(z.funct.seed$coefficients)
+bootconfZ<-as.data.frame(z.funct.seed$bootconfint95)
+bootconfZ<-as.data.frame(t(bootconfZ))
 
-bootest2<-rownames_to_column(bootest2, "trait")
-bootconf2<-rownames_to_column(bootconf2, "trait")
-bootmich2<-full_join(bootconf2,bootest2, by="trait")
-colnames(bootmich2)<-c("trait","low","high","estimate")
-bootmich2<-dplyr::filter(bootmich2, trait!="alpha")
-bootmich2<-dplyr::filter(bootmich2, trait!="(Intercept)")
+bootestZ<-rownames_to_column(bootestZ, "trait")
+bootconfZ<-rownames_to_column(bootconfZ, "trait")
+bootmichZ<-full_join(bootconfZ,bootestZ, by="trait")
+colnames(bootmichZ)<-c("trait","low","high","estimate")
+bootmichZ<-dplyr::filter(bootmichZ, trait!="alpha")
+bootmichZ<-dplyr::filter(bootmichZ, trait!="(Intercept)")
 ###names
-bootmich2$trait[bootmich2$trait=="tol_cent"]<-"shade tolerance"
-bootmich2$trait[bootmich2$trait=="pol_cent"]<-"pollination syndrome"
-bootmich2$trait[bootmich2$trait=="height_cent"]<-"max height"
-bootmich2$trait[bootmich2$trait=="dev_time_cent"]<-"seed development"
-bootmich2$trait[bootmich2$trait=="flo_cent"]<-"flower timing"
-bootmich2$class<-"functional-MTSV"
+bootmichZ$trait[bootmichZ$trait=="tol_cent"]<-"shade tolerance"
+bootmichZ$trait[bootmichZ$trait=="pol_cent"]<-"pollination syndrome"
+bootmichZ$trait[bootmichZ$trait=="height_cent"]<-"max height"
+bootmichZ$trait[bootmichZ$trait=="dev_time_cent"]<-"seed development"
+bootmichZ$trait[bootmichZ$trait=="flo_cent"]<-"flower timing"
+bootmichZ$class<-"functional-MTSV"
 
-functplot1<-ggplot(bootmich2,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
+functplot1<-ggplot(bootmichZ,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
 functplot1
 
 ####interactions
@@ -156,24 +156,24 @@ z.phys.seed<-phyloglm(pro3~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,
                          boot=599,full.matrix = TRUE)
 summary(z.phys.seed)
 
-bootest3<-as.data.frame(z.phys.seed$coefficients)
-bootconf3<-as.data.frame(z.phys.seed$bootconfint95)
-bootconf3<-as.data.frame(t(bootconf3))
+bootestY<-as.data.frame(z.phys.seed$coefficients)
+bootconfY<-as.data.frame(z.phys.seed$bootconfint95)
+bootconfY<-as.data.frame(t(bootconfY))
 
 
-bootest3<-rownames_to_column(bootest3, "trait")
-bootconf3<-rownames_to_column(bootconf3, "trait")
-bootmich3<-full_join(bootconf3,bootest3, by="trait")
-colnames(bootmich3)<-c("trait","low","high","estimate")
-bootmich3<-dplyr::filter(bootmich3, trait!="alpha")
-bootmich3<-dplyr::filter(bootmich3, trait!="(Intercept)")
+bootestY<-rownames_to_column(bootestY, "trait")
+bootconfY<-rownames_to_column(bootconfY, "trait")
+bootmichY<-full_join(bootconfY,bootestY, by="trait")
+colnames(bootmichY)<-c("trait","low","high","estimate")
+bootmichY<-dplyr::filter(bootmichY, trait!="alpha")
+bootmichY<-dplyr::filter(bootmichY, trait!="(Intercept)")
 ###names
-bootmich3$trait[bootmich3$trait=="tol_cent"]<-"shade tolerance"
-bootmich3$trait[bootmich3$trait=="pol_cent"]<-"pollination syndrome"
-bootmich3$trait[bootmich3$trait=="height_cent"]<-"max height"
-bootmich3$trait[bootmich3$trait=="dev_time_cent"]<-"seed development"
-bootmich3$trait[bootmich3$trait=="flo_cent"]<-"flower timing"
-bootmich3$class<-"physiological-MTSV"
+bootmichY$trait[bootmichY$trait=="tol_cent"]<-"shade tolerance"
+bootmichY$trait[bootmichY$trait=="pol_cent"]<-"pollination syndrome"
+bootmichY$trait[bootmichY$trait=="height_cent"]<-"max height"
+bootmichY$trait[bootmichY$trait=="dev_time_cent"]<-"seed development"
+bootmichY$trait[bootmichY$trait=="flo_cent"]<-"flower timing"
+bootmichY$class<-"physiological-MTSV"
 ######### intermediate
 z.inter.seed<-phyloglm(pro~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                       start.beta=NULL, start.alpha=NULL,
@@ -197,7 +197,12 @@ bootmichX$trait[bootmichX$trait=="pol_cent"]<-"pollination syndrome"
 bootmichX$trait[bootmichX$trait=="height_cent"]<-"max height"
 bootmichX$trait[bootmichX$trait=="dev_time_cent"]<-"seed development"
 bootmichX$trait[bootmichX$trait=="flo_cent"]<-"flower timing"
-bootmichX$class<-"physiological-MTSV"
+bootmichX$class<-"intermidiate-MTSV"
+
+michcomp<-rbind(bootmichX,bootmichY,bootmichZ)
+library(ggstance)
+pd=position_dodgev(height=0.25)
+ggplot(michcomp,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
 
 
 ################
@@ -340,12 +345,40 @@ bootsilvP$trait[bootsilvP$trait=="dev_time_cent"]<-"seed development"
 bootsilvP$trait[bootsilvP$trait=="flo_cent"]<-"flower timing"
 bootsilvP$class<-"physiological-Silvics"
 
+
+z.inter.silv<-phyloglm(pro~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                      start.beta=NULL, start.alpha=NULL,
+                      boot=599,full.matrix = TRUE)
+
+bootestSI<-as.data.frame(z.inter.silv$coefficients)
+bootconfSI<-as.data.frame(z.inter.silv$bootconfint95)
+bootconfSI<-as.data.frame(t(bootconfSI))
+
+
+bootestSI<-rownames_to_column(bootestSI, "trait")
+bootconfSI<-rownames_to_column(bootconfSI, "trait")
+bootsilvI<-full_join(bootconfSI,bootestSI, by="trait")
+colnames(bootsilvI)<-c("trait","low","high","estimate")
+bootsilvI<-dplyr::filter(bootsilvI, trait!="alpha")
+bootsilvI<-dplyr::filter(bootsilvI, trait!="(Intercept)")
+###names
+bootsilvI$trait[bootsilvI$trait=="tol_cent"]<-"shade tolerance"
+bootsilvI$trait[bootsilvI$trait=="pol_cent"]<-"pollination syndrome"
+bootsilvI$trait[bootsilvI$trait=="height_cent"]<-"max height"
+bootsilvI$trait[bootsilvI$trait=="dev_time_cent"]<-"seed development"
+bootsilvI$trait[bootsilvI$trait=="flo_cent"]<-"flower timing"
+bootsilvI$class<-"intermidiate-Silvics"
+
+
+
 bootdatasilv<-rbind(bootsilvF,bootsilvP)
+bootdatasilv<-rbind(bootdatasilv,bootsilvI)
+
 pd=position_dodgev(height=0.25)
 
 ggplot(bootdatasilv,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
 
-fullcomp<-rbind(bootdata.nointer,bootdatasilv)
+fullcomp<-rbind(michcomp,bootdatasilv)
 
 fullcomp$low<-ifelse(fullcomp$trait==c("flower timing"),-(fullcomp$low),fullcomp$low)
 fullcomp$high<-ifelse(fullcomp$trait==c("flower timing"),-(fullcomp$high),fullcomp$high)
@@ -358,14 +391,16 @@ fullcomp$category[which(fullcomp$class=="physiological-Silvics")] <- "physiologi
 fullcomp$category[which(fullcomp$class=="physiological-MTSV")] <- "physiological"
 fullcomp$category[which(fullcomp$class=="functional-Silvics")] <- "functional"
 fullcomp$category[which(fullcomp$class=="functional-MTSV")] <- "functional"
+fullcomp$category[which(fullcomp$class=="intermidiate-MTSV")] <- "intermediate"
+fullcomp$category[which(fullcomp$class=="intermidiate-Silvics")] <- "intermediate"
 
 fullcomp$data<-NA
 fullcomp$data[which(fullcomp$class=="physiological-Silvics")] <- "USFS"
 fullcomp$data[which(fullcomp$class=="physiological-MTSV")] <- "MTSV"
 fullcomp$data[which(fullcomp$class=="functional-Silvics")] <- "USFS"
 fullcomp$data[which(fullcomp$class=="functional-MTSV")] <- "MTSV"
-
-
+fullcomp$data[which(fullcomp$class=="intermidiate-MTSV")] <- "MTSV"
+fullcomp$data[which(fullcomp$class=="intermidiate-Silvics")] <- "USFS"
 
 
 ###now express traits more positively
