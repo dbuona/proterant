@@ -21,7 +21,7 @@ library(car)
 
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
-load("hystmodels.RData")
+load(file="contmodels.RData")
 ##read in harvard forest
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
@@ -313,7 +313,7 @@ binplot.full<-ggplot(HF.bin,aes(estimate,trait))+geom_point(size=2.5,aes(color=c
 binplot.full
 
 library(gridExtra)
-grid.arrange(binplot.full,contplot.full, ncol=2)
+product.plot<-grid.arrange(binplot.full,contplot.full, ncol=2)
 
 save.image(file="contmodels.RData")
 ?phyloglm()
