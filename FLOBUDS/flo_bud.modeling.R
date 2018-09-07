@@ -1,4 +1,4 @@
-
+##This is DAn's main analysis. 2018
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -15,6 +15,7 @@ library(survival)
 library(sur)
 library(survminer)
 library(ggthemes)
+library("Hmisc")
 
 setwd("~/Documents/git/proterant/FLOBUDS")
 
@@ -42,9 +43,10 @@ ggplot(d,aes(flo_day))+geom_density()
 ggplot(d,aes(leaf_day))+geom_density()
 ggplot(d,aes(Lbb_day))+geom_density()
 ggplot(d,aes(Lexpand_day))+geom_density()
-d<-unite(d, treatment, Force,Light, Chill, sep= ".",remove = FALSE)
+d<-unite(d, treatment, Force,Light, Chill, sep= "",remove = FALSE)
 
 ###Basic plots for each phenophase#############################################
+
 phased<-gather(d,phase,DOY,8:12)
 
 bbview<-filter(phased, phase %in% c("Lbb_day","flo_day"))
@@ -52,17 +54,24 @@ expview<-filter(phased, phase %in% c("Lexpand_day","flo_day"))
 leafview<-filter(phased, phase %in% c("leaf_day","flo_day"))
 
 
-##filter to species that have goodish flowering and BB
-bigsp<-filter(bbview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
-ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+ggtitle("budburst vs. flower")+facet_wrap(~GEN.SPA)
-
-###expansion and flowering
-bigsp<-filter(expview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
-ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+ggtitle("expansion vs. flower")+facet_wrap(~GEN.SPA)
 
 ###leafout and flowering
-bigsp<-filter(leafview, GEN.SPA %in% c("ACE.PEN", "COM.PER","COR.COR","ILE.MUC", "PRU.PEN","VAC.COR"))
-ggplot(bigsp,aes(treatment,as.numeric(DOY)))+geom_point(aes(color=phase),size=0.5)+stat_summary(fun.data = "mean_cl_boot",aes(color=phase))+facet_wrap(~GEN.SPA)+labs(y="Day of Experiment")+theme_base()
+bigsp<-filter(leafview, !GEN.SPA %in% c("AME.SPP","BET.SPP"))
+unique(bigsp$GEN.SPA)
+
+library(ggstance)
+pd=position_dodge(0.1)
+bigsp$phase[bigsp$phase=="flo_day"]<-"flower"
+bigsp$phase[bigsp$phase=="leaf_day"]<-"leaf"             
+bigsp$Light[bigsp$Light=="L"]<-"long photoperiod"
+bigsp$Light[bigsp$Light=="S"]<-"short photoperiod"
+bigsp$Chill[bigsp$Chill=="0"]<-"short chilling"
+bigsp$Chill[bigsp$Chill=="1"]<-"long chilling"
+bigsp$Force[bigsp$Force=="C"]<-"low forcing"
+bigsp$Force[bigsp$Force=="W"]<-"high forcing"
+             
+p<-ggplot(bigsp,aes(GEN.SPA,as.numeric(DOY)))+geom_point(aes(shape=phase,color=phase),size=0.8)+ylab("days to event")+xlab("species")+stat_summary(fun.data = "mean_cl_boot",aes(shape=phase,color=phase),position=pd)+facet_grid(Force~Light~Chill)+theme_bw()
+p+theme(axis.text.x = element_text(size=8,angle = 300, hjust = 0))
 
 ###################survival analysis###########Kaplan-Meier########################
 viv<-filter(d,Dead.alive %in% c("A","?"))
