@@ -288,6 +288,8 @@ silv.data$dev_time_cent<-(silv.data$dev.time-mean(silv.data$dev.time))/(2*sd(sil
        
 #####phylogenetic signals
 e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+PhyloSilv<-phylo.d(e,binvar=pro)
+PhyloSilv
 PhyloSilv2<-phylo.d(e,binvar=pro2)
 PhyloSilv2
 
