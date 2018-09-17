@@ -18,7 +18,7 @@ library(ggthemes)
 library("Hmisc")
 
 setwd("~/Documents/git/proterant/FLOBUDS")
-#load("flobud_mods.RData")
+load("flobud_mods.RData")
 d<-read.csv("first.event.dat.csv",header=TRUE)
 ###get rid of useless colummns
 colnames(d)
@@ -26,7 +26,7 @@ d<-dplyr::select(d, -X.1)
 d<-dplyr::select(d, -X)
 
 #### make light differsent so variables  appear in order
-#d$Light<-ifelse(d$Light=="L","xL","S")
+#d$Light<-ifelse(d$Light=="L","XL","S")
 ###name treatments numeric/continuous
 d$photoperiod<-ifelse(d$Light=="L",12,8)
 d$temp_day<-ifelse(d$Force=="W",24,18)
@@ -63,7 +63,7 @@ library(ggstance)
 pd=position_dodge(0.1)
 bigsp$phase[bigsp$phase=="flo_day"]<-"flower"
 bigsp$phase[bigsp$phase=="leaf_day"]<-"leaf"             
-bigsp$Light[bigsp$Light=="L"]<-"long photoperiod"
+bigsp$Light[bigsp$Light=="XL"]<-"long photoperiod"
 bigsp$Light[bigsp$Light=="S"]<-"short photoperiod"
 bigsp$Chill[bigsp$Chill=="0"]<-"short chilling"
 bigsp$Chill[bigsp$Chill=="1"]<-"long chilling"
@@ -71,7 +71,7 @@ bigsp$Force[bigsp$Force=="C"]<-"low forcing"
 bigsp$Force[bigsp$Force=="W"]<-"high forcing"
              
 p<-ggplot(bigsp,aes(GEN.SPA,as.numeric(DOY)))+geom_point(aes(shape=phase,color=phase),size=0.8)+ylab("days to event")+xlab("species")+stat_summary(fun.data = "mean_cl_boot",aes(shape=phase,color=phase),position=pd)+facet_grid(Force~Light~Chill)+theme_bw()
-p+theme(axis.text.x = element_text(size=8,angle = 300, hjust = 0))
+pp<-p+theme(axis.text.x = element_text(size=8,angle = 300, hjust = 0))
 
 ###################survival analysis###########Kaplan-Meier########################
 viv<-filter(d,Dead.alive %in% c("A","?"))
@@ -189,7 +189,7 @@ colnames(Q)
 R<-dplyr::select(Q,contains("Estimate"))
 R<-rownames_to_column(R,"GEN.SPA")
 colnames(R)
-R<-select(R,-GEN.SPA.Estimate.Intercept)
+R<-dplyr::select(R,-GEN.SPA.Estimate.Intercept)
 colnames(R)<-c("GEN.SPA","Phase","Light:Flo","Light:Leaf","Chill:Flo","Chill:Leaf","Force:Flo","Force:Leaf")
 
 R<-gather(R,"predictor","effect",2:8)
@@ -231,7 +231,9 @@ ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_
 
 Z2<-filter(Z, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
 
-ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Leaf out and Flowering")+facet_wrap(~GEN.SPA)+theme_bw()+theme(legend.position="none")
+M1bplot<-ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+facet_wrap(~GEN.SPA)+theme_bw()+theme(legend.position="none")
+
+gridExtra::grid.arrange(pp,M1bplot,ncol=2)
 
 ##########binary flower leaf or no model on suggestion of Lizzie
 
