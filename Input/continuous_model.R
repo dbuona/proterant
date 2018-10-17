@@ -149,8 +149,13 @@ bootmich$category<-"intermediate"
 
 contplot<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5,aes(shape=data,color=category))+geom_segment(aes(y=trait,yend=trait,x=low,xend=high,color=category))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0),color="black")+xlim(-58,60)+theme_bw()+annotate("text", x = 52, y = 5.5, label = "Flowers first",fontface =2)+annotate("text", x = -51, y = 5.5, label = "Leaves first",fontface =2)
 contplot
-
-
+library("sme")
+AIC(fit2)
+AIC(fit2.func)
+AIC(fit2.physi)
+AIC(funct.HF)
+AIC(phys.HF)
+AIC(inter.HF)
 #####other form of hysteranthy: physiological
 fit2.func <- phylolm(avg.offset.func~pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent,data=final.df,phy=HF.tree,model="BM",measurement_error=TRUE,boot=599)
 summary(fit2.func)
