@@ -105,13 +105,18 @@ hayim2<-filter(hayim,floposs==1)
 
 
 
-#######try a model with just vaccor
-VACO<-filter(hayim2,GEN.SPA=="VAC.COR")
+#######try a model with just COMPER
+VACO<-filter(hayim2,GEN.SPA=="COM.PER")
 
-brm(DOY | cens(surv) ~ phase+photoperiod+chilldays+temp_day+photoperiod:phase+chilldays:phase+temp_day:phase,
+VAC1<-brm(DOY | cens(surv) ~ phase+photoperiod+chilldays+temp_day+photoperiod:phase+chilldays:phase+temp_day:phase,
     data = VACO, family = weibull,inits = "0",
     iter= 3000,
     warmup = 2000) 
+ summary(VAC1)
+launch_shinystan(VAC1)
+
+
+
 
 
 
