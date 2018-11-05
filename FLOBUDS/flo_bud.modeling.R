@@ -102,6 +102,21 @@ hayim$floposs<-ifelse(hayim$Flo.poss.=="N",0,1)
 ###This is only twigs where we deemed flowering to even bee possible
 hayim2<-filter(hayim,floposs==1)
 
+
+
+
+#######try a model with just vaccor
+VACO<-filter(hayim2,GEN.SPA=="VAC.COR")
+
+brm(DOY | cens(surv) ~ phase+photoperiod+chilldays+temp_day+photoperiod:phase+chilldays:phase+temp_day:phase,
+    data = VACO, family = weibull,inits = "0",
+    iter= 3000,
+    warmup = 2000) 
+
+
+
+
+
 ####ofset analysis
 offset1<-spread(vivo2,phase,DOY)
 offset1$offset<-offset1$Lbb_day-offset1$flo_day
@@ -444,6 +459,16 @@ plotA<-ggplot(out2,aes(effect,predictors))+geom_point(aes(color=phase),position=
 
 
 save.image(file="flobud_mods.RData")
+
+
+
+####try it with one species
+COPE<- filter()
+
+
+
+
+
 
 ######################
 hayim2$bin<-ifelse(hayim2$DOY==120,0,1)
