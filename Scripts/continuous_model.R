@@ -8,7 +8,7 @@ library("phytools")
 library("geiger")
 library("gbm")
 library("pez")
-
+library(broom)
 library(caper)
 library(picante)
 library("tidyverse")
@@ -63,6 +63,11 @@ cont<-filter(cont,!is.na(offset))
 cont<-filter(cont,!is.na(name))
 unique(cont$name)
 setdiff(cont$name,d$name)
+###Binary
+cont$hyst<-ifelse(cont$offset>0,1,0)
+cont$hyst2<-ifelse(cont$offset2>0,1,0)
+cont$hyst3<-ifelse(cont$offset2>0,1,0)
+
 
 names.intree<-mich.tree$tip.label
 
@@ -74,6 +79,75 @@ setdiff(d$name,namelist)
 to.prune<-which(!names.intree%in%namelist)
 HF.tree<-drop.tip(mich.tree,to.prune)
 
+####
+
+inv.phylo <- MCMCglmm::inverseA(HF.tree, nodes = "TIPS", scale = TRUE)
+A <- solve(inv.phylo$Ainv)
+rownames(A) <- rownames(inv.phylo$Ainv)
+
+
+###bayesian and continuous-- main model###############
+library(brms)
+modelcont <- brm(offset~ pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent +(1|name), data = cont, 
+                 family = gaussian, cov_ranef = list(name= A) ,iter=5000)                
+summary(modelcont)
+
+modelcont2 <- brm(offset2~ pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent +(1|name), data = cont, 
+                 family = gaussian, cov_ranef = list(name= A) ,iter=5000)                
+summary(modelcont2)
+
+modelcont3 <- brm(offset3~ pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent +(1|name), data = cont, 
+                  family = gaussian, cov_ranef = list(name= A) ,iter=5000)                
+summary(modelcont3)
+
+modelbin<-brm(hyst~ pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent +(1|name), data = cont, 
+              family = bernoulli(link="logit"), cov_ranef = list(name= A) ,iter=5000) 
+
+modelbin2<-brm(hyst2~ pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent +(1|name), data = cont, 
+              family = bernoulli(link="logit"), cov_ranef = list(name= A) ,iter=5000) 
+
+modelbin3<-brm(hyst3~ pol_cent+height_cent+flo_cent+dev_time_cent+tol_cent +(1|name), data = cont, 
+              family = bernoulli(link="logit"), cov_ranef = list(name= A) ,iter=5000) 
+
+A<-as.data.frame(tidy(modelcont,robust = TRUE))
+A<-A %>% "["(.,2:6,)
+A$class<-"functional"
+  
+B<-as.data.frame(tidy(modelcont2,robust = TRUE))
+B<-B %>% "["(.,2:6,)
+B$class<-"intermediate"
+
+
+C<-as.data.frame(tidy(modelcont3,robust = TRUE))
+C<-C %>% "["(.,2:6,)
+C$class<-"physiological"
+
+AA<-as.data.frame(tidy(modelbin,robust = TRUE))
+AA<-AA %>% "["(.,2:6,)
+AA$class<-"functional"
+
+BB<-as.data.frame(tidy(modelbin2,robust = TRUE))
+BB<-BB %>% "["(.,2:6,)
+BB$class<-"intermediate"
+
+CC<-as.data.frame(tidy(modelbin3,robust = TRUE))
+CC<-CC %>% "["(.,2:6,)
+CC$class<-"physiological"
+
+D<-rbind(A,B,C)
+DD<-rbind(AA,BB,CC)
+library(ggstance)
+pd=position_dodgev(height=0.3)
+ggplot(D,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="blue")
+
+ggplot(DD,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="blue")
+
+
+
+
+
+
+######go here to run the model in phylglm
 sum1 <-cont %>% group_by(name) %>% summarise(avg.offset = mean(offset3,na.rm=TRUE)) 
 sum2 <-cont %>% group_by(name) %>% summarise(avg.offset.phys = mean(offset2,na.rm=TRUE))
 sum3 <-cont %>% group_by(name) %>% summarise(avg.offset.func = mean(offset,na.rm=TRUE))
