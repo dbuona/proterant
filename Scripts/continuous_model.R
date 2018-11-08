@@ -21,7 +21,7 @@ library(car)
 
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
-load(file="contmodels.RData")
+#load(file="contmodels.RData")
 ##read in harvard forest
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
