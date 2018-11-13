@@ -1,28 +1,11 @@
-rm(list=ls()) 
-options(stringsAsFactors = FALSE)
-graphics.off()
-setwd("~/Documents/git/proterant/input")
-library("ape")
-library("phytools")
-library("geiger")
-library("gbm")
-library("pez")
-library(broom)
-library(caper)
-library(picante)
-library("tidyverse")
-library(boot)
-library("phylolm")
-library("ggplot2")
-library(arm)
-library("randomForest")
-library(car)
+
 
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
 
+
 ##read in harvard forest
-d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
+d<-read.csv("Input/hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
 ### offset functional
 d$offset.funct<-d$l75.jd-d$fopn.jd
@@ -32,12 +15,13 @@ d$offset.inter<-d$bb.jd-d$fbb.jd
 d$offset.phys<-d$bb.jd-d$fopn.jd
 
 ####code offset as binary
-d$hyst.funct<-ifelse(d$offset.funt>0,1,0)
+
+d$hyst.funct<-ifelse(d$offset.funct>0,1,0)
 d$hyst.inter<-ifelse(d$offset.inter>0,1,0)
 d$hyst.phys<-ifelse(d$offset.phys>0,1,0)
 
 ### This file is for prepping USDA traits for merging with hf
-traits<-read.csv("HF.species.trait.data.csv",header=TRUE)
+traits<-read.csv("Input/HF.species.trait.data.csv",header=TRUE)
 
 ###make things numeric
 traits$pol<-ifelse(traits$pollination=="insect",0,1)
@@ -55,7 +39,7 @@ traits$cent_flo_view<-(traits$flo_view-mean(traits$flo_view))/(2*sd(traits$flo_v
 traits$seed_cent<-(traits$seed_pound-mean(traits$seed_pound,na.rm=TRUE))/(2*sd(traits$seed_pound,na.rm=TRUE))
 
 ###prep the tree
-treee<-read.tree("Vascular_Plants_rooted.dated.tre")
+treee<-read.tree("Input/Vascular_Plants_rooted.dated.tre")
 names.intree<-treee$tip.label
 namelist<-unique(traits$name)
 
@@ -79,3 +63,5 @@ namelist<-df$name
 namelist==mytree.names
 df$name== mytree.names
 #### cool
+HF.tree.pruned$node.label<-NULL
+
