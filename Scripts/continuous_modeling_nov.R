@@ -2,38 +2,28 @@ rm(list=ls())
 options(stringsAsFactors = FALSE)
 graphics.off()
 setwd("~/Documents/git/proterant")
-library("ape")
 library("phytools")
-library("geiger")
-library("gbm")
-library("pez")
 library(broom)
-library(caper)
-library(picante)
-library("tidyverse")
+library(dplyr)
+library(tidyr)
 library(boot)
-library("phylolm")
 library("ggplot2")
-library(arm)
-library("randomForest")
 library(car)
 library(lme4)
+library(rlang)
 source("Scripts/continuous_mod_prep.R")
 ###individuals with more than 10 observations
-checker1<-d %>% group_by(tree.id) %>% summarise(non_na_count = sum(!is.na(offset.funct)))
-checker1<-filter(checker1, non_na_count>=10)
-table(checker1$tree.id)
-use.id<-checker1$tree.id
-d.plus<-filter(d, tree.id %in% use.id)
+
+
 
 ##species to use
 ###ACRU, QURU, ACPE, most complete observations, each hysteranthy class
 
 ###species with more than 45 total boservations
 use.sp<-c("ACPE","ACRU","QURU")
-#"KALA","BEAL","AMSP","VACO
 
-d.plus<-filter(d.plus, species %in% use.sp)
+
+d.plus<-filter(d, species %in% use.sp)
 
 jpeg("../figure/individual_HF_var.jpg")
 ggplot(d.plus)+stat_summary(fun.data = "mean_cl_boot",geom="errorbar",aes(tree.id, offset.phys,color=species),linetype="solid")+stat_summary(fun.data = "mean_cl_boot", geom = "errorbar",aes(tree.id,offset.funct,color=species),linetype="dashed")+stat_summary(fun.data = "mean_cl_boot", geom = "errorbar",aes(tree.id,offset.inter,color=species),linetype="dotdash")+theme_bw()+scale_color_manual(values=c("darkgreen","red","blue"))+ylab("FLS offset")+xlab("tree ID")
@@ -107,32 +97,59 @@ rownames(A) <- rownames(inv.phylo$Ainv)
 
 ###bayesian and continuous-- main model###############
 ###all measurements of flowering time swamp all other predictors
-modelcont.funct <- brm(offset.funct~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_month +(1|name), data = dater, 
+modelcont.funct <- brm(offset.funct~ cent_pol+seed_cent+cent_minP+cent_flo_month +(1|name), data = dater, 
                  family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
-modelcont.phys <- brm(offset.phys~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_month+(1|name), data = dater, 
+modelcont.phys <- brm(offset.phys~ cent_pol+seed_cent+cent_minP+cent_flo_month+(1|name), data = dater, 
                  family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
-modelcont.inter <- brm(offset.inter~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_month+(1|name), data = dater, 
+modelcont.inter <- brm(offset.inter~ cent_pol+seed_cent+cent_minP+cent_flo_month+(1|name), data = dater, 
                       family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
-A<-as.data.frame(tidy(modelcont,robust = TRUE))
-A<-A %>% "["(.,2:6,)
-A$class<-"functional"
+Aa<-as.data.frame(tidy(modelcont.funct,robust = TRUE))
+Aa<-Aa %>% "["(.,2:5,)
+Aa$class<-"functional"
 
-B<-as.data.frame(tidy(modelcont.inter,robust = TRUE))
-B<-B %>% "["(.,2:6,)
-B$class<-"intermediate"
+Bb<-as.data.frame(tidy(modelcont.inter,robust = TRUE))
+Bb<-Bb %>% "["(.,2:5,)
+Bb$class<-"intermediate"
 
 
-C<-as.data.frame(tidy(modelcont.phys,robust = TRUE))
-C<-C %>% "["(.,2:6,)
-C$class<-"physiological"
-D<-rbind(A,B,C)
+Cc<-as.data.frame(tidy(modelcont.phys,robust = TRUE))
+Cc<-Cc %>% "["(.,2:5,)
+Cc$class<-"physiological"
+Dd<-rbind(Aa,Bb,Cc)
 
 library(ggstance)
 pd=position_dodgev(height=0.3)
-ggplot(D,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="black")
+ggplot(Dd,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="black")
+
+
+modelbin.funct <- brm(hyst.funct~ cent_pol+seed_cent+cent_minP+cent_flo_month +(1|name), data = dater, 
+                       family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
+
+modelbin.phys <- brm(hyst.phys~ cent_pol+seed_cent+cent_minP+cent_flo_month+(1|name), data = dater, 
+                      family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
+
+modelbin.inter <- brm(hyst.inter~ cent_pol+seed_cent+cent_minP+cent_flo_month+(1|name), data = dater, 
+                       family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000)
+
+
+aA<-as.data.frame(tidy(modelbin.funct,robust = TRUE))
+aA<-aA %>% "["(.,2:5,)
+aA$class<-"functional"
+
+bB<-as.data.frame(tidy(modelbin.inter,robust = TRUE))
+bB<-bB %>% "["(.,2:5,)
+bB$class<-"intermediate"
+
+
+cC<-as.data.frame(tidy(modelbin.phys,robust = TRUE))
+cC<-cC %>% "["(.,2:5,)
+cC$class<-"physiological"
+dD<-rbind(aA,bB,cC)
+
+ggplot(dD,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="black")
 ######## Do models again without flowering time
 colnames(dater)
 modelcont.funct.1 <- brm(offset.funct~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_view+(1|name), data = dater, 
@@ -140,29 +157,103 @@ modelcont.funct.1 <- brm(offset.funct~ cent_pol+seed_cent+cent_minP+cent_minT+ce
 
 summary(modelcont.funct.1)
 
-modelcont.phys.1 <- brm(offset.phys~ cent_pol+(1|name), data = dater, 
+modelcont.phys.1 <- brm(offset.phys~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_view+(1|name), data = dater, 
 family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
 summary(modelcont.phys.1)
 
-modelcont.inter.1 <- brm(offset.inter~ cent_pol+seed_cent+cent_minP+cent_minT+cent_frost+cent_roots +(1|name), data = dater, 
+modelcont.inter.1 <- brm(offset.inter~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_view +(1|name), data = dater, 
                        family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
-coef(modelcont.funct.1)
+coef(modelcont.inter.1)
 A<-as.data.frame(tidy(modelcont.funct.1,robust = TRUE))
-A<-A %>% "["(.,2:7,)
+A<-A %>% "["(.,2:6,)
 A$class<-"functional"
 
 B<-as.data.frame(tidy(modelcont.inter.1,robust = TRUE))
-B<-B %>% "["(.,2:7,)
+B<-B %>% "["(.,2:6,)
 B$class<-"intermediate"
 
 
 C<-as.data.frame(tidy(modelcont.phys.1,robust = TRUE))
-C<-C %>% "["(.,2:7,)
+C<-C %>% "["(.,2:6,)
 C$class<-"physiological"
 D<-rbind(A,B,C)
 
 library(ggstance)
 pd=position_dodgev(height=0.3)
+
+pdf("../figure/continuous_1.pdf")
 ggplot(D,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="black")
+dev.off()
+
+colnames(dater)
+
+modelbin.funct.1 <- brm(hyst.funct~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_view+(1|name), data = dater, 
+                         family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
+
+summary(modelbin.funct.1)
+
+modelbin.inter.1 <- brm(hyst.inter~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_view+(1|name), data = dater, 
+                        family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
+
+modelbin.phys.1 <- brm(hyst.phys~ cent_pol+seed_cent+cent_minP+cent_minT+cent_flo_view+(1|name), data = dater, 
+                        family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000)
+
+AA<-as.data.frame(tidy(modelbin.funct.1,robust = TRUE))
+AA<-AA %>% "["(.,2:6,)
+AA$class<-"functional"
+
+BB<-as.data.frame(tidy(modelbin.inter.1,robust = TRUE))
+BB<-BB %>% "["(.,2:6,)
+BB$class<-"intermediate"
+
+
+CC<-as.data.frame(tidy(modelbin.phys.1,robust = TRUE))
+CC<-CC %>% "["(.,2:6,)
+CC$class<-"physiological"
+DD<-rbind(AA,BB,CC)
+
+jpeg("../figure/binary_1.jpg")
+ggplot(DD,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="black")
+dev.off()
+
+######interactions dont really need them
+inv.phylo <- MCMCglmm::inverseA(HF.tree.pruned, nodes = "TIPS", scale = TRUE)
+A <- solve(inv.phylo$Ainv)
+rownames(A) <- rownames(inv.phylo$Ainv)
+colnames(dater)
+modelcont.funct.2 <- brm(offset.funct~ cent_pol+cent_flo_month+cent_minP+cent_flo_month:cent_pol+cent_flo_month:cent_minP+cent_pol:cent_minP+(1|name), data = dater, 
+                         family = gaussian(), cov_ranef = list(name= A),iter=3000) 
+
+summary(modelcont.funct.2)
+
+modelcont.phys.2 <- brm(offset.phys~ cent_pol+cent_flo_month+cent_minP+cent_flo_month:cent_pol+cent_flo_month:cent_minP+cent_pol:cent_minP+(1|name)+(1|name), data = dater, 
+                        family = gaussian(), cov_ranef = list(name= A),iter=3000) 
+
+summary(modelcont.phys.2)
+
+modelcont.inter.2<- brm(offset.inter~cent_pol+cent_flo_month+cent_minP+cent_flo_month:cent_pol+cent_flo_month:cent_minP+cent_pol:cent_minP+(1|name), data = dater, 
+                         family = gaussian(), cov_ranef = list(name= A),iter=3000) 
+summary(modelcont.inter.2)
+
+AAA<-as.data.frame(tidy(modelcont.funct.2,robust = TRUE))
+AAA<-AAA %>% "["(.,2:7,)
+AAA$class<-"functional"
+
+BBB<-as.data.frame(tidy(modelcont.inter.2,robust = TRUE))
+BBB<-BBB %>% "["(.,2:7,)
+BBB$class<-"intermediate"
+
+
+CCC<-as.data.frame(tidy(modelcont.phys.2,robust = TRUE))
+CCC<-CCC %>% "["(.,2:7,)
+CCC$class<-"physiological"
+DDD<-rbind(AAA,BBB,CCC)
+ggplot(DDD,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="black")
+
+
+pp_check(modelcont.phys) ###models seem good
+pp_check(modelcont.inter)
+pp_check(modelbin.phys)
+save.image("continuous.mods.RData")
