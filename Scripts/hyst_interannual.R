@@ -13,12 +13,29 @@ library(gridExtra)
 
 d<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
 unique(d$species)
+d$name[d$species=="ACPE"]<-"A. pensylvanicum"
+d$name[d$species=="ACRU"]<-"A. rubrum"
+d$name[d$species=="BEAL"]<-"B. alleghaniensis"
+d$name[d$species=="FRAM"]<-"F. americana"
+d$name[d$species=="NYSY"]<-"N. sylvatica"
+d$name[d$species=="QURU"]<-"Q. rubra"
 
-a<-filter(d, species %in% c("ACRU","ACSA","AMSP" ,"BEAL" ,"BELE" ,"BEPA", "BEPO","FRAM","POTR" ,"QURU" ,"QUVE"))
 
-#unique(hys$species) ##15 hysteranthous species (pro and syn)
+a<-filter(d, species %in% c("ACRU","BEAL","FRAM" ,"QURU","ACPE","NYSY" ))
+colnames(a)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (75%)","flower budburst","flower open","name")
+unique(hys$species) ##15 hysteranthous species (pro and syn)
 
-#a<-gather(a, phase,DOY,4:7)
+a<-gather(a, phase,DOY,4:7)
+
+a$name <- factor(a$name, levels = c("A. rubrum","B. alleghaniensis","F. americana" ,"Q. rubra","A. pensylvanicum","N. sylvatica"))
+pd<-position_dodge(width=0.0)
+
+jpeg("..//figure/HFmeans.jpeg")
+ggplot(a,(aes(name,DOY)))+stat_summary(fun.data = "mean_cl_boot",aes(color=phase,shape=phase),position=pd,size=0.78)+scale_color_manual(values=c("deeppink","firebrick1","lawngreen","darkgreen"))+scale_shape_manual(values=c(0,8,16,23))+theme_bw()+ylab("Day of Year")+xlab(NULL)#+theme(axis.text.x = element_text(angle = 300,hjust=0.5))
+dev.off()
+
+
+
 #a<-filter(a, phase %in% c("fopn.jd","l75.jd"))
 #bet<-filter(a, species %in% c("BEAL"))
 #ggplot(bet,aes(year,DOY))+geom_point(aes(shape=phase))+geom_smooth(method='lm',aes(,color=phase))+theme_base()
