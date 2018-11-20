@@ -81,22 +81,58 @@ names(newdat)[6]<-"slope"
 names(newdat)[7]<-"slope.2.5"
 names(newdat)[8]<-"slope.97.5"
 newdata<-dplyr::select(newdat,peporder,Intercept,Intercept.2.5,Intercept.97.5,slope,slope.2.5,slope.97.5,s_id,year,offset,YEAR.hin,lat,lon)
-
 newdata$hinge<-ifelse(newdata$YEAR.hin>0,1,0)
-
+colnames(newdata)
 alphaX<-mean(newdata$Intercept)
 alphaXlow<-mean(newdata$Intercept.2.5)
 alphaXhigh<-mean(newdata$Intercept.97.5)
 betaX<-mean(newdata$slope)
+betaXlow<-mean(newdata$slope.2.5)
+betaXhigh<-mean(newdata$slope.97.5)
 
-#ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980))+geom_segment(aes(y=alpha,yend=alpha,x=1960, xend=1980),color="red")
-#ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope))+geom_segment(aes(x=1980,xend=2015,y=alpha,yend=alpha+35*beta),color="red")
+allbetas<-newdata$slope
+allalphas<-newdata$Intercept
+allbetas1<-newdata1$slope
+allalphas1<-newdata1$Intercept
+allbetas2<-newdata2$slope
+allalphas2<-newdata2$Intercept
+
+# graph
+dev.off()
+jpeg("..//figure/FLS_climate_change.jpeg")
+plot(c(1960,2015), c(-30,45), type = "n", xlab = "year", ylab = "FLS offset", bty='l')
+#rect(xleft=1960, ybottom=-30, xright=1980, ytop=50,col="ivory1" )
+#rect(xleft=1980, ybottom=-30, xright=2015, ytop=50,col="ivory2")
+segments(x0=1980,y0=allalphas,x1=2015,y1=allalphas+allbetas*35,col="azure3",lty="dotted" )
+segments(x0=1960,y0=allalphas,x1=1980,y1=allalphas,col="azure3",lty="dotted")
+segments(x0=1980,y0=allalphas1,x1=2015,y1=allalphas1+allbetas1*35,col="azure3")
+segments(x0=1960,y0=allalphas1,x1=1980,y1=allalphas1,col="azure3")
+segments(x0=1980,y0=allalphas2,x1=2015,y1=allalphas2+allbetas2*35,col="azure3",lty="dashed")
+segments(x0=1960,y0=allalphas2,x1=1980,y1=allalphas2,col="azure3",lty="dashed")
+segments(x0=1960,y0=alphaX, x1=1980,y1=alphaX,col="darkgreen",lwd=3)
+segments(x0=1980,y0=alphaX, x1=2015,y1=alphaX+betaX*35,col="darkgreen",lwd=3)
+segments(x0=1960,y0=alphaXlow, x1=2015,y1=alphaXlow, lty=2, col="darkgreen",lwd=2)
+segments(x0=1960,y0=alphaXhigh, x1=2015,y1=alphaXhigh, lty=2, col="darkgreen",lwd=2)
+segments(x0=1960,y0=alpha1, x1=1980,y1=alpha1,col="red",lwd=3)
+segments(x0=1980,y0=alpha1, x1=2015,y1=alpha1+beta1*35,col="red",lwd=3)
+segments(x0=1960,y0=alphalow, x1=2015,y1=alphalow, lty=2,col="red",lwd=2)
+segments(x0=1960,y0=alphahigh, x1=2015,y1=alphahigh, lty=2,col="red",lwd=2)
+segments(x0=1960,y0=alpha2, x1=1980,y1=alpha2,col="blue",lwd=3)
+segments(x0=1980,y0=alpha2, x1=2015,y1=alpha2+beta2*35,col="blue",lwd=3)
+segments(x0=1960,y0=alpha2low, x1=2015,y1=alpha2low, lty=2,col="blue",lwd=2)
+segments(x0=1960,y0=alpha2high, x1=2015,y1=alpha2high, lty=2,col="blue",lwd=2)
+legend(2002,3, legend=c("A. glutinosa", "F. excelsior","A. hippocastanum"),col=c("darkgreen", "red","blue"), lwd=2, cex=0.6)
+
+dev.off()
 
 
-plottyX<-ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightgray")+geom_segment(aes(y=alphaX,yend=alphaX,x=1960, xend=1980),color="red")+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightgray")+geom_segment(aes(x=1980,xend=2015,y=alphaX,yend=alphaX+35*betaX),color="red")+theme_tufte()+theme(legend.position="none")+ggtitle("Alnus glutinosa")
-plottyalnus<-plottyX+geom_segment(aes(y=alphaXlow,yend=alphaXlow,x=1960, xend=2015),data=newdat,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alphaXhigh,yend=alphaXhigh,x=1960, xend=2015),data=newdat,color="blue",linetype="dashed",size=0.5)
 
 
+plottyX<-ggplot(newdata,aes(year,offset,group=peporder))+geom_segment(aes(y=Intercept,yend=Intercept,x=1960, xend=1980),size=0.1,color="lightskyblue3",linetype="solid")+geom_segment(aes(y=alphaX,yend=alphaX,x=1960, xend=1980),color="slategray",linetype="solid",size=1)+geom_segment(aes(x=1980,xend=2015,y=Intercept,yend=Intercept+35*slope),size=0.1,color="lightsalmon1",linetype="solid",linejoin = c('bevel'))+geom_segment(aes(x=1980,xend=2015,y=alphaX,yend=alphaX+(35*betaX)),color="orchid4",linetype="solid",size=1)+theme_linedraw()+theme(legend.position="none")+ggtitle("Alnus glutinosa")
+plottyalnus<-plottyX+geom_segment(aes(y=alphaXlow,yend=alphaXlow,x=1960, xend=1980),data=newdat,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alphaXhigh,yend=alphaXhigh, x=1960, xend=1980),data=newdat,color="blue",linetype="dashed",size=0.5)
+
+alnusplot.close<-plottyalnus+geom_segment(aes(y=alphaXlow,yend=alphaXlow,x=1980, xend=2015),data=newdat,color="black",linetype="dashed",size=0.5)+geom_segment(aes(y=alphaXhigh,yend=alphaXhigh, x=1980, xend=2015),data=newdat,color="black",linetype="dashed",size=0.5)
+alnus.plotfinal<-alnusplot.close+geom_segment(aes(x=1980,xend=2015,y=alphaXhigh,yend=alphaXhigh+35*betaXhigh))
 
 ####Fraxinus model
 fit.frax.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=frax) 
