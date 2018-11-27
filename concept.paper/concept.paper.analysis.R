@@ -1,4 +1,5 @@
 ####c### This is the final analysis file for hysteranthy anaylsis on MTSV as of 3/28/18.
+###major update on 11.27.18
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -27,26 +28,28 @@ library(broom)
 mich.tree<-read.tree("pruned_for_mich.tre")
 mich.data<-read.csv("mich_data_full_clean.csv")
 drought.dat<-read.csv("..//Data/USDA_traitfor_MTSV.csv",header=TRUE)
+
+###make a column for seed development time
 mich.data$dev.time<-NA
 mich.data$dev.time<-mich.data$fruiting-mich.data$flo_time
 ###one more cleaninging tax
 mich.data$pol<-ifelse(mich.data$Species=="quadrangulata",1,mich.data$pol)
-
 mich.data$pol<-ifelse(mich.data$Genus=="Populus"& mich.data$Species=="nigra",1,mich.data$pol)
 
-#pro<- hysteranthy= before, and before with leaves 
-  #phyloD =0.18 with 49 species hysteranthous
-
-#pro2<-hysteranthy= before, before/with and with
-    #phylod=0.06 with 101 species hysteranthous
-#pro3<- hysteranthy=before only
-    #D= 0.34 34 sp hysteranthous
-###phylo.D###### calculate phylo d.
-set.seed(122)
+###make the tree work 
 mich.tree$node.label<-NULL
-######phylo signals#############################################
+
+###RESPONSE VARIABLE KEY
+#pro<- hysteranthy= before, and before with leaves 
+#pro2<-hysteranthy= before, before/with and with
+#pro3<- hysteranthy=before only
+###phylo.D###### calculate phylo d.
+
+set.seed(122)
+###################################################################################
+######phylo signals#########################################################
 d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
-PhyloD <- phylo.d(d, binvar=pro) ###regular hysteranthy
+PhyloD <- phylo.d(d, binvar=pro) ###intermediate hysteranthy
 PhyloD
 plot(PhyloD)
 Wind<-phylo.d(d, binvar=pol) #-0.48 more phylogenetically conserved that 
@@ -58,19 +61,17 @@ plot(Wind)
 PhyloPro2<-phylo.d(d,binvar=pro2)
 PhyloPro2
 plot(PhyloPro2)
-
 #d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloPro3<-phylo.d(d,binvar=pro3)
 PhyloPro3
 plot(PhyloPro3)
 ###phlosignal for continuous trait
-
 phylosig(mich.tree, mich.data$flo_time, method="lambda", test=TRUE, nsim=999,se=NULL)
 phylosig(mich.tree, mich.data$dev.time, method="lambda", test=TRUE, nsim=999)
 phylosig(mich.tree, mich.data$heigh_height, method="lambda", test=TRUE, nsim=999)
 ###############################################################################################
 
-###Rescale predictors
+###Rescale predictors this makes it so you can compare binary to continous data
 mich.data$height_cent<-(mich.data$heigh_height-mean(mich.data$heigh_height))/(2*sd(mich.data$heigh_height))
 mich.data$fruit_cent<-(mich.data$fruiting-mean(mich.data$fruiting))/(2*sd(mich.data$fruiting))
 mich.data$flo_cent<-(mich.data$flo_time-mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
@@ -79,122 +80,94 @@ mich.data$av_fruit_time_cent<-(mich.data$av_fruit_time-mean(mich.data$av_fruit_t
 mich.data$dev_time_cent<-(mich.data$dev.time-mean(mich.data$dev.time))/(2*sd(mich.data$dev.time))
 mich.data$tol_cent<-(mich.data$shade_bin-mean(mich.data$shade_bin))/(2*sd(mich.data$shade_bin))
 
-####add drought tolerance data
+
+
+######### later we'll be running model with drought tolerance, so add drought tolerance data
 mich.data<-left_join(mich.data,drought.dat,by="name")
 
 ######prune the tree for drought modeling
 mich.data.wdrought<-filter(mich.data,!is.na(min._precip))
-  mich.data.wdrought$precip_cent<-(mich.data.wdrought$min._precip-mean(mich.data.wdrought$min._precip))/(2*sd(mich.data.wdrought$min._precip))
-
+mich.data.wdrought$precip_cent<-(mich.data.wdrought$min._precip-mean(mich.data.wdrought$min._precip))/(2*sd(mich.data.wdrought$min._precip))
 ####prune tree to match reduced dataset
 names.intree<-mich.tree$tip.label
 namelist<-unique(mich.data.wdrought$name)
-
 to.prune<-which(!names.intree%in%namelist)
 mich.tree.droughtprune<-drop.tip(mich.tree,to.prune)
 mytree.names<-mich.tree.droughtprune$tip.label
+### the smaller new tree is called mich.tree.droughtprune
 
-###prepare for modeling
+######### phyloglm requires species names to be in rownames
 mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
-mich.data$height10<-mich.data$heigh_height/10
+
 ###models:
-
-
-#####Mich.cent.funct uses pro2
-##cent.funct.seed uses seed maturation duration rather than dispersal time
-######Mich.cent.interm uses pro
-####Mich.cent.phys
-###Mih.fun
 
 #number of bootstraps from Wilcox, R. R. (2010). Fundamentals of modern statistical methods: Substantially improving power and accuracy. Springer.
 
-
-
 ######models with flowertime and polination and dev time, and complete species,
-
 z.funct.seed<-phyloglm(pro2~pol_cent+flo_cent+pol_cent:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
 
-summary(z.funct.seed)
-
+######This code plots everything
 bootestZ<-as.data.frame(z.funct.seed$coefficients)
 bootconfZ<-as.data.frame(z.funct.seed$bootconfint95)
 bootconfZ<-as.data.frame(t(bootconfZ))
-
 bootestZ<-rownames_to_column(bootestZ, "trait")
 bootconfZ<-rownames_to_column(bootconfZ, "trait")
 bootmichZ<-full_join(bootconfZ,bootestZ, by="trait")
 colnames(bootmichZ)<-c("trait","low","high","estimate")
 bootmichZ<-dplyr::filter(bootmichZ, trait!="alpha")
 bootmichZ<-dplyr::filter(bootmichZ, trait!="(Intercept)")
-###names
-
 bootmichZ$class<-"functional-MTSV"
-
-functplot1<-ggplot(bootmichZ,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
-functplot1
-
 
 ##############################################################
 z.phys.seed<-phyloglm(pro3~pol_cent+flo_cent+pol_cent:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
                          boot=599,full.matrix = TRUE)
-summary(z.phys.seed)
 
+###This code plots everything
 bootestY<-as.data.frame(z.phys.seed$coefficients)
 bootconfY<-as.data.frame(z.phys.seed$bootconfint95)
 bootconfY<-as.data.frame(t(bootconfY))
-
-
 bootestY<-rownames_to_column(bootestY, "trait")
 bootconfY<-rownames_to_column(bootconfY, "trait")
 bootmichY<-full_join(bootconfY,bootestY, by="trait")
 colnames(bootmichY)<-c("trait","low","high","estimate")
 bootmichY<-dplyr::filter(bootmichY, trait!="alpha")
 bootmichY<-dplyr::filter(bootmichY, trait!="(Intercept)")
-###names
 bootmichY$class<-"physiological-MTSV"
-physplot1<-ggplot(bootmichY,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-9,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
-physplot1
 
-######### intermediate
+######### intermediate##############
 z.inter.seed<-phyloglm(pro~pol_cent+flo_cent+pol_cent:flo_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                       start.beta=NULL, start.alpha=NULL,
                       boot=599,full.matrix = TRUE)
-summary(z.inter.seed)
 
 bootestX<-as.data.frame(z.inter.seed$coefficients)
 bootconfX<-as.data.frame(z.inter.seed$bootconfint95)
 bootconfX<-as.data.frame(t(bootconfX))
-
-
 bootestX<-rownames_to_column(bootestX, "trait")
 bootconfX<-rownames_to_column(bootconfX, "trait")
 bootmichX<-full_join(bootconfX,bootestX, by="trait")
 colnames(bootmichX)<-c("trait","low","high","estimate")
 bootmichX<-dplyr::filter(bootmichX, trait!="alpha")
 bootmichX<-dplyr::filter(bootmichX, trait!="(Intercept)")
-###names
 bootmichX$class<-"intermidiate-MTSV"
-
+#######now put these all together
 michcomp<-rbind(bootmichX,bootmichY,bootmichZ)
-library(ggstance)
+
+###and plot
 pd=position_dodgev(height=0.25)
 ggplot(michcomp,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
 
-
-
 ##############################################
-##########add silvics back
+###Now do all you did with silvics
 #######################################################
 silv.tree<-read.tree("pruned_silvics.tre")
 silv.data<-read.csv("silv_data_full.csv")
 silv.tree$node.label<-NULL
+silv.data<-left_join(silv.data,drought.dat) ###maybe you should make a drought species list specifically for silvics to lose less species
 
-silv.data<-left_join(silv.data,drought.dat)
-
-####Silvics cleaning
+####Silvics cleaning########
 ###fruiting
 silv.data$fruiting<-NA
 silv.data$fruiting<-silv.data$av_fruit_time
@@ -221,7 +194,7 @@ silv.data$pro3[silv.data$silvic_phen_seq== "hyst"] <- 0
 silv.data$pro3[silv.data$name == "Quercus_laurifolia"] <- 1
 
 
-###silve centering
+###silv rescaling
 silv.data$height_cent<-(silv.data$height-mean(silv.data$height))/(2*sd(silv.data$height))
 silv.data$fruit_cent<-(silv.data$fruiting-mean(silv.data$fruiting))/(2*sd(silv.data$fruiting))
 silv.data$flo_cent<-(silv.data$flower_time-mean(silv.data$flower_time))/(2*sd(silv.data$flower_time))
@@ -231,21 +204,21 @@ silv.data$dev.time<-silv.data$fruiting-silv.data$flower_time
 silv.data$dev_time_cent<-(silv.data$dev.time-mean(silv.data$dev.time))/(2*sd(silv.data$dev.time))
 
   
-#######
-silv.data.wdrought<-filter(silv.data,!is.na(min._precip)) #49 sp
+#######make a datasheet for dealing with slilvics drought
+silv.data.wdrought<-filter(silv.data,!is.na(min._precip)) 
 silv.data.wdrought$precip_cent<-(silv.data.wdrought$min._precip-mean(silv.data.wdrought$min._precip))/(2*sd(silv.data.wdrought$min._precip))    
 
-####prune tree to match reduced dataset
+####prune silvics tree to match reduced dataset
 names.intree<-silv.tree$tip.label
 namelist<-unique(silv.data.wdrought$name)
-
 to.prune<-which(!names.intree%in%namelist)
 silv.tree.droughtprune<-drop.tip(silv.tree,to.prune)
 mytree.names<-silv.tree.droughtprune$tip.label
-
 setdiff(namelist,mytree.names) 
 intersect(namelist,mytree.names)
-#####phylogenetic signals#######################################
+
+
+#####phylogenetic signals####################################### for silvics
 e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
 PhyloSilv<-phylo.d(e,binvar=pro)
 PhyloSilv
@@ -255,47 +228,39 @@ PhyloSilv3<-phylo.d(e,binvar=pro3)
 PhyloSilv3
 #######################
 
+###prepare silvics data for modeling
 silv.data<- silv.data %>% remove_rownames %>% column_to_rownames(var="name")
-
 
 ###models
 z.funct.silv<-phyloglm(pro2~pol_cent*flo_cent,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                        start.beta=NULL, start.alpha=NULL,
                        boot=599,full.matrix = TRUE)
 
-summary(z.funct.silv)
+###prepare for plotting
 bootestS<-as.data.frame(z.funct.silv$coefficients)
 bootconfS<-as.data.frame(z.funct.silv$bootconfint95)
 bootconfS<-as.data.frame(t(bootconfS))
-
 bootestS<-rownames_to_column(bootestS, "trait")
 bootconfS<-rownames_to_column(bootconfS, "trait")
 bootsilvF<-full_join(bootconfS,bootestS, by="trait")
 colnames(bootsilvF)<-c("trait","low","high","estimate")
 bootsilvF<-dplyr::filter(bootsilvF, trait!="alpha")
 bootsilvF<-dplyr::filter(bootsilvF, trait!="(Intercept)")
-###names
-
 bootsilvF$class<-"functional-Silvics"
 
 z.phys.silv<-phyloglm(pro3~pol_cent*flo_cent,silv.data, silv.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                        start.beta=NULL, start.alpha=NULL,
                        boot=599,full.matrix = TRUE)
 
-summary(z.phys.silv)
 bootestS1<-as.data.frame(z.phys.silv$coefficients)
 bootconfS1<-as.data.frame(z.phys.silv$bootconfint95)
-
 bootconfS1<-as.data.frame(t(bootconfS1))
-
-
 bootestS1<-rownames_to_column(bootestS1, "trait")
 bootconfS1<-rownames_to_column(bootconfS1, "trait")
 bootsilvP<-full_join(bootconfS1,bootestS1, by="trait")
 colnames(bootsilvP)<-c("trait","low","high","estimate")
 bootsilvP<-dplyr::filter(bootsilvP, trait!="alpha")
 bootsilvP<-dplyr::filter(bootsilvP, trait!="(Intercept)")
-###names
 bootsilvP$class<-"physiological-Silvics"
 
 
@@ -306,34 +271,26 @@ z.inter.silv<-phyloglm(pro~pol_cent*flo_cent,silv.data, silv.tree, method = "log
 bootestSI<-as.data.frame(z.inter.silv$coefficients)
 bootconfSI<-as.data.frame(z.inter.silv$bootconfint95)
 bootconfSI<-as.data.frame(t(bootconfSI))
-
-
 bootestSI<-rownames_to_column(bootestSI, "trait")
 bootconfSI<-rownames_to_column(bootconfSI, "trait")
 bootsilvI<-full_join(bootconfSI,bootestSI, by="trait")
 colnames(bootsilvI)<-c("trait","low","high","estimate")
 bootsilvI<-dplyr::filter(bootsilvI, trait!="alpha")
 bootsilvI<-dplyr::filter(bootsilvI, trait!="(Intercept)")
-###names
 bootsilvI$class<-"intermidiate-Silvics"
 
-
-
+##combind into one data set
 bootdatasilv<-rbind(bootsilvF,bootsilvP)
 bootdatasilv<-rbind(bootdatasilv,bootsilvI)
 
+##and plot
 pd=position_dodgev(height=0.25)
-
 ggplot(bootdatasilv,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
 
+###now combine mich and silvics
 fullcomp<-rbind(michcomp,bootdatasilv)
 
-#fullcomp$low<-ifelse(fullcomp$trait==c("flower timing"),-(fullcomp$low),fullcomp$low)
-#fullcomp$high<-ifelse(fullcomp$trait==c("flower timing"),-(fullcomp$high),fullcomp$high)
-#fullcomp$estimate<-ifelse(fullcomp$trait==c("flower timing"),-(fullcomp$estimate),fullcomp$estimate)
-
-
-
+##a little more formatting
 fullcomp$category<-NA
 fullcomp$category[which(fullcomp$class=="physiological-Silvics")] <- "physiological"
 fullcomp$category[which(fullcomp$class=="physiological-MTSV")] <- "physiological"
@@ -341,7 +298,6 @@ fullcomp$category[which(fullcomp$class=="functional-Silvics")] <- "functional"
 fullcomp$category[which(fullcomp$class=="functional-MTSV")] <- "functional"
 fullcomp$category[which(fullcomp$class=="intermidiate-MTSV")] <- "intermediate"
 fullcomp$category[which(fullcomp$class=="intermidiate-Silvics")] <- "intermediate"
-
 fullcomp$data<-NA
 fullcomp$data[which(fullcomp$class=="physiological-Silvics")] <- "USFS"
 fullcomp$data[which(fullcomp$class=="physiological-MTSV")] <- "MTSV"
@@ -351,342 +307,86 @@ fullcomp$data[which(fullcomp$class=="intermidiate-MTSV")] <- "MTSV"
 fullcomp$data[which(fullcomp$class=="intermidiate-Silvics")] <- "USFS"
 
 
-###now express traits more positively
-#fullcomp$trait[fullcomp$trait=="flower timing"]<-"earlier flowering"
-#fullcomp$trait[fullcomp$trait=="seed development"]<-"seed development period"
 
-
-library(ggstance)
+###and plot
 pd=position_dodgev(height=0.4)
-
 figure<-ggplot(fullcomp,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd,data=fullcomp)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category,group=class))+geom_vline(aes(xintercept=0))+xlim(-7.5,7)+theme_bw()
 figure
 
 ###############################################################
-##now add drought hypothesis...
+##now add drought hypothesis... for mich
+#################################################################
 mich.data.wdrought<-  mich.data.wdrought %>% remove_rownames %>% column_to_rownames(var="name")
 
 z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data.wdrought, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                        start.beta=NULL, start.alpha=NULL,
                        boot=599,full.matrix = TRUE)
-summary(z.funct.drought)
 
 z.phys.drought<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data.wdrought, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
-summary(z.phys.drought)
 
 z.inter.drought<-phyloglm(pro~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data.wdrought, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
                          boot=599,full.matrix = TRUE)
 
-summary(z.inter.drought)
-
 bootestSI<-as.data.frame(z.inter.drought$coefficients)
 bootconfSI<-as.data.frame(z.inter.drought$bootconfint95)
 bootconfSI<-as.data.frame(t(bootconfSI))
-
-
 bootestSI<-rownames_to_column(bootestSI, "trait")
 bootconfSI<-rownames_to_column(bootconfSI, "trait")
 bootdroughtI<-full_join(bootconfSI,bootestSI, by="trait")
 colnames(bootdroughtI)<-c("trait","low","high","estimate")
 bootdroughtI<-dplyr::filter(bootdroughtI, trait!="alpha")
 bootdroughtI<-dplyr::filter(bootdroughtI, trait!="(Intercept)")
-###names
 bootdroughtI$class<-"intermediate-MTSV"
-pd=position_dodgev(height=0.4)
-ggplot(bootdroughtI,aes(estimate,trait))+geom_point(size=2.5,position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high))+geom_vline(aes(xintercept=0))+xlim(-7.5,7)+theme_bw()
 
 
 bootestSF<-as.data.frame(z.funct.drought$coefficients)
 bootconfSF<-as.data.frame(z.funct.drought$bootconfint95)
 bootconfSF<-as.data.frame(t(bootconfSF))
-
-
 bootestSF<-rownames_to_column(bootestSF, "trait")
 bootconfSF<-rownames_to_column(bootconfSF, "trait")
 bootdroughtF<-full_join(bootconfSF,bootestSF, by="trait")
 colnames(bootdroughtF)<-c("trait","low","high","estimate")
 bootdroughtF<-dplyr::filter(bootdroughtF, trait!="alpha")
 bootdroughtF<-dplyr::filter(bootdroughtF, trait!="(Intercept)")
-###names
 bootdroughtF$class<-"functional-MTSV"
-ggplot(bootdroughtF,aes(estimate,trait))+geom_point(size=2.5,position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high))+geom_vline(aes(xintercept=0))+xlim(-7.5,8)+theme_bw()
 
 bootestSP<-as.data.frame(z.phys.drought$coefficients)
 bootconfSP<-as.data.frame(z.phys.drought$bootconfint95)
 bootconfSP<-as.data.frame(t(bootconfSP))
-
-
 bootestSP<-rownames_to_column(bootestSP, "trait")
 bootconfSP<-rownames_to_column(bootconfSP, "trait")
 bootdroughtP<-full_join(bootconfSP,bootestSP, by="trait")
 colnames(bootdroughtP)<-c("trait","low","high","estimate")
 bootdroughtP<-dplyr::filter(bootdroughtP, trait!="alpha")
 bootdroughtP<-dplyr::filter(bootdroughtP, trait!="(Intercept)")
-###names
 bootdroughtP$class<-"physiological-MTSV"
 
+###combine these three catagories
 bootdrought<-rbind(bootdroughtF,bootdroughtP)
 bootdrought<-rbind(bootdrought,bootdroughtI)
 
-ggplot(bootdrought,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
+#and plot
+plotty<-ggplot(bootdrought,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
+plotty
 
-
-
-
-
-#####silvics
+#############################################################################################
+#####silvics########  with drought 
+##########################################################################################
 silv.data.wdrought<- silv.data.wdrought %>% remove_rownames %>% column_to_rownames(var="name")
 
 z.funct.drought.silvics<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data.wdrought, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
 
-summary(z.funct.drought.silvics)
-
 z.phys.drought.silvics<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data.wdrought, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                                   start.beta=NULL, start.alpha=NULL,
                                   boot=599,full.matrix = TRUE)
 
-###phyosig summary for 
+z.inter.drought.silvics<-phyloglm(pro~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data.wdrought, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                                 start.beta=NULL, start.alpha=NULL,
+                                 boot=599,full.matrix = TRUE)
 
-
-(PhyloPro2) #0.06
-PhyloPro3 #0.29
-PhyloSilv2 #0.64
-PhyloSilv3 #0.10
 save.image(file="hystmodels.RData")
-
-tab<-matrix(c(0.06,0.64,0.29,0.10))
-rownames(tab)<-c("functional-MTSV","functional-Silvics","physiological-MTSV","Physiological-Silvics")
-tab<-as.data.frame(tab)
-tab<-rownames_to_column(tab, "Model")
-###make this into a table at some point
-###Which species are super early################################
-superearl<-filter(mich.data, flo_time=="3.5")
-superearl2<-filter(mich.data, flo_time=="4")
-superearl3<-filter(mich.data, flo_time=="4.5")
-
-
-
-
-
-
-
-
-
-
-stop("not an error, just ending the sourcing")
-
-
-###########################################################################################
-
-###average predictive comparsons(I dont think these are working yet.) Can I use divide by 4 rule?
-coef(cent.funct.seed)
-beta<-coef(cent.funct.seed)
-hi<-1
-lo<-0
-###for [pollination syndrome]
-beta[2]
-delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*mich.data$height_cent+beta[4]*mich.data$dev_time_cent+beta[5]*mich.data$fruit_cent+beta[6]*mich.data$shade_bin)-
-    invlogit(beta[1]+beta[2]*lo+beta[3]*mich.data$height_cent+beta[4]*mich.data$flo_cent+beta[5]*mich.data$dev_time_cent+beta[6]*mich.data$shade_bin)
-
-print(mean(delta))  #0.41
-
-
-###for flowering
-april<-(4-mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
-may<-(5-mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
-earl<-2*sd(mich.data$flo_time)*april+mean(mich.data$flo_time)
-mid<-2*sd(mich.data$flo_time)*may+mean(mich.data$flo_time)   
-
-delta2<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height_cent+beta[4]*april+beta[5]*mich.data$dev_time_cent+beta[6]*mich.data$shade_bin)-
-  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$height_cent+beta[4]*may+beta[5]*mich.data$dev_time_cent+beta[6]*mich.data$shade_bin)
-
-mean(delta2) ##.24 which is right! yay
-
-2*sd(mich.data$flo_time)*(-0.697978)+mean(mich.data$flo_time)
-2*sd(mich.data$flo_time)*(-0.1677311)+mean(mich.data$flo_time)                                            
- 
-###how do I unscale this to make it meaningful this?
-#=#z score = X-m/sd
-#rescale SD(z) + M
-#I did mean(mich.data$flo_time))/(2*sd(mich.data$flo_time))
-#so I should do 2sd(z)+M
-
-
-###APC unscaled#########################################
-
-summary(Mich.funct)
-coef(Mich.funct)
-beta<-coef(Mich.funct)
-hi<-1
-lo<-0
-###for [pollination syndrome]
-beta[2]
-delta<-invlogit(beta[1]+beta[2]*hi+beta[3]*mich.data$heigh_height+beta[4]*mich.data$flo_time+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)-
-  invlogit(beta[1]+beta[2]*lo+beta[3]*mich.data$heigh_height+beta[4]*mich.data$flo_time+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)
-
-mean(delta)  #0.40
-
-###for flowering 
-earl<-4
-mid<-5
-delta2<-invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+beta[4]*earl+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)-
-  invlogit(beta[1]+beta[2]*mich.data$pol+beta[3]*mich.data$heigh_height+beta[4]*mid+beta[5]*mich.data$dev.time+beta[6]*mich.data$shade_bin)
-
-mean(delta2)
-
-#Whixh species are insect pollinated but not hysteranthous
-buggy<-filter(mich.data, pol==0 & pro3==1)
-unique(buggy$Family)
-###tropical Rhamnaceae, Lauraceae, Anacardiaceae, Rutaceae
-phy<-as.data.frame(coef(cent.funct.seed.winter))
-phy<- phy %>%  rownames_to_column(var="effect")
-
-nophy<-as.data.frame(coef(cent.funct.seed.nophylo))
-nophy<- nophy %>%  rownames_to_column(var="effect")
-phycom<-left_join(phy,nophy)
-
-#-------------------------------------------------------#
-#okay no to see if I can replicate the results of the scoop
-###different hysteranthy definition
-####different predictors
-###didn't z-score (they log transformed continuous variables)
-###reduced species list
-#no interaactions
-### they conflate early flowering hypotheses with hysteranthous hypotheses
-
-### also I think they maybe ran a seperate model for each hypothesis
-
-#1 ###take out flower time and compare functional to physiological
-#predictor seed dev should be big and pol samall
-funct.check<-phyloglm(pro2~pol+heigh_height+dev.time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                          start.beta=NULL, start.alpha=NULL,
-                          boot=10,full.matrix = TRUE)
-summary(funct.check)
-phys.check<-phyloglm(pro3~pol+heigh_height+dev.time+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                     start.beta=NULL, start.alpha=NULL,
-                     boot=10,full.matrix = TRUE)
-summary(phys.check)
-##its true that dev time is increasing in importance and syndrome decreasing with different definitions
-#### try it z scored
-z.check.funct<-phyloglm(pro2~pol+height_cent++dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                          start.beta=NULL, start.alpha=NULL,
-                          boot=10,full.matrix = TRUE)
-summary(z.check.funct)
-#pol 2.88, dev -0.5
-z.check.phys<-phyloglm(pro3~pol+height_cent++dev_time_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                        start.beta=NULL, start.alpha=NULL,
-                        boot=10,full.matrix = TRUE)
-summary(z.check.phys)
-#pol 2.01 dev -1.7
-
-####lets look at dev time flower time and polinaton
-z.check.funct2<-phyloglm(pro2~pol+flo_cent+dev_time_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                        start.beta=NULL, start.alpha=NULL,
-                        boot=10,full.matrix = TRUE)
-
-z.check.phys2<-phyloglm(pro3~pol+flo_cent+dev_time_cent,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                        start.beta=NULL, start.alpha=NULL,
-                        boot=10,full.matrix = TRUE)
-summary(z.check.funct2)
-##pol 2.69, flo, -2.98, dev time -0.9
-summary(z.check.phys2) 
-##pol 1.5, flo -4.11, dev -1.43
-
-funct.check2<-phyloglm(pro2~pol+flo_time+dev.time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                      start.beta=NULL, start.alpha=NULL,
-                      boot=10,full.matrix = TRUE)
-summary(funct.check2)
-#pol 2.7, flo -1.86 dev -0.18
-
-phys.check2<-phyloglm(pro3~pol+flo_time+dev.time,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                       start.beta=NULL, start.alpha=NULL,
-                       boot=10,full.matrix = TRUE)
-summary(phys.check2)
-#pol 0.99, flo -2.46 dev -.22
-
-####summary accross the board, polination syndrome decrease with phys definition
-
-######do fruit and flo time covary? If yes removing one from the model should greatly change the effect
-#test1<-phyloglm(pro2~pol+height_cent+flo_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-#                         start.beta=NULL, start.alpha=NULL,
-#                        boot=599,full.matrix = TRUE)
-#summary(test1)
-
-#test2<-phyloglm(pro2~pol+height_cent+fruit_cent+shade_bin,mich.data, mich.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-#               start.beta=NULL, start.alpha=NULL,
-#              boot=599,full.matrix = TRUE)
-
-#summary(test2)
-####The effect sizes remain relatively stable there fore we assume there is not a collinearity issue
-####marginal effects of flowering time on pollination
-
-vels<-seq(0,1,1)
-slopes <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[7]*vels
-cbind(vels,slopes)
-plot(vels, slopes, type = "l", lty = 1, ylim = c(-5, 0), xlab = "syndrome", ylab = "Marginal Effect of flower time")
-
-###height
-z.funct.seed.winter$coefficients
-range(mich.data$height_cent)
-height<-seq(-0.5603846, 1.0484774,0.1)
-slopes2 <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[9]*height
-cbind(height,slopes2)
-plot(height, slopes2, type = "l", lty = 1, ylim = c(-7, 0), xlab = "height centered", ylab = "Marginal Effect of flower time")
-
-
-###shade
-z.funct.seed.winter$coefficients
-
-shade<-seq(0,1,1)
-slopes3 <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[10]*shade
-cbind(shade,slopes3)
-plot(shade, slopes3, type = "l", lty = 1, ylim = c(-4, 0), xlab = "shade centered", ylab = "Marginal Effect of flower time")
-
-###seed development
-z.funct.seed.winter$coefficients
-range(mich.data$dev_time_cent)
-seed<-seq(-0.7,2.1,0.2)
-slopes4 <- z.funct.seed.winter$coefficients[4] + z.funct.seed.winter$coefficients[8]*seed
-cbind(seed,slopes4)
-plot(seed, slopes4, type = "l", lty = 1, ylim = c(-7, 2), xlab = "seed centered", ylab = "Marginal Effect of flower time")
-
-
-###More plots for understanding interactions
-interaction.plot(mich.data$pol,mich.data$flo_time,mich.data$pro2)
-interaction.plot(mich.data$shade_bin,mich.data$flo_time,mich.data$pro2)
-
-interaction.plot(mich.data$class,mich.data$flo_time,mich.data$pro2)
-
-qplot(x = pol, y = pro2, data = mich.data, color = as.factor(flo_time)) +
-  geom_smooth(method = "lm",se=FALSE), se=FALSE)+ggtitle("flower time X syndrome") 
-
-qplot(x = shade_bin, y = pro2, data = mich.data, color = as.factor(flo_time)) +
-  geom_smooth(method = "lm",se=FALSE)+ggtitle("flower time X shade tolerance") 
-
-qplot(x = dev.time, y = pro2, data = mich.data, color = as.factor(flo_time)) +
-  geom_smooth(method = "lm",se=FALSE)+ggtitle("flower time X development time") 
-
-qplot(x = heigh_height ,y = pro2, data = mich.data, color = as.factor(flo_time)) +geom_smooth(method = "lm",se=FALSE)+ggtitle("flower time X height") 
-
-###residuals and stuff
-
-resid1<-as.data.frame(z.funct.seed.winter$fitted.values)
-resid1<-rownames_to_column(resid1, "name")
-
-resid2<-as.data.frame(z.funct.seed.winter$residuals)
-
-resid2<-rownames_to_column(resid2, "name")
-resid2$residuals<-resid$z.funct.seed.winter$residual
-resid<-left_join(resid1,resid2)
-qplot(z.funct.seed.winter$fitted.values,z.funct.seed.winter$residuals,data=resid)+geom_point()
-
-goober<-filter(resid2,z.funct.seed.winter$residuals>=0.7)
-goober2<-filter(resid2,z.funct.seed.winter$residuals<=-0.7)
-
-residual.list<-rbind(goober,goober2)
-write.csv(residual.list,"extreme.resid.csv")
