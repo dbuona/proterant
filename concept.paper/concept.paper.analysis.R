@@ -390,3 +390,26 @@ z.inter.drought.silvics<-phyloglm(pro~pol_cent+flo_cent+precip_cent+precip_cent:
                                  boot=599,full.matrix = TRUE)
 
 save.image(file="hystmodels.RData")
+
+
+####try a order catagorical model
+unique(mich.data.wdrought$Phen.sequence)
+mich.data.wdrought$hyst_cat<-NA
+mich.data.wdrought$hyst_cat[which(mich.data.wdrought$Phen.sequence=="ser")]<-0
+mich.data.wdrought$hyst_cat[which(mich.data.wdrought$Phen.sequence=="hyst")]<-0
+mich.data.wdrought$hyst_cat[which(mich.data.wdrought$Phen.sequence=="syn/ser")]<-1
+mich.data.wdrought$hyst_cat[which(mich.data.wdrought$Phen.sequence=="syn")]<-2
+mich.data.wdrought$hyst_cat[which(mich.data.wdrought$Phen.sequence=="pro/syn")]<-3
+mich.data.wdrought$hyst_cat[which(mich.data.wdrought$Phen.sequence=="pro")]<-4
+unique(mich.data.wdrought$hyst_cat)
+
+
+
+mod.cat<-polr(factor(hyst_cat)~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent, mich.data.wdrought)
+summary(mod.cat)
+exp(coef(mod.cat))
+
+
+z.funct.cat<--phyloglm(factor(hyst_cat)~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data.wdrought, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
