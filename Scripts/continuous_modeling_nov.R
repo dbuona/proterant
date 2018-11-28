@@ -86,13 +86,13 @@ rownames(A) <- rownames(inv.phylo$Ainv)
 
 ###bayesian and continuous-- main model###############
 ###all measurements of flowering time swamp all other predictors
-modelcont.funct <- brm(offset.funct~ cent_pol+seed_cent+cent_minP+cent_flo_month +(1|name), data = dater, 
+modelcont.funct <- brm(offset.funct~cent_pol+cent_minP+cent_flo_month +(1|name), data = dater, 
                  family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
-modelcont.phys <- brm(offset.phys~ cent_pol+seed_cent+cent_minP+cent_flo_month+(1|name), data = dater, 
+modelcont.phys <- brm(offset.phys~ cent_pol+cent_minP+cent_flo_month+(1|name), data = dater, 
                  family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
-modelcont.inter <- brm(offset.inter~ cent_pol+seed_cent+cent_minP+cent_flo_month+(1|name), data = dater, 
+modelcont.inter <- brm(offset.inter~ cent_pol+cent_minP+cent_flo_month+(1|name), data = dater, 
                       family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
 Aa<-as.data.frame(tidy(modelcont.funct,robust = TRUE))

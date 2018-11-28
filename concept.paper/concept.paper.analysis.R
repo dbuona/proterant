@@ -22,7 +22,7 @@ library(ggstance)
 library(broom)
 
 #if you dont want to run the model: 
-#load("hystmodels.RData")
+load("hystmodels.RData")
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
 mich.tree<-read.tree("pruned_for_mich.tre")
@@ -164,8 +164,12 @@ ggplot(michcomp,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),positi
 #######################################################
 silv.tree<-read.tree("pruned_silvics.tre")
 silv.data<-read.csv("silv_data_full.csv")
+silv.USDA<-read.csv("silv.USDA.csv")
 silv.tree$node.label<-NULL
-silv.data<-left_join(silv.data,drought.dat) ###maybe you should make a drought species list specifically for silvics to lose less species
+silv.data<-left_join(silv.data,silv.USDA) ###maybe you should make a drought species list specifically for silvics to lose less species
+
+
+
 
 ####Silvics cleaning########
 ###fruiting
@@ -309,7 +313,7 @@ fullcomp$data[which(fullcomp$class=="intermidiate-Silvics")] <- "USFS"
 
 
 ###and plot
-pd=position_dodgev(height=0.4)
+pd=position_dodgev(height=0.6)
 figure<-ggplot(fullcomp,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd,data=fullcomp)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category,group=class))+geom_vline(aes(xintercept=0))+xlim(-7.5,7)+theme_bw()
 figure
 
@@ -388,6 +392,67 @@ z.phys.drought.silvics<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:
 z.inter.drought.silvics<-phyloglm(pro~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data.wdrought, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                                  start.beta=NULL, start.alpha=NULL,
                                  boot=599,full.matrix = TRUE)
+
+
+bootestSI<-as.data.frame(z.inter.drought.silvics$coefficients)
+bootconfSI<-as.data.frame(z.inter.drought.silvics$bootconfint95)
+bootconfSI<-as.data.frame(t(bootconfSI))
+bootestSI<-rownames_to_column(bootestSI, "trait")
+bootconfSI<-rownames_to_column(bootconfSI, "trait")
+bootdroughtII<-full_join(bootconfSI,bootestSI, by="trait")
+colnames(bootdroughtII)<-c("trait","low","high","estimate")
+bootdroughtII<-dplyr::filter(bootdroughtII, trait!="alpha")
+bootdroughtII<-dplyr::filter(bootdroughtII, trait!="(Intercept)")
+bootdroughtII$class<-"intermediate-USFS"
+
+
+bootestSF<-as.data.frame(z.funct.drought.silvics$coefficients)
+bootconfSF<-as.data.frame(z.funct.drought.silvics$bootconfint95)
+bootconfSF<-as.data.frame(t(bootconfSF))
+bootestSF<-rownames_to_column(bootestSF, "trait")
+bootconfSF<-rownames_to_column(bootconfSF, "trait")
+bootdroughtFF<-full_join(bootconfSF,bootestSF, by="trait")
+colnames(bootdroughtFF)<-c("trait","low","high","estimate")
+bootdroughtFF<-dplyr::filter(bootdroughtFF, trait!="alpha")
+bootdroughtFF<-dplyr::filter(bootdroughtFF, trait!="(Intercept)")
+bootdroughtFF$class<-"functional-USFS"
+
+bootestSP<-as.data.frame(z.phys.drought.silvics$coefficients)
+bootconfSP<-as.data.frame(z.phys.drought.silvics$bootconfint95)
+bootconfSP<-as.data.frame(t(bootconfSP))
+bootestSP<-rownames_to_column(bootestSP, "trait")
+bootconfSP<-rownames_to_column(bootconfSP, "trait")
+bootdroughtPP<-full_join(bootconfSP,bootestSP, by="trait")
+colnames(bootdroughtPP)<-c("trait","low","high","estimate")
+bootdroughtPP<-dplyr::filter(bootdroughtPP, trait!="alpha")
+bootdroughtPP<-dplyr::filter(bootdroughtPP, trait!="(Intercept)")
+bootdroughtPP$class<-"physiological-USFS"
+
+bootdrought.USFS<-rbind(bootdroughtFF,bootdroughtPP)
+bootdrought.USFS<-rbind(bootdrought.USFS,bootdroughtII)
+
+plotty2<-ggplot(bootdrought.USFS,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
+plotty2
+comps<-rbind(bootdrought,bootdrought.USFS)
+
+comps$category<-NA
+comps$category[which(comps$class=="physiological-USFS")] <- "physiological"
+comps$category[which(comps$class=="physiological-MTSV")] <- "physiological"
+comps$category[which(comps$class=="functional-USFS")] <- "functional"
+comps$category[which(comps$class=="functional-MTSV")] <- "functional"
+comps$category[which(comps$class=="intermediate-MTSV")] <- "intermediate"
+comps$category[which(comps$class=="intermediate-USFS")] <- "intermediate"
+comps$data<-NA
+comps$data[which(comps$class=="physiological-USFS")] <- "USFS"
+comps$data[which(comps$class=="physiological-MTSV")] <- "MTSV"
+comps$data[which(comps$class=="functional-USFS")] <- "USFS"
+comps$data[which(comps$class=="functional-MTSV")] <- "MTSV"
+comps$data[which(comps$class=="intermediate-MTSV")] <- "MTSV"
+comps$data[which(comps$class=="intermediate-USFS")] <- "USFS"
+
+
+plotty3<-ggplot(comps,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category,shape=data))+geom_vline(aes(xintercept=0))+theme_bw()
+plotty3
 
 save.image(file="hystmodels.RData")
 
