@@ -29,14 +29,14 @@ traits$flo_view<-ifelse(traits$fl_conspic=="Y",0,1)
 traits$frost_free<-as.numeric(traits$frost_free)
 
 #rescale predictors
-traits$height_cent<-(traits$height_mat-mean(traits$height_mat))/(2*sd(traits$height_mat))
-traits$cent_frost<-(traits$frost_free-mean(traits$frost_free))/(2*sd(traits$frost_free))
-traits$cent_minT<-(traits$min_temp-mean(traits$min_temp))/(2*sd(traits$min_temp))
-traits$cent_minP<-(traits$min_precip-mean(traits$min_precip))/(2*sd(traits$min_precip))
-traits$cent_roots<-(traits$root_depth_in-mean(traits$root_depth_in))/(2*sd(traits$root_depth_in))
-traits$cent_pol<-(traits$pol-mean(traits$pol))/(2*sd(traits$pol))
-traits$cent_flo_view<-(traits$flo_view-mean(traits$flo_view))/(2*sd(traits$flo_view))
-traits$seed_cent<-(traits$seed_pound-mean(traits$seed_pound,na.rm=TRUE))/(2*sd(traits$seed_pound,na.rm=TRUE))
+#traits$height_cent<-(traits$height_mat-mean(traits$height_mat))/(2*sd(traits$height_mat))
+#traits$cent_frost<-(traits$frost_free-mean(traits$frost_free))/(2*sd(traits$frost_free))
+#traits$cent_minT<-(traits$min_temp-mean(traits$min_temp))/(2*sd(traits$min_temp))
+#traits$cent_minP<-(traits$min_precip-mean(traits$min_precip))/(2*sd(traits$min_precip))
+#traits$cent_roots<-(traits$root_depth_in-mean(traits$root_depth_in))/(2*sd(traits$root_depth_in))
+#traits$cent_pol<-(traits$pol-mean(traits$pol))/(2*sd(traits$pol))
+#traits$cent_flo_view<-(traits$flo_view-mean(traits$flo_view))/(2*sd(traits$flo_view))
+#traits$seed_cent<-(traits$seed_pound-mean(traits$seed_pound,na.rm=TRUE))/(2*sd(traits$seed_pound,na.rm=TRUE))
 
 ###prep the tree
 treee<-read.tree("Input/Vascular_Plants_rooted.dated.tre")

@@ -1,7 +1,7 @@
 ####c### This is the final analysis file for hysteranthy anaylsis on MTSV as of 3/28/18.
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
-graphics.off()
+#graphics.off()
 setwd("~/Documents/git/proterant/input")
 library("ape")
 library("phytools")
@@ -21,74 +21,84 @@ library("randomForest")
 
 mich.tree<-read.tree("pruned_for_mich.tre")
 mich.data<-read.csv("mich_data_full_clean.csv")
+drought.dat<-read.csv("..//Data/USDA_traitfor_MTSV.csv",header=TRUE)
 
 mich.data$dev.time<-NA
 mich.data$dev.time<-mich.data$fruiting-mich.data$flo_time
+###one more cleaninging tax
+mich.data$pol<-ifelse(mich.data$Species=="quadrangulata",1,mich.data$pol)
+mich.data$pol<-ifelse(mich.data$Genus=="Populus"& mich.data$Species=="nigra",1,mich.data$pol)
+
+###make the tree work 
+mich.tree$node.label<-NULL
 
 
-###restrict data set to early flowering
-median(mich.data$flo_time)
-mean(mich.data$flo_time)
-earlymich<-filter(mich.data,flo_time<=5.5)
+######### later we'll be running model with drought tolerance, so add drought tolerance data
+mich.data<-left_join(mich.data,drought.dat,by="name")
 
-###prune tree
-mich.data<-rownames_to_column(mich.data, "name")
-namelist<-earlymich$name
+######prune the tree for drought modeling
+mich.data.wdrought<-filter(mich.data,!is.na(min._precip))
+mich.data.wdrought$precip_cent<-(mich.data.wdrought$min._precip-mean(mich.data.wdrought$min._precip))/(2*sd(mich.data.wdrought$min._precip))
+earlymich<-filter(mich.data.wdrought,flo_time<=5.5)
+
 names.intree<-mich.tree$tip.label
-
-##Prune the tree
+namelist<-unique(earlymich$name)
 to.prune<-which(!names.intree%in%namelist)
-earlytree<-drop.tip(mich.tree,to.prune)
+mich.tree.early<-drop.tip(mich.tree,to.prune)
+mytree.names<-mich.tree.early$tip.label
 
-earlytree$tip.label==earlymich$name
+###Rescale predictors this makes it so you can compare binary to continous data
 
-###For some reason I need to runthis twice when sourcing
-earlymich<-filter(mich.data,flo_time<=5.5)
 
-###prune tree
-#mich.data<-rownames_to_column(mich.data, "name")
-namelist<-earlymich$name
-names.intree<-mich.tree$tip.label
-
-##Prune the tree
-to.prune<-which(!names.intree%in%namelist)
-earlytree<-drop.tip(mich.tree,to.prune)
-
-earlytree$tip.label==earlymich$name
-
-#recenter
-earlymich$height_cent<-(earlymich$heigh_height-mean(earlymich$heigh_height))/(2*sd(earlymich$heigh_height))
-earlymich$fruit_cent<-(earlymich$fruiting-mean(earlymich$fruiting))/(2*sd(earlymich$fruiting))
 earlymich$flo_cent<-(earlymich$flo_time-mean(earlymich$flo_time))/(2*sd(earlymich$flo_time))
 earlymich$pol_cent<-(earlymich$pol-mean(earlymich$pol))/(2*sd(earlymich$pol))
-earlymich$dev_time_center<-(earlymich$dev.time-mean(earlymich$dev.time))/(2*sd(earlymich$dev.time))
+earlymich$precip_cent<-(earlymich$min._precip-mean(earlymich$min._precip))/(2*sd(earlymich$min._precip))
+
+
+
 
 earlymich<-  earlymich %>% remove_rownames %>% column_to_rownames(var="name")
 
-early.seed.cent<-phyloglm(pro2~pol+height_cent+flo_cent+dev_time_center+shade_bin,earlymich, earlytree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                    start.beta=NULL, start.alpha=NULL,
-                    boot=599,full.matrix = TRUE)
-summary(early.seed.cent)
+z.funct.early<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,earlymich, mich.tree.early, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
 
-bootest<-as.data.frame(early.seed.cent$coefficients)
-bootconf<-as.data.frame(early.seed.cent$bootconfint95)
-bootconf<-as.data.frame(t(bootconf))
+z.phys.early<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,earlymich, mich.tree.early, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                         start.beta=NULL, start.alpha=NULL,
+                         boot=599,full.matrix = TRUE)
 
-bootest<-rownames_to_column(bootest, "trait")
-bootconf<-rownames_to_column(bootconf, "trait")
-bootmich<-full_join(bootconf,bootest, by="trait")
-colnames(bootmich)<-c("trait","low","high","estimate")
-bootmich<-dplyr::filter(bootmich, trait!="alpha")
-bootmich<-dplyr::filter(bootmich, trait!="(Intercept)")
-###names
-bootmich$trait[bootmich$trait=="shade_bin"]<-"shade tolerance"
-bootmich$trait[bootmich$trait=="pol"]<-"pollination syndrome"
-bootmich$trait[bootmich$trait=="height_cent"]<-"max height"
-bootmich$trait[bootmich$trait=="dev_time_center"]<-"seed development"
-bootmich$trait[bootmich$trait=="flo_cent"]<-"flower timing"
 
-jpeg("early.effectplot.jpeg")
-functplot1<-ggplot(bootmich,aes(estimate,trait))+geom_point(size=2.5)+geom_segment(aes(y=trait,yend=trait,x=low,xend=high))+theme(panel.border=element_rect(aes(color=blue)))+geom_vline(aes(xintercept=0,color="red"))+xlim(-7,5)+theme(axis.text = element_text(size=14, hjust = .5))+guides(color="none")
-functplot1
-dev.off()
+
+bootestSF<-as.data.frame(z.funct.early$coefficients)
+bootconfSF<-as.data.frame(z.funct.early$bootconfint95)
+bootconfSF<-as.data.frame(t(bootconfSF))
+bootestSF<-rownames_to_column(bootestSF, "trait")
+bootconfSF<-rownames_to_column(bootconfSF, "trait")
+bootdroughtF<-full_join(bootconfSF,bootestSF, by="trait")
+colnames(bootdroughtF)<-c("trait","low","high","estimate")
+bootdroughtF<-dplyr::filter(bootdroughtF, trait!="alpha")
+bootdroughtF<-dplyr::filter(bootdroughtF, trait!="(Intercept)")
+bootdroughtF$class<-"functional-MTSV"
+
+bootestSP<-as.data.frame(z.phys.early$coefficients)
+bootconfSP<-as.data.frame(z.phys.early$bootconfint95)
+bootconfSP<-as.data.frame(t(bootconfSP))
+bootestSP<-rownames_to_column(bootestSP, "trait")
+bootconfSP<-rownames_to_column(bootconfSP, "trait")
+bootdroughtP<-full_join(bootconfSP,bootestSP, by="trait")
+colnames(bootdroughtP)<-c("trait","low","high","estimate")
+bootdroughtP<-dplyr::filter(bootdroughtP, trait!="alpha")
+bootdroughtP<-dplyr::filter(bootdroughtP, trait!="(Intercept)")
+bootdroughtP$class<-"physiological-MTSV"
+
+###combine these three catagories
+bootearly<-rbind(bootdroughtF,bootdroughtP)
+#bootdrought<-rbind(bootdrought,bootdroughtI)
+
+#and plot
+pd=position_dodgev(height=0.3)
+plotty<-ggplot(bootdrought,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
+plotty
+
+
 
