@@ -272,7 +272,6 @@ comps.noint$data[which(comps.noint$class=="functional-MTSV")] <- "MTSV"
 pd=position_dodgev(height=0.4)
 plotty4<-ggplot(comps.noint,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd)+geom_errorbarh(position=pd,width=0.4,aes(xmin=low,xmax=high,color=category,shape=data))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))
 plotty4
-
 save.image(file="hystmodels.RData")
 
 
