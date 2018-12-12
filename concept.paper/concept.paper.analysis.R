@@ -22,57 +22,43 @@ library(ggstance)
 library(broom)
 
 #if you dont want to run the model: 
-load("hystmodels.RData")
+#load("hystmodels.RData")
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
 mich.tree<-read.tree("pruned_for_mich.tre")
 mich.data<-read.csv("mich_data_full_clean.csv")
 drought.dat<-read.csv("..//Data/USDA_traitfor_MTSV.csv",header=TRUE)
-
+source("..//Scripts/extract_coefs.R")
 ###make a column for seed development time
 mich.data$dev.time<-NA
 mich.data$dev.time<-mich.data$fruiting-mich.data$flo_time
 ###one more cleaninging tax
 mich.data$pol<-ifelse(mich.data$Species=="quadrangulata",1,mich.data$pol)
 mich.data$pol<-ifelse(mich.data$Genus=="Populus"& mich.data$Species=="nigra",1,mich.data$pol)
-
 ###make the tree work 
 mich.tree$node.label<-NULL
 
 ###RESPONSE VARIABLE KEY
-#pro<- hysteranthy= before, and before with leaves 
 #pro2<-hysteranthy= before, before/with and with
 #pro3<- hysteranthy=before only
 ###phylo.D###### calculate phylo d.
 
 set.seed(122)
-###################################################################################
 ######phylo signals#########################################################
 d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
-PhyloD <- phylo.d(d, binvar=pro) ###intermediate hysteranthy
-PhyloD
-plot(PhyloD)
 Wind<-phylo.d(d, binvar=pol) #-0.48 more phylogenetically conserved that 
 Wind
-tol<-phylo.d(d, binvar=shade_bin)
-tol
-plot(Wind)
 ##functionalhysteranthy
 PhyloPro2<-phylo.d(d,binvar=pro2)
 PhyloPro2
 plot(PhyloPro2)
-#d<-comparative.data(mich.tree,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+
 PhyloPro3<-phylo.d(d,binvar=pro3)
 PhyloPro3
 plot(PhyloPro3)
 ###phlosignal for continuous trait
 phylosig(mich.tree, mich.data$flo_time, method="lambda", test=TRUE, nsim=999,se=NULL)
-phylosig(mich.tree, mich.data$dev.time, method="lambda", test=TRUE, nsim=999)
-phylosig(mich.tree, mich.data$heigh_height, method="lambda", test=TRUE, nsim=999)
 ###############################################################################################
-
-
-
 ######### later we'll be running model with drought tolerance, so add drought tolerance data
 mich.data<-left_join(mich.data,drought.dat,by="name")
 
@@ -98,69 +84,6 @@ mich.data$dev_time_cent<-(mich.data$dev.time-mean(mich.data$dev.time))/(2*sd(mic
 mich.data$tol_cent<-(mich.data$shade_bin-mean(mich.data$shade_bin))/(2*sd(mich.data$shade_bin))
 mich.data$precip_cent<-(mich.data$min._precip-mean(mich.data$min._precip))/(2*sd(mich.data$min._precip))
 
-######### phyloglm requires species names to be in rownames
-mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
-
-###models:
-
-
-z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                          start.beta=NULL, start.alpha=NULL,
-                          boot=599,full.matrix = TRUE)
-
-z.phys.drought<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                         start.beta=NULL, start.alpha=NULL,
-                         boot=599,full.matrix = TRUE)
-
-#z.inter.drought<-phyloglm(pro~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data.wdrought, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
- #                         start.beta=NULL, start.alpha=NULL,
-  #                        boot=599,full.matrix = TRUE)
-
-#bootestSI<-as.data.frame(z.inter.drought$coefficients)
-#bootconfSI<-as.data.frame(z.inter.drought$bootconfint95)
-#bootconfSI<-as.data.frame(t(bootconfSI))
-#bootestSI<-rownames_to_column(bootestSI, "trait")
-#bootconfSI<-rownames_to_column(bootconfSI, "trait")
-#bootdroughtI<-full_join(bootconfSI,bootestSI, by="trait")
-#colnames(bootdroughtI)<-c("trait","low","high","estimate")
-#bootdroughtI<-dplyr::filter(bootdroughtI, trait!="alpha")
-#bootdroughtI<-dplyr::filter(bootdroughtI, trait!="(Intercept)")
-#bootdroughtI$class<-"intermediate-MTSV"
-
-
-bootestSF<-as.data.frame(z.funct.drought$coefficients)
-bootconfSF<-as.data.frame(z.funct.drought$bootconfint95)
-bootconfSF<-as.data.frame(t(bootconfSF))
-bootestSF<-rownames_to_column(bootestSF, "trait")
-bootconfSF<-rownames_to_column(bootconfSF, "trait")
-bootdroughtF<-full_join(bootconfSF,bootestSF, by="trait")
-colnames(bootdroughtF)<-c("trait","low","high","estimate")
-bootdroughtF<-dplyr::filter(bootdroughtF, trait!="alpha")
-bootdroughtF<-dplyr::filter(bootdroughtF, trait!="(Intercept)")
-bootdroughtF$class<-"functional-MTSV"
-
-bootestSP<-as.data.frame(z.phys.drought$coefficients)
-bootconfSP<-as.data.frame(z.phys.drought$bootconfint95)
-bootconfSP<-as.data.frame(t(bootconfSP))
-bootestSP<-rownames_to_column(bootestSP, "trait")
-bootconfSP<-rownames_to_column(bootconfSP, "trait")
-bootdroughtP<-full_join(bootconfSP,bootestSP, by="trait")
-colnames(bootdroughtP)<-c("trait","low","high","estimate")
-bootdroughtP<-dplyr::filter(bootdroughtP, trait!="alpha")
-bootdroughtP<-dplyr::filter(bootdroughtP, trait!="(Intercept)")
-bootdroughtP$class<-"physiological-MTSV"
-
-###combine these three catagories
-bootdrought<-rbind(bootdroughtF,bootdroughtP)
-#bootdrought<-rbind(bootdrought,bootdroughtI)
-
-#and plot
-pd=position_dodgev(height=0.3)
-plotty<-ggplot(bootdrought,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
-plotty
-
-
-#number of bootstraps from Wilcox, R. R. (2010). Fundamentals of modern statistical methods: Substantially improving power and accuracy. Springer.
 
 ##############################################
 ###Now do all you did with silvics
@@ -170,9 +93,6 @@ silv.data<-read.csv("silv_data_full.csv")
 silv.USDA<-read.csv("silv.USDA.csv")
 silv.tree$node.label<-NULL
 silv.data<-left_join(silv.data,silv.USDA) ###maybe you should make a drought species list specifically for silvics to lose less species
-
-
-
 
 ####Silvics cleaning########
 ###fruiting
@@ -209,11 +129,7 @@ silv.data$pol_cent<-(silv.data$pol-mean(silv.data$pol))/(2*sd(silv.data$pol))
 silv.data$tol_cent<-(silv.data$shade_bin-mean(silv.data$shade_bin))/(2*sd(silv.data$shade_bin))
 silv.data$dev.time<-silv.data$fruiting-silv.data$flower_time
 silv.data$dev_time_cent<-(silv.data$dev.time-mean(silv.data$dev.time))/(2*sd(silv.data$dev.time))
-
 silv.data$precip_cent<-(silv.data$min._precip-mean(silv.data$min._precip))/(2*sd(silv.data$min._precip)) 
-  
-#######make a datasheet for dealing with slilvics drought
-   
 
 ####prune silvics tree to match reduced dataset
 names.intree<-silv.tree$tip.label
@@ -223,7 +139,6 @@ silv.tree.droughtprune<-drop.tip(silv.tree,to.prune)
 mytree.names<-silv.tree.droughtprune$tip.label
 setdiff(namelist,mytree.names) 
 intersect(namelist,mytree.names)
-
 
 #####phylogenetic signals####################################### for silvics
 e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
@@ -235,90 +150,62 @@ plot(PhyloSilv2)
 PhyloSilv3<-phylo.d(e,binvar=pro3)
 PhyloSilv3
 plot(PhyloSilv3)
-#######################
-
-###prepare silvics data for modeling
-silv.data<- silv.data %>% remove_rownames %>% column_to_rownames(var="name")
-
-###models
-
-
 #############################################################################################
-#####silvics########  with drought 
+#### interaction models 
 ##########################################################################################
+######### phyloglm requires species names to be in rownames
+mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 silv.data<- silv.data %>% remove_rownames %>% column_to_rownames(var="name")
+###models: #number of bootstraps from Wilcox, R. R. (2010). Fundamentals of modern statistical methods: Substantially improving power and accuracy. Springer.
 
-z.funct.drought.silvics<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
 
-z.phys.drought.silvics<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+z.phys.drought<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                         start.beta=NULL, start.alpha=NULL,
+                         boot=599,full.matrix = TRUE)
+
+z.funct.drought.silvics<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                                   start.beta=NULL, start.alpha=NULL,
                                   boot=599,full.matrix = TRUE)
 
-#z.inter.drought.silvics<-phyloglm(pro~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data.wdrought, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
- #                                start.beta=NULL, start.alpha=NULL,
-  #                               boot=599,full.matrix = TRUE)
+z.phys.drought.silvics<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                                 start.beta=NULL, start.alpha=NULL,
+                                 boot=599,full.matrix = TRUE)
+#======clean for plotting
+mich.funct.wint.dat<-full_join(extract_coefs(z.funct.drought),extract_CIs(z.funct.drought),by="trait")
+colnames(mich.funct.wint.dat)<-c("trait","estimate","low","high")
+mich.funct.wint.dat$class<-"functional-MTSV"
 
+mich.phys.wint.dat<-full_join(extract_coefs(z.phys.drought),extract_CIs(z.phys.drought),by="trait")
+colnames(mich.phys.wint.dat)<-c("trait","estimate","low","high")
+mich.phys.wint.dat$class<-"physiological-MTSV"
 
-#bootestSI<-as.data.frame(z.inter.drought.silvics$coefficients)
-#bootconfSI<-as.data.frame(z.inter.drought.silvics$bootconfint95)
-#bootconfSI<-as.data.frame(t(bootconfSI))
-#bootestSI<-rownames_to_column(bootestSI, "trait")
-#bootconfSI<-rownames_to_column(bootconfSI, "trait")
-#bootdroughtII<-full_join(bootconfSI,bootestSI, by="trait")
-#colnames(bootdroughtII)<-c("trait","low","high","estimate")
-#bootdroughtII<-dplyr::filter(bootdroughtII, trait!="alpha")
-#bootdroughtII<-dplyr::filter(bootdroughtII, trait!="(Intercept)")
-#bootdroughtII$class<-"intermediate-USFS"
+silv.funct.wint.dat<-full_join(extract_coefs(z.funct.drought.silvics),extract_CIs(z.funct.drought.silvics),by="trait")
+colnames(silv.funct.wint.dat)<-c("trait","estimate","low","high")
+silv.funct.wint.dat$class<-"functional-USFS"
 
+silv.phys.wint.dat<-full_join(extract_coefs(z.phys.drought.silvics),extract_CIs(z.phys.drought.silvics),by="trait")
+colnames(silv.phys.wint.dat)<-c("trait","estimate","low","high")
+silv.phys.wint.dat$class<-"physiological-USFS"
 
-bootestSF<-as.data.frame(z.funct.drought.silvics$coefficients)
-bootconfSF<-as.data.frame(z.funct.drought.silvics$bootconfint95)
-bootconfSF<-as.data.frame(t(bootconfSF))
-bootestSF<-rownames_to_column(bootestSF, "trait")
-bootconfSF<-rownames_to_column(bootconfSF, "trait")
-bootdroughtFF<-full_join(bootconfSF,bootestSF, by="trait")
-colnames(bootdroughtFF)<-c("trait","low","high","estimate")
-bootdroughtFF<-dplyr::filter(bootdroughtFF, trait!="alpha")
-#bootdroughtFF<-dplyr::filter(bootdroughtFF, trait!="(Intercept)")
-bootdroughtFF$class<-"functional-USFS"
+michigan.wint<-rbind(mich.phys.wint.dat,mich.funct.wint.dat)
+USFS.wint<-rbind(silv.phys.wint.dat,silv.funct.wint.dat)
 
-bootestSP<-as.data.frame(z.phys.drought.silvics$coefficients)
-bootconfSP<-as.data.frame(z.phys.drought.silvics$bootconfint95)
-bootconfSP<-as.data.frame(t(bootconfSP))
-bootestSP<-rownames_to_column(bootestSP, "trait")
-bootconfSP<-rownames_to_column(bootconfSP, "trait")
-bootdroughtPP<-full_join(bootconfSP,bootestSP, by="trait")
-colnames(bootdroughtPP)<-c("trait","low","high","estimate")
-bootdroughtPP<-dplyr::filter(bootdroughtPP, trait!="alpha")
-#bootdroughtPP<-dplyr::filter(bootdroughtPP, trait!="(Intercept)")
-bootdroughtPP$class<-"physiological-USFS"
-
-bootdrought.USFS<-rbind(bootdroughtFF,bootdroughtPP)
-#bootdrought.USFS<-rbind(bootdrought.USFS,bootdroughtII)
-
-plotty2<-ggplot(bootdrought.USFS,aes(estimate,trait))+geom_point(size=2.5,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_bw()
-plotty2
-comps<-rbind(bootdrought,bootdrought.USFS)
-
+#============== cleaning
+comps<-rbind(michigan.wint,USFS.wint)
 comps$category<-NA
 comps$category[which(comps$class=="physiological-USFS")] <- "physiological"
 comps$category[which(comps$class=="physiological-MTSV")] <- "physiological"
 comps$category[which(comps$class=="functional-USFS")] <- "functional"
 comps$category[which(comps$class=="functional-MTSV")] <- "functional"
-#comps$category[which(comps$class=="intermediate-MTSV")] <- "intermediate"
-#comps$category[which(comps$class=="intermediate-USFS")] <- "intermediate"
+
 comps$data<-NA
 comps$data[which(comps$class=="physiological-USFS")] <- "USFS"
 comps$data[which(comps$class=="physiological-MTSV")] <- "MTSV"
 comps$data[which(comps$class=="functional-USFS")] <- "USFS"
 comps$data[which(comps$class=="functional-MTSV")] <- "MTSV"
-#comps$data[which(comps$class=="intermediate-MTSV")] <- "MTSV"
-#comps$data[which(comps$class=="intermediate-USFS")] <- "USFS"
-
-
-comps<-filter(comps,category!="intermediate")
 
 ###change the variable names
 comps$trait[which(comps$trait=="pol_cent")] <- "main effect: pollination syndrome"
@@ -331,7 +218,7 @@ comps$trait[which(comps$trait=="pol_cent:flo_cent")] <- "interaction: pollinatio
 pd=position_dodgev(height=0.4)
 plotty3<-ggplot(comps,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd)+geom_errorbarh(position=pd,width=0.4,aes(xmin=low,xmax=high,color=category,shape=data))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))
 plotty3
-################################no inter
+#models=====================no interaction=========================================================================================
 z.funct.drought.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
@@ -339,32 +226,6 @@ z.funct.drought.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,mich.data, mi
 z.phys.drought.noint<-phyloglm(pro3~pol_cent+flo_cent+precip_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
                          boot=599,full.matrix = TRUE)
-
-
-
-bootestSF<-as.data.frame(z.funct.drought.noint$coefficients)
-bootconfSF<-as.data.frame(z.funct.drought.noint$bootconfint95)
-bootconfSF<-as.data.frame(t(bootconfSF))
-bootestSF<-rownames_to_column(bootestSF, "trait")
-bootconfSF<-rownames_to_column(bootconfSF, "trait")
-bootdroughtF<-full_join(bootconfSF,bootestSF, by="trait")
-colnames(bootdroughtF)<-c("trait","low","high","estimate")
-bootdroughtF<-dplyr::filter(bootdroughtF, trait!="alpha")
-#bootdroughtF<-dplyr::filter(bootdroughtF, trait!="(Intercept)")
-bootdroughtF$class<-"functional-MTSV"
-
-bootestSP<-as.data.frame(z.phys.drought.noint$coefficients)
-bootconfSP<-as.data.frame(z.phys.drought.noint$bootconfint95)
-bootconfSP<-as.data.frame(t(bootconfSP))
-bootestSP<-rownames_to_column(bootestSP, "trait")
-bootconfSP<-rownames_to_column(bootconfSP, "trait")
-bootdroughtP<-full_join(bootconfSP,bootestSP, by="trait")
-colnames(bootdroughtP)<-c("trait","low","high","estimate")
-bootdroughtP<-dplyr::filter(bootdroughtP, trait!="alpha")
-#bootdroughtP<-dplyr::filter(bootdroughtP, trait!="(Intercept)")
-bootdroughtP$class<-"physiological-MTSV"
-
-bootdrought.MTSCI<-rbind(bootdroughtF,bootdroughtP)
 
 z.funct.drought.silvics.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,silv.data, silv.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                                   start.beta=NULL, start.alpha=NULL,
@@ -374,50 +235,44 @@ z.phys.drought.silvics.noint<-phyloglm(pro3~pol_cent+flo_cent+precip_cent,silv.d
                                  start.beta=NULL, start.alpha=NULL,
                                  boot=599,full.matrix = TRUE)
 
-bootestSF<-as.data.frame(z.funct.drought.silvics.noint$coefficients)
-bootconfSF<-as.data.frame(z.funct.drought.silvics.noint$bootconfint95)
-bootconfSF<-as.data.frame(t(bootconfSF))
-bootestSF<-rownames_to_column(bootestSF, "trait")
-bootconfSF<-rownames_to_column(bootconfSF, "trait")
-bootdroughtFF<-full_join(bootconfSF,bootestSF, by="trait")
-colnames(bootdroughtFF)<-c("trait","low","high","estimate")
-bootdroughtFF<-dplyr::filter(bootdroughtFF, trait!="alpha")
-#bootdroughtFF<-dplyr::filter(bootdroughtFF, trait!="(Intercept)")
-bootdroughtFF$class<-"functional-USFS"
+#=============cleaning====================================================
+mich.funct.noint.dat<-full_join(extract_coefs(z.funct.drought.noint),extract_CIs(z.funct.drought.noint),by="trait")
+colnames(mich.funct.noint.dat)<-c("trait","estimate","low","high")
+mich.funct.noint.dat$class<-"functional-MTSV"
 
-bootestSP<-as.data.frame(z.phys.drought.silvics.noint$coefficients)
-bootconfSP<-as.data.frame(z.phys.drought.silvics.noint$bootconfint95)
-bootconfSP<-as.data.frame(t(bootconfSP))
-bootestSP<-rownames_to_column(bootestSP, "trait")
-bootconfSP<-rownames_to_column(bootconfSP, "trait")
-bootdroughtPP<-full_join(bootconfSP,bootestSP, by="trait")
-colnames(bootdroughtPP)<-c("trait","low","high","estimate")
-bootdroughtPP<-dplyr::filter(bootdroughtPP, trait!="alpha")
-#bootdroughtPP<-dplyr::filter(bootdroughtPP, trait!="(Intercept)")
-bootdroughtPP$class<-"physiological-USFS"
+mich.phys.noint.dat<-full_join(extract_coefs(z.phys.drought.noint),extract_CIs(z.phys.drought.noint),by="trait")
+colnames(mich.phys.noint.dat)<-c("trait","estimate","low","high")
+mich.phys.noint.dat$class<-"physiological-MTSV"
 
-bootdrought.USFS<-rbind(bootdroughtFF,bootdroughtPP)
+silv.funct.noint.dat<-full_join(extract_coefs(z.funct.drought.silvics.noint),extract_CIs(z.funct.drought.silvics.noint),by="trait")
+colnames(silv.funct.noint.dat)<-c("trait","estimate","low","high")
+silv.funct.noint.dat$class<-"functional-USFS"
 
-comps<-rbind(bootdrought.MTSCI,bootdrought.USFS)
+silv.phys.noint.dat<-full_join(extract_coefs(z.phys.drought.silvics.noint),extract_CIs(z.phys.drought.silvics.noint),by="trait")
+colnames(silv.phys.noint.dat)<-c("trait","estimate","low","high")
+silv.phys.noint.dat$class<-"physiological-USFS"
 
-comps$category<-NA
-comps$category[which(comps$class=="physiological-USFS")] <- "physiological"
-comps$category[which(comps$class=="physiological-MTSV")] <- "physiological"
-comps$category[which(comps$class=="functional-USFS")] <- "functional"
-comps$category[which(comps$class=="functional-MTSV")] <- "functional"
-#comps$category[which(comps$class=="intermediate-MTSV")] <- "intermediate"
-#comps$category[which(comps$class=="intermediate-USFS")] <- "intermediate"
-comps$data<-NA
-comps$data[which(comps$class=="physiological-USFS")] <- "USFS"
-comps$data[which(comps$class=="physiological-MTSV")] <- "MTSV"
-comps$data[which(comps$class=="functional-USFS")] <- "USFS"
-comps$data[which(comps$class=="functional-MTSV")] <- "MTSV"
+mich.noint<-rbind(mich.phys.noint.dat,mich.funct.noint.dat)
+USFS.noint<-rbind(silv.phys.noint.dat,silv.funct.noint.dat)
 
+comps.noint<-rbind(mich.noint,USFS.noint)
+comps.noint$category<-NA
+comps.noint$category[which(comps.noint$class=="physiological-USFS")] <- "physiological"
+comps.noint$category[which(comps.noint$class=="physiological-MTSV")] <- "physiological"
+comps.noint$category[which(comps.noint$class=="functional-USFS")] <- "functional"
+comps.noint$category[which(comps.noint$class=="functional-MTSV")] <- "functional"
 
+comps.noint$data<-NA
+comps.noint$data[which(comps.noint$class=="physiological-USFS")] <- "USFS"
+comps.noint$data[which(comps.noint$class=="physiological-MTSV")] <- "MTSV"
+comps.noint$data[which(comps.noint$class=="functional-USFS")] <- "USFS"
+comps.noint$data[which(comps.noint$class=="functional-MTSV")] <- "MTSV"
+
+###plotting==================================================
 pd=position_dodgev(height=0.4)
-plotty3<-ggplot(comps,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd)+geom_errorbarh(position=pd,width=0.4,aes(xmin=low,xmax=high,color=category,shape=data))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))
-plotty3
-####noint
+plotty4<-ggplot(comps.noint,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd)+geom_errorbarh(position=pd,width=0.4,aes(xmin=low,xmax=high,color=category,shape=data))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))
+plotty4
+
 save.image(file="hystmodels.RData")
 
 
