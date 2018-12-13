@@ -1,7 +1,7 @@
 #####First flobuds analysis. Question: How does first flowering (60), change relative to first leafout day (15)?
 # Begun by Dan on April 13 2018
 setwd("~/Documents/git/proterant/FLOBUDS")
-source("cleaning.R")
+source("cleaning/cleaning.R")
 
 #############CREATE A DATA SHEET THAT HAS THE THREE FLOWER TYPES IN SEPARATE COLUMNS#########################
 #################THIS WILL BE USEFUL FOR COMPARING CHANGES IN PROTANDRY OR PROTOGYNY######################
@@ -12,58 +12,60 @@ first<-aggregate(d.leaf$doy.final, by = list(d.leaf$id), min)
 ####combine with all data
 dater<-as.data.frame(unique(dx$id))
 colnames(dater)<- c("id")
-colnames(first)<-c("id","leaf_day")
+colnames(first)<-c("id","leaf_day(15)")
 dater<-full_join(dater,first,by="id") ###now you have a data set with first leaves
+
+
+
 ### flowers (currrently mixed only)
 unique(dx$flophase)
-d.flo<-filter(dx,flophase==60) ###This is all the 60s ever I have
+d.flo<-filter(dx,flophase %in% c("60","60-F","60-M")) ###This is all the 60s ever I have
 firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id),min )
+
 colnames(firstflo)<-c("id","flo_day")
 dater<-full_join(dater,firstflo,by="id")
 ###add female
-d.floF<-filter(dx,flophase=="60-F")
-firstfloF<-aggregate(d.floF$doy.final, by = list(d.floF$id), min) ##This stage is problematc
+#d.floF<-filter(dx,flophase=="60-F")
+#firstfloF<-aggregate(d.floF$doy.final, by = list(d.floF$id), min) ##This stage is problematc
 
-colnames(firstfloF)<-c("id","flo_dayF")
-dater<-full_join(dater,firstfloF,by="id")
+#colnames(firstfloF)<-c("id","flo_dayF")
+#dater<-full_join(dater,firstfloF,by="id")
 ###add male
-d.floM<-filter(dx,flophase=="60-M")
-firstfloM<-aggregate(d.floM$doy.final, by = list(d.floM$id), min)
-colnames(firstfloM)<-c("id","flo_dayM")
-dater<-full_join(dater,firstfloM,by="id")
+#d.floM<-filter(dx,flophase=="60-M")
+#firstfloM<-aggregate(d.floM$doy.final, by = list(d.floM$id), min)
+#colnames(firstfloM)<-c("id","flo_dayM")
+#dater<-full_join(dater,firstfloM,by="id")
 ##### pull experimenta; information to merge. THis give a full data sheet 
 ###in which male, female and mixd flowering can be compared
 dxx<-dplyr::select(dx,1:7)
 dxx<-distinct(dxx)
 good.dat<-left_join(dater,dxx)
 ###make a dichogamy sheet
-mono<-filter(good.dat, GEN.SPA %in% c( "COM.PER","COR.COR"))
+#mono<-filter(good.dat, GEN.SPA %in% c( "COM.PER","COR.COR"))
 #write.csv(mono,"dicogamy.csv")
 ###continue
 good.dat<-gather(good.dat,sex,DOY,2:5)
-#good.dat<-unite(good.dat,treatment,Force,Light,Chill,sep="" )
-
-#ggplot(good.dat,aes(x=treatment,y=flo_day_Mon, color=sex))+geom_point()+facet_wrap(~GEN.SPA)
-#ggplot(good.dat,aes(x=treatment,y=DOY))+stat_summary(aes(color=sex))+geom_point(size=0.2,aes(color=sex))+facet_wrap(~GEN.SPA)
 
 
 
 ##########################################################################################
 
 ############MAKE A DATE SHEET THAT AGGREGATES ALL FLOWER TO EVALUATE COARSE HYSTERANTHY############
+unique(dx$flophase)
 DAT<-separate(dx,flophase,c("abosolute_flower","sex_ind"),sep="-")
 L<-filter(DAT,leafphase==9)
 L1<-aggregate(L$doy.final, by = list(L$id), min)
 
 datUM<-as.data.frame(unique(DAT$id))
 colnames(datUM)<- c("id")
-colnames(L1)<-c("id","Lbb_day")
+colnames(L1)<-c("id","Lbb_day(9)")
 datUM<-full_join(datUM,L1,by="id") ###now you have a data set with first leaves
 
 ### flowers (currrently mixed only)
+unique(DAT$abosolute_flower)
 Fl<-filter(DAT,abosolute_flower==60)
 Fl1<-aggregate(Fl$doy.final, by = list(Fl$id), min)
-colnames(Fl1)<-c("id","flo_day")
+colnames(Fl1)<-c("id","flo_day(60)")
 datUM<-full_join(datUM,Fl1,by="id")
 great.dat<-left_join(datUM,dxx)
 
@@ -73,7 +75,7 @@ L3<-aggregate(LLL$doy.final, by = list(LLL$id), min)
 
 datUM3<-as.data.frame(unique(DAT$id))
 colnames(datUM3)<- c("id")
-colnames(L3)<-c("id","leaf_day")
+colnames(L3)<-c("id","leaf_day(15)")
 great.dat<-left_join(great.dat,L3)
 ###add expansion
 LL<-filter(DAT,leafphase==11)
@@ -81,12 +83,12 @@ L2<-aggregate(LL$doy.final, by = list(LL$id), min)
 
 datUM2<-as.data.frame(unique(DAT$id))
 colnames(datUM2)<- c("id")
-colnames(L2)<-c("id","Lexpand_day")
+colnames(L2)<-c("id","Lexpand_day(11)")
 great.dat<-left_join(great.dat,L2)
 ncol(great.dat)
 great.dat<-great.dat[,c(1,4,5,6,7,8,9,3,2,10,11)]
 ###add survival analysis columns
-surv<-read.csv("flobuds.eval.csv",header=TRUE)
+surv<-read.csv("data/flobuds.eval.csv",header=TRUE)
 colnames(surv)
 colnames(great.dat)
 surv<-unite(surv,treatcode,Force,Light,Chill,sep="_",remove = FALSE)

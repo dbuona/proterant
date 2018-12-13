@@ -19,19 +19,43 @@ library(survminer)
 library(ggthemes)
 library("Hmisc")
 
-d<-read.csv("flo_exapand_survival_data")
-d.flo<-filter(d,phase=="flo_day")
-d.leaf<-filter(d,phase=="leaf_day")
+d<-read.csv("flo_exapand_survival_data.csv")
+d.flo<-filter(d,phase=="flo_day.60.")
+d.leaf<-filter(d,phase=="Lexpand_day.11.")
 ###model for flowering and leaf exansion
-prior2<-get_prior(DOY | cens(surv) ~ phase+Light+Chill+Force+Light:phase+Chill:phase+Force:phase,
-                  data = d, family = weibull) 
+table(d$GEN.SPA)
+prior2<-get_prior(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase,
+                  data = d, family = lognormal()) 
 
-mod.fe1<- brm(DOY | cens(surv) ~ phase+Light+Chill+Force+Light:phase+Chill:phase+Force:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
-          data = d, family = weibull,inits = "0",
+mod.fe.z<- brm(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
+          data = d, family = lognormal(),inits = "0",
           iter= 3000,
           warmup = 2000,
           prior = prior2) 
-summary(mod.fe)#13 divergent transitions
+summary(mod.fe.z)
+comp.only<-dplyr::filter(d,GEN.SPA %in% c("COM.PER","COR.COR","ILE.MUC","VAC.COR","PRU.PEN","ACE.PEN"))
+
+prior.comp<-get_prior(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase,
+                                           data = comp.only, family = lognormal()) 
+                         
+
+mod.comp.z<- brm(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase+(1+phase+p_z:phase+c_z:phase+f_z:phase|GEN.SPA),
+               data = comp.only, family = lognormal(),inits = "0",
+               iter= 3000,
+               warmup = 2000,
+               prior = prior.comp)
+summary(mod.comp.z)
+
+comp<-as.data.frame(fixef(mod.comp.z))
+comp<-rownames_to_column(comp,"predictor")
+ggplot(comp,aes(Estimate,predictor))+geom_point(aes(color=GEN.SPA))+geom_errorbarh(aes(xmin=(Q2.5), xmax=(Q97.5)))+facet+wrap(~GEN.SPA)+geom_vline(aes(xintercept=0))
+
+
+####try the model above for individual species
+
+
+
+
 #plot this model
 ggplot(Z,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom_errorbarh(aes(color=as.character(class),xmin=(CIlow), xmax=(CIhigh)), position=pd, size=.5, height =0, width=0)+geom_vline(aes(xintercept=0))+ggtitle("Model M1b:")+facet_wrap(~GEN.SPA)
 ###### This model has 13 divergent transistions and no real effects in the predictors.
