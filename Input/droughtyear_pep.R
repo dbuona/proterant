@@ -9,7 +9,7 @@ library(car)
 library(rgdal)
 
 
-#read in clean data
+#read in clean data of offset for each species
 aln<-read.csv("alnus_delta_hyst.csv",header=TRUE)
 frax<-read.csv("fraxinus_delta_hyst.csv",header=TRUE)
 aes<-read.csv("aes_delta_hyst.csv",header=TRUE)
@@ -17,6 +17,7 @@ aes<-read.csv("aes_delta_hyst.csv",header=TRUE)
  ###is there a correlation between drought and hysteranthy
 #2003-4 and 2005-6 in germany Ivits et al 2014
 
+##this plots the stations to show that they are all pretty mcuh in germany
 newmap <- getMap(resolution = "low")
 plot(newmap,
      xlim = c(0, 20),
@@ -29,8 +30,9 @@ points(15.28300,45.2670,col="green")###gerride of this point
 ###pretty much all site are in germany except for 1 alnus in croatia
 aln<-dplyr::filter(aln,lat!=45.2670)
 
-aln.sub<-dplyr::filter(aln,year %in% c(2004,2005,2006,2008,2009,2010))
-aln.sub$drought<-ifelse(aln.sub$year %in% c(2004,2005,2006),1,0)
+###subset to the 4 drought year
+aln.sub<-dplyr::filter(aln,year %in% c(2003,2004,2005,2006,2007,2008,2009,2010))
+aln.sub$drought<-ifelse(aln.sub$year %in% c(2003,2004,2005,2006),1,0)
 
 Anova(lmer(offset~drought+(1|s_id),data=aln.sub),type=3)
 Anova(lmer(flower~drought+(1|s_id),data=aln.sub),type=3)
@@ -38,8 +40,8 @@ Anova(lmer(flower~drought+(1|s_id),data=aln.sub),type=3)
 ggplot(aln.sub,aes(as.factor(drought),offset))+geom_boxplot()+ggtitle("Alnus incana")
 ggplot(aln.sub,aes(as.factor(drought),flower))+geom_boxplot()+ggtitle("Alnus incana") 
 
-frax.sub<-dplyr::filter(frax,year %in% c(2004,2005,2006,2008,2009,2010))
-frax.sub$drought<-ifelse(frax.sub$year %in% c(2004,2005,2006),1,0)
+frax.sub<-dplyr::filter(frax,year %in% c(2003,2004,2005,2006,2007,2008,2009,2010))
+frax.sub$drought<-ifelse(frax.sub$year %in% c(2003,2004,2005,2006),1,0)
 
 Anova(lmer(offset~drought+(1|s_id),data=frax.sub))
 Anova(lmer(flower~drought+(1|s_id),data=frax.sub))
@@ -47,10 +49,11 @@ Anova(lmer(flower~drought+(1|s_id),data=frax.sub))
 ggplot(frax.sub,aes(as.factor(drought),offset))+geom_boxplot()+ggtitle("Fraxinus excelsior")
 ggplot(frax.sub,aes(as.factor(drought),flower))+geom_boxplot()+ggtitle("Fraxinus excelsior")
 
-aes.sub<-dplyr::filter(aes,year %in% c(2004,2005,2006,2008,2009,2010))
-aes.sub$drought<-ifelse(aes.sub$year %in% c(2004,2005,2006),1,0)
+aes.sub<-dplyr::filter(aes,year %in% c(2003,2004,2005,2006,2007,2008,2009,2010))
+aes.sub$drought<-ifelse(aes.sub$year %in% c(2003,2004,2005,2006),1,0)
 
 Anova(lmer(offset~drought+(1|s_id),data=aes.sub))
+Anova(lmer(flower~drought+(1|s_id),data=aes.sub))
 ggplot(aes.sub,aes(as.factor(drought),offset))+geom_boxplot()+ggtitle("Aesculus")
 ggplot(aes.sub,aes(as.factor(drought),flower))+geom_boxplot()+ggtitle("Aesculus")
 
@@ -60,11 +63,12 @@ library("remote")
 library(reshape2)
 
 d<-frax
-calc<-d %>% group_by(s_id) %>% summarise(ave=mean(offset))
+calc<-d %>% group_by(s_id) %>% summarise(ave.offset=mean(offset))
+calc2<-d %>% group_by(s_id) %>% summarise(ave.flower=mean(flower))
 d<-dplyr::select(d,s_id,lon,lat)
 
 d<-left_join(d,calc)
-
+d<-left_join(d,calc2)
 d<-d[!duplicated(d), ]
 
 moist<-raster("grids_germany_multi_annual_soil_moist_1991-2010_05.asc") ##Gause Kruger 3
@@ -83,15 +87,14 @@ colnames(goo)<-c("x","y")
 class(d)
 goot<-cbind(goo2,goo)
 
-nrow(gaas)
-d
 
 ###decent projectiontry to extract
 foo<-extract(moist, matrix(c(goot$x,goot$y), ncol = 2))
 goot$SM<-foo
 class(goot)
-?lm()
-summary(lm(ave~SM,data=goot))
+
+summary(lm(ave.offset~SM,data=goot))
+
 
 plot(moist)
 points(p)
