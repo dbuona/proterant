@@ -257,3 +257,4 @@ fagus<-grid.arrange(plotty4,mappy3,ncol=2, nrow=1)
 tilia<-grid.arrange(plotty5,mappy4,ncol=2, nrow=1)
 
 save.image(file="hinges.Rdata")
+

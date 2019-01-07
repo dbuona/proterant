@@ -18,10 +18,31 @@ library(sur)
 library(survminer)
 library(ggthemes)
 library("Hmisc")
-
+setwd("~/Documents/git/proterant/FLOBUDS")
 d<-read.csv("flo_exapand_survival_data.csv")
+
 d.flo<-filter(d,phase=="flo_day.60.")
 d.leaf<-filter(d,phase=="Lexpand_day.11.")
+
+###leaf only
+prior<-get_prior(DOY | cens(surv) ~ Light+Chill+Force,
+                 data = d.leaf, family = weibull) 
+
+mod.leaf<- brm(DOY | cens(surv) ~ Light+Chill+Force+(1+Light+Chill+Force|GEN.SPA),
+               data = d.leaf, family = weibull,inits = "0",
+               iter= 3000,
+               warmup = 2000,
+               prior = prior)    
+
+summary(mod.leaf)
+
+
+
+
+
+
+
+
 ###model for flowering and leaf exansion
 table(d$GEN.SPA)
 prior2<-get_prior(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase,
