@@ -90,14 +90,15 @@ fraxagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
 
 
 frax50 <- subset(fraxagg, year>50)
-compy<- compy[which(compy$s_id %in% frax50$s_id),]
+frax10 <- subset(fraxagg, year>10)
+compy<- compy[which(compy$s_id %in% frax10$s_id),]
 
 
 
 
 #compy<-filter(compy, s_id %in% c(range)) ##stations have data 1960-2000
 #compy<-filter(compy, year>1960)
-write.csv(compy,"fraxinus_delta_hyst.csv")
+write.csv(compy,"fraxinus10_delta_hyst.csv")
 
 plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Fraxinus")
 
@@ -191,10 +192,11 @@ alnusagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
 
 
 alnus50 <- subset(alnusagg, year>50)
-compy<- compy[which(compy$s_id %in% alnus50$s_id),]
+alnus10<-subset(alnusagg, year>10)
+#compy<- compy[which(compy$s_id %in% alnus50$s_id),]
+compy<- compy[which(compy$s_id %in% alnus10$s_id),]
 
-
-write.csv(compy,"alnus_delta_hyst.csv")
+write.csv(compy,"alnus10_delta_hyst.csv")
 
 ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=s_id),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Alnus glutinosa")+theme_base()
 
@@ -321,7 +323,18 @@ compy$offset<-compy$leaf-compy$flower
 fullcory<-compy
 fullcory$taxa<-"Corylus avenula"
 
+fullcory<-filter(fullcory,offset<70)
+fullcory<-filter(fullcory,offset>(-70))
+table(fullcory$year)
+coryagg <- aggregate(fullcory[("year")], fullcory[c("s_id", "lat", "lon", "alt")],
+                     FUN=length)
 
+
+cory10 <- subset(coryagg, year>10)
+Corylus10<- fullcory[which(fullcory$s_id %in% cory10$s_id),]
+quantile(Corylus10$offset)
+
+write.csv(Corylus10,"cory10_delta_hyst.csv")
 ##Betula pendula
 cor1<-read.csv("buo_106_020_011.csv", header=TRUE)
 cor2<-read.csv("buo_106_020_060.csv",header=TRUE)
@@ -353,6 +366,19 @@ compy$flower<-as.numeric(compy$flower)
 compy$offset<-compy$leaf-compy$flower
 fullbet<-compy
 fullbet$taxa<-"Betula pendula"
+
+fullbet<-filter(fullbet,offset<70)
+fullbet<-filter(fullbet,offset>(-70))
+table(fullbet$year)
+betagg <- aggregate(fullbet[("year")], fullbet[c("s_id", "lat", "lon", "alt")],
+                     FUN=length)
+
+
+bet10 <- subset(betagg, year>10)
+Bet.pen10<- fullbet[which(fullbet$s_id %in% bet10$s_id),]
+quantile(Bet.pen10$offset)
+
+write.csv(Bet.pen10,"betpen10_delta_hyst.csv")
 
 
 ###Acer platanus
@@ -549,6 +575,19 @@ compy$offset<-compy$leaf-compy$flower
 fullquer<-compy
 fullquer$taxa<-"Quercus spp."
 
+table(fullquer$year)
+queragg <- aggregate(fullquer[("year")], fullquer[c("s_id", "lat", "lon", "alt")],
+                    FUN=length)
+
+
+quer10 <- subset(queragg, year>10)
+Quer10<- fullquer[which(fullquer$s_id %in% quer10$s_id),]
+
+
+write.csv(Quer10,"Quercus10_delta_hyst.csv")
+
+
+
 ###Prunis avium
 cor1<-read.csv("buo_222_xxx_011.csv", header=TRUE)
 cor2<-read.csv("buo_222_xxx_060.csv",header=TRUE)
@@ -580,7 +619,24 @@ compy$flower<-as.numeric(compy$flower)
 compy$offset<-compy$leaf-compy$flower
 fullpru<-compy
 fullpru$taxa<-"Prunus avium"
-big.dat<-rbind(fullacer,fullaes,fullalnus,fullbet,fullbetquest,fullcory,fullfag,fullfrax,fullpru,fullquer,fullsorb,fullsyr,fulltil,fulltil.plat)
+
+
+
+table(fullpru$year)
+pruagg <- aggregate(fullpru[("year")], fullpru[c("s_id", "lat", "lon", "alt")],
+                     FUN=length)
+
+
+pru10 <- subset(pruagg, year>10)
+Prunus10<- fullpru[which(fullpru$s_id %in% pru10$s_id),]
+
+
+write.csv(Prunus10,"Prunus10_delta_hyst.csv")
+
+
+
+
+ig.dat<-rbind(fullacer,fullaes,fullalnus,fullbet,fullbetquest,fullcory,fullfag,fullfrax,fullpru,fullquer,fullsorb,fullsyr,fulltil,fulltil.plat)
 
 ###remove NA's
 big.dat<-filter(big.dat, !is.na(offset))
