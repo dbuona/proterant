@@ -143,11 +143,12 @@ aesagg <- aggregate(compy[("year")], compy[c("s_id", "lat", "lon", "alt")],
 
 
 aes50 <- subset(aesagg, year>50)
-compy<- compy[which(compy$s_id %in% aes50$s_id),]
+aes10 <- subset(aesagg, year>10)
+compy<- compy[which(compy$s_id %in% aes10$s_id),]
 
 
 
-write.csv(compy,"aes_delta_hyst.csv")
+write.csv(compy,"aes10_delta_hyst.csv")
 
 plotty<-ggplot(compy,aes(as.numeric(year),offset))+geom_smooth(method="lm",aes(group=locale),se=FALSE,color="black", linetype="dotted")+geom_smooth(method="lm",color="red")+ggtitle("Aesculus")
 
