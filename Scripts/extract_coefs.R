@@ -10,7 +10,10 @@ extract_CIs<-function(x){
 }  
    
 
+as.data.frame(t(as.data.frame(z.funct.drought.noint$bootconfint95))),"trait")
+
+,trait!="alpha")
 
 
 
-
+  z.funct.drought.noint$bootconfint95

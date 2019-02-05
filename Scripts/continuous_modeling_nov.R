@@ -16,7 +16,7 @@ library(MCMCglmm)
 
 
 source("Scripts/continuous_mod_prep.R")
-#load("continuous.mods.RData")
+load("continuous.mods.RData")
 
 ##species to use
 ###ACRU, QURU, ACPE, most complete observations, each hysteranthy class
@@ -225,7 +225,7 @@ HF.bin<-ggplot(ddd,aes(estimate,term))+geom_point(aes(color=class),position=pd)+
 library(gridExtra)
 grid.arrange(HF.cont,HF.bin)
 
-#####Sans interaction
+###############Sans interaction################################################################
 modelcont.funct.noint <- brm(offset.funct~ cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
                          family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
@@ -236,8 +236,57 @@ modelcont.phys.noint <- brm(offset.phys~ cent_pol+cent_floday+cent_minP+(1|name)
 #modelcont.inter.3<- brm(offset.inter~cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
  #                       family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
+summary(modelcont.funct.noint)
+summary(modelcont.phys.noint)
+
+extract_coefs<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,.25,.75,0.975))),"trait")
+}
 
 
+modelbin.funct.noint <- brm(hyst.funct~ cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
+                        family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
+
+#summary(modelbin.funct.3)
+modelbin.phys.noint <- brm(hyst.phys~ cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
+                      family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
+
+
+#modelbin.inter.3<- brm(hyst.inter~cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
+ #                       family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
+
+
+funct.cont<-extract_coefs(modelcont.funct.noint)
+funct.cont$class<-"functional"
+funct.bin<-extract_coefs(modelbin.funct.noint)
+funct.bin$class<-"functional"
+
+phys.cont<-extract_coefs(modelcont.phys.noint)
+phys.bin<-extract_coefs(modelbin.phys.noint)
+phys.cont$class<-"physiological"
+phys.bin$class<-"physiological"
+
+
+cont.noint<-rbind(phys.cont,funct.cont)
+bin.noint<-rbind(phys.bin,funct.bin)
+
+
+
+pd=position_dodgev(height=0.4)
+hf.cont.noint<-ggplot(cont.noint,aes(Estimate,trait))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=class),linetype="solid",position=pd,width=0)+geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=class),linetype="dotted",position=pd,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("HF-Continuous")
+hf.bin.noint<-ggplot(bin.noint,aes(Estimate,trait))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=class),linetype="solid",position=pd,width=0)+geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=class),linetype="dotted",position=pd,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("HF-Binary")
+
+
+grid.arrange(hf.cont.noint,hf.bin.noint,nrow=1)
+
+pp_check(modelcont.phys) ###models seem good
+pp_check(modelcont.inter)
+pp_check(modelbin.phys)
+save.image("continuous.mods.RData")
+
+
+
+stop("not an error, jsut excess below this")######
+plot(dater$pol,dater$ave_flo_month)
 
 AAAA<-as.data.frame(tidy(modelcont.funct.noint,robust = TRUE))
 AAAA<-AAAA %>% "["(.,1:4,)
@@ -254,20 +303,6 @@ DDDD<-rbind(AAAA,CCCC)
 
 ggplot(DDDD,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd)+geom_vline(aes(xintercept=0),color="black")
 
-
-
-modelbin.funct.noint <- brm(hyst.funct~ cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
-                        family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
-
-#summary(modelbin.funct.3)
-modelbin.phys.noint <- brm(hyst.phys~ cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
-                      family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
-
-
-#modelbin.inter.3<- brm(hyst.inter~cent_pol+cent_floday+cent_minP+(1|name), data = dater, 
- #                       family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
-
-
 AAAAA<-as.data.frame(tidy(modelbin.funct.noint,robust = TRUE))
 AAAAA<-AAAAA %>% "["(.,1:4,)
 AAAAA$class<-"functional"
@@ -280,13 +315,3 @@ CCCCC<-CCCCC %>% "["(.,1:4,)
 CCCCC$class<-"physiological"
 DDDDD<-rbind(AAAAA,CCCCC)
 
-hf.cont.noint<-ggplot(DDDD,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd,width=0.4)+geom_vline(aes(xintercept=0),color="black")+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("Continuous")
-hf.bin.noint<-ggplot(DDDDD,aes(estimate,term))+geom_point(aes(color=class),position=pd)+geom_errorbarh(aes(xmin=lower,xmax=upper,color=class),position=pd,width=0.4)+geom_vline(aes(xintercept=0),color="black")+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("Binary")
-grid.arrange(hf.cont.noint,hf.bin.noint)
-
-pp_check(modelcont.phys) ###models seem good
-pp_check(modelcont.inter)
-pp_check(modelbin.phys)
-save.image("continuous.mods.RData")
-
-plot(dater$pol,dater$ave_flo_month)

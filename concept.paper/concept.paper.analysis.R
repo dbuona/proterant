@@ -22,7 +22,7 @@ library(ggstance)
 library(broom)
 
 #if you dont want to run the model: 
-#load("hystmodels.RData")
+load("hystmodels.RData")
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
 mich.tree<-read.tree("pruned_for_mich.tre")
@@ -218,6 +218,14 @@ comps$trait[which(comps$trait=="pol_cent:flo_cent")] <- "interaction: pollinatio
 pd=position_dodgev(height=0.4)
 plotty3<-ggplot(comps,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd)+geom_errorbarh(position=pd,width=0.4,aes(xmin=low,xmax=high,color=category,shape=data))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))
 plotty3
+###does the plot look better with the two separet
+comps.MTSV<-filter(comps,data=="MTSV")
+comps.USFS<-filter(comps,data=="USFS")
+pd=position_dodgev(height=0.4)
+plotty3a<-ggplot(comps.MTSV,aes(estimate,trait))+geom_point(size=2.5,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))+xlim(-8,8)
+plotty3b<-ggplot(comps.USFS,aes(estimate,trait))+geom_point(size=2.5,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))+xlim(-8,8)
+grid.arrange(plotty3a,plotty3b,nrow=1)
+
 #models=====================no interaction=========================================================================================
 z.funct.drought.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
@@ -269,9 +277,22 @@ comps.noint$data[which(comps.noint$class=="functional-USFS")] <- "USFS"
 comps.noint$data[which(comps.noint$class=="functional-MTSV")] <- "MTSV"
 
 ###plotting==================================================
+comps.noint$trait[which(comps.noint$trait=="pol_cent")] <- "pollination syndrome"
+comps.noint$trait[which(comps.noint$trait=="flo_cent")] <- "flowering time"
+comps.noint$trait[which(comps.noint$trait=="precip_cent")] <- "minimum precipitation"
+
+
+
 pd=position_dodgev(height=0.4)
+comps.noint.MTSV<-filter(comps.noint,data=="MTSV")
+comps.noint.USFS<-filter(comps.noint,data=="USFS")
 plotty4<-ggplot(comps.noint,aes(estimate,trait))+geom_point(size=2.5,aes(color=category,shape=data),position=pd)+geom_errorbarh(position=pd,width=0.4,aes(xmin=low,xmax=high,color=category,shape=data))+geom_vline(aes(xintercept=0))+theme_bw()+scale_color_manual(values=c("orchid4", "springgreen4"))
-plotty4
+
+plotty4a<-ggplot(comps.noint.MTSV,aes(estimate,trait))+geom_point(size=2.5,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category))+geom_vline(aes(xintercept=0))+theme_base()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("MTSV")+xlim(-6.5,5)
+plotty4b<-ggplot(comps.noint.USFS,aes(estimate,trait))+geom_point(size=2.5,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category))+geom_vline(aes(xintercept=0))+theme_base()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("USFS")+xlim(-6.5,5)
+
+
+twopan.noint<-grid.arrange(plotty4a,plotty4b,nrow=1)
 save.image(file="hystmodels.RData")
 
 
