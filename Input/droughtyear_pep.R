@@ -19,7 +19,7 @@ library("remote")
 library(reshape2)
 
 
-#load("intervar.RData")
+load("intervar.RData")
 
 #read in clean data of offset for each species
 aln<-read.csv("alnus10_delta_hyst.csv",header=TRUE) ## alnus from stations with atleast 10 years of data
@@ -130,6 +130,7 @@ dat<-rbind(aln,frax,cory,bet,quer)
 d.sub<-dplyr::filter(dat,year %in% c(2003,2004,2005,2006,2007,2008,2009,2010))
 d.sub$drought<-ifelse(d.sub$year %in% c(2003,2004,2005,2006),1,0) #1 are drought
 
+d.sub<-filter(d.sub,taxa %in% c("Betula pendula","Alnus glutinosa","Fraxinus excelsior"))
 
 annual<-lmer(offset~drought+(1|s_id)+(drought|taxa),dat=d.sub) ### drought years have less ofset
 summary(annual)

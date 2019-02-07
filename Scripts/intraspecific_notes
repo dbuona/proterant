@@ -1,0 +1,63 @@
+1. Population level variation in hysteranthy.
+Data:
+map of average soil moisture in germany 1991-2010 (monthly, I ran models on august)
+Phenological offset from german PEP stations with more than 10 years of hysteranthy data.
+
+3 taxa, Bet pen. Alnus, Fraxinus
+Models run in lm().
+
+offset~soil moisture. offset increases at lower SM. weak effect, low r^2.
+offset~floweringtime. Early flowering associated with increase offset. 0.5 r^2
+offset~leaftime r^2 0.03
+
+Example outputs for:
+offset~floweringtime*soil moisture, soil moisture sign flips.
+
+ Fraxinus: Coefficients:
+                     Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)        20.0097627  0.0598949  334.081   <2e-16 ***
+flo.cent           -0.5540250  0.0026362 -210.163   <2e-16 ***
+soil.cent           0.1696536  0.0066900   25.359   <2e-16 ***
+flo.cent:soil.cent -0.0005789  0.0002704   -2.141   0.0323 * 
+
+
+Bet. Pen: Coefficients:
+                    Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)         0.124936   0.056458    2.213  0.02691 *  
+flo.cent           -0.418698   0.003753 -111.554  < 2e-16 ***
+soil.cent           0.094801   0.006624   14.312  < 2e-16 ***
+flo.cent:soil.cent -0.001166   0.000389   -2.998  0.00272 ** 
+
+
+Alnus Coefficients:
+                     Estimate Std. Error  t value Pr(>|t|)    
+(Intercept)        16.2082331  0.0776412  208.758  < 2e-16 ***
+flo.cent           -0.6841806  0.0023745 -288.139  < 2e-16 ***
+soil.cent           0.1701893  0.0084361   20.174  < 2e-16 ***
+flo.cent:soil.cent  0.0007723  0.0002628    2.939  0.00329 ** 
+
+
+2. Interannaul variation 
+Ivits: 2003,2004,2005,2006 are drough years in Germany, 2007,2008,2009,2010 normal.
+offset is less in drought years, due to a delay in flowering.
+
+annual<-lmer(offset~drought+(1|s_id)+(drought|taxa),dat=d.sub)
+                   (Intercept)     drought
+Alnus glutinosa      33.923554 -2.22665799
+Betula pendula       -2.663136 -0.09445194
+Fraxinus excelsior   11.892657 -0.01220323
+
+
+annual.flower<-lmer(flower~drought+(1|s_id)+(drought|taxa),dat=d.sub) 
+Alnus glutinosa       68.19799 7.760420
+Betula pendula       106.01515 5.190208
+Fraxinus excelsior   108.97244 2.872386
+
+annual.leaf<-lmer(leaf~drought+(1|s_id)+(drought|taxa),dat=d.sub) 
+                   (Intercept)  drought
+Alnus glutinosa       102.2027 5.353442
+Betula pendula        103.2331 5.218855
+Fraxinus excelsior    120.8059 2.923684
+
+
+3. Also ran a model with average offset~ average day of last freeze. This was not significant especial when combined with other envirnment predictors.

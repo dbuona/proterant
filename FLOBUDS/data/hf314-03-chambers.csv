@@ -1,0 +1,7 @@
+chamber,treatment,day.start,day.end,temp.day,temp.night,humidity,co2
+1,CL0,07:00,19:00,15,5,85,400
+2,WL0,07:00,19:00,20,10,85,400
+3,CS0,08:00,16:00,15,5,85,400
+4,WS0,08:00,16:00,20,10,85,400
+Growth room,Chill1,NA,NA,2,2,NA,NA
+Cold room,Chill2,NA,NA,4,4,NA,NA

@@ -164,7 +164,6 @@ plotty2<-ggplot(newdata1,aes(year,offset,group=peporder))+geom_segment(aes(y=Int
 plottyfrax<-plotty2+geom_segment(aes(y=alphalow,yend=alphalow,x=1960, xend=2015),data=newdat1,color="blue",linetype="dashed",size=0.5)+geom_segment(aes(y=alphahigh,yend=alphahigh,x=1960, xend=2015),data=newdat1,color="blue",linetype="dashed",size=0.5)
 
 ###Aesculus model
-
 fit.aes.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=aes) 
 dat2<-as.data.frame(coef(fit.aes.brms))
 dat2<-rownames_to_column(dat2, var = "peporder")
