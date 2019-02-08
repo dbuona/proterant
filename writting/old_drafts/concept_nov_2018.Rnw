@@ -1,0 +1,27 @@
+\documentclass[12pt]{article}
+
+\begin{document}
+
+\section*{Introduction}
+\begin{enumerate}
+\item Studying phenology is important because of ecological structure and function and climate change
+\item Recently it has been suggested that we should consider not just individual phenophases, but also the relationship between them (cite Ailene)
+\item FLS has attracted attention recently, hysteranthy is the signature FLS of temperates, and is has been asserted that this pattern should be considered a functional trait, but the concrete evidence for this suggestion is rare, which is a huge gap.
+
+
+
+
+
+\stop
+%\section{Flower Leaf sequences}
+%\indent Phenology, the timing of seasonal life cycle events, is widely recongized as a major component of structure and function of ecological communites \citep{}. Observed phenological shifts across of broad range of taxa have also emerged as a pronounced biological singnature of anthropogenic climate change \citep{Parmesan2003,Menzel2006,Root2003}. These factors have lead to an dramatic increase in phenology research \citep{Wolkovich2014}, and recent work is beginning to show that it is not only individual phenophases that are of ecological importance, but also the realtionship between them, even if they are seemingly disperate \citep{Ettenger2018}.\\
+%\indent One phenological sequence that has begun to attract research attention is the flower leaf sequence (FLS) in deciduous woody plants\citep{Gogherty2018}. It has long been observed that in the temperate deciduous forests, some woody species flower before leafing in the spring, while others leafout before flowering. Flowering first, also know as hysteranthy, proteranthy or precocious flowering \citep{} is readily apparent in many ecologically and commercially important species and has been described as the characteristic flower-leaf sequence (FLS) of temperate deciduous forests \citep{Rathcke1985}. It has been suggested that FLS variation should be viewed as a functional trait, critical to the reproductive or physiological functioning of woody species \citep{Gougherty2018}, however direct empirical evidence for this assertion is rare in the literature.\\
+%\indent With the pronouced phenological shifts that have been observed over the past several decades due to anthropogenic climate change \citep{Parmesan2003,Menzel2006,Root2003}, it is reasonable to expect that FLS's may also be altered, but because the physiological mechanism structuring FLS's have been poorly characterized, it is difficult to predict if, or how observed phenological advances will affect FLS in the future.\\
+%\indent To begin to address this uncertaintly, we evaluated how FLS offset, defined here as mean day of first flower open - mean day leaf out, as a function of time for three? woody plant species with longterm phenological records from the PEP725 phenological database. Using a Bayesian hinge modeling framework witha breakpoint of 1980, we found there was a positive trend of increasing FLS offset with time, and that in some cases, the the mean offset has already increased beyond the pre-1980 range of variability (see fig 1). 
+%\indent
+
+<<>>=
+#code from hinge_brms.R for figures
+@
+
+%\indent Based on this, it is impertive we apply ourselves to better understand the function of FLS, to evaluate the affect of FLS change on plant demography or something
