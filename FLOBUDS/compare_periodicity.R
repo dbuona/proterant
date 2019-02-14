@@ -146,4 +146,4 @@ summary(photo.only.leaf2)
 
 
 
-
+save.image("periodicity_mods.RData")
