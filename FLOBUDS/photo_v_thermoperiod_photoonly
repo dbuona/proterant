@@ -1,3 +1,6 @@
+model is 
+eventday~study(db or df)+photo(0,1)+photo:study+(study+photo+photoLstudy|genus species)
+
 bb average forcing 15 (DB low, DF high) DF chill0 DBchill 28 days ,with varying sloeps (1 divergent transition)
 
 Population-Level Effects: 

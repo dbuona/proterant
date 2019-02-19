@@ -1,3 +1,7 @@
+model is:
+eventday~study(db or df)+forcing(0,1)+photo(0,1)+forcing:study+photo:study+(1|Genus.species) or
+eventday~study(db or df)+forcing(0,1)+photo(0,1)+forcing:study+photo:study+(study+forcing+photo+forcing:study+photo:study|Genus.species).
+
 note DB and DF did not use the same forcing. DB 0->1 is 15-21 and DF is 10-15. So it makes sense that DB has a stronger forcing effect.
 
 bb. Dan Flynns no chilling Dan B's 28 days. 
