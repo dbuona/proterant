@@ -1,0 +1,31 @@
+\documentclass{article}
+
+\begin{document}
+
+\section*{Main Takeaways (interpretting results and making reccomendations)}
+\begin{enumerate}
+\item Multiple hypotheses supported
+\item Support for wind pollination, early flowering, little for precip. at interspecfic.
+\item At intraspecfic level, good support for flowering, little for precip, more varaition than expected for wind pollination.
+\item How you define hysteranthy really changes your results, so does the identities of species in your dataset esp with catagorical data.
+\item Given the above, and the data limitations (so much of it is qualatative), large scale analysis can only take us so far.
+\item Continuous data is the most reliable, and it reveals important varaition at the interspecific level.
+\item There is considerable variation at the intraspecfic level, which hasn't been well address in research, this is the next frontier.
+\item Testing consequences of variation is critical, and this really hasn't been done.
+\item with strength early flowering signal, should we abandon FLS as its own thing and think of it just in the context selection for early flowering. Not entirely,.
+\item Recomendations: Studies should be quatitative, designed to test multiple hyotheses at one, address mechanism and consequences of variation.
+\item This will not only clarify hypotheses, but help us understand what we need to worry about with global change.
+\end{enumerate}
+
+\section*{Sub-points}
+\begin{enumerate}
+\item This wind pollination variation could either contribute varaible fitness years, or be benign because it is bounded, ie varaition between no leaves and tiny leaves doesn't signifcantly change pollen impaction on vegetative structure.
+\item interspecific studies should work on subsets of taxa, eg What drives hysteranthy variation within wind-pollinated taxa?
+\item Another early flowering/wind synthesis point I haven't mentioned yet- would would expect community not just individual  phenology to drive flowering time. Best pollin transfer happens before there are leaves in general not just on you conspecifics.
+\item Phylo-geography should be considered-- might segregate with hypotheses. Eg I predict biotic polliated hysteranthous species are going to be representative of mostly tropical clades.
+
+\item The multiple hypothesis thing is expected and obvious. This is obvious because insection pollinated hysteranthy exisists. and even within wind pollinated continuoues measures of hysteranthy show strong intra and inter specific variation.
+\end{enumerate}
+
+
+\end{document}
