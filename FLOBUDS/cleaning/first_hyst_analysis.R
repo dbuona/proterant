@@ -85,8 +85,20 @@ datUM2<-as.data.frame(unique(DAT$id))
 colnames(datUM2)<- c("id")
 colnames(L2)<-c("id","Lexpand_day(11)")
 great.dat<-left_join(great.dat,L2)
+
+BB<-filter(DAT,leafphase==07)
+LBB<-aggregate(BB$doy.final, by = list(BB$id), min)
+
+datUM2<-as.data.frame(unique(DAT$id))
+colnames(datUM2)<- c("id")
+colnames(L2)<-c("id","Lexpand_day(11)")
+great.dat<-left_join(great.dat,L2)
+
+
 ncol(great.dat)
 great.dat<-great.dat[,c(1,4,5,6,7,8,9,3,2,10,11)]
+
+
 ###add survival analysis columns
 surv<-read.csv("data/flobuds.eval.csv",header=TRUE)
 colnames(surv)
