@@ -1,0 +1,135 @@
+\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[top=1.00in, bottom=1.0in, left=1.1in, right=1.1in]{geometry}
+\renewcommand{\baselinestretch}{1.1}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+
+\def\labelitemi{--}
+\parindent=0pt
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\section*{ Why other studies are weak and available data}
+\begin{enumerate}
+\item Direct test of these hypotheses in the literature are are, and support for them is mixed
+\begin{enumerate}
+\item Studies tend to test single hypotheses, or present the expectation that hypotheses are mutually exclusive.
+\item Even the recent paper by Gougherty and Gougherty which considers multiple hypotheses models them separate (is this totally true? They also used a random forest model).
+\item Variability in FLS is generally ignored.
+\item Yet, there are datasets widely available that would allow for testing this hypotheses at multiple levels.
+\end{enumerate}
+\item To address this gap, we supplement our literature review with re-testing some previously-used datasets to examine all hypotheses, and we leverage several widely-available datasets to test how support for these hypotheses varies across the inter- to intraspecific levels.
+\begin{enumerate}
+\item  Michigan Trees and its companion volume Michigan trees shrubs and vines (MTSV) contains FLS information for 195 Woody plant species. The USFS Silvics mannual volume II contains FLS descriptions for 81 woody species. These data can be used to test interspecfic FLS varaiation.  Species are categorized as flowers before leaves, flowers before/with leaves and flowers with leaves, and flowering after leaves. As in previous work, we collapsed these categories to binary "hysteranthous" of "seranthous" for modeling. 
+\item But even within this frame work, we built back in variability associated with the hypotheses. We defined `functional hysteranthy' to accommodate a degree of overlap between flowering and the early stages of leaf out as predicted by the wind pollination hypothesis (including `flowers before leaves', `flowers before/with leaves' and `flowers with leaves') versus `physiological hysteranthy' (only flowers before leaves) which relates to drought tolerance hypothesis.
+\item Harvard Forest contains flowering and leaf phenology measurements for individuals 24 woody species over 15 year, allowing for both inter- and intra-specific comparisons. In this dataset we calculated "FLS offset" (flower DOY-leaf DOY), a continuous measure fo FLS, which allows us to better understand the impact of FLS categorization and make comparison even within categories. We approximated "functional" and "physiological" hysteranthy in this data set by calculating 2 offset values (Fopn-L75) and (fbb-lbb).
+\item From the PEP725 database we obtained spatially and temporally explicit flowering and leaf phenology for 3 European hysteranthous species. This allows for test only at the intra-specific level, but unlike the other datasets allow for population level variability to be assessed.
+\end{enumerate}
+\end{enumerate}
+\section*{What we know, what we don't know, and what we can do to know more}
+\begin{enumerate}
+\item In considering each dataset separately and in tandem, two clear trend emerge: 
+\begin{enumerate}
+\item Across inter-specific models, multiple hypotheses were supported. There was generally strong evidence for the early flowering and wind pollination hypothesis, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable.
+\item This is not a surprise. We wouldn't expect the wind pollination hypothesis to explain hysteranthy in biotically pollinated taxa. And geologically speaking, the relatively recent post glaciation assembly of North Eastern Forests, we have taxa with radically different bio-geographic histories. 
+\item The relative importance of each the predictors changed significantly depending on how hysteranthy was defined. This effect was minimized when continuous measure of FLS were used over categorical.
+\end{enumerate}
+\item But perhaps more important that the results of these specific model themselves, is that through considering them together, we are provided a more comprehensive picture of where our understanding of this phenological trait is. and where it needs to go.
+\item First, our analysis reveals the clear advantages of continuous data.
+\begin{enumerate}
+\item As mentioned above, it minimizes the observer bias that comes with categorization.
+\item It reveals important interspecific differences that are masked by categorization. I.e. two hysteranthous species may have dramatically different FLS offsets.
+\item It also reveals that there are large intra-specific difference which, as will be discussed more below, will be instructive to hypothesis testing.
+\item All and all, our work shows categorizing hysteranthy is biased and biologically problematic, and future studies about phenological sequences should abandon these categories and treat FLS as continuous traits.
+\end{enumerate}
+\item Because the trait modeling in large community level datasets seem to support multiple hypotheses, and are confounded by species' identities and observer bias, the utility of these data can only take us so far. A main outgrowth of our model is the realization it is instructive to test questions of hysteranthy at other scales.
+\begin{enumerate}
+\item One option is to look within the hypotheses to address address subgrouping of taxa in which overlap between hypotheses could be controled?
+\item  For example What drives hysteranthy among biotically pollinated taxa? It certain isn't wind pollination efficiency.  Or, What traits accounts for variability in hysteranthy among wind polliated taxa?
+\item Further incorperating a phylo-biogeographic approach would probably be instructive at this level, for example are their phylogeopraphic commonalities between biotocally pollinated hysteranthous species in Eastern flora.
+\end{enumerate}
+\begin{enumerate}
+\item But even with sub-groupings,  interspecific trait association models can only can take us so far. 
+\item One reality of these kind of studies is that we never know we are picking the right traits. For example we used minimum P across range, one of the only available quantitative drought metrics at the scale of large interspecific models, to represent the water dynamics hypothesis. Is this really a good proxy for drought tolerance?
+\item Further, species evolve a suit of traits of any function, and unmeasured traits might bias our results. IE wind pollinated species could compensate for a lack of hysteranthy by over producing pollen  or selfing. To really understand this trade across large taxonomic space, you would have to compare species over N-dimensional trait axis.
+\end{enumerate}
+\item Considering hysteranthy variation at the intraspecific level overcomes many of these limitations  and is the the next frontier in understanding FLS.
+\begin{enumerate}
+\item As predicted by evolutationary theory the agreement between our intra and interspecific models, suggesting flowering time major driver in FLS variation, suggests that we are in the right direction.
+\item Further, though our datasets were taxonomically and geographically limited, they demonstrate that FLS variability is significant over time and space, .
+\item Looking within species holds most other traits relatively equal, avoids the problem of latent tradeoffs with unmeasured traits.
+\end{enumerate}
+
+\item  This allows us to move into the next state to better understand this trait, not look at the traits associated with FLS variation, but with the consequences of FLS variation through experimental manipulations and observations. you couldn't do this at the inter specific level, but you can at intra. For example.
+\begin{enumerate}
+\item Do years or population with more hysteranthy experience greater pollination success?
+\item Do water stressed populations alter their FLS?
+
+\end{enumerate}
+\item Looking at consequences will not only help clarify basic scientific hypotheses, but is important for global change because this whole thing is motivated by understand how changing hysteranthy will impact species fitness.
+
+\end{enumerate}
+\begin{enumerate}
+    \item Things I didn't sneak in but could considered
+    \begin{enumerate}
+        \item With the strength of flowering time across models should be abandon think of hysteranthy outside of selection for early flowering?
+        \item Community matters ie wind pollination
+        \item other: I relaize that in some way I am not suggesting we test mutliple hypotheses at once. I am more suggesting we allow the to coexist by subgrouping our taxa
+    \end{enumerate}
+\end{enumerate}
+
+
+
+
+\end{document}
