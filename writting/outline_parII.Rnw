@@ -10,16 +10,21 @@
 
 \begin{document}
 
-\section*{ Why other studies are weak and available data}
+% To do:
+% Add citations and clarify your topic sentences 
+% Send back to Lizzie for quick glance
+% Start writing! (When you do this start a supp file too.)
+
+\section*{ Why other studies are weak and available data} % Be sure when you transfer this to manuscript text you pick and choose carefully when to be negative about the existing literature or you will lose most of your audience. 
 \begin{enumerate}
-\item Direct test of these hypotheses in the literature are are, and support for them is mixed
+\item Direct test of these hypotheses in the literature are [what?], and support for them is mixed
 \begin{enumerate}
 \item Studies tend to test single hypotheses, or present the expectation that hypotheses are mutually exclusive.
-\item Even the recent paper by Gougherty and Gougherty which considers multiple hypotheses models them separate (is this totally true? They also used a random forest model).
+\item Even the recent paper by Gougherty and Gougherty which considers multiple hypotheses models them, in part, separately (is this totally true? They also used a random forest model).
 \item Variability in FLS is generally ignored.
-\item Yet, there are datasets widely available that would allow for testing this hypotheses at multiple levels.
+\item Yet, there are datasets widely available that would allow for testing these hypotheses at once and at multiple levels.
 \end{enumerate}
-\item To address this gap, we supplement our literature review with re-testing some previously-used datasets to examine all hypotheses, and we leverage several widely-available datasets to test how support for these hypotheses varies across the inter- to intraspecific levels.
+\item To address this gap, we supplement our literature review by re-testing some previously-used datasets to examine all hypotheses, and we leverage several widely-available datasets to test how support for these hypotheses varies across the inter- to intraspecific levels. % This is good! But you then need to carry through and make sure you include the lit review mixed in with your results. 
 \begin{enumerate}
 \item  Michigan Trees and its companion volume Michigan trees shrubs and vines (MTSV) contains FLS information for 195 Woody plant species. The USFS Silvics mannual volume II contains FLS descriptions for 81 woody species. These data can be used to test interspecfic FLS varaiation.  Species are categorized as flowers before leaves, flowers before/with leaves and flowers with leaves, and flowering after leaves. As in previous work, we collapsed these categories to binary "hysteranthous" of "seranthous" for modeling. 
 \item But even within this frame work, we built back in variability associated with the hypotheses. We defined `functional hysteranthy' to accommodate a degree of overlap between flowering and the early stages of leaf out as predicted by the wind pollination hypothesis (including `flowers before leaves', `flowers before/with leaves' and `flowers with leaves') versus `physiological hysteranthy' (only flowers before leaves) which relates to drought tolerance hypothesis.
@@ -29,28 +34,32 @@
 \end{enumerate}
 \section*{What we know, what we don't know, and what we can do to know more}
 \begin{enumerate}
-\item In considering each dataset separately and in tandem, two clear trend emerge: 
+\item In considering each dataset separately and in tandem, two clear trend emerge: % Can you add in some references to the literature here?
 \begin{enumerate}
-\item Across inter-specific models, multiple hypotheses were supported. There was generally strong evidence for the early flowering and wind pollination hypothesis, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable.
-\item This is not a surprise. We wouldn't expect the wind pollination hypothesis to explain hysteranthy in biotically pollinated taxa. And geologically speaking, the relatively recent post glaciation assembly of North Eastern Forests, we have taxa with radically different bio-geographic histories. 
+\item Lit says XYZ are supported. 
+\item In our re-analyses, across inter-specific models, multiple hypotheses were supported. There was generally strong evidence for the early flowering and wind pollination hypothesis, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable.
+\item This is not a surprise. We wouldn't expect the wind pollination hypothesis to explain hysteranthy in biotically pollinated taxa. And geologically speaking, the relatively recent post glaciation assembly of North Eastern Forests, we have taxa with radically different bio-geographic histories. % I don't know what your second sentence connects to ... can you link to a hypothesis more clearly for the readers, and me.
 \item The relative importance of each the predictors changed significantly depending on how hysteranthy was defined. This effect was minimized when continuous measure of FLS were used over categorical.
 \end{enumerate}
-\item But perhaps more important that the results of these specific model themselves, is that through considering them together, we are provided a more comprehensive picture of where our understanding of this phenological trait is. and where it needs to go.
+\item But perhaps more important that the results of these specific model themselves, is that through considering them together, we are provided a more comprehensive picture of where our understanding of this phenological trait is. and where it needs to go. % Yes! I would start a new subsection next on future directions. 
 \item First, our analysis reveals the clear advantages of continuous data.
 \begin{enumerate}
 \item As mentioned above, it minimizes the observer bias that comes with categorization.
 \item It reveals important interspecific differences that are masked by categorization. I.e. two hysteranthous species may have dramatically different FLS offsets.
 \item It also reveals that there are large intra-specific difference which, as will be discussed more below, will be instructive to hypothesis testing.
-\item All and all, our work shows categorizing hysteranthy is biased and biologically problematic, and future studies about phenological sequences should abandon these categories and treat FLS as continuous traits.
+\item All and all, our work shows categorizing hysteranthy into groups is biased and biologically problematic; future studies about phenological sequences should avoid these categories when possible and treat FLS as continuous traits (whenever possible).
 \end{enumerate}
-\item Because the trait modeling in large community level datasets seem to support multiple hypotheses, and are confounded by species' identities and observer bias, the utility of these data can only take us so far. A main outgrowth of our model is the realization it is instructive to test questions of hysteranthy at other scales.
+\item Because trait modeling in large community level datasets seem to support multiple hypotheses, and are confounded by species' identities and observer bias, the utility of these data can only take us so far. A main outgrowth of our model is the realization it is instructive to test questions of hysteranthy at other scales. % Good! When you write this paragraph you might try to flip it so your second sentence comes first if possible (that's really your main point and the first info just bolsters it). 
 \begin{enumerate}
-\item One option is to look within the hypotheses to address address subgrouping of taxa in which overlap between hypotheses could be controled?
+\item One option is to look within the hypotheses to address address subgrouping of taxa in which overlap between hypotheses could be controlled?
+% This is a timely point which you may want to acknowledge. A few papers to check out regarding this:
+% https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12841
+% https://www.journals.uchicago.edu/doi/10.1086/692326
 \item  For example What drives hysteranthy among biotically pollinated taxa? It certain isn't wind pollination efficiency.  Or, What traits accounts for variability in hysteranthy among wind polliated taxa?
 \item Further incorperating a phylo-biogeographic approach would probably be instructive at this level, for example are their phylogeopraphic commonalities between biotocally pollinated hysteranthous species in Eastern flora.
 \end{enumerate}
 \begin{enumerate}
-\item But even with sub-groupings,  interspecific trait association models can only can take us so far. 
+\item But even with sub-groupings,  interspecific trait association models can only can take us so far. % This may be a separate paragraph... the next two points seem to fit within it (maybe you enumerate code is off actually?) 
 \item One reality of these kind of studies is that we never know we are picking the right traits. For example we used minimum P across range, one of the only available quantitative drought metrics at the scale of large interspecific models, to represent the water dynamics hypothesis. Is this really a good proxy for drought tolerance?
 \item Further, species evolve a suit of traits of any function, and unmeasured traits might bias our results. IE wind pollinated species could compensate for a lack of hysteranthy by over producing pollen  or selfing. To really understand this trade across large taxonomic space, you would have to compare species over N-dimensional trait axis.
 \end{enumerate}
@@ -61,21 +70,24 @@
 \item Looking within species holds most other traits relatively equal, avoids the problem of latent tradeoffs with unmeasured traits.
 \end{enumerate}
 
-\item  This allows us to move into the next state to better understand this trait, not look at the traits associated with FLS variation, but with the consequences of FLS variation through experimental manipulations and observations. you couldn't do this at the inter specific level, but you can at intra. For example.
+\item  This allows us to move into the next state to better understand this trait, to look at consequences of FLS variation through experimental manipulations and observations. you couldn't do this at the inter specific level, but you can at intra. For example. % Can you say fitness here? Can you explain a little more (the hypotheses *make* fitness predictions) before diving in on examples? 
 \begin{enumerate}
 \item Do years or population with more hysteranthy experience greater pollination success?
 \item Do water stressed populations alter their FLS?
-
+\item Working at this level also highlights where local context may matter ... Does community matters ie wind pollination?
 \end{enumerate}
-\item Looking at consequences will not only help clarify basic scientific hypotheses, but is important for global change because this whole thing is motivated by understand how changing hysteranthy will impact species fitness.
+\item Looking at consequences will not only help clarify basic scientific hypotheses, but is important for global change, and understanding how changing hysteranthy will impact species fitness.
+\begin{enumerate}
+\item Give an example  ... if it's mainly about pollination success, then what?
+\item If there really is strong selection on early-flowering what is predicted next (lots of cites you could add here). 
+\end{enumerate}
 
 \end{enumerate}
 \begin{enumerate}
     \item Things I didn't sneak in but could considered
     \begin{enumerate}
         \item With the strength of flowering time across models should be abandon think of hysteranthy outside of selection for early flowering?
-        \item Community matters ie wind pollination
-        \item other: I relaize that in some way I am not suggesting we test mutliple hypotheses at once. I am more suggesting we allow the to coexist by subgrouping our taxa
+        \item other: I realized that in some way I am not suggesting we test mutliple hypotheses at once. I am more suggesting we allow the to coexist by subgrouping our taxa. % Good distinction to make -- I think you have room to make this point. I suspect you are suggesting future large-scale studies must try to study multiple traits across phylo-trees (see refs), but getting deep into mechanisms, means drilling down in an opposing direction. 
     \end{enumerate}
 \end{enumerate}
 
