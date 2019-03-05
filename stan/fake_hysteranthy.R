@@ -1,63 +1,68 @@
+
+####March 4 2019/ Dan notes, the model is running but not really returning the proper parameters.
+
+##wait, I now its returning the propper paramenters, wih a ton of divergetn transitions
+
+rm(list=ls())
+options(stringsAsFactors = FALSE)
+graphics.off()
 ### fake hysteranthy data
-setwd("~/Documents/git/proterant/stan")
-library("bindata")
+
+#library(devtools)
+#install_github("rmcelreath/rethinking")
 library(rstan)
-N<- 50
-hysteranthy <- 0.5
-wind <- 0.5
-rho<- 0.9
+setwd("~/Documents/git/proterant/stan")
 
-# Create one pair of correlated binomial values
-trials <- rmvbin(N, c(hysteranthy,wind), bincorr=(1-rho)*diag(2)+rho)
-colnames(trials)<-c("hysteranthy","wind")
-trials<-as.data.frame(trials)
-
-data.list <- with(trials, 
-                  list(y=hysteranthy, 
-                       pol = wind, 
-                       N = nrow(trials)
-                  ))
-
-bernoulli= stan('binary_stan_nophylo.stan', data = data.list,
-                iter = 2500, warmup=1500)
-
-summary(bernoulli)
+# Params
+a <- 0.5
+b_flo <- -.05
+b_drought <- -0.001
+b_wind<- .2
 
 
-# The Stan model as a string.
-model_string <- "
-data {
-# Number of data points
-int n1;
-int n2;
-# Number of successes
-int y1[n1];
-int y2[n2];
-}
+# x data
+ndata <- 200
 
-parameters {
-real<lower=0, upper=1> theta1;
-real<lower=0, upper=1> theta2;
-}
 
-model {  
-theta1 ~ beta(1, 1);
-theta2 ~ beta(1, 1);
-y1 ~ bernoulli(theta1);
-y2 ~ bernoulli(theta2); 
-}
+flo_time <- runif(ndata, 4.5, 9)
+min_p <- rnorm(ndata, mean = 8, 1)
+pol<-rbinom(ndata,size = 1,prob = 0.5)
+# linear model
+z <- a + b_wind*pol + b_flo*flo_time+b_drought*min_p
+# inverse logit -- this is the reverse of logit(p) in the model code
+p <- 1/(1+exp(-z))
+# now, can get bernoulli
+y <- rbinom(ndata, 1, p)
 
-generated quantities {
-}
-"
+dat <- as.data.frame(cbind(pol, flo_time,min_p, y))
+#dat$pol.z<-NA
+#dat$flo_time.z<-NA
+#dat$
 
-y1 <- c(0, 1, 0, 0, 0, 0, 1, 0, 0, 0)
-y2 <- c(0, 0, 1, 1, 1, 0, 1, 1, 1, 0)
-data_list <- list(y1 = y1, y2 = y2, n1 = length(y1), n2 = length(y2))
 
-# Compiling and producing posterior samples from the model.
-stan_samples <- stan(model_code = model_string, data = data_list)
+datalist<- with(dat, 
+                  list(y=y, 
+                  pol = pol,
+                    flo=flo_time,
+                     minp=min_p, 
+                  N = nrow(dat)
+                             ))
 
-# Plotting and summarizing the posterior distribution
-stan_samples
-plot(stan_samples)
+berny<- stan('binary_stan_nophylo.stan', data = datalist,
+                                        iter = 3000, warmup=2000) 
+
+summary(berny)
+#This is from rethinking, but i should tray and do it in r stan
+#flist <- alist(
+ # y ~ dbinom(1, p),
+#  logit(p) <-a + b_wind*pol + b_flo*flo_time+b_drought*min_p,
+#  a <- dnorm(0, 3),
+#  b_flo <- dnorm(0, 5),
+#  b_wind <- dnorm(0, 5),
+#  b_drought<-dnorm(0,5)
+#)
+
+#rbeta(200,1,1)
+#mp.1 <- rethinking::map(flist, data = dat)
+
+2.427140e-02

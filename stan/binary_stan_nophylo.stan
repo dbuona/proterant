@@ -1,16 +1,26 @@
 data { 
   int<lower=0> N; 
   int<lower=0,upper=1> y[N];
-  int<lower=0,upper=1> pol[N];
+  vector[N] pol;
+  vector[N] flo;
+  vector[N] minp;
 } 
 parameters {
-  real<lower=0,upper=1> alpha;
-  real b_pol;
-  
+  real alpha;
+  real  b_pol;
+  real  b_flo;
+  real  b_drought;
 } 
+
+
+    
+
 model {
-  alpha~ beta(1,1);
-  b_pol ~ beta(1,1);
-  for (n in 1:N) 
-    y[n] ~ bernoulli(alpha+b_pol*pol[N]);
-}
+  alpha~ uniform(0,1);
+  b_pol ~ normal(0,1);
+  b_flo ~ normal(0,1);
+  b_drought ~normal(0,1);
+  
+  y~bernoulli_logit(alpha+b_pol*pol+b_flo*flo+b_drought*minp);
+    
+    }

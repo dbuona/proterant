@@ -34,7 +34,7 @@
 \end{enumerate}
 \section*{What we know, what we don't know, and what we can do to know more}
 \begin{enumerate}
-\item In considering each dataset separately and in tandem, two clear trend emerge: % Can you add in some references to the literature here?
+\item In considering each dataset separately and in tandem, and the previous literature, two clear trend emerge: % Can you add in some references to the literature here?
 \begin{enumerate}
 \item Lit says XYZ are supported. 
 \item In our re-analyses, across inter-specific models, multiple hypotheses were supported. There was generally strong evidence for the early flowering and wind pollination hypothesis, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable.
