@@ -8,6 +8,12 @@ graphics.off()
 library(dplyr)
 library(brms)
 library(chillR)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(ggstance)
+library(ggthemes)
+library(grid)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
 
@@ -99,8 +105,9 @@ colnames(df.dat.match)
 
 unique(db.dat.match$chill)
 
-db.dat.match.short<-filter(db.dat.match,chill==0) ###Use DB's short chill since it is closest in Chilling hours to DF's
+#db.dat.match.short<-filter(db.dat.match,chill==0) ###Use DB's short chill since it is closest in Chilling hours to DF's
 ###db.dat.match.long<-filter(db.dat.match,chill==1)
+
 
 both.dat1<-rbind(df.dat.match,db.dat.match) ### since dan F was in he middle of mine, I am going to use both of my chilling
 #both.dat2<-rbind(df.dat.match,db.dat.match.long)
@@ -114,6 +121,7 @@ both.dat1$photo.cent<-both.dat1$photo-mean(both.dat1$photo)
 #both.dat2$photo.cent<-both.dat2$photo-mean(both.dat2$photo)
 
 
+##a A series of old models
 #both.mod.bud1<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat1)
 #summary(both.mod.bud1)
 
@@ -155,29 +163,124 @@ both.dat.sameforce1<-both.dat1 %>% filter(warm %in% c(20,18)) ## Filter just the
 photo.only.bb1<-brm(bday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2500)
 summary(photo.only.bb1)
 coef(photo.only.bb1)
+bb.output<-rownames_to_column(as.data.frame(fixef(photo.only.bb1,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
+#bb.output<-bb.output %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
+bb.output$Phase<-"budburst"
+
+pd2=position_dodgev(height=0.4)
+ggplot(bb.output,aes(Estimate,Parameter))+geom_point(position=pd2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90),linetype="dotted",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="red")+ggtitle("Budburst comparison")
 
 photo.only.leaf1<-brm(lday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2000)
-summary(photo.only.leaf1)
 
-photo.only.flo1<-brm(fday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2000)
+lo.output<-rownames_to_column(as.data.frame(fixef(photo.only.leaf1,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
+#lo.output<-lo.output %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
+lo.output$Phase<-"leafout"
+ggplot(lo.output,aes(Estimate,Parameter))+geom_point(position=pd2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90),linetype="dotted",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="red")+ggtitle("leaf out comparison")
+
+veggie<-rbind(bb.output,lo.output)
+
+veggie$Parameter<-ifelse(veggie$Parameter=="studyDF","InterceptDF",veggie$Parameter)
+
+veggie.effect<-veggie %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
+
+pd2=position_dodgev(height=0.2)
+plotyx<-ggplot(veggie,aes(Estimate,Parameter))+geom_point(aes(color=Phase,shape=Phase),position=pd2,size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=Phase),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=Phase),linetype="dashed",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("darkgrey","black"))
+plotyy<-ggplot(veggie.effect,aes(Estimate,Parameter))+geom_point(aes(color=Phase, shape=Phase),position=pd2,size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=Phase),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=Phase),linetype="dashed",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("darkgray","black"))+xlim(-10,10)+theme(legend.position = "none",axis.title.x=element_blank(),axis.title.y=element_blank(),axis.text.y=element_blank(),axis.ticks.y=element_blank())
+
+jpeg("Plots/photothermo_allsps.jpeg",width = 1020, height = 529)
+vp <- viewport(width = 0.4, height = 0.5, x = 0.2, y = .99,just=c("left","top"))
+plotyx+theme_base()
+print(plotyy, vp = vp, )
+dev.off()
 
 
-fixef(photo.only.bb1, summary = TRUE, robust = FALSE,
-     probs = c(0.025, 0.975,.10,.90,.25,.75))
-
-fixef(photo.only.leaf1, summary = TRUE, robust = FALSE,
-      probs = c(0.025, 0.975,.10,.90,.25,.75))
-
-fixef(photo.only.flo1, summary = TRUE, robust = FALSE,
-      probs = c(0.025, 0.975,.10,.90,.25,.75))
-save.image("photovthermoperiod")
-#photo.only.bb2<-brm(bday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce2,iter=3000,warmup=2000)
-#summary(photo.only.bb2)
-#coef(photo.only.bb2)
-
-#photo.only.leaf2<-brm(lday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce2,iter=3000,warmup=2000)
-#summary(photo.only.leaf2)
 
 
+
+#photo.only.flo1<-brm(fday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2000)
+
+fl.output<-rownames_to_column(as.data.frame(fixef(photo.only.flo1,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
+fl.output<-fl.output %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
+fl.output$Phase<-"flowering"
+allphen<-rbind(veggie,fl.output) ### flowering is really sparse in DF's data so maybe dont include
+
+
+##3now do matching sps only
+
+df.dat.match<-df.dat.HF %>%filter(GEN.SPA %in% c(matching_sps))  ### make both dataset noly consiston matching sps
+db.dat.match<-db.dat %>%filter(GEN.SPA %in% c(matching_sps))
+
+
+db.dat.match<-unite(db.dat.match, treatcode, 4:6,sep="")
+db.dat.match$Chill<-ifelse(db.dat.match$chilldays==28,0,1)
+
+db.dat.match$FORCE<-ifelse(db.dat.match$temp_day==24,1,0) ### new column where forcing temperature are binary low or high
+df.dat.match$FORCE<-ifelse(df.dat.match$warm==20,1,0)
+
+
+db.dat.match$study<-"DB"
+df.dat.match$study<-"DF"
+
+##subset to columns of use
+db.dat.match<-dplyr::select(db.dat.match,GEN.SPA,F60,LBB,L11,treatcode,temp_day,photoperiod,Chill,study,FORCE)
+df.dat.match<-dplyr::select(df.dat.match,GEN.SPA,fday,bday,lday,treatcode,warm,photo,chill,study,FORCE)
+
+
+
+
+###make columns the same
+colnames(db.dat.match)[colnames(db.dat.match)=="F60" ] <- "fday"
+colnames(db.dat.match)[colnames(db.dat.match)=="L11" ] <- "lday"
+colnames(db.dat.match)[colnames(db.dat.match)=="LBB" ] <- "bday"
+colnames(db.dat.match)[colnames(db.dat.match)=="temp_day" ] <- "warm"
+colnames(db.dat.match)[colnames(db.dat.match)=="photoperiod" ] <- "photo"
+colnames(db.dat.match)[colnames(db.dat.match)=="Chill" ] <- "chill"
+
+colnames(db.dat.match)
+colnames(df.dat.match)
+
+unique(db.dat.match$chill)
+
+#db.dat.match.short<-filter(db.dat.match,chill==0) ###Use DB's short chill since it is closest in Chilling hours to DF's
+###db.dat.match.long<-filter(db.dat.match,chill==1)
+
+
+both.dat.match<-rbind(df.dat.match,db.dat.match) ### since dan F was in he middle of mine, I am going to use both of my chilling
+#both.dat2<-rbind(df.dat.match,db.dat.match.long)
+
+both.dat.match$PHOTO<-ifelse(both.dat.match$photo==8,0,1)
+
+
+both.dat.match$warm.cent<-both.dat.match$warm-mean(both.dat.match$warm)
+both.dat.match$photo.cent<-both.dat.match$photo-mean(both.dat.match$photo)
+
+both.dat.sameforce.match<-both.dat.match %>% filter(warm %in% c(20,18)) ## Filter just the studies with same forcing
+
+unique(both.dat.sameforce.match$GEN.SPA)
+
+photo.only.bb.match<-brm(bday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce.match,iter=3000,warmup=2500)
+photo.only.lo.match<-brm(lday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce.match,iter=3000,warmup=2500)
+
+bb.output2<-rownames_to_column(as.data.frame(fixef(photo.only.bb.match,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
+bb.output2$Phase<-"budburst"
+
+lo.output2<-rownames_to_column(as.data.frame(fixef(photo.only.lo.match,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
+lo.output2$Phase<-"leafout"
+
+veggie2<-rbind(bb.output2,lo.output2)
+veggie2$Parameter<-ifelse(veggie2$Parameter=="studyDF","InterceptDF",veggie2$Parameter)
+
+veggie.effect2<-veggie2 %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
+
+
+pd2=position_dodgev(height=0.2)
+plotyxx<-ggplot(veggie2,aes(Estimate,Parameter))+geom_point(aes(color=Phase,shape=Phase),position=pd2,size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=Phase),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=Phase),linetype="dashed",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("darkgrey","black"))+xlim(-50,80)
+plotyyy<-ggplot(veggie.effect2,aes(Estimate,Parameter))+geom_point(aes(color=Phase, shape=Phase),position=pd2,size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=Phase),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=Phase),linetype="dashed",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("darkgray","black"))+xlim(-14,14)+theme(legend.position = "none",axis.title.x=element_blank(),axis.title.y=element_blank(),axis.text.y=element_blank(),axis.ticks.y=element_blank())
+
+jpeg("Plots/photothermo_matchsps.jpeg",width = 1020, height = 529)
+vp <- viewport(width = 0.4, height = 0.5, x = 0.23, y = .99,just=c("left","top"))
+plotyxx+theme_base()
+print(plotyyy, vp = vp, )
+dev.off()
 
 save.image("periodicity_mods.RData")
