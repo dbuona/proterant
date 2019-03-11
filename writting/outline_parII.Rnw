@@ -11,42 +11,34 @@
 \begin{document}
 
 % To do:
-% Add citations and clarify your topic sentences 
-% Send back to Lizzie for quick glance
 % Start writing! (When you do this start a supp file too.)
 
-\section*{ Why other studies are weak and available data} % Be sure when you transfer this to manuscript text you pick and choose carefully when to be negative about the existing literature or you will lose most of your audience. 
+\section*{Available evidence for FLS hypotheses in temperate woody species} % Be sure when you transfer this to manuscript text you pick and choose carefully when to be negative about the existing literature or you will lose most of your audience. 
 \begin{enumerate}
-\item Direct test of these hypotheses in the literature are rare, and support for them is mixed. Studies tend to test single hypotheses, or present the expectation that hypotheses are mutually exclusive.
+\item Direct tests of these hypotheses in the literature are rare, and support for them is mixed.  %EMW: This should be ONE paragraph that covers wind pollination, early flowering and drought, I tried to help in suggesting some cuts (I think many of these points you have made before, so unless they help to our current point we should cut)...
 \begin{enumerate}
-\item  Evidence for wind pollination hypothesis: suggested conceptually in \citep{Robertson1895,Rathcke_1985,Whitehead1969}
-\begin{enumerate}
-\item Particle movement through closed and open canopies \citep{Niklas1985,Nathan2005, Milleron2012}
-\item Quantifying pollen impaction in non-floral structures \citep{Tauber1967}
-\item \citet{Janzen1967} suggests that tropical hysteranthous flowering is a pollinator visability adaptation, but to our knowledge, this hypothesis has never been rigorously developed.
-\item The possibility that hysteranthous pollination is more effecient regardless of syndrome can be gleaned from comparative anatomy studies. Reduced floral investment has been shown in hysteranthous vs. seranthous dogwoods \citep{Gunatilleke1984} but we are aware of no other studies that link morphological differences to phenological ones. 
-\end{enumerate}
-\item{Early flowering}
-\begin{enumerate}
+\item  For example, the most prevalent hypothesis---wind pollination---has often been suggested conceptually  \citep{Robertson1895,Rathcke_1985,Whitehead1969}, but tested most often through pollen studies. % EMW: Pick one of the next two items and reference in ()
+\item e.g., particle movement through closed and open canopies \citep{Niklas1985,Nathan2005, Milleron2012} 
+\item e.g., quantifying pollen impaction in non-floral structures \citep{Tauber1967}
+% \item \citet{Janzen1967} suggests that tropical hysteranthous flowering is a pollinator visability adaptation, but to our knowledge, this hypothesis has never been rigorously developed. % EMW... this feels like we could cut it
 \item We are aware of no direct test to try and distinguish hysteranthy from selection early flowering.
 \item \citet{Primack1987} notes that hysteranthous wind pollianted species tend to also have large seed mass, and lack primary seed dormancy for germination. These are traits associated with early flowering in general, making the case that hysteranthy is a part of this.
+% \item The possibility that hysteranthous pollination is more effecient regardless of syndrome can be gleaned from comparative anatomy studies. Reduced floral investment has been shown in hysteranthous vs. seranthous dogwoods \citep{Gunatilleke1984} but we are aware of no other studies that link morphological differences to phenological ones. %EMW: I like this point but I think you could fit it elsewhere in the ms. 
+\item Drought hypothesis: Only recently has it been suggest that this hypothesis might be relevant in the temperate zone too \citep{Gougherty_2018} because we wouldn't expect water status to matter in the spring in the temperate zone. (find citation)
+% \item Observations of flowering in dry tropics by \citet{Borchert1983,Reich1984} suggest that flowering happens when plant water status recovers due to leaf drop. 
+% \item The work of \citet{Franklin2016}in the Austrailian dry tropics suggests flowering following leaf drop isn't neccisarily mechanistic. 
+% \item \citet{Feild2009} found that some Basal angiosperm flowers might be hydrated by xylem, suggesting extreme water stress would occur if flowering an leaf overlapping in dry environments, but confirm that most eudicots are hydrated by flower. This hydration by the phloem in may temperate Eastern species was supported by recent work of \citet{Savage2019} %EMW: Feels very nitty gritty for this paper (more appropriate for a water-focused paper), do you need? 
+\item All the above studies tend to test single hypotheses. %EMW: Dan, is this correct?
 \end{enumerate}
-\item Drought hypothesis:
-\begin{enumerate}
-\item Observations of flowering in dry tropics by \citet{Borchert1983,Reich1984} suggest that flowering happens when plant water status recovers due to leaf drop. 
-\item The work of \citet{Franklin2016}in the Austrailian dry tropics suggests flowering following leaf drop isn't neccisarily mechanistic. 
-\item \citet{Feild2009} found that some Basal angiosperm flowers might be hydrated by xylem, suggesting extreme water stress would occur if flowering an leaf overlapping in dry environments, but confirm that most eudicots are hydrated by flower. This hydration by the phloem in may temperate Eastern species was supported by recent work of \citet{Savage2019}
-\item Only recently has it been suggest that this hypothesis might be relevant in the temperate zone too \citep{Gougherty_2018} because we wouldn't expect water status to matter in the spring in the temperate zone. (find citation)
-\end{enumerate}
-\item One study by \citet{Bolmgren2003} has considered multiple hypotheses, showing that wind pollinated species tend to also be earlier flowering than their biotocially pollinated sister taxa, suggesting an interaction between the early flowering and wind pollination hypotheses.
-
+\item  In contrast, studies testing multiple hypotheses generally always find support for more than one mechanism of hysteranthy.
+\item One study by \citet{Bolmgren2003} showed that wind pollinated species tend to also be earlier flowering than their biotocially pollinated sister taxa, suggesting an interaction between the early flowering and wind pollination hypotheses.
 \item A recent paper by \citet{Gougherty_2018} tested multiple hypotheses by modeling associations trait correlations to FLS pattern in the Great Lakes regions. They found the strongest support for the water dynamics and early flowering (flower timing and seed characteristics) hypotheses, and found strong phylogenetic clustering for FLS. It should be noted that their seed mass findings were contrary to the predictions of \citep{Primack1987}, with small seeds being associated with hysteranthy. Also, their modeling framework doesn't really allow for direct comparisions (need to say this better).%How much should I explain their paper
 \end{enumerate}
-\item  In all of these cases, variability in FLS isn't addressed.
+\item In all of these cases, variability in FLS isn't addressed.
 \item Yet, there are datasets widely available that would allow for testing these hypotheses at once and at multiple levels.
 
-\item To address this gap, we supplement our literature review by re-testing some previously-used datasets to examine all hypotheses, and we leverage several widely-available datasets to test how support for these hypotheses varies across the inter- to intraspecific levels. % This is good! But you then need to carry through and make sure you include the lit review mixed in with your results. 
-\begin{enumerate}
+\item To address this gap, we supplement our literature review by re-testing some previously-used datasets to examine all hypotheses, and we leverage several widely-available datasets to test how support for these hypotheses varies across the inter- to intraspecific levels. 
+\begin{enumerate} %EMW: The below should be *ONE* relatively quick paragraph. Start a supp for extra details...
 \item  Michigan Trees and its companion volume Michigan Shrubs and Vines \citep{Barnes2004,Barnes2016} (MTSV) contains FLS information for 195 Woody plant species. The USFS Silvics mannual volume II \citep{Burns1990} contains FLS descriptions for 81 woody species. These data can be used to test interspecfic FLS varaiation.  Species are categorized as flowers before leaves, flowers before/with leaves and flowers with leaves, and flowering after leaves. As in previous work, we collapsed these categories to binary "hysteranthous" of "seranthous" for modeling. 
 \item But even within this frame work, we built back in variability associated with the hypotheses. We defined `functional hysteranthy' to accommodate a degree of overlap between flowering and the early stages of leaf out as predicted by the wind pollination hypothesis (including `flowers before leaves', `flowers before/with leaves' and `flowers with leaves') versus `physiological hysteranthy' (only flowers before leaves) which relates to drought tolerance hypothesis.
 \item Harvard Forest contains flowering and leaf phenology measurements for individuals 24 woody species over 15 year, allowing for both inter- and intra-specific comparisons \citep{Okeefe2015}. In this dataset we calculated "FLS offset" (flower DOY-leaf DOY), a continuous measure fo FLS, which allows us to better understand the impact of FLS categorization and make comparison even within categories. We approximated "functional" and "physiological" hysteranthy in this data set by calculating 2 offset values (Fopn-L75) and (fbb-lbb).
@@ -54,13 +46,11 @@
 \end{enumerate}
 \end{enumerate}
 
-
-\section*{What we know, what we don't know, and what we can do to know more}
 \begin{enumerate}
-\item In considering each dataset separately and in tandem, and the previous literature, two clear trend emerge: % Can you add in some references to the literature here?
-\item As presented above, multiple hypotheses are supported by the literature.
-\item In our re-analyses, across inter-specific models, multiple hypotheses were too supported. There was generally a strong support for the early flowering and wind pollination hypothesis, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable.
+\item In considering each dataset separately and in tandem two clear trend emerge: 
+\item As seen from the recent literature we also found in our re-analyses that multiple hypotheses were supported. There was generally a strong support for the early flowering and wind pollination hypothesis, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable.
 \item This is not a surprise. We wouldn't expect the wind pollination hypothesis to explain hysteranthy in biotically pollinated taxa. Further, with the relative recent community reassmbly of Northeastern forests following the most recent glaciation, it is not surprising our flora consists of species with radically different bio-geographic histories, and hysteranthy could have converged under different selection environments.
+% EMW: Be sure to expand here .... 
 \item The relative importance of each the predictors changed significantly depending on how hysteranthy was defined. This effect was minimized when continuous measure of FLS were used over categorical.
 \end{enumerate}
 
