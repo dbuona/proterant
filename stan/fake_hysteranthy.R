@@ -13,45 +13,49 @@ graphics.off()
 library(rstan)
 setwd("~/Documents/git/proterant/stan")
 
+
+set.seed(613)
 # Params
-a <- 0.5
-b_flo <- -.05
-b_drought <- -0.001
-b_wind<- .2
+alpha<-1.5
+b_pol<-3
+b_flotime<--.5
+b_minP<--.1
 
 
 # x data
-ndata <- 200
+ndata <- 4000
+pol<-rbinom(ndata,1,0.5)
+flotime<-runif(ndata,4.5,8.5)
+minP<-rnorm(ndata,8,2)
 
-
-flo_time <- runif(ndata, 4.5, 9)
-min_p <- rnorm(ndata, mean = 8, 1)
-pol<-rbinom(ndata,size = 1,prob = 0.5)
-# linear model
-z <- a + b_wind*pol + b_flo*flo_time+b_drought*min_p
+z <-alpha+b_pol*pol+b_flotime*flotime+b_minP*minP
 # inverse logit -- this is the reverse of logit(p) in the model code
 p <- 1/(1+exp(-z))
 # now, can get bernoulli
 y <- rbinom(ndata, 1, p)
 
-dat <- as.data.frame(cbind(pol, flo_time,min_p, y))
+
+dat <- as.data.frame(cbind(pol,flotime,minP,y))
+
+
 #dat$pol.z<-NA
 #dat$flo_time.z<-NA
 #dat$
 
 
 datalist<- with(dat, 
-                  list(y=y, 
-                  pol = pol,
-                    flo=flo_time,
-                     minp=min_p, 
+                  list(y=y,
+                       pol=pol,
+                       flotime=flotime,
+                       minP=minP,
                   N = nrow(dat)
                              ))
 
 berny<- stan('binary_stan_nophylo.stan', data = datalist,
                                         iter = 3000, warmup=2000) 
+berny.sum <- summary(berny)$summary
 
-summary(berny)
+berny.sum[c("alpha","b_pol","b_flotime","b_minP"),]
 #This is from rethinking, but i should tray and do it in r stan
 #flist <- alist(
  # y ~ dbinom(1, p),

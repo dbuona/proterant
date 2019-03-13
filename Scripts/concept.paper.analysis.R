@@ -20,9 +20,11 @@ library("randomForest")
 library(car)
 library(ggstance)
 library(broom)
+library(brms)
+library(rstan)
 
 #if you dont want to run the model: 
-load("hystmodels.RData")
+load("RData/zarchival/hystmodels.RData")
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
 mich.tree<-read.tree("pruned_for_mich.tre")
@@ -162,6 +164,7 @@ z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cen
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
 
+
 z.phys.drought<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
                          boot=599,full.matrix = TRUE)
@@ -230,6 +233,47 @@ grid.arrange(plotty3a,plotty3b,nrow=1)
 z.funct.drought.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                           start.beta=NULL, start.alpha=NULL,
                           boot=599,full.matrix = TRUE)
+
+summary(z.funct.drought.noint)
+
+
+####March 13, 2019 Start testing stan models
+z.no.phylo.freq<-glm(pro2~pol_cent+flo_cent+precip_cent,mich.data,family=binomial(link="logit"))
+summary(z.no.phylo.freq)
+colnames(mich.data)
+no.phylo.freq<-glm(pro2~pol+flo_time+min._precip,mich.data,family=binomial(link="logit"))
+summary(no.phylo.freq)
+
+?glm()
+####Bayesian
+datalist<- with(mich.data, 
+                list(y=pro2,
+                     pol=pol_cent,
+                     flotime=flo_cent,
+                     minP=precip_cent,
+                     N = nrow(mich.data)
+                ))
+
+datalist2<- with(mich.data, 
+                list(y=pro2,
+                     pol=pol,
+                     flotime=flo_time,
+                     minP=min._precip,
+                     N = nrow(mich.data)
+                ))
+
+z.no.phylo.bayes<- stan('..//stan/binary_stan_nophylo.stan', data = datalist,
+             iter = 5000, warmup=3500) 
+
+sum.bayes<-summary(z.no.phylo.bayes)$summary
+sum.bayes[c("alpha","b_pol","b_flotime","b_minP"),]
+
+
+no.phylo.bayes<- stan('..//stan/binary_stan_nophylo.stan', data = datalist2,
+                        iter = 5000, warmup=3500)
+
+sum.bayes2<-summary(no.phylo.bayes)$summary
+sum.bayes2[c("alpha","b_pol","b_flotime","b_minP"),]
 
 z.phys.drought.noint<-phyloglm(pro3~pol_cent+flo_cent+precip_cent,mich.data, mich.tree.droughtprune, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                          start.beta=NULL, start.alpha=NULL,
