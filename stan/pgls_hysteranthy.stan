@@ -7,22 +7,46 @@ data {
   vector[N] flotime;
   vector[N] minP;
 
+	matrix[N, N] V; // will be VCV?
+	matrix[N, N] Lmat; // some sort of pre-designed matrix
 } 
+
+transformed data{
+	real Ndiv; // a real number (holder)
+	matrix[N, N] Ident; // a N by N matrix (holder)
+
+	Ndiv = N; // fill out Ndiv
+	Ident = diag_matrix(rep_vector(1, N)); // matrix of 0s with 1s on diagonal
+}
+
 parameters {
   real alpha;
   real  b_pol;
   real b_flotime;
   real b_minP;
-  matrix Vsigma;
+  
+  real<lower=0> sigma;
+	real<lower=0, upper=1> lambda;
 }
 
-//transformed parameters {
-//real p[N];
+transformed parameters {
 
-//for (i in 1:N)
-//p[i]=1/(1+exp(-(alpha+b_pol*pol[i]+b_flotime*flotime[i]+b_minP*minP[i])));
+matrix[N,N] Vlambda; // VCV x lambda??
+matrix[N,N] Vsigma; // (VCVxlambda) x sigma??
+vector[N] yhat; // holder for predicted values
+real detV; // determinant of the VCV
+real p[N];
+real theta[N];
 
-//}
+
+Vlambda = (lambda*Lmat + Ident) .* V;
+Vsigma = sigma^2*Vlambda;
+
+for (i in 1:N)
+p[i]=1/(1+exp(-(alpha+b_pol*pol[i]+b_flotime*flotime[i]+b_minP*minP[i])));
+for (i in 1:N)
+theta[i]=p[i]+Vsigma //with the sigma of the phylogeny
+}
     
 model {
   real yhat[N];
@@ -34,6 +58,6 @@ model {
 
 yhat= 1/(1+exp(-(alpha+b_pol*pol+b_flotime*flotime+b_minP*minP)));
 
-y~multi_normal(yhat, Vsigma);
+y~multi_normal(theta);
     }
 
