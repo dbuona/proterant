@@ -13,11 +13,11 @@ parameters {
   real b_minP;
 }
 
-transformed parameters {
-real p[N];
-for (i in 1:N)
-p[i]=1/(1+exp(-(alpha+b_pol*pol[i]+b_flotime*flotime[i]+b_minP*minP[i])));
-}
+//transformed parameters {
+//real p[N];
+//for (i in 1:N)
+//p[i]=1/(1+exp(-(alpha+b_pol*pol[i]+b_flotime*flotime[i]+b_minP*minP[i])));
+//}
     
 model {
   alpha~ normal(0,10);
@@ -26,6 +26,6 @@ model {
   b_minP~normal(0,10);
 
   
-  y~bernoulli(p);
+  y~bernoulli_logit(alpha+b_pol*pol+b_flotime*flotime+b_minP*minP);
     
     }
