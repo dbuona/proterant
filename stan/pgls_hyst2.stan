@@ -6,7 +6,7 @@ data {
   real minP[N]; // minimum repcitp
   
   matrix[N, N] V; //  VCV
-	matrix[N, N] Lmat; // some sort of pre-designed matrix
+	matrix[N, N] Lmat; // matrix with 0 diagonol
 
 } 
 
@@ -32,7 +32,7 @@ vector[N] yhat; // the theota of bernoulli (prob y=1) with out accounting for ph
 
 
 for (i in 1:N)
-yhat[i]= 1/(1+exp(-(alpha+b_pol*pol[i]+b_flotime*flotime[i]+b_minP*minP[i]))); //(logistic transformation of linear model)
+yhat[i]= 1/(1+exp(-(alpha+b_pol*pol[i]+b_flotime*flotime[i]+b_minP*minP[i]+s+u))); //(logistic transformation of linear model)
 }
 
 model {

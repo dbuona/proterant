@@ -70,3 +70,8 @@ berny.sum[c("alpha","b_pol","b_flotime","b_minP"),]
 #mp.1 <- rethinking::map(flist, data = dat)
 
 2.427140e-02
+
+tre = rtree(50)
+x = rTrait(n=1,phy=tre)
+X = cbind(rep(1,50),x)
+?rbinTrait()
