@@ -28,6 +28,15 @@ plotty2<-ploty+geom_rect(dat,mapping=aes(xmin=10.9,xmax=15.1,ymin=382,ymax=482),
 plotty2<-plotty2+geom_point(xy,mapping=aes(x,y),shape=8,size=4)+theme(legend.position = "left")
 
 
+########
+temp<-c(12,12,12,12)
+light<-c(11,11,15,15)
+treat<-c("warm/short","cool/short","warm/long","warm/long")
+dawn<-data.frame(temp,light,treat)
+dawn$dawn.offset<-dawn$temp-dawn$light
+ggplot()
+
+
 xx<-c(1:24)
 yy<-rep(25,24)
 zz<-rep(15,24)
