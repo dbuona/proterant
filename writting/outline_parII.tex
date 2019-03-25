@@ -56,117 +56,30 @@
 \usepackage{amsmath}
 \bibliographystyle{..//refs/styles/besjournals.bst}
 \def\labelitemi{--}
-\parindent=0pt
+\parindent=24pt
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
 % To do:
-% Add citations and clarify your topic sentences 
-% Send back to Lizzie for quick glance
 % Start writing! (When you do this start a supp file too.)
 
-\section*{ Why other studies are weak and available data} % Be sure when you transfer this to manuscript text you pick and choose carefully when to be negative about the existing literature or you will lose most of your audience. 
-\begin{enumerate}
-\item Direct test of these hypotheses in the literature are rare, and support for them is mixed. Studies tend to test single hypotheses, or present the expectation that hypotheses are mutually exclusive.
-\begin{enumerate}
-\item  Evidence for wind pollination hypothesis: suggested conceptually in \citep{Robertson1895,Rathcke_1985,Whitehead1969}
-\begin{enumerate}
-\item Particle movement through closed and open canopies \citep{Niklas1985,Nathan2005, Milleron2012}
-\item Quantifying pollen impaction in non-floral structures \citep{Tauber1967}
-\item \citet{Janzen1967} suggests that tropical hysteranthous flowering is a pollinator visability adaptation, but to our knowledge, this hypothesis has never been rigorously developed.
-\item The possibility that hysteranthous pollination is more effecient regardless of syndrome can be gleaned from comparative anatomy studies. Reduced floral investment has been shown in hysteranthous vs. seranthous dogwoods \citep{Gunatilleke1984} but we are aware of no other studies that link morphological differences to phenological ones. 
-\end{enumerate}
-\item{Early flowering}
-\begin{enumerate}
-\item We are aware of no direct test to try and distinguish hysteranthy from selection early flowering.
-\item \citet{Primack1987} notes that hysteranthous wind pollianted species tend to also have large seed mass, and lack primary seed dormancy for germination. These are traits associated with early flowering in general, making the case that hysteranthy is a part of this.
-\end{enumerate}
-\item Drought hypothesis:
-\begin{enumerate}
-\item Observations of flowering in dry tropics by \citet{Borchert1983,Reich1984} suggest that flowering happens when plant water status recovers due to leaf drop. 
-\item The work of \citet{Franklin2016}in the Austrailian dry tropics suggests flowering following leaf drop isn't neccisarily mechanistic. 
-\item \citet{Feild2009} found that some Basal angiosperm flowers might be hydrated by xylem, suggesting extreme water stress would occur if flowering an leaf overlapping in dry environments, but confirm that most eudicots are hydrated by flower. This hydration by the phloem in may temperate Eastern species was supported by recent work of \citet{Savage2019}
-\item Only recently has it been suggest that this hypothesis might be relevant in the temperate zone too \citep{Gougherty_2018} because we wouldn't expect water status to matter in the spring in the temperate zone. (find citation)
-\end{enumerate}
-\item One study by \citet{Bolmgren2003} has considered multiple hypotheses, showing that wind pollinated species tend to also be earlier flowering than their biotocially pollinated sister taxa, suggesting an interaction between the early flowering and wind pollination hypotheses.
-
-\item A recent paper by \citet{Gougherty_2018} tested multiple hypotheses by modeling associations trait correlations to FLS pattern in the Great Lakes regions. They found the strongest support for the water dynamics and early flowering (flower timing and seed characteristics) hypotheses, and found strong phylogenetic clustering for FLS. It should be noted that their seed mass findings were contrary to the predictions of \citep{Primack1987}, with small seeds being associated with hysteranthy. Also, their modeling framework doesn't really allow for direct comparisions (need to say this better).%How much should I explain their paper
-\end{enumerate}
-\item  In all of these cases, variability in FLS isn't addressed.
-\item Yet, there are datasets widely available that would allow for testing these hypotheses at once and at multiple levels.
-
-\item To address this gap, we supplement our literature review by re-testing some previously-used datasets to examine all hypotheses, and we leverage several widely-available datasets to test how support for these hypotheses varies across the inter- to intraspecific levels. % This is good! But you then need to carry through and make sure you include the lit review mixed in with your results. 
-\begin{enumerate}
-\item  Michigan Trees and its companion volume Michigan Shrubs and Vines \citep{Barnes2004,Barnes2016} (MTSV) contains FLS information for 195 Woody plant species. The USFS Silvics mannual volume II \citep{Burns1990} contains FLS descriptions for 81 woody species. These data can be used to test interspecfic FLS varaiation.  Species are categorized as flowers before leaves, flowers before/with leaves and flowers with leaves, and flowering after leaves. As in previous work, we collapsed these categories to binary "hysteranthous" of "seranthous" for modeling. 
-\item But even within this frame work, we built back in variability associated with the hypotheses. We defined `functional hysteranthy' to accommodate a degree of overlap between flowering and the early stages of leaf out as predicted by the wind pollination hypothesis (including `flowers before leaves', `flowers before/with leaves' and `flowers with leaves') versus `physiological hysteranthy' (only flowers before leaves) which relates to drought tolerance hypothesis.
-\item Harvard Forest contains flowering and leaf phenology measurements for individuals 24 woody species over 15 year, allowing for both inter- and intra-specific comparisons \citep{Okeefe2015}. In this dataset we calculated "FLS offset" (flower DOY-leaf DOY), a continuous measure fo FLS, which allows us to better understand the impact of FLS categorization and make comparison even within categories. We approximated "functional" and "physiological" hysteranthy in this data set by calculating 2 offset values (Fopn-L75) and (fbb-lbb).
-\item From the PEP725 (look up citation) database we obtained spatially and temporally explicit flowering and leaf phenology for 3 European hysteranthous species. This allows for test only at the intra-specific level, but unlike the other datasets allow for population level variability to be assessed.
-\end{enumerate}
-\end{enumerate}
-
-
-\section*{What we know, what we don't know, and what we can do to know more}
-\begin{enumerate}
-\item In considering each dataset separately and in tandem, and the previous literature, two clear trend emerge: % Can you add in some references to the literature here?
-\item As presented above, multiple hypotheses are supported by the literature.
-\item In our re-analyses, across inter-specific models, multiple hypotheses were too supported. There was generally a strong support for the early flowering and wind pollination hypothesis, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable.
-\item This is not a surprise. We wouldn't expect the wind pollination hypothesis to explain hysteranthy in biotically pollinated taxa. Further, with the relative recent community reassmbly of Northeastern forests following the most recent glaciation, it is not surprising our flora consists of species with radically different bio-geographic histories, and hysteranthy could have converged under different selection environments.
-\item The relative importance of each the predictors changed significantly depending on how hysteranthy was defined. This effect was minimized when continuous measure of FLS were used over categorical.
-\end{enumerate}
+\section*{Available evidence for FLS hypotheses in temperate woody species} % Be sure when you transfer this to manuscript text you pick and choose carefully when to be negative about the existing literature or you will lose most of your audience. 
+\indent\indent Despite a strong conceptual basis, direct tests of these hypotheses of hysteranthy in the literature are relatively rare, and support for them is mixed.  Many studies only test a singal hypothesis at once, making comparision between them difficult. For example, the primary evidence supporting the wind pollination hypotheses comes from pollen diffusion studies, e.g., particle movement through closed and open canopies \citep{Niklas1985,Nathan2005, Milleron2012}, which provide no framework for comparatively evaluating the other hysteranthy hypotheses. We are aware of no direct test to try and distinguish hysteranthy from selection early flowering, but \citet{Primack1987} notes that hysteranthous wind pollianted species tend to also have large seed mass, and lack primary seed dormancy for germination. These are traits associated with early flowering in general, making the case that hysteranthy may simply be one component of a larger suit of early flowering traits. We are also aware of no studies that have mechanistically evaluated the water dynamics hypothesis, though observations of flowering in the dry tropics by \citet{Borchert1983,Reich1984} suggest that the timing of flowering in hysteranthous taxa is associated with a plant water status recovery due to leaf drop. Only recently has it even been suggested that this hypothesis might be relevant in the temperate zone as well, as it is not expected that water status would limit biological activity in the wet spring months of the temperate zone \citep{Gougherty_2018}.\\
+\indent In contrast, studies testing multiple hypotheses  have generally found support for more than one evolutionary driver of hysteranthy. One study by \citet{Bolmgren2003} showed that wind pollinated species tend to also be earlier flowering than their biotocially pollinated sister taxa, suggesting an interaction between the early flowering and wind pollination hypotheses. A recent study by \citet{Gougherty_2018} tested multiple hypotheses by modeling associations bwtween species' trait and FLS patterns in the Great Lakes regions. They found strong support for both the water dynamics and early flowering (flower timing and seed characteristics) hypotheses, and found strong phylogenetic clustering for FLS. \\
+\indent In all of these cases, variability in FLS below the species level isn't addressed. Yet, there are datasets widely available that would allow for concurrently testing these several hysteranthy hypotheses concurrently, and at multiple taxonomic levels. To address this gap, we supplement our literature review by re-testing some previously-used datasets to examine all hypotheses, and we leverage several widely-available datasets to test how support for these hypotheses varies across the inter- to intraspecific levels.\\ 
+\indent We evaluated hysteranthy in four phenological datasets. Michigan Trees and its companion volume Michigan Shrubs and Vines \citep{Barnes2004,Barnes2016} (MTSV) contains catagorical FLS information for 195 Woody plant species. The USFS Silvics mannual volume II \citep{Burns1990} contains catagorical FLS descriptions for 81 woody species. These data can be used to test interspecfic FLS variation. Within these datasets, we applied 2 alternative FLS classification schemes; physiological hysteranthy, which allowed for no overlap between floral and leaf phenophases, and functional hysteranthy, which allowed for a degree of overlap as predicted by the wind pollination hypotheses. The Harvard Forest dataset (HF) contains quantatitive flowering and leaf phenology measurements for individuals of 24 woody species over a 15 year period, allowing for both inter- and intra-specific comparisons \citep{Okeefe2015. In this dataset, we approximated the two hysteranthy classification schemes mentioned by measuring the temporal offset between different floral and leaf phenophases. From the Pan European Phenological Database (PEP725) (look up citation) we obtained spatially and temporally explicit, quantitative flowering and leaf phenology for 3 European hysteranthous species. This allows for test only at the intra-specific level, but unlike the other datasets, it allows for population level variability to be assessed.
+\section*{Results of sorts, and ideas about them}
+\indent\indent In considering each dataset separately and in tandem two clear trend emerge: One, in accordance with the recent literature, we found that in our re-analyses, multiple hypotheses were supported. There was generally a strong support for the early flowering and wind pollination hypotheses, poor support for the water dynamics hypothesis, and the phylogenetic signal was variable. The support for multple hypotheses is not terribly surprising. We wouldn't expect the wind pollination hypothesis to explain hysteranthy in biotically pollinated taxa. Futher, given the almost constant non-equllibrum state of temperate forest communites due to glacial cycles over the last 10,000 years \citep{Barnes}, it is not surprising our flora consists of species with radically different bio-geographic histories that may have evolved hysteranthous flower under very different selection environments.  The second clear singnature from our analysis was that relative importance of each the predictors changed significantly depending on how hysteranthy was defined. This effect was minimized when continuous measure of FLS were used over categorical. But perhaps more important that the results of these specific model themselves, is that through considering them together, we are provided a more comprehensive picture of where our understanding of this phenological trait is currently, and where it needs to go. 
 
 \subsection*{Future}
-\begin{enumerate}
-\item But perhaps more important that the results of these specific model themselves, is that through considering them together, we are provided a more comprehensive picture of where our understanding of this phenological trait is. and where it needs to go. % Yes! I would start a new subsection next on future directions. 
-\item First, our analysis reveals the clear advantages of continuous data.
-\begin{enumerate}
-\item As mentioned above, it minimizes the observer bias that comes with categorization.
-\item It reveals important interspecific differences that are masked by categorization. I.e. two hysteranthous species may have dramatically different FLS offsets.
-\item It also reveals that there are large intra-specific difference which, as will be discussed more below, will be instructive to hypothesis testing.
-\item All and all, our work shows categorizing hysteranthy into groups is biased and biologically problematic; future studies about phenological sequences should avoid these categories when possible and treat FLS as continuous traits (whenever possible).
-\end{enumerate}
-\item A main outgrowth of our model is the realization it is instructive to test questions of hysteranthy at other scales. Because trait modeling in large community level datasets seem to support multiple hypotheses, and are confounded by species' identities and observer bias, the utility of these data can only take us so far. While future large-scale studies must try to study multiple traits across phylo-trees, the evolution of hysteranthy may be better explored through getting into mechanisms, which mean means drilling down in an opposing direction. 
-\begin{enumerate}
-\item One option is to look within the hypotheses to address sub-grouping of taxa in which overlap between hypotheses could be controlled?
-% This is a timely point which you may want to acknowledge. A few papers to check out regarding this:
-% https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12841
-% https://www.journals.uchicago.edu/doi/10.1086/692326
-\item  For example What drives hysteranthy among biotically pollinated taxa? It certain isn't wind pollination efficiency. Or what traits accounts for variability in hysteranthy among wind polliated taxa?
-\item Further incorperating a phylo-biogeographic approach would probably be instructive at this level, for example: are their phylogeopraphic commonalities between biotocally pollinated hysteranthous species in Eastern flora.
-\end{enumerate}
-
-
-\item But even with sub-groupings, interspecific trait association models can only can take us so far. 
-\begin{enumerate}
-
-\item One reality of these kind of studies is that we never know we are picking the right traits. For example we used minimum P across range, one of the only available quantitative drought metrics at the scale of large interspecific models, to represent the water dynamics hypothesis. Is this really a good proxy for drought tolerance?
-\item Further, species evolve a suit of traits of any function, and unmeasured traits might bias our results \citep{Davies2019}. IE wind pollinated species could compensate for a lack of hysteranthy by over producing pollen or selfing. To really understand this trait across large taxonomic space, you would have to compare species over N-dimensional trait axis.
-\end{enumerate}
-
-\item Considering hysteranthy variation at the intraspecific level overcomes many of these limitations and is the the next frontier in understanding FLS.
-\begin{enumerate}
-\item As predicted by evolutationary theory the agreement between our intra and interspecific models, suggesting flowering time major driver in FLS variation, suggests that we are in moving the right direction.
-\item Further, though our datasets were taxonomically and geographically limited, they demonstrate that FLS variability is significant over time and space.
-\item Looking within species holds most other traits relatively equal, avoids the problem of latent tradeoffs with unmeasured traits.
-\end{enumerate}
-
-\item  With this equalizing nature of intra-specfic coomparision we can now, move beyond trait associations and actually begin to to look at fitness consequences of FLS variation through experimental manipulations and observations.
-\begin{enumerate}
-\item This as a next step is intuative because fitness actually drives trait evoltion, and the hysteranthy hypotheses themselves make fitness predictions. It is tough to tease these appart at the interspecific level beacuse of the N-dimensional trait axis mentioned above, but the hypotheses predict that variability in hysteranthy would lead to varaibility into fitness outcome at the intraspecific level.
-\begin{enumerate}
-\item For example, the wind pollination hypothesis predicts that years with increased hysteranthy should correlate with more pollination success.
-\item The water dynamics hypothesis suggests more hysteranthous populations should better tolerate drought. 
-\end{enumerate}
-\item These predictions could be directly assessed.
-\item Working at this level also highlights where local context may matter ... Does community matter ie wind pollination?
-\end{enumerate}
-\item Looking at fitness consequences will not only help clarify basic scientific hypotheses, but is important for global change, and understanding how changing hysteranthy will impact species fitness.
-\begin{enumerate}
-\item For example, if hysteranthy is driven by pollination effciency, increased hysteranthy with climate change might effect demography to favor hysteranthous species. Or if the opposite is true, hysteranthous species may be at greater risk.
-\item If there really is strong selection on early-flowering what is predicted next (lots of cites you could add here). % lets talk more about this 
-\end{enumerate}
-
-\end{enumerate}
-
+\indent\indent Our analysis reveals the clear advantages of treating hysteranthy as a continuous trait. As mentioned above, continous data minimizes the observer bias that comes with categorization. It also reveals important inter-specific differences that are masked by categorization. For example, two catagorically hysteranthous species may have dramatically different FLS offsets. Through working with continous measures of hysteranthy, substantial intra-specific differences in FLS emerge, and as will be discussed more below, these will be valuable for hypothesis testing. All and all, our work shows categorizing hysteranthy into groups is biased and biologically problematic; future studies about phenological sequences should avoid these categories when possible and treat FLS as continuous traits whenever possible.\\
+ \indent Another main outgrowth of our analysis is the realization that it is instructive to test questions of hysteranthy at many scales. Because trait modeling in large community level datasets seem to support multiple hypotheses and are confounded by species' identities and observer bias, the utility of these data can only take us so far. While there is certainly value to broad taxonmic studies, and future large-scale analyses should continue,it is possible the evolutionary dynamics of hysteranthy may be better explored with a more mechanistic approach, which may mean utalizing a more taxonomically restricted focus.\\
+\indent One option is to look within the hypotheses to address sub-grouping of taxa in which overlap between hypotheses could be controlled. For example, what drives hysteranthy among biotically pollinated taxa? It certain isn't wind pollination efficiency. Or, what factors accounts for variability in hysteranthy among wind polliated taxa? Incorperating a more explicit phylo-biogeographic approach would probably be instructive at this level, for example: are their phylogeopraphic commonalities between biotocally pollinated hysteranthous species in Eastern flora?\\
+\indent But even with drilling down to sub-groupings, interspecific trait association models can only can take us so far. One reality of these kind of studies is that we never know we are picking the right traits. For example we used minimum precipitation across a species' range, one of the only available quantitative drought metrics at the scale of large interspecific models, to represent the water dynamics hypothesis. Is this really a good proxy for drought tolerance? Further, species evolve a suit of traits for any function, and unmeasured traits might bias our results \citep{Davies2019}. For example, wind pollinated species could compensate for a lack of hysteranthy by over producing pollen or through self-pollination. To really understand this trait across large taxonomic space, you would have to compare species across an unfeasibly large, N-dimensional trait space.\\
+\indent Considering hysteranthy variation at the intraspecific level overcomes many of these limitations, and is the the next frontier in testing the evolutionary and ecological significance of FLS. Evolutationary theory predicts that intraspecific variation should follow the same trends as interspecific varaition. The agreement between our intra- and interspecific models supports this, and may suggests that we are narrowing in on certain hypotheses. Further, though our datasets were taxonomically and geographically limited, they demonstrate that FLS variability is significant over time and space. Looking within species holds most other traits relatively equal, avoiding the problem of latent tradeoffs with unmeasured traits.\\
+\indent With this equalizing nature of intra-specfic coomparision we can now, move beyond trait associations and actually begin to to look at fitness consequences of FLS variation through experimental manipulations and observations. This next step is intuative because fitness actually drives trait evoltion, and the hysteranthy hypotheses themselves make fitness predictions. It is tough to tease these appart at the interspecific level beacuse of the N-dimensional trait axis mentioned above, but the hypotheses predict that variability in hysteranthy would lead to varaibility into fitness outcome at the intraspecific level. For example, the wind pollination hypothesis predicts that years with increased hysteranthy should correlate with more pollination success. The water dynamics hypothesis suggests more hysteranthous populations should better tolerate drought. These predictions could be directly assessed through well designed experiments.\\
+\indent Looking at fitness consequences will not only help clarify basic scientific hypotheses, but is essential for understanding how global change induced alterations to hysteranthy will impact species demographics. For example, if hysteranthy is driven by pollination effciency, increased hysteranthy with climate change might favor hysteranthous species. Or, if climate changes reduces FLS offset, hysteranthous species may be at greater risk for reproductive failure. If there really is strong selection on early-flowering what is predicted next (lots of cites you could add here). % lets talk more about this.
+A better understanding of consequences of variation in hysteranthy is essential both for understanding the evolutionary origins of this trait, and for predicting the fate of species with this phenologic syndrome as global climate continues to change.
 
 \subsubsection{Things I didn't sneak in but could considered}
     \begin{itemize}
@@ -179,3 +92,37 @@
 
 
 \end{document}
+%\begin{enumerate}
+%\item Direct tests of these hypotheses in the literature are rare, and support for them is mixed.  %EMW: This should be ONE paragraph that covers wind pollination, early flowering and drought, I tried to help in suggesting some cuts (I think many of these points you have made before, so unless they help to our current point we should cut)...
+%\begin{enumerate}
+%\item   % EMW: Pick one of the next two items and reference in ()
+%\item  
+%\item e.g., quantifying pollen impaction in non-floral structures \citep{Tauber1967}
+% \item \citet{Janzen1967} suggests that tropical hysteranthous flowering is a pollinator visability adaptation, but to our knowledge, this hypothesis has never been rigorously developed. % EMW... this feels like we could cut it
+%\item 
+% \item The possibility that hysteranthous pollination is more effecient regardless of syndrome can be gleaned from comparative anatomy studies. Reduced floral investment has been shown in hysteranthous vs. seranthous dogwoods \citep{Gunatilleke1984} but we are aware of no other studies that link morphological differences to phenological ones. %EMW: I like this point but I think you could fit it elsewhere in the ms. 
+%\item Drought hypothesis: 
+% \item Observations of flowering in dry tropics by \citet{Borchert1983,Reich1984} suggest that flowering happens when plant water status recovers due to leaf drop. 
+% \item The work of \citet{Franklin2016}in the Austrailian dry tropics suggests flowering following leaf drop isn't neccisarily mechanistic. 
+% \item \citet{Feild2009} found that some Basal angiosperm flowers might be hydrated by xylem, suggesting extreme water stress would occur if flowering an leaf overlapping in dry environments, but confirm that most eudicots are hydrated by flower. This hydration by the phloem in may temperate Eastern species was supported by recent work of \citet{Savage2019} %EMW: Feels very nitty gritty for this paper (more appropriate for a water-focused paper), do you need? 
+%\item All the above studies tend to test single hypotheses. %EMW: Dan, is this correct?
+%\end{enumerate}
+%\item  In contrast, studies testing multiple hypotheses generally always find support for more than one mechanism of hysteranthy.
+
+ %Also, their modeling framework doesn't really allow for direct comparisions (need to say this better).%How much should I explain their paper
+%\end{enumerate}
+
+%Suppliment
+begin{enumerate} %EMW: The below should be *ONE* relatively quick paragraph. Start a supp for extra details...
+%\item  Michigan Trees and its companion volume Michigan Shrubs and Vines \citep{Barnes2004,Barnes2016} (MTSV) contains FLS information for 195 Woody plant species. The USFS Silvics mannual volume II \citep{Burns1990} contains FLS descriptions for 81 woody species. These data can be used to test interspecfic FLS varaiation.  Species are categorized as flowers before leaves, flowers before/with leaves and flowers with leaves, and flowering after leaves. As in previous work, we collapsed these categories to binary "hysteranthous" of "seranthous" for modeling. 
+%\item But even within this frame work, we built back in variability associated with the hypotheses. We defined `functional hysteranthy' to accommodate a degree of overlap between flowering and the early stages of leaf out as predicted by the wind pollination hypothesis (including `flowers before leaves', `flowers before/with leaves' and `flowers with leaves') versus `physiological hysteranthy' (only flowers before leaves) which relates to drought tolerance hypothesis.
+ %In this dataset we calculated "FLS offset" (flower DOY-leaf DOY), a continuous measure fo FLS, which allows us to better understand the impact of FLS categorization and make comparison even within categories. We approximated "functional" and "physiological" hysteranthy in this data set by calculating 2 offset values (Fopn-L75) and (fbb-lbb).
+%\item 
+%\end{enumerate}
+%\end{enumerate}
+% This is a timely point which you may want to acknowledge. A few papers to check out regarding this:
+% https://onlinelibrary.wiley.com/doi/full/10.1111/geb.12841
+% https://www.journals.uchicago.edu/doi/10.1086/692326
+
+%It should be noted that their seed mass findings were contrary to the predictions of \citep{Primack1987}, with small seeds being associated with hysteranthy.\\
+% Working at this level also highlights where local context may matter ... Does community matter ie wind pollination?\\

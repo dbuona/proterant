@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  25 MAR 2019 17:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  25 MAR 2019 17:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**outline_parII.tex
-(./outline_parII.tex
+**rethinking_FLS_draft.tex
+(./rethinking_FLS_draft.tex
 LaTeX2e <2017-04-15>
 Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
 (/usr/local/texlive/2017/texmf-dist/tex/latex/base/article.cls
@@ -169,21 +169,22 @@ LaTeX Info: Redefining \] on input line 2818.
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 )
-No file outline_parII.aux.
-\openout1 = `outline_parII.aux'.
+(./rethinking_FLS_draft.aux)
+\openout1 = `rethinking_FLS_draft.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count104
@@ -277,73 +278,63 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-
-Package natbib Warning: Citation `Niklas1985' on page 1 undefined on input line
- 67.
-
-
-Package natbib Warning: Citation `Nathan2005' on page 1 undefined on input line
- 67.
-
-
-Package natbib Warning: Citation `Milleron2012' on page 1 undefined on input li
-ne 67.
-
-
-Package natbib Warning: Citation `Primack1987' on page 1 undefined on input lin
-e 67.
-
-
-Package natbib Warning: Citation `Borchert1983' on page 1 undefined on input li
-ne 67.
-
-
-Package natbib Warning: Citation `Reich1984' on page 1 undefined on input line 
-67.
-
-
-Package natbib Warning: Citation `Gougherty_2018' on page 1 undefined on input 
-line 67.
-
-
-Package natbib Warning: Citation `Bolmgren2003' on page 1 undefined on input li
-ne 68.
-
-
-Package natbib Warning: Citation `Gougherty_2018' on page 1 undefined on input 
-line 68.
-
-
-Package natbib Warning: Citation `Barnes2004' on page 1 undefined on input line
- 70.
-
-
-Package natbib Warning: Citation `Barnes2016' on page 1 undefined on input line
- 70.
-
-
-Package natbib Warning: Citation `Burns1990' on page 1 undefined on input line 
-70.
-
-Runaway argument?
-{Okeefe2015. In this dataset, we approximated the two hysteranthy cla\ETC.
-! Paragraph ended before \@citex was complete.
-<to be read again> 
-                   \par 
-l.73 
-     
-I suspect you've forgotten a `}', causing me to apply this
-control sequence to too much text. How can we recover?
-My plan is to forget the whole thing and hope for the best.
-
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2] [3]
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
 
-Package natbib Warning: Citation `Davies2019' on page 2 undefined on input line
- 78.
+ []
 
-[2] (./outline_parII.bbl [3]
+[4] [5]
+Underfull \hbox (badness 10000) in paragraph at lines 109--111
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--119
+
+ []
+
+[6] [7] [8] <..//figure/FLS_climate_change.jpeg, id=32, 481.8pt x 481.8pt>
+File: ..//figure/FLS_climate_change.jpeg Graphic file (type jpg)
+
+<use ..//figure/FLS_climate_change.jpeg>
+Package pdftex.def Info: ..//figure/FLS_climate_change.jpeg used on input line 
+176.
+(pdftex.def)             Requested size: 455.30013pt x 455.31075pt.
+
+<..//figure/HFmeans.jpeg, id=33, 481.8pt x 481.8pt>
+File: ..//figure/HFmeans.jpeg Graphic file (type jpg)
+
+<use ..//figure/HFmeans.jpeg>
+Package pdftex.def Info: ..//figure/HFmeans.jpeg used on input line 182.
+(pdftex.def)             Requested size: 364.24149pt x 364.253pt.
+
+<..//figure/HFdissplot.jpeg, id=34, 481.8pt x 481.8pt>
+File: ..//figure/HFdissplot.jpeg Graphic file (type jpg)
+
+<use ..//figure/HFdissplot.jpeg>
+Package pdftex.def Info: ..//figure/HFdissplot.jpeg used on input line 188.
+(pdftex.def)             Requested size: 341.47508pt x 341.4849pt.
+
+<..//figure/Mtsv_usfs_sidexside.jpeg, id=35, 1369.115pt x 278.03876pt>
+File: ..//figure/Mtsv_usfs_sidexside.jpeg Graphic file (type jpg)
+
+<use ..//figure/Mtsv_usfs_sidexside.jpeg>
+Package pdftex.def Info: ..//figure/Mtsv_usfs_sidexside.jpeg used on input line
+ 195.
+(pdftex.def)             Requested size: 455.30013pt x 92.46156pt.
+
+<..//figure/HF_cont_v_bin.jpeg, id=36, 1261.71375pt x 290.08376pt>
+File: ..//figure/HF_cont_v_bin.jpeg Graphic file (type jpg)
+
+<use ..//figure/HF_cont_v_bin.jpeg>
+Package pdftex.def Info: ..//figure/HF_cont_v_bin.jpeg used on input line 202.
+(pdftex.def)             Requested size: 455.30013pt x 104.67793pt.
+ (./rethinking_FLS_draft.bbl [9] [10 <..//figure/FLS_climate_change.jpeg>] [11 
+<..//figure/HFmeans.jpeg>] [12 <..//figure/HFdissplot.jpeg> <..//figure/Mtsv_us
+fs_sidexside.jpeg>]
 ! Misplaced alignment tab character &.
 <argument> Michgan Shrubs &
                             Vines: A guide to species of the Great Lakes Region
@@ -356,36 +347,50 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-)
+! Misplaced alignment tab character &.
+<argument> Trends in Ecology &
+                               Evolution
+l.33   Ecology & Evolution}
+                            \textbf{22}, 357 -- 365.
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
 
-Package natbib Warning: There were undefined citations.
+Missing character: There is no ‚ in font cmr12!
+Missing character: There is no Ä in font cmr12!
+Missing character: There is no ê in font cmr12!
+[13 <..//figure/HF_cont_v_bin.jpeg>]
+! Misplaced alignment tab character &.
+l.127 ...1980) \emph{Forest Ecology}. John Wiley &
+                                                  Sons, 3rd
+I can't figure out why you would want to use a tab mark
+here. If you just want an ampersand, the remedy is
+simple: Just type `I\&' now. But if some right brace
+up above has ended a previous alignment prematurely,
+you're probably due for more error messages, and you
+might try typing `S' now just to see what is salvageable.
 
-[4] (./outline_parII.aux
-
-Package natbib Warning: Citation(s) may have changed.
-(natbib)                Rerun to get citations correct.
-
-) )
-(\end occurred inside a group at level 1)
-
-### semi simple group (level 1) entered at line 70 (\begingroup)
-### bottom level 
+[14]) [15] (./rethinking_FLS_draft.aux) ) 
 Here is how much of TeX's memory you used:
- 3089 strings out of 492995
- 42392 string characters out of 6132704
- 121334 words of memory out of 5000000
- 6602 multiletter control sequences out of 15000+600000
- 8915 words of font info for 32 fonts, out of 8000000 for 9000
+ 3178 strings out of 492995
+ 44383 string characters out of 6132704
+ 123782 words of memory out of 5000000
+ 6682 multiletter control sequences out of 15000+600000
+ 10280 words of font info for 37 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,5n,25p,1593b,254s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmti12.pfb>
-Output written on outline_parII.pdf (4 pages, 64670 bytes).
+ 39i,6n,26p,1722b,264s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmti12.pfb>
+Output written on rethinking_FLS_draft.pdf (15 pages, 360501 bytes).
 PDF statistics:
- 29 PDF objects out of 1000 (max. 8388607)
- 19 compressed objects within 1 object stream
+ 74 PDF objects out of 1000 (max. 8388607)
+ 47 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
