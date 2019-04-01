@@ -3,7 +3,7 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
-setwd("~/Documents/git/proterant/input")
+setwd("~/Documents/git/proterant/Input")
 
 ###libraryies
 library("tidyverse")
@@ -25,7 +25,8 @@ library("raster")
 library("remote")
 library(reshape2)
 
-###Data#####################################################################
+load("RData/paper_full_analysis.RData")
+ ###Data#####################################################################
 #data1
 aln<-read.csv("datasheets_derived/alnus_delta_hyst.csv",header=TRUE)
 frax<-read.csv("datasheets_derived/fraxinus_delta_hyst.csv",header=TRUE)
@@ -335,8 +336,14 @@ mod.intra.aes.sm<-brm(offset~soil.cent,data=df.intra.aes)
 summary(mod.intra.bet.sm)
 
 priorz<-get_prior(offset~flo.cent*soil.cent,data=df.intra.alnus)
-mod.intra.flo.sm.sm<-brm(offset~flo.cent*soil.cent,data=df.intra.alnus,prior=priorz)
-summary(mod.intra.flo.sm.sm)
+mod.intra.flo.sm.aln<-brm(offset~flo.cent*soil.cent,data=df.intra.alnus,prior=priorz)
+summary(mod.intra.flo.sm.aln)
 mod.intra.flo.sm.frax<-brm(offset~flo.cent*soil.cent,data=df.intra.frax,prior=priorz)
 summary(mod.intra.flo.sm.frax)
+mod.intra.flo.sm.sm<-brm(offset~flo.cent*soil.cent,data=df.intra.bet,prior=priorz)
+summary(mod.intra.flo.sm.sm)
+
+alnus.itra<-extract_coefs4HF(mod.intra.flo.sm.aln)
+frax.itra<-extract_coefs4HF(mod.intra.flo.sm.frax)
+bet.itra<-extract_coefs4HF(mod.intra.flo.sm.sm)
 save.image("paper_full_analysis.RData")

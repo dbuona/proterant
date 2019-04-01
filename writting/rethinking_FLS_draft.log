@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  25 MAR 2019 17:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  1 APR 2019 13:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -282,59 +282,59 @@ e
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 95--97
+Underfull \hbox (badness 10000) in paragraph at lines 105--107
 
  []
 
 [4] [5]
-Underfull \hbox (badness 10000) in paragraph at lines 109--111
+Underfull \hbox (badness 10000) in paragraph at lines 119--121
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 115--119
+Underfull \hbox (badness 10000) in paragraph at lines 125--129
 
  []
 
-[6] [7] [8] <..//figure/FLS_climate_change.jpeg, id=32, 481.8pt x 481.8pt>
+[6] [7] [8] [9] <..//figure/FLS_climate_change.jpeg, id=35, 481.8pt x 481.8pt>
 File: ..//figure/FLS_climate_change.jpeg Graphic file (type jpg)
 
 <use ..//figure/FLS_climate_change.jpeg>
 Package pdftex.def Info: ..//figure/FLS_climate_change.jpeg used on input line 
-176.
+186.
 (pdftex.def)             Requested size: 455.30013pt x 455.31075pt.
 
-<..//figure/HFmeans.jpeg, id=33, 481.8pt x 481.8pt>
+<..//figure/HFmeans.jpeg, id=36, 481.8pt x 481.8pt>
 File: ..//figure/HFmeans.jpeg Graphic file (type jpg)
 
 <use ..//figure/HFmeans.jpeg>
-Package pdftex.def Info: ..//figure/HFmeans.jpeg used on input line 182.
+Package pdftex.def Info: ..//figure/HFmeans.jpeg used on input line 192.
 (pdftex.def)             Requested size: 364.24149pt x 364.253pt.
 
-<..//figure/HFdissplot.jpeg, id=34, 481.8pt x 481.8pt>
+<..//figure/HFdissplot.jpeg, id=37, 481.8pt x 481.8pt>
 File: ..//figure/HFdissplot.jpeg Graphic file (type jpg)
 
 <use ..//figure/HFdissplot.jpeg>
-Package pdftex.def Info: ..//figure/HFdissplot.jpeg used on input line 188.
+Package pdftex.def Info: ..//figure/HFdissplot.jpeg used on input line 198.
 (pdftex.def)             Requested size: 341.47508pt x 341.4849pt.
 
-<..//figure/Mtsv_usfs_sidexside.jpeg, id=35, 1369.115pt x 278.03876pt>
+<..//figure/Mtsv_usfs_sidexside.jpeg, id=38, 1369.115pt x 278.03876pt>
 File: ..//figure/Mtsv_usfs_sidexside.jpeg Graphic file (type jpg)
 
 <use ..//figure/Mtsv_usfs_sidexside.jpeg>
 Package pdftex.def Info: ..//figure/Mtsv_usfs_sidexside.jpeg used on input line
- 195.
+ 205.
 (pdftex.def)             Requested size: 455.30013pt x 92.46156pt.
 
-<..//figure/HF_cont_v_bin.jpeg, id=36, 1261.71375pt x 290.08376pt>
+<..//figure/HF_cont_v_bin.jpeg, id=39, 1261.71375pt x 290.08376pt>
 File: ..//figure/HF_cont_v_bin.jpeg Graphic file (type jpg)
 
 <use ..//figure/HF_cont_v_bin.jpeg>
-Package pdftex.def Info: ..//figure/HF_cont_v_bin.jpeg used on input line 202.
+Package pdftex.def Info: ..//figure/HF_cont_v_bin.jpeg used on input line 212.
 (pdftex.def)             Requested size: 455.30013pt x 104.67793pt.
- (./rethinking_FLS_draft.bbl [9] [10 <..//figure/FLS_climate_change.jpeg>] [11 
-<..//figure/HFmeans.jpeg>] [12 <..//figure/HFdissplot.jpeg> <..//figure/Mtsv_us
-fs_sidexside.jpeg>]
+ [10] [11 <..//figure/FLS_climate_change.jpeg>] [12 <..//figure/HFmeans.jpeg>] 
+[13 <..//figure/HFdissplot.jpeg> <..//figure/Mtsv_usfs_sidexside.jpeg>] (./reth
+inking_FLS_draft.bbl
 ! Misplaced alignment tab character &.
 <argument> Michgan Shrubs &
                             Vines: A guide to species of the Great Lakes Region
@@ -362,7 +362,7 @@ might try typing `S' now just to see what is salvageable.
 Missing character: There is no ‚ in font cmr12!
 Missing character: There is no Ä in font cmr12!
 Missing character: There is no ê in font cmr12!
-[13 <..//figure/HF_cont_v_bin.jpeg>]
+[14 <..//figure/HF_cont_v_bin.jpeg>] [15]
 ! Misplaced alignment tab character &.
 l.127 ...1980) \emph{Forest Ecology}. John Wiley &
                                                   Sons, 3rd
@@ -373,24 +373,24 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-[14]) [15] (./rethinking_FLS_draft.aux) ) 
+) [16] (./rethinking_FLS_draft.aux) ) 
 Here is how much of TeX's memory you used:
  3178 strings out of 492995
  44383 string characters out of 6132704
- 123782 words of memory out of 5000000
+ 125782 words of memory out of 5000000
  6682 multiletter control sequences out of 15000+600000
  10280 words of font info for 37 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,6n,26p,1722b,264s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fon
-ts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmti12.pfb>
-Output written on rethinking_FLS_draft.pdf (15 pages, 360501 bytes).
+ 39i,6n,26p,1722b,262s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmti12.pfb>
+Output written on rethinking_FLS_draft.pdf (16 pages, 361346 bytes).
 PDF statistics:
- 74 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 77 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
