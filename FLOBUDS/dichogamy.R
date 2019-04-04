@@ -16,7 +16,7 @@ library(ggstance)
 setwd("~/Documents/git/proterant/FLOBUDS")
 
 d<-read.csv("dicogamy.csv",header=TRUE)
-?unite()
+
 d<-unite(d,treatment,Force,Light,Chill,sep="",remove=FALSE)
 d$Light<-ifelse(d$Light=="L","xL","S")
 ###name treatments numeric/continuous
@@ -30,22 +30,54 @@ d$p_cent<-d$photoperiod/mean(d$photoperiod)
 d$f_cent<-d$temp_day/mean(d$temp_day)
 d$c_cent<-d$chilldays/mean(d$chilldays)
 
-count(d,!is.na(flo_dayF)) #31
-count(d,!is.na(flo_dayM)) #36
+d$p.z<-d$photoperiod-mean(d$photoperiod)/sd(d$photoperiod)
+d$f.z<-d$temp_day-mean(d$temp_day)/sd(d$temp_day)
+d$c.z<-d$chilldays-mean(d$chilldays)/sd(d$chilldays)
+
+d$leaflike<-ifelse(is.na(d$leaf_day),0,1)
+d$gynlike<-ifelse(is.na(d$flo_dayF),0,1)
+d$anthlike<-ifelse(is.na(d$flo_dayM),0,1)
+
+
 
 cor<-filter(d,GEN.SPA=="COR.COR")
-count(cor,!is.na(flo_dayF)) #12
-count(cor,!is.na(flo_dayM)) #15
-
 com<-filter(d,GEN.SPA=="COM.PER")
-count(com,!is.na(flo_dayF)) #19
-count(com,!is.na(flo_dayM)) #21
 
-lady<-lm(flo_dayF~Light+Chill+Force+Light:Chill+Light:Force+Force:Chill,data=cor)
 
-bro<-lm(flo_dayM~Light+Chill+Force+Light:Chill+Light:Force+Force:Chill,data=cor)
+ladylikelinood<-brm(gynlike~p.z+f.z+c.z,data=com, family=bernoulli(link="logit"))
+summary(ladylikelinood)
+brolikelinood<-brm(anthlike~p.z+f.z+c.z,data=com, family=bernoulli(link="logit"))
 
+
+ladylikelinood.cor<-brm(gynlike~p.z+f.z+c.z+p.z:f.z+p.z:c.z+f.z:c.z,data=cor, family=bernoulli(link="logit"))
+summary(ladylikelinood.cor)
+brolikelinood.cor<-brm(anthlike~p.z+f.z+c.z,data=cor, family=bernoulli(link="logit"))
+summary(brolikelinood.cor)
+
+
+lady<-brm(flo_dayF~p.z+f.z+c.z,data=com)
+bro<-brm(flo_dayM~~p.z+f.z,data=com) ### doesn't flower without chilling
 summary(lady)
 summary(bro)
+lady2<-brm(flo_dayF~p.z+f.z+c.z,data=cor)
+bro2<-brm(flo_dayM~~p.z+f.z+c.z,data=cor)
+
+
+summary(lady2)
+summary(bro2)
+gynsums<- d %>% group_by(GEN.SPA,treatment) %>%  summarise(mean.gyn=mean(flo_dayF, na.rm=TRUE)) 
+anthsums<- d %>% group_by(GEN.SPA,treatment)%>%  summarise(mean.anth=mean(flo_dayM,na.rm=TRUE))
+gynsums2<- d %>% group_by(GEN.SPA,treatment) %>%  summarise(sd.gyn=sd(flo_dayF, na.rm=TRUE)) 
+anthsums2<- d %>% group_by(GEN.SPA,treatment)%>%  summarise(sd.anth=sd(flo_dayM,na.rm=TRUE))
+dicho<-left_join(gynsums,gynsums2)
+dich2<-left_join(anthsums,anthsums2)
+dicho<-left_join(dicho,dich2)
+dicho$dicogamy<-dicho$mean.anth-dicho$mean.gyn
+
+ggplot(dicho, aes(treatment, dicogamy))+geom_boxplot(aes(color=GEN.SPA))
+dicho$dichogamybin<-ifelse(dicho$dicogamy<=0,1,0)
+ggplot(dicho, aes(treatment,dichogamybin))+geom_point()+facet_wrap(~GEN.SPA)
+
+summary(lady)
 
          
