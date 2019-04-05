@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  1 APR 2019 11:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  5 APR 2019 14:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -544,18 +544,18 @@ tim
 (./experimental_periodicty.aux)
 \openout1 = `experimental_periodicty.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 74.
-LaTeX Font Info:    ... okay on input line 74.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
 
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -616,15 +616,15 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Info: Redefining \celsius on input line 74.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 74.
+LaTeX Info: Redefining \celsius on input line 71.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 71.
 
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 74.
-Package gensymb Info: Using \Omega for \ohm on input line 74.
+LaTeX Info: Redefining \ohm on input line 71.
+Package gensymb Info: Using \Omega for \ohm on input line 71.
 
 Package gensymb Warning: Not defining \micro.
 
@@ -663,25 +663,20 @@ Package gensymb Warning: Not defining \micro.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 76.
+(Font)              <14.4> on input line 73.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 76.
+(Font)              <7> on input line 73.
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 143.
+(Font)              <12> on input line 140.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 143.
+(Font)              <8> on input line 140.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 143.
- [3]
-Underfull \hbox (badness 10000) in paragraph at lines 147--148
-
- []
-
-[4] (./experimental_periodicty.bbl
+(Font)              <6> on input line 140.
+ [3] [4] (./experimental_periodicty.bbl [5]
 ! Misplaced alignment tab character &.
 <argument> Trends in Ecology &
                                Evolution
@@ -694,58 +689,64 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-[5]) <..//Plots/Just_treats.jpeg, id=23, 1307.88625pt x 408.52625pt>
-File: ..//Plots/Just_treats.jpeg Graphic file (type jpg)
-
-<use ..//Plots/Just_treats.jpeg>
-Package pdftex.def Info: ..//Plots/Just_treats.jpeg used on input line 184.
-(pdftex.def)             Requested size: 469.75502pt x 146.72649pt.
+[6])
+<..//Plots/periodicity_figures/new_treats.jpeg, id=26, 832.10875pt x 742.775pt>
+File: ..//Plots/periodicity_figures/new_treats.jpeg Graphic file (type jpg)
+<use ..//Plots/periodicity_figures/new_treats.jpeg>
+Package pdftex.def Info: ..//Plots/periodicity_figures/new_treats.jpeg used on 
+input line 182.
+(pdftex.def)             Requested size: 469.75502pt x 419.32864pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<..//Plots/photothermo_allsps.jpeg, id=24, 1023.825pt x 530.98375pt>
-File: ..//Plots/photothermo_allsps.jpeg Graphic file (type jpg)
 
-<use ..//Plots/photothermo_allsps.jpeg>
-Package pdftex.def Info: ..//Plots/photothermo_allsps.jpeg used on input line 1
-91.
+<..//Plots/periodicity_figures/Uncoupled_coupled.jpeg, id=27, 777.90625pt x 522
+.95375pt>
+File: ..//Plots/periodicity_figures/Uncoupled_coupled.jpeg Graphic file (type j
+pg)
+ <use ..//Plots/periodicity_figures/Uncoupled_coupled.jpeg>
+Package pdftex.def Info: ..//Plots/periodicity_figures/Uncoupled_coupled.jpeg u
+sed on input line 189.
+(pdftex.def)             Requested size: 469.75502pt x 315.80148pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+<..//Plots/periodicity_figures/photothermo_matchsps.jpeg, id=28, 1023.825pt x 5
+30.98375pt>
+File: ..//Plots/periodicity_figures/photothermo_matchsps.jpeg Graphic file (typ
+e jpg)
+ <use ..//Plots/periodicity_figures/photothermo_matchsps.jpeg>
+Package pdftex.def Info: ..//Plots/periodicity_figures/photothermo_matchsps.jpe
+g used on input line 196.
 (pdftex.def)             Requested size: 469.75502pt x 243.6235pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<..//Plots/photothermo_matchsps.jpeg, id=25, 1023.825pt x 530.98375pt>
-File: ..//Plots/photothermo_matchsps.jpeg Graphic file (type jpg)
-
-<use ..//Plots/photothermo_matchsps.jpeg>
-Package pdftex.def Info: ..//Plots/photothermo_matchsps.jpeg used on input line
- 198.
-(pdftex.def)             Requested size: 469.75502pt x 243.6235pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[6] [7 <..//Plots/Just_treats.jpeg> <..//Plots/photothermo_allsps.jpeg>]
-[8 <..//Plots/photothermo_matchsps.jpeg>] (./experimental_periodicty.aux) ) 
+[7] [8 <..//Plots/periodicity_figures/new_treats.jpeg>] [9 <..//Plots/periodici
+ty_figures/Uncoupled_coupled.jpeg> <..//Plots/periodicity_figures/photothermo_m
+atchsps.jpeg>] (./experimental_periodicty.aux) ) 
 Here is how much of TeX's memory you used:
- 3641 strings out of 492995
- 50796 string characters out of 6132704
- 226207 words of memory out of 5000000
- 7114 multiletter control sequences out of 15000+600000
+ 3647 strings out of 492995
+ 51148 string characters out of 6132704
+ 226265 words of memory out of 5000000
+ 7120 multiletter control sequences out of 15000+600000
  8848 words of font info for 31 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,6n,32p,1496b,322s stack positions out of 5000i,500n,10000p,200000b,80000s
-</us
-r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr
-/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/l
-ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loc
-al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local
-/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on experimental_periodicty.pdf (8 pages, 338714 bytes).
+</usr/local/texlive/2017/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2017/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2017/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on experimental_periodicty.pdf (9 pages, 333941 bytes).
 PDF statistics:
- 54 PDF objects out of 1000 (max. 8388607)
- 35 compressed objects within 1 object stream
+ 57 PDF objects out of 1000 (max. 8388607)
+ 37 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
