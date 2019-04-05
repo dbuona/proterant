@@ -17,43 +17,306 @@ library(survival)
 library(sur)
 library(survminer)
 library(ggthemes)
+
 library("Hmisc")
 setwd("~/Documents/git/proterant/FLOBUDS")
 d<-read.csv("flo_exapand_survival_data.csv")
+d$phasebin<-ifelse(d$phase=="Lexpand_day.11.",0,1) ## flowering i 1
 
-d.flo<-filter(d,phase=="flo_day.60.")
-d.leaf<-filter(d,phase=="Lexpand_day.11.")
+###z.score to compare with effect interaction of binary phase Model 3
+d$p_zz<-d$photoperiod-mean(d$photoperiod)/(2*(sd(d$photoperiod)))
+d$f_zz<-d$temp_day-mean(d$temp_day)/(2*(sd(d$temp_day)))
+d$c_zz<-d$chilldays-mean(d$chilldays)/(2*(sd(d$chilldays)))
 
-###leaf only
-prior<-get_prior(DOY | cens(surv) ~ Light+Chill+Force,
-                 data = d.leaf, family = weibull) 
+###make predictors binary
+d$Light<-ifelse(d$Light=="S",0,1)
+d$Force<-ifelse(d$Force=="C",0,1)
 
-mod.leaf<- brm(DOY | cens(surv) ~ Light+Chill+Force+(1+Light+Chill+Force|GEN.SPA),
-               data = d.leaf, family = weibull,inits = "0",
-               iter= 3000,
-               warmup = 2000,
-               prior = prior)    
+d<- transform(d,taxa_num=as.numeric(factor(GEN.SPA)))
+
+###new dataset
+d.nosurv<-filter(d,surv==0) ###remove no bursts
+d.flo<-filter(d.nosurv,phase=="flo_day.60.")### jsut flowers
+d.leaf<-filter(d.nosurv,phase=="Lexpand_day.11.") #### jsut leaves
+
+#######################models 0.A and 0.B##################################### many divergent trans not actively in use.
+#data.list<-with(d.nosurv,
+ #               list(y=DOY,
+  #                   sp=taxa_num,
+    #                chill=Chill,
+   #                 force=Force,
+     #               photo=Light,
+      #               N=nrow(d.nosurv),
+       #             n_sp=length(unique(d.nosurv$taxa_num))))
+
+
+#mod.leaf.1 = stan('winter_2level_floorleaf.stan', data = data.list,  
+ #           iter = 3000, warmup=2200)
+
+#mod.leaf.noint = stan('nointer_2level_flowleaf.stan', data = data.list,  
+ #                 iter = 6000, warmup=5000) 
+
+
+##########################Model 1 a and b, model flowering and buds seperate;y############################################
+#for now, skip to line 103
+prerleaf<-get_prior(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z,data = d.leaf, family = gaussian())
+
+#mod.leaf<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1+p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z|GEN.SPA),
+ #              data = d.leaf, family = gaussian(),
+  #             iter= 4000,
+   #            warmup = 3500,
+    #           prior=prerleaf)   ##83 divergetn
+
+mod.leaf<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1|GEN.SPA),
+               data = d.leaf, family = gaussian(),
+               iter= 4000,
+               warmup = 3500,
+               prior=prerleaf)  
 
 summary(mod.leaf)
+pp_check(mod.leaf)
+
+prerflo<-get_prior(DOY ~  p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z,data = d.flo, family = gaussian())
+#mod.flo<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1+ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z|GEN.SPA),
+ #              data = d.flo, family = gaussian(),
+  #             iter= 4000,
+  #             warmup = 3500,
+   #            prior=prerflo)    ## 41 diverget 
+
+mod.flo<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1|GEN.SPA),
+              data = d.flo, family = gaussian(),
+              iter= 4000,
+              warmup = 3500)    
+summary(mod.flo)
+pp_check(mod.flo)
+
+prerleaf2<-get_prior(DOY ~Chill+Light+Force,data = d.leaf, family = gaussian())
+mod.leaf2<- brm(DOY ~ ~Chill+Light+Force+(1+~Chill+Light+Force|GEN.SPA),
+               data = d.leaf, family = gaussian(),
+               iter= 4000,
+               warmup = 3400,
+               prior=prerleaf2) 
+summary(mod.leaf2)
+pp_check(mod.leaf2)
+
+
+prerleaf2.int<-get_prior(DOY~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = d.leaf, family = gaussian())
+mod.leaf2.int<-brm(DOY ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(1+Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                  data = d.leaf, family = gaussian(),
+                  iter= 4000,
+                  warmup = 3400)   
+summary(mod.leaf2.int)
+pp_check(mod.leaf2.int)
+
+
+prerflo2<-get_prior(DOY ~Chill+Light+Force,data = d.flo, family = gaussian())
+mod.flo2<-brm(DOY~Chill+Light+Force+(1+~Chill+Light+Force|GEN.SPA),
+                data = d.flo, family = gaussian(),
+                iter= 4000,
+                warmup = 3400,
+                prior=prerflo2)
+  
+###This is good
+
+prerflo2.int<-get_prior(DOY~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = d.flo, family = gaussian())
+mod.flo2.int<-brm(DOY ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(1+Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+      data = d.flo, family = gaussian(),
+      iter= 4000,
+      warmup = 3000)   
+
+summary(mod.flo2.int)
+pp_check(mod.flo2.int)
+
+
+###functions
+extract_coefs<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.10,.25,.75,0.90))),"Predictor")
+}
+extract_ranef<-function(x){dplyr::select(rownames_to_column(as.data.frame(ranef(x, summary=FALSE,probs=c(0.10,.25,.75,0.90))),"GEN.SPA"),-c(3,9,15,21,27,33,39))
+}
+reduce_ranef<-function(x){dplyr::select(x, )
+}
+
+###############################################
+
+flowy<-extract_coefs(mod.flo2.int)
+leafy<-extract_coefs(mod.leaf2.int)
+leafy$phase<-"foliate"
+flowy$phase<-"floral"
+
+bothy<-rbind(flowy,leafy)
+bothy<-filter(bothy,Predictor!="Intercept")
+
+bothy$Predictor[bothy$Predictor=="Chill:Light"]<-"xChill:Light"
+bothy$Predictor[bothy$Predictor=="Light:Force"]<-"xLight:Force"
+bothy$Predictor[bothy$Predictor=="Chill:Force"]<-"xChill:Force"
+
+pd2=position_dodgev(height=0.4)
+hm<-ggplot(bothy,aes(Estimate,Predictor))+geom_point(aes(color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("darkgrey", "black"))
+
+ran.flo<-extract_ranef(mod.flo2.int)
+colnames(ran.flo)
+
+a<-dplyr::select(ran.flo,1:6)
+b<-dplyr::select(ran.flo,1,7:11)
+c<-dplyr::select(ran.flo,1,12:16)
+d<-dplyr::select(ran.flo,1,17:21)
+e<-dplyr::select(ran.flo,1,22:26)
+f<-dplyr::select(ran.flo,1,27:31)
+g<-dplyr::select(ran.flo,1,32:36)
+
+a$Predictor<-"xIntercept"
+b$Predictor<-"chilling"
+c$Predictor<-"photoperiod"
+d$Predictor<-"forcing"
+e$Predictor<-"int:chillxphoto"
+f$Predictor<-"int:chillxforce"
+g$Predictor<-"int:photoxforce"
+
+call<-c("GEN.SPA","Estimate","Q10","Q25","Q75","Q90","Predictor")
+colnames(a)<-call
+colnames(b)<-call
+colnames(c)<-call
+colnames(d)<-call
+colnames(e)<-call
+colnames(f)<-call
+colnames(g)<-call
+flo.sps<-rbind(a,b,c,d,e,f,g)
+flo.sps$phase<-"floral"
+pd2=position_dodgev(height=0.6)
+ggplot(flo.sps,aes(Estimate,Predictor))+geom_point(aes(color=GEN.SPA),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=GEN.SPA),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=GEN.SPA),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")+theme_base()
+
+###now leaf estiamte
+ran.leaf<-extract_ranef(mod.leaf2.int)
+
+aa<-dplyr::select(ran.leaf,1:6)
+bb<-dplyr::select(ran.leaf,1,7:11)
+cc<-dplyr::select(ran.leaf,1,12:16)
+dd<-dplyr::select(ran.leaf,1,17:21)
+ee<-dplyr::select(ran.leaf,1,22:26)
+ff<-dplyr::select(ran.leaf,1,27:31)
+gg<-dplyr::select(ran.leaf,1,32:36)
+
+aa$Predictor<-"xIntercept"
+bb$Predictor<-"chilling"
+cc$Predictor<-"photoperiod"
+dd$Predictor<-"forcing"
+ee$Predictor<-"int:chillxphoto"
+ff$Predictor<-"int:chillxforce"
+gg$Predictor<-"int:photoxforce"
+
+call<-c("GEN.SPA","Estimate","Q10","Q25","Q75","Q90","Predictor")
+colnames(aa)<-call
+colnames(bb)<-call
+colnames(cc)<-call
+colnames(dd)<-call
+colnames(ee)<-call
+colnames(ff)<-call
+colnames(gg)<-call
+leaf.sps<-rbind(aa,bb,cc,dd,ee,ff,gg)
+leaf.sps$phase<-"foliate"
+
+sps.plot<-rbind(leaf.sps,flo.sps)
+sps.plot<-gather(sps.plot,"ltype","lower",3:4)
+sps.plot<-gather(sps.plot,"utype","upper",3:4)
+sps.plot$interval<-NA
+sps.plot$interval[sps.plot$ltype=="Q10"]<-"80"
+sps.plot$interval[sps.plot$utype=="Q90"]<-"80"
+sps.plot$interval[sps.plot$ltype=="Q25"]<-"50"
+sps.plot$interval[sps.plot$utype=="Q75"]<-"50"
+sps.plot<-filter(sps.plot,Predictor!="xIntercept")
+pd2=position_dodgev(height=.9)
+ggplot(sps.plot,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base() ##these need to be added to the global estimates
+
+
+
+#######bernouli yes no flower leaf out #################################################################
+d.flo.full<-filter(d,phase=="flo_day.60.")### jsut flowers
+d.leaf.full<-filter(d,phase=="Lexpand_day.11.")
+
+flo.yn<-get_prior(surv~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = d.flo.full, family = bernoulli(link="logit"))
+
+mod.floyn.int<-brm(surv ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(1+Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                  data = d.flo.full, family = bernoulli(link="logit"),
+                  iter= 4000,
+                  warmup = 3000,
+                  prior=flo.yn)   
+summary(mod.floyn.int)
+
+leaf.yn<-get_prior(surv~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = d.leaf.full, family = bernoulli(link="logit"))
+
+mod.leafyn.int<-brm(surv ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(1+Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                   data = d.leaf.full, family = bernoulli(link="logit"),
+                   iter= 4000,
+                   warmup = 3000,
+                   prior=leaf.yn)   
+summary(mod.leafyn.int)
+
+flowy2<-extract_coefs(mod.floyn.int)
+leafy2<-extract_coefs(mod.leafyn.int)
+leafy2$phase<-"foliate"
+flowy2$phase<-"floral"
+
+bothy2<-rbind(flowy2,leafy2)
+bothy2<-filter(bothy2,Predictor!="Intercept")
+
+bothy2$Predictor[bothy2$Predictor=="Chill:Light"]<-"xChill:Light"
+bothy2$Predictor[bothy2$Predictor=="Light:Force"]<-"xLight:Force"
+bothy2$Predictor[bothy2$Predictor=="Chill:Force"]<-"xChill:Force"
+yn<-ggplot(bothy2,aes(Estimate,Predictor))+geom_point(aes(color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("hotpink", "black"))
+
+gridExtra::grid.arrange(yn,hm,ncol=2)
 
 
 
 
 
+leaf.yn.z<-get_prior(surv~p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z,data = d.leaf.full, family = bernoulli(link="logit"))
 
-
-
-###model for flowering and leaf exansion
+mod.leafyn.z<-brm(surv ~p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1+p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z|GEN.SPA),
+                    data = d.leaf.full, family = bernoulli(link="logit"),
+                    iter= 4000,
+                    warmup = 3000,
+                    prior=leaf.yn.z)   
+summary(mod.leafyn.z)
+stop("Only here and above is relevant: everthing below is old code")
+###################################model 3 ### combine flowering and leafing into a single model################################################################
 table(d$GEN.SPA)
-prior2<-get_prior(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase,
-                  data = d, family = lognormal()) 
 
-mod.fe.z<- brm(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase+(1+phase+Light:phase+Chill:phase+Force:phase|GEN.SPA),
-          data = d, family = lognormal(),inits = "0",
-          iter= 3000,
-          warmup = 2000,
+
+######survival model-- i don't really understand the output, and Im not include biologically to believe these
+prior2<-get_prior(DOY | cens(surv) ~ phasebin+p_zz+c_zz+f_zz+p_zz:phasebin+c_zz:phasebin+f_zz:phasebin,
+                  data = d, family = weibull()) 
+
+mod.fe.z<- brm(DOY | cens(surv) ~ phasebin+p_zz+c_zz+f_zz+p_zz:phasebin+c_zz:phasebin+f_zz:phasebin+(1+phasebin+p_zz+c_zz+f_zz+p_zz:phasebin+c_zz:phasebin+f_zz:phasebin|GEN.SPA),
+          data = d, family = weibull(),inits = "0",
+          iter= 4500,
+          warmup = 3800,
           prior = prior2) 
-summary(mod.fe.z)
+summary(mod.fe.z) ## 12 divergetn transitions
+
+########not survival model
+prior.gaus<-get_prior(DOY~phasebin+p_zz+c_z+f_zz+p_zz:phasebin+c_zz:phasebin+f_zz:phasebin, data = d.nosurv, family = gaussian())
+mod.fe.z.nosurv<- brm(DOY ~ phasebin+p_zz+c_z+f_zz+p_zz:phasebin+c_zz:phasebin+f_zz:phasebin+(1+phasebin+p_zz+c_zz+f_zz+p_zz:phasebin+c_zz:phasebin+f_zz:phasebin|GEN.SPA),
+               data = d.nosurv, family = gaussian(),
+               iter= 4000,
+               warmup =3400,
+               prior=prior.gaus) 
+summary(mod.fe.z.nosurv) ##6 divergent transitions
+ranef(mod.fe.z.nosurv)
+
+fixef(mod.fe.z.nosurv)
+fixed<-rownames_to_column(as.data.frame(fixef(mod.fe.z.nosurv,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
+fixed<-filter(fixed,Parameter!="Intercept")
+fixed<-filter(fixed,Parameter!="phasebin")
+pd2=position_dodgev(height=0.2)
+ggplot(fixed,aes(Estimate,Parameter))+geom_point(position=pd2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90),linetype="dashed",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("darkgrey","black"))
+
+d$bin<-ifelse(d$DOY=)
+
+
+
+
+
 comp.only<-dplyr::filter(d,GEN.SPA %in% c("COM.PER","COR.COR","ILE.MUC","VAC.COR","PRU.PEN","ACE.PEN"))
 
 prior.comp<-get_prior(DOY | cens(surv) ~ phase+p_z+c_z+f_z+p_z:phase+c_z:phase+f_z:phase,
@@ -103,6 +366,9 @@ mod.flo<- brm(DOY | cens(surv) ~ photoperiod+chilldays+temp_day+(1+photoperiod+c
               warmup = 2000,
               prior = prior)
 coef(mod.flo)
+
+
+
 
 prior<-get_prior(DOY | cens(surv) ~ photoperiod+chilldays+temp_day,
                  data = d.leaf, family = weibull) 

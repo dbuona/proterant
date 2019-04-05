@@ -113,7 +113,10 @@ surv<-unite(surv,id,name,good_flaskid,sep="_")
 intersect(surv$id,great.dat$id) 
 datty<-left_join(great.dat,surv)
 ##a data sheet for first analysis
-write.csv(datty,"first.event.dat.csv") 
+write.csv(datty,"first.event.dat.csv")
+
+
+stop("not an error, everything below here is extamepis")
 #great.dat<-unite(great.dat,treatment,Force,Light,Chill,sep="" )
 #####################################
 ###good.dat, great.dat are the files to analyze

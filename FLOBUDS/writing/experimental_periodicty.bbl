@@ -1,4 +1,4 @@
-\begin{thebibliography}{18}
+\begin{thebibliography}{20}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Brelsford \& Robson({2018})}]{Brelsford2018}
@@ -20,6 +20,17 @@ Cleland, E.E., Chuine, I., Menzel, A., Mooney, H.A. \& Schwartz, M.D. (2007)
 Cober, E., Tanner, J. \& Voldeng, H. ({1996}) {Soybean photoperiod-sensitivity
   loci respond differentially to light quality}. \emph{{CROP SCIENCE}}
   \textbf{{36}}, {606--610}.
+
+\bibitem[{Erwin({1998})}]{Erwin1998}
+Erwin, J. ({1998}) {Temperature and light effects on stem elongation}.
+  \emph{{JOURNAL OF THE JAPANESE SOCIETY FOR HORTICULTURAL SCIENCE}}
+  \textbf{{67}}, {1113--1120}, {Session of Plant Growth Regulation by Physical
+  and Mechanical Stimuli at the Commemorative Symposium of the 75th Anniversary
+  of Japanese-Society-for-Horticultural-Science, JAPAN, APR 03-04, 1998}.
+
+\bibitem[{Erwin \& Heins({1995})}]{Erwin1995}
+Erwin, J. \& Heins, R. ({1995}) {Thermomorphogenic responses in stem and leaf
+  development}. \emph{{HORTSCIENCE}} \textbf{{30}}, {940--949}.
 
 \bibitem[{Ettinger \emph{et~al.}()}]{Ettinger_inprep}
 Ettinger, A.K. \emph{et~al.} (????) Ospree .
