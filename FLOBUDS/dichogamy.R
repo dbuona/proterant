@@ -34,11 +34,10 @@ d$p.z<-d$photoperiod-mean(d$photoperiod)/sd(d$photoperiod)
 d$f.z<-d$temp_day-mean(d$temp_day)/sd(d$temp_day)
 d$c.z<-d$chilldays-mean(d$chilldays)/sd(d$chilldays)
 
-d$leaflike<-ifelse(is.na(d$leaf_day),0,1)
-d$gynlike<-ifelse(is.na(d$flo_dayF),0,1)
-d$anthlike<-ifelse(is.na(d$flo_dayM),0,1)
-
-
+goo<- d %>% group_by(GEN.SPA,treatment) %>% summarise(mean.gyn=mean(flo_dayF,na.rm=TRUE))
+goo2<-d %>% group_by(GEN.SPA,treatment) %>% summarise(mean.anth=mean(flo_dayM,na.rm=TRUE))
+googoo<-left_join(goo,goo2)
+googoo$dichog<-googoo$mean.gyn-googoo$mean.anth
 
 cor<-filter(d,GEN.SPA=="COR.COR")
 com<-filter(d,GEN.SPA=="COM.PER")

@@ -16,8 +16,9 @@ library(ggthemes)
 library(grid)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
+load("periodicity/periodicity_mods.RData")
 
-db.dat<-read.csv("Flo_buds_for_thermoperiodicity.csv")
+db.dat<-read.csv("periodicity/Flo_buds_for_thermoperiodicity.csv")
 df.dat<-read.csv("input/Budburst By Day.csv")
 ##
 ##what chilling to use  in my experiments
@@ -89,9 +90,6 @@ df.dat.match$study<-"DF"
 db.dat.match<-dplyr::select(db.dat.match,GEN.SPA,F60,LBB,L11,treatcode,temp_day,photoperiod,Chill,study,FORCE)
 df.dat.match<-dplyr::select(df.dat.match,GEN.SPA,fday,bday,lday,treatcode,warm,photo,chill,study,FORCE)
 
-
-
-
 ###make columns the same
 colnames(db.dat.match)[colnames(db.dat.match)=="F60" ] <- "fday"
 colnames(db.dat.match)[colnames(db.dat.match)=="L11" ] <- "lday"
@@ -105,66 +103,22 @@ colnames(df.dat.match)
 
 unique(db.dat.match$chill)
 
-#db.dat.match.short<-filter(db.dat.match,chill==0) ###Use DB's short chill since it is closest in Chilling hours to DF's
-###db.dat.match.long<-filter(db.dat.match,chill==1)
+
 
 
 both.dat1<-rbind(df.dat.match,db.dat.match) ### since dan F was in he middle of mine, I am going to use both of my chilling
-#both.dat2<-rbind(df.dat.match,db.dat.match.long)
-
 both.dat1$PHOTO<-ifelse(both.dat1$photo==8,0,1)
-#both.dat2$PHOTO<-ifelse(both.dat2$photo==8,0,1)
-
 both.dat1$warm.cent<-both.dat1$warm-mean(both.dat1$warm)
 both.dat1$photo.cent<-both.dat1$photo-mean(both.dat1$photo)
-#both.dat2$warm.cent<-both.dat2$warm-mean(both.dat2$warm)
-#both.dat2$photo.cent<-both.dat2$photo-mean(both.dat2$photo)
 
 
-##a A series of old models
-#both.mod.bud1<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat1)
-#summary(both.mod.bud1)
-
-#both.mod.bud2<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat2)
-
-#summary(both.mod.bud2)
-
-#both.mod.leaf1<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat1)
-#summary(both.mod.leaf1)
-
-#both.mod.leaf2<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat2)
-#summary(both.mod.leaf2)
-
-#both.mod.bud1.int<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat1)
-#summary(both.mod.bud1.int)
-
-#both.mod.leaf1.int<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat1)
-#summary(both.mod.leaf1.int)
-
-#both.mod.bud2.int<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat2)
-#summary(both.mod.bud2.int)
-
-#both.mod.leaf2.int<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat2)
-#summary(both.mod.leaf2.int)
-
-
-
-
-
-
-
-
-####but above effects could jsut be cause Dan B used consitantly higher forcing. Luckily my low force average is teh same as DF's high average
-
-
-#both.dat.sameforce2<-both.dat2 %>% filter(warm %in% c(20,18))# This make a data sheet where the average forcing in both experiments was 15 C (DB low, DF high)
 both.dat.sameforce1<-both.dat1 %>% filter(warm %in% c(20,18)) ## Filter just the studies with same forcing
 
 photo.only.bb1<-brm(bday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2500)
 summary(photo.only.bb1)
 coef(photo.only.bb1)
 bb.output<-rownames_to_column(as.data.frame(fixef(photo.only.bb1,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
-#bb.output<-bb.output %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
+
 bb.output$Phase<-"budburst"
 
 pd2=position_dodgev(height=0.4)
@@ -173,14 +127,11 @@ ggplot(bb.output,aes(Estimate,Parameter))+geom_point(position=pd2)+geom_errorbar
 photo.only.leaf1<-brm(lday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2000)
 
 lo.output<-rownames_to_column(as.data.frame(fixef(photo.only.leaf1,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
-#lo.output<-lo.output %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
 lo.output$Phase<-"leafout"
 ggplot(lo.output,aes(Estimate,Parameter))+geom_point(position=pd2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90),linetype="dotted",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="red")+ggtitle("leaf out comparison")
 
 veggie<-rbind(bb.output,lo.output)
-
 veggie$Parameter<-ifelse(veggie$Parameter=="studyDF","InterceptDF",veggie$Parameter)
-
 veggie.effect<-veggie %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
 
 pd2=position_dodgev(height=0.2)
@@ -192,20 +143,7 @@ vp <- viewport(width = 0.4, height = 0.5, x = 0.2, y = .99,just=c("left","top"))
 plotyx+theme_base()
 print(plotyy, vp = vp, )
 dev.off()
-
-
-
-
-
-#photo.only.flo1<-brm(fday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2000)
-
-fl.output<-rownames_to_column(as.data.frame(fixef(photo.only.flo1,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
-fl.output<-fl.output %>% filter(Parameter %in% c("PHOTO","studyDF:PHOTO"))
-fl.output$Phase<-"flowering"
-allphen<-rbind(veggie,fl.output) ### flowering is really sparse in DF's data so maybe dont include
-
-
-##3now do matching sps only
+##3now do matching sps only##########################################################
 
 df.dat.match<-df.dat.HF %>%filter(GEN.SPA %in% c(matching_sps))  ### make both dataset noly consiston matching sps
 db.dat.match<-db.dat %>%filter(GEN.SPA %in% c(matching_sps))
@@ -224,9 +162,6 @@ df.dat.match$study<-"DF"
 ##subset to columns of use
 db.dat.match<-dplyr::select(db.dat.match,GEN.SPA,F60,LBB,L11,treatcode,temp_day,photoperiod,Chill,study,FORCE)
 df.dat.match<-dplyr::select(df.dat.match,GEN.SPA,fday,bday,lday,treatcode,warm,photo,chill,study,FORCE)
-
-
-
 
 ###make columns the same
 colnames(db.dat.match)[colnames(db.dat.match)=="F60" ] <- "fday"
@@ -284,3 +219,33 @@ print(plotyyy, vp = vp, )
 dev.off()
 
 save.image("periodicity_mods.RData")
+
+
+
+
+##a A series of old models
+#both.mod.bud1<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat1)
+#summary(both.mod.bud1)
+
+#both.mod.bud2<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat2)
+
+#summary(both.mod.bud2)
+
+#both.mod.leaf1<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat1)
+#summary(both.mod.leaf1)
+
+#both.mod.leaf2<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(1|GEN.SPA),data=both.dat2)
+#summary(both.mod.leaf2)
+
+#both.mod.bud1.int<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat1)
+#summary(both.mod.bud1.int)
+
+#both.mod.leaf1.int<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat1)
+#summary(both.mod.leaf1.int)
+
+#both.mod.bud2.int<-brm(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat2)
+#summary(both.mod.bud2.int)
+
+#both.mod.leaf2.int<-brm(lday~study+FORCE+PHOTO+study:FORCE+study:PHOTO+(bday~study+FORCE+PHOTO+study:FORCE+study:PHOTO|GEN.SPA),data=both.dat2)
+#summary(both.mod.leaf2.int)
+

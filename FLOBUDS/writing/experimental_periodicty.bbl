@@ -1,4 +1,4 @@
-\begin{thebibliography}{20}
+\begin{thebibliography}{21}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Brelsford \& Robson({2018})}]{Brelsford2018}
@@ -96,6 +96,11 @@ Rathcke, B. \& Lacey, E.P. (1985) Phenological patterns of terrestrial plants.
 Root, T.L., Price, J.T., Hall, K.R., Schneider, S.H., Rosenzweig, C. \& Pounds,
   J.A. (2003) Fingerprints of global warming on wild animals and plants.
   \emph{Nature} \textbf{421}, 57--60.
+
+\bibitem[{Rossi \& Isabel(2017)}]{Rossi2017}
+Rossi, S. \& Isabel, N. (2017) Bud break responds more strongly to daytime than
+  night-time temperature under asymmetric experimental warming. \emph{Global
+  Change Biology} \textbf{23}, 446--454.
 
 \bibitem[{Visser \emph{et~al.}({2010})Visser, Caro, van Oers, Schaper \&
   Helm}]{Visser2010}
