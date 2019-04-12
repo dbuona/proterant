@@ -38,16 +38,22 @@ tre$node.label<-NULL
 lab<-tre$tip.label 
 ### simulates 2 continues variables with differnt phylogenetic clustering themselves
 
-x = rTrait(n=2,phy=tre)
-y = rbinTrait(n=1, phy=tre, beta=c(-.5,1.8), alpha=0.7, X=x)
+?rTrait()
+x = rTrait(n=2,phy=tre,model="lambda")
+y = rbinTrait(n=1, phy=tre, beta=c(-.5,1.8), alpha=0, X=x)
 dat<-as.data.frame(cbind(x,y))
 
 
+set.seed(123456)
+tre = rtree(50)
+x = rTrait(n=1,phy=tre)
+X = cbind(rep(1,50),x)
+y = rbinTrait(n=1,phy=tre, beta=c(-1,0.5), alpha=0 ,X=X)
+dat = data.frame(trait01 = y, predictor = x)
+fit = phyloglm(trait01~predictor,phy=tre,data=dat,boot=100)
+summary(fit)
 
-mod1<-phyloglm(y~V1+V2,dat,tre, method = "logistic_MPLE", btol = 10, log.alpha.bound = 6,
-         start.beta=NULL, start.alpha=NULL,
-         boot=10,full.matrix = TRUE)
-
+?phyloglm()
 summary(mod1)
 dat2<-rownames_to_column(dat,var = "name")
 

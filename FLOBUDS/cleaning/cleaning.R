@@ -8,14 +8,13 @@ library(tidyverse)
 library(lubridate)
 library("Hmisc")
 
-###Clean date
+###Clean dates and convert all dates to day of experiments
 unique(d$date)
 d$date[d$date=="26-Nov"]<-"11/26/17"
 d$Date<-d$date
 d<-separate(d,date,c("month","day","year"))
 
 d$Date<-as.Date(d$Date,format =  "%m/%d/%y")
-
 d$doy<-yday(d$Date)
 unique(d$doy)
 start<-yday("2017/11/21")
@@ -23,25 +22,19 @@ start<-yday("2017/11/21")
 d$doy.adjusted<-ifelse(d$year==17,d$doy-start,40+(d$doy))
 unique(d$doy.adjusted)
 
-#cold treatment wen in Dec/19/2017
+#cold treatment went in Dec/19/2017
 start2<-yday("2017/12/19")
 365-353
 d$doy.adjusted2<-ifelse(d$year==17,d$doy-start2,12+(d$doy))
 unique(d$doy.adjusted2)
-
 d$doy.final<-ifelse(d$Chill==0,d$doy.final<-d$doy.adjusted,d$doy.final<-d$doy.adjusted2)
-
-d<-dplyr::filter(d,doy.final>=0)
+d<-dplyr::filter(d,doy.final>=0) ##This makes every experiment day congruent with the different stary datyes between treatments
 unique(d$doy.final)
-max(d$doy.final)
-q<-filter(d,Chill==1)
-r<-filter(d,Chill==0)
-unique(q$doy.final)
-unique(r$doy.final)
+
 ###give each entry a unique id
 d<-unite(d,id,name,good_flaskid,sep="_",remove = FALSE)
 
-###clean treatment
+###clean treatment ###one of the treatmentwas was put in the wrong change at the beginning so WSO actually got WLO etc
 d<-unite(d,treatcode,Force,Light,Chill,sep="_",remove = FALSE)
 d$Light<-ifelse(d$treatcode=="W_S_0","L",d$Light)
 d$Light<-ifelse(d$treatcode=="W_L_0","S",d$Light)
@@ -205,8 +198,5 @@ dx$flophase<-ifelse(dx$id=="COMPER 6 HF DB_WS0_21" &dx$flophase==60,"60-F",dx$fl
 dx$flophase<-ifelse(dx$id=="COMPER 2 HF DB_CL0_1" &dx$flophase==60,"60-F",dx$flophase)
 
 
-#to do:
-#put in treatment values (IE 8 and 12 photoperiod)?
-#Calculate chilling?
-#restrict to 112 days for both chilling treatment
+
 

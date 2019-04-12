@@ -20,8 +20,8 @@ library(ggthemes)
 
 library("Hmisc")
 setwd("~/Documents/git/proterant/FLOBUDS")
-d<-read.csv("flo_exapand_survival_data.csv")
-d$phasebin<-ifelse(d$phase=="Lexpand_day.11.",0,1) ## flowering i 1
+d<-read.csv("budburst_survival_data.csv")
+d$phasebin<-ifelse(d$phase=="Lbb_day.9.",0,1) ## flowering i 1
 
 ###z.score to compare with effect interaction of binary phase Model 3
 d$p_zz<-d$photoperiod-mean(d$photoperiod)/(2*(sd(d$photoperiod)))
@@ -37,58 +37,33 @@ d<- transform(d,taxa_num=as.numeric(factor(GEN.SPA)))
 ###new dataset
 d.nosurv<-filter(d,surv==0) ###remove no bursts
 d.flo<-filter(d.nosurv,phase=="flo_day.60.")### jsut flowers
-d.leaf<-filter(d.nosurv,phase=="Lexpand_day.11.") #### jsut leaves
+d.leaf<-filter(d.nosurv,phase=="Lbb_day.9.") #### jsut leaves
 
 #######################models 0.A and 0.B##################################### many divergent trans not actively in use.
 #data.list<-with(d.nosurv,
- #               list(y=DOY,
-  #                   sp=taxa_num,
-    #                chill=Chill,
-   #                 force=Force,
+         #       list(y=DOY,
+        #             sp=taxa_num,
+       #             chill=Chill,
+      #              force=Force,
      #               photo=Light,
-      #               N=nrow(d.nosurv),
-       #             n_sp=length(unique(d.nosurv$taxa_num))))
+  ###                n_sp=length(unique(d.flo$taxa_num))))
 
 
-#mod.leaf.1 = stan('winter_2level_floorleaf.stan', data = data.list,  
+#mod.flo.1 = stan('stan/winter_2level_floorleaf.stan', data = data.list,  
  #           iter = 3000, warmup=2200)
 
 #mod.leaf.noint = stan('nointer_2level_flowleaf.stan', data = data.list,  
  #                 iter = 6000, warmup=5000) 
 
 
+
+####plot the raw data
+d.figure<-filter(d.nosurv !GEN.SPA %in% c("ACE.RUB"))
+ggplot(d.nosurv,aes(treatment,DOY,color=phase))+stat_summary()+facet_wrap(~GEN.SPA)+theme_base()
+
+
+
 ##########################Model 1 a and b, model flowering and buds seperate;y############################################
-#for now, skip to line 103
-prerleaf<-get_prior(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z,data = d.leaf, family = gaussian())
-
-#mod.leaf<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1+p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z|GEN.SPA),
- #              data = d.leaf, family = gaussian(),
-  #             iter= 4000,
-   #            warmup = 3500,
-    #           prior=prerleaf)   ##83 divergetn
-
-mod.leaf<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1|GEN.SPA),
-               data = d.leaf, family = gaussian(),
-               iter= 4000,
-               warmup = 3500,
-               prior=prerleaf)  
-
-summary(mod.leaf)
-pp_check(mod.leaf)
-
-prerflo<-get_prior(DOY ~  p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z,data = d.flo, family = gaussian())
-#mod.flo<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1+ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z|GEN.SPA),
- #              data = d.flo, family = gaussian(),
-  #             iter= 4000,
-  #             warmup = 3500,
-   #            prior=prerflo)    ## 41 diverget 
-
-mod.flo<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1|GEN.SPA),
-              data = d.flo, family = gaussian(),
-              iter= 4000,
-              warmup = 3500)    
-summary(mod.flo)
-pp_check(mod.flo)
 
 prerleaf2<-get_prior(DOY ~Chill+Light+Force,data = d.leaf, family = gaussian())
 mod.leaf2<- brm(DOY ~ ~Chill+Light+Force+(1+~Chill+Light+Force|GEN.SPA),
@@ -511,6 +486,37 @@ ggplot(Z2,aes(effect,predictor))+geom_point(aes(color=as.character(class)))+geom
 
 
 
+#for now, skip to line 103
+prerleaf<-get_prior(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z,data = d.leaf, family = gaussian())
+
+#mod.leaf<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1+p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z|GEN.SPA),
+#              data = d.leaf, family = gaussian(),
+#             iter= 4000,
+#            warmup = 3500,
+#           prior=prerleaf)   ##83 divergetn
+
+mod.leaf<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1|GEN.SPA),
+               data = d.leaf, family = gaussian(),
+               iter= 4000,
+               warmup = 3500,
+               prior=prerleaf)  
+
+summary(mod.leaf)
+pp_check(mod.leaf)
+
+prerflo<-get_prior(DOY ~  p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z,data = d.flo, family = gaussian())
+#mod.flo<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1+ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z|GEN.SPA),
+#              data = d.flo, family = gaussian(),
+#             iter= 4000,
+#             warmup = 3500,
+#            prior=prerflo)    ## 41 diverget 
+
+mod.flo<- brm(DOY ~ p_z+c_z+f_z+p_z:c_z+p_z:f_z+c_z:f_z+(1|GEN.SPA),
+              data = d.flo, family = gaussian(),
+              iter= 4000,
+              warmup = 3500)    
+summary(mod.flo)
+pp_check(mod.flo)
 
 
 
