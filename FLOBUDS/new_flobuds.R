@@ -275,4 +275,14 @@ dev.off()
 
 FLS<-filter(dat, !GEN.SPA %in% c("ACE.SAC","BET.ALL"))
 hys<-c("ACE.RUB","COM.PER","COR.COR")
+
+newdata <- data.frame(Chill = c(0,0),
+                      Light = c(0,1),
+                      Force=  c(0,1),
+                      GEN.SPA=c("VAC.COR"))
+predict(mod.bb.int, newdata = newdata)
+
+predict(mod.flo.int, newdata = newdata)
+
+
 save.image("new_flobud.mods.Rda")

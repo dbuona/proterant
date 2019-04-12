@@ -33,6 +33,12 @@ d$c_cent<-d$chilldays/mean(d$chilldays)
 d$p.z<-d$photoperiod-mean(d$photoperiod)/sd(d$photoperiod)
 d$f.z<-d$temp_day-mean(d$temp_day)/sd(d$temp_day)
 d$c.z<-d$chilldays-mean(d$chilldays)/sd(d$chilldays)
+d$Force<-ifelse(d$Force=="W",1,0)
+d$Light<-ifelse(d$Light=="xL",1,0)
+
+
+ggplot
+
 
 goo<- d %>% group_by(GEN.SPA,treatment) %>% summarise(mean.gyn=mean(flo_dayF,na.rm=TRUE))
 goo2<-d %>% group_by(GEN.SPA,treatment) %>% summarise(mean.anth=mean(flo_dayM,na.rm=TRUE))
