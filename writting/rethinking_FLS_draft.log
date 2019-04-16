@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  1 APR 2019 13:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  16 APR 2019 16:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -281,60 +281,71 @@ e
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3]
-Underfull \hbox (badness 10000) in paragraph at lines 105--107
+[2] [3] [4]
+Underfull \hbox (badness 10000) in paragraph at lines 109--111
 
  []
 
-[4] [5]
-Underfull \hbox (badness 10000) in paragraph at lines 119--121
+[5] [6]
+Underfull \hbox (badness 10000) in paragraph at lines 123--125
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 125--129
+Underfull \hbox (badness 10000) in paragraph at lines 129--133
 
  []
 
-[6] [7] [8] [9] <..//figure/FLS_climate_change.jpeg, id=35, 481.8pt x 481.8pt>
+[7] [8] [9] <..//figure/FLS_climate_change.jpeg, id=35, 481.8pt x 481.8pt>
 File: ..//figure/FLS_climate_change.jpeg Graphic file (type jpg)
 
 <use ..//figure/FLS_climate_change.jpeg>
 Package pdftex.def Info: ..//figure/FLS_climate_change.jpeg used on input line 
-186.
+190.
 (pdftex.def)             Requested size: 455.30013pt x 455.31075pt.
 
-<..//figure/HFmeans.jpeg, id=36, 481.8pt x 481.8pt>
+<..//figure/HFmeans.jpeg, id=36, 803.0pt x 552.0625pt>
 File: ..//figure/HFmeans.jpeg Graphic file (type jpg)
 
 <use ..//figure/HFmeans.jpeg>
-Package pdftex.def Info: ..//figure/HFmeans.jpeg used on input line 192.
-(pdftex.def)             Requested size: 364.24149pt x 364.253pt.
+Package pdftex.def Info: ..//figure/HFmeans.jpeg used on input line 196.
+(pdftex.def)             Requested size: 455.30013pt x 313.02783pt.
 
-<..//figure/HFdissplot.jpeg, id=37, 481.8pt x 481.8pt>
-File: ..//figure/HFdissplot.jpeg Graphic file (type jpg)
+<..//figure/HF_Q_ru_interannual.jpeg, id=37, 803.0pt x 552.0625pt>
+File: ..//figure/HF_Q_ru_interannual.jpeg Graphic file (type jpg)
 
-<use ..//figure/HFdissplot.jpeg>
-Package pdftex.def Info: ..//figure/HFdissplot.jpeg used on input line 198.
-(pdftex.def)             Requested size: 341.47508pt x 341.4849pt.
+<use ..//figure/HF_Q_ru_interannual.jpeg>
+Package pdftex.def Info: ..//figure/HF_Q_ru_interannual.jpeg used on input line
+ 202.
+(pdftex.def)             Requested size: 455.30013pt x 313.02783pt.
 
-<..//figure/Mtsv_usfs_sidexside.jpeg, id=38, 1369.115pt x 278.03876pt>
-File: ..//figure/Mtsv_usfs_sidexside.jpeg Graphic file (type jpg)
+<..//figure/MTSV_effectsize.jpeg, id=38, 803.0pt x 351.3125pt>
+File: ..//figure/MTSV_effectsize.jpeg Graphic file (type jpg)
 
-<use ..//figure/Mtsv_usfs_sidexside.jpeg>
-Package pdftex.def Info: ..//figure/Mtsv_usfs_sidexside.jpeg used on input line
- 205.
-(pdftex.def)             Requested size: 455.30013pt x 92.46156pt.
+<use ..//figure/MTSV_effectsize.jpeg>
+Package pdftex.def Info: ..//figure/MTSV_effectsize.jpeg used on input line 209
+.
+(pdftex.def)             Requested size: 455.30013pt x 199.19952pt.
 
-<..//figure/HF_cont_v_bin.jpeg, id=39, 1261.71375pt x 290.08376pt>
-File: ..//figure/HF_cont_v_bin.jpeg Graphic file (type jpg)
+<..//figure/USFS_effectsize.jpeg, id=39, 803.0pt x 351.3125pt>
+File: ..//figure/USFS_effectsize.jpeg Graphic file (type jpg)
 
-<use ..//figure/HF_cont_v_bin.jpeg>
-Package pdftex.def Info: ..//figure/HF_cont_v_bin.jpeg used on input line 212.
-(pdftex.def)             Requested size: 455.30013pt x 104.67793pt.
+<use ..//figure/USFS_effectsize.jpeg>
+Package pdftex.def Info: ..//figure/USFS_effectsize.jpeg used on input line 216
+.
+(pdftex.def)             Requested size: 455.30013pt x 199.19952pt.
+
+<..//figure/HF_cont_effectsize.jpeg, id=40, 803.0pt x 351.3125pt>
+File: ..//figure/HF_cont_effectsize.jpeg Graphic file (type jpg)
+
+<use ..//figure/HF_cont_effectsize.jpeg>
+Package pdftex.def Info: ..//figure/HF_cont_effectsize.jpeg used on input line 
+223.
+(pdftex.def)             Requested size: 455.30013pt x 199.19952pt.
  [10] [11 <..//figure/FLS_climate_change.jpeg>] [12 <..//figure/HFmeans.jpeg>] 
-[13 <..//figure/HFdissplot.jpeg> <..//figure/Mtsv_usfs_sidexside.jpeg>] (./reth
-inking_FLS_draft.bbl
+[13 <..//figure/HF_Q_ru_interannual.jpeg> <..//figure/MTSV_effectsize.jpeg>] [1
+4 <..//figure/USFS_effectsize.jpeg> <..//figure/HF_cont_effectsize.jpeg>] (./re
+thinking_FLS_draft.bbl
 ! Misplaced alignment tab character &.
 <argument> Michgan Shrubs &
                             Vines: A guide to species of the Great Lakes Region
@@ -362,7 +373,7 @@ might try typing `S' now just to see what is salvageable.
 Missing character: There is no ‚ in font cmr12!
 Missing character: There is no Ä in font cmr12!
 Missing character: There is no ê in font cmr12!
-[14 <..//figure/HF_cont_v_bin.jpeg>] [15]
+[15]
 ! Misplaced alignment tab character &.
 l.127 ...1980) \emph{Forest Ecology}. John Wiley &
                                                   Sons, 3rd
@@ -373,24 +384,90 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-) [16] (./rethinking_FLS_draft.aux) ) 
+[16])
+! Undefined control sequence.
+<recently read> \ident 
+                       
+l.236 \ident
+             For modeling trait associates we chose three predictors to repr...
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Package natbib Warning: Citation `Ives2010' on page 17 undefined on input line 
+238.
+
+
+Package natbib Warning: Citation `Ho2014' on page 17 undefined on input line 23
+8.
+
+
+Package natbib Warning: Citation `Zanne2013' on page 17 undefined on input line
+ 238.
+
+
+Package natbib Warning: Citation `Wilcox2000' on page 17 undefined on input lin
+e 238.
+
+
+Package natbib Warning: Citation `Gelman2007' on page 17 undefined on input lin
+e 238.
+
+
+Package natbib Warning: Citation `Orme2013' on page 17 undefined on input line 
+238.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--239
+
+ []
+
+[17] <..//figure/michtreeplot.jpeg, id=66, 804.00375pt x 780.9175pt>
+File: ..//figure/michtreeplot.jpeg Graphic file (type jpg)
+
+<use ..//figure/michtreeplot.jpeg>
+Package pdftex.def Info: ..//figure/michtreeplot.jpeg used on input line 258.
+(pdftex.def)             Requested size: 267.86156pt x 260.16803pt.
+
+<..//figure/silvtreeplot.jpeg, id=67, 804.00375pt x 780.9175pt>
+File: ..//figure/silvtreeplot.jpeg Graphic file (type jpg)
+
+<use ..//figure/silvtreeplot.jpeg>
+Package pdftex.def Info: ..//figure/silvtreeplot.jpeg used on input line 265.
+(pdftex.def)             Requested size: 267.86156pt x 260.16803pt.
+
+<..//figure/HFtreeplot.jpeg, id=68, 804.00375pt x 780.9175pt>
+File: ..//figure/HFtreeplot.jpeg Graphic file (type jpg)
+
+<use ..//figure/HFtreeplot.jpeg>
+Package pdftex.def Info: ..//figure/HFtreeplot.jpeg used on input line 272.
+(pdftex.def)             Requested size: 267.86156pt x 260.16803pt.
+
+
+Package natbib Warning: There were undefined citations.
+
+[18] [19 <..//figure/michtreeplot.jpeg> <..//figure/silvtreeplot.jpeg>]
+[20 <..//figure/HFtreeplot.jpeg>] (./rethinking_FLS_draft.aux) ) 
 Here is how much of TeX's memory you used:
- 3178 strings out of 492995
- 44383 string characters out of 6132704
- 125782 words of memory out of 5000000
- 6682 multiletter control sequences out of 15000+600000
+ 3210 strings out of 492995
+ 45165 string characters out of 6132704
+ 123930 words of memory out of 5000000
+ 6710 multiletter control sequences out of 15000+600000
  10280 words of font info for 37 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,6n,26p,1722b,262s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2017/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2017/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2017/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmti12.pfb>
-Output written on rethinking_FLS_draft.pdf (16 pages, 361346 bytes).
+ 39i,8n,26p,1722b,270s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/tex
+live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texl
+ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texliv
+e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/
+2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on rethinking_FLS_draft.pdf (20 pages, 597075 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
- 49 compressed objects within 1 object stream
+ 94 PDF objects out of 1000 (max. 8388607)
+ 58 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

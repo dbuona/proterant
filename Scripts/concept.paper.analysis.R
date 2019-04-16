@@ -27,8 +27,8 @@ library(rstan)
 load("RData/zarchival/hystmodels.RData")
 #########READ IN ALL DATA AND ASSOCIATED TREES##################
 
-mich.tree<-read.tree("pruned_for_mich.tre")
-mich.data<-read.csv("mich_data_full_clean.csv")
+mich.tree<-read.tree("datasheets_derived/MTSV_USFS/pruned_for_mich.tre")
+mich.data<-read.csv("datasheets_derived/MTSV_USFS/mich_data_full_clean.csv")
 drought.dat<-read.csv("..//Data/USDA_traitfor_MTSV.csv",header=TRUE)
 source("..//Scripts/extract_coefs.R")
 ###make a column for seed development time
@@ -37,6 +37,7 @@ mich.data$dev.time<-mich.data$fruiting-mich.data$flo_time
 ###one more cleaninging tax
 mich.data$pol<-ifelse(mich.data$Species=="quadrangulata",1,mich.data$pol)
 mich.data$pol<-ifelse(mich.data$Genus=="Populus"& mich.data$Species=="nigra",1,mich.data$pol)
+
 ###make the tree work 
 mich.tree$node.label<-NULL
 
@@ -86,12 +87,13 @@ mich.data$dev_time_cent<-(mich.data$dev.time-mean(mich.data$dev.time))/(2*sd(mic
 mich.data$tol_cent<-(mich.data$shade_bin-mean(mich.data$shade_bin))/(2*sd(mich.data$shade_bin))
 mich.data$precip_cent<-(mich.data$min._precip-mean(mich.data$min._precip))/(2*sd(mich.data$min._precip))
 
-
+write.csv(mich.data,"datasheets_derived/MTSV_USFS/michdata_final.csv")
+write.tree(mich.tree.droughtprune,"datasheets_derived/MTSV_USFS/michtre_final.tre")
 ##############################################
 ###Now do all you did with silvics
 #######################################################
-silv.tree<-read.tree("pruned_silvics.tre")
-silv.data<-read.csv("silv_data_full.csv")
+silv.tree<-read.tree("datasheets_derived/MTSV_USFS/pruned_silvics.tre")
+silv.data<-read.csv("datasheets_derived/MTSV_USFS/silv_data_full.csv")
 silv.USDA<-read.csv("silv.USDA.csv")
 silv.tree$node.label<-NULL
 silv.data<-left_join(silv.data,silv.USDA) ###maybe you should make a drought species list specifically for silvics to lose less species
@@ -141,6 +143,11 @@ silv.tree.droughtprune<-drop.tip(silv.tree,to.prune)
 mytree.names<-silv.tree.droughtprune$tip.label
 setdiff(namelist,mytree.names) 
 intersect(namelist,mytree.names)
+
+write.csv(silv.data,"datasheets_derived/MTSV_USFS/silvdata_final.csv")
+write.tree(silv.tree.droughtprune,"datasheets_derived/MTSV_USFS/silvtre_final.tre")
+
+
 
 #####phylogenetic signals####################################### for silvics
 e<-comparative.data(silv.tree,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)

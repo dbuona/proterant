@@ -188,7 +188,7 @@ segments(x0=1960,y0=alphaAES, x1=1980,y1=alphaAES,col="blue",lwd=3)
 segments(x0=1980,y0=alphaAES, x1=2015,y1=alphaAES+betaAES*35,col="blue",lwd=3)
 segments(x0=1960,y0=alphaAESlow, x1=2015,y1=alphaAESlow, lty=2,col="blue",lwd=2)
 segments(x0=1960,y0=alphaAEShigh, x1=2015,y1=alphaAEShigh, lty=2,col="blue",lwd=2)
-legend(2006,3, legend=c("A. glutinosa", "F. excelsior","A. hippocastanum"),col=c("darkgreen", "red","blue"), lwd=2, cex=0.6)
+legend(2000,3, legend=c("A. glutinosa", "F. excelsior","A. hippocastanum"),col=c("darkgreen", "red","blue"), lwd=2, cex=0.6)
 dev.off()
 
 ##################################Analysis II####################################################
@@ -208,8 +208,8 @@ HF.averages<-tidyr::gather(HF.averages, phase,DOY,4:7)
 HF.averages$name <- factor(HF.averages$name, levels = c("A. rubrum","B. alleghaniensis" ,"Q. rubra","A. pensylvanicum","N. sylvatica"))
 pd<-position_dodge(width=0.0)
 
-jpeg("..//figure/HFmeans.jpeg")
-ggplot(HF.averages,(aes(name,DOY)))+stat_summary(fun.data = "mean_cl_boot",aes(color=phase,shape=phase),position=pd,size=0.78)+scale_color_manual(values=c("deeppink","firebrick1","lawngreen","darkgreen"))+scale_shape_manual(values=c(0,8,16,23))+theme_base()+ylab("Day of Year")+xlab(NULL)#+theme(axis.text.x = element_text(angle = 300,hjust=0.5))
+jpeg("..//figure/HFmeans.jpeg",width = 800, height = 550)
+ggplot(HF.averages,(aes(name,DOY)))+stat_summary(fun.data = "mean_cl_boot",aes(color=phase,shape=phase),position=pd,size=0.78)+scale_color_manual(values=c("lawngreen","firebrick1","deeppink","darkgreen"))+scale_shape_manual(values=c(0,16,8,23))+theme_base()+ylab("Day of Year")+xlab(NULL)#+theme(axis.text.x = element_text(angle = 300,hjust=0.5))
 dev.off()
 
 ########Analysis 3 Quercus rubra at HF.........
@@ -217,10 +217,13 @@ QURU<-filter(HF,species=="QURU")
 QURU<-filter(QURU,tree.id!="QURU-02")
 QURU$FLS<-ifelse(QURU$phys.offset<0,"seranthous","hysteranthous")
 QURU<-drop_na(QURU)
-pd2<-position_dodge(0.6)
+QURU$tree.id[QURU$tree.id=="QURU-01"]<-"1"
+QURU$tree.id[QURU$tree.id=="QURU-03"]<-"3"
+QURU$tree.id[QURU$tree.id=="QURU-04"]<-"4"
 
-jpeg("..//figure/HF_Q.ru_interannual.jpeg")
-ggplot(QURU,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd,color=tree.id,group = row.names(QURU)),shape=8, size=4,position=pd2)+geom_point(aes(year,bb.jd,color=tree.id,group = row.names(QURU)),shape=18,size=3,position=pd2)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=FLS,color=tree.id,group = row.names(QURU)),position=pd2)+theme_base()+labs(y = "Day of year",color= "Tree I.D.")
+jpeg("..//figure/HF_Q_ru_interannual.jpeg",width = 800, height = 550)
+pd2<-position_dodge2(0.8)
+ggplot(QURU,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd,color=tree.id,group = row.names(QURU)),shape=8, size=4,position=pd2)+geom_point(aes(year,bb.jd,color=tree.id,group = row.names(QURU)),shape=18,size=3,position=pd2)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=FLS,color=tree.id,group = row.names(QURU)),position=pd2)+theme_base()+labs(y = "Day of year",color= "Tree I.D.")+scale_color_manual(values=c("red","blue","darkgreen"))
 dev.off()
 
 #######Analysis 3 come back to this once Lizzie talk to Jonath.
@@ -230,15 +233,119 @@ extract_coefs<-function(x){
 extract_CIs<-function(x){
   filter(rownames_to_column(as.data.frame(t(as.data.frame(x$bootconfint95))),"trait"),trait!="alpha") ##This function extracts CIs from phylo lm models.
   }  
-###Quick clean
-mich.data$pol<-ifelse(mich.data$Species=="quadrangulata",1,mich.data$pol)
-mich.data$pol<-ifelse(mich.data$Genus=="Populus"& mich.data$Species=="nigra",1,mich.data$pol)
-mich.tree$node.label<-NULL ###remove node labels so three works
+###read in data
+mich.data<-read.csv("datasheets_derived/MTSV_USFS/michdata_final.csv")
+mich.tre<-read.tree("datasheets_derived/MTSV_USFS/michtre_final.tre")
+
+silv.data<-read.csv("datasheets_derived/MTSV_USFS/silvdata_final.csv")
+silv.tre<-read.tree("datasheets_derived/MTSV_USFS/silvtre_final.tre")
+##### phylo signal for suppliment
+mich.tre$node.label<-NULL
+silv.tre$node.label<-NULL
+d<-comparative.data(mich.tre,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+#physiological hysteranthy
+Phylo.Pro.phys<-phylo.d(d, binvar=pro3) 
+Phylo.Pro.phys
+##functionalhysteranthy
+PhyloPro.funct<-phylo.d(d,binvar=pro2)
+PhyloPro.funct
+plot(PhyloPro.funct)
+
+d.silv<-comparative.data(silv.tre,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+silv.Pro.phys<-phylo.d(d.silv, binvar=pro3) 
+silv.Pro.phys
+##functionalhysteranthy
+silv.Pro.funct<-phylo.d(d.silv,binvar=pro2)
+silv.Pro.funct
+plot(PhyloPro.funct)
+
+######### phyloglm requires species names to be in rownames
+mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
+silv.data<- silv.data %>% remove_rownames %>% column_to_rownames(var="name")
+
+##with Interactions
+z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
+
+
+z.phys.drought<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                         start.beta=NULL, start.alpha=NULL,
+                         boot=599,full.matrix = TRUE)
+
+z.funct.drought.silvics<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                                  start.beta=NULL, start.alpha=NULL,
+                                  boot=599,full.matrix = TRUE)
+
+z.phys.drought.silvics<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                                 start.beta=NULL, start.alpha=NULL,
+                                 boot=599,full.matrix = TRUE)
+
+
+##prep for plotting
+mich.funct.wint.dat<-full_join(extract_coefs(z.funct.drought),extract_CIs(z.funct.drought),by="trait")
+colnames(mich.funct.wint.dat)<-c("trait","estimate","low","high")
+mich.funct.wint.dat$class<-"functional-MTSV"
+
+mich.phys.wint.dat<-full_join(extract_coefs(z.phys.drought),extract_CIs(z.phys.drought),by="trait")
+colnames(mich.phys.wint.dat)<-c("trait","estimate","low","high")
+mich.phys.wint.dat$class<-"physiological-MTSV"
+
+silv.funct.wint.dat<-full_join(extract_coefs(z.funct.drought.silvics),extract_CIs(z.funct.drought.silvics),by="trait")
+colnames(silv.funct.wint.dat)<-c("trait","estimate","low","high")
+silv.funct.wint.dat$class<-"functional-USFS"
+
+silv.phys.wint.dat<-full_join(extract_coefs(z.phys.drought.silvics),extract_CIs(z.phys.drought.silvics),by="trait")
+colnames(silv.phys.wint.dat)<-c("trait","estimate","low","high")
+silv.phys.wint.dat$class<-"physiological-USFS"
+
+michigan.wint<-rbind(mich.phys.wint.dat,mich.funct.wint.dat)
+USFS.wint<-rbind(silv.phys.wint.dat,silv.funct.wint.dat)
+
+comps<-rbind(michigan.wint,USFS.wint)
+comps$category<-NA
+comps$category[which(comps$class=="physiological-USFS")] <- "physiological"
+comps$category[which(comps$class=="physiological-MTSV")] <- "physiological"
+comps$category[which(comps$class=="functional-USFS")] <- "functional"
+comps$category[which(comps$class=="functional-MTSV")] <- "functional"
+
+comps$data<-NA
+comps$data[which(comps$class=="physiological-USFS")] <- "USFS"
+comps$data[which(comps$class=="physiological-MTSV")] <- "MTSV"
+comps$data[which(comps$class=="functional-USFS")] <- "USFS"
+comps$data[which(comps$class=="functional-MTSV")] <- "MTSV"
+
+###change the variable names
+comps$trait[which(comps$trait=="pol_cent")] <- "main effect: pollination syndrome"
+comps$trait[which(comps$trait=="flo_cent")] <- "main effect: flowering time"
+comps$trait[which(comps$trait=="precip_cent")] <- "main effect: minimum precipitation"
+comps$trait[which(comps$trait=="flo_cent:precip_cent")] <- "interaction: flowering x precip."
+comps$trait[which(comps$trait=="pol_cent:precip_cent")] <- "interaction: pollination x precip."
+comps$trait[which(comps$trait=="pol_cent:flo_cent")] <- "interaction: pollination x flowering"
+
+###looks better on seperate plots
+comps.MTSV<-filter(comps,data=="MTSV")
+comps.USFS<-filter(comps,data=="USFS")
+pd=position_dodgev(height=0.4)
+
+jpeg("..//figure/MTSV_effectsize.jpeg",width = 800, height = 350)
+ggplot(comps.MTSV,aes(estimate,trait))+geom_point(size=4,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category))+geom_vline(aes(xintercept=0))+theme_base(base_size = 11)+scale_color_manual(values=c("orchid4", "springgreen4"))+xlim(-8,8)
+dev.off()
+
+jpeg("..//figure/USFS_effectsize.jpeg",width = 800, height = 350)
+ggplot(comps.USFS,aes(estimate,trait))+geom_point(size=4,aes(color=category),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=category))+geom_vline(aes(xintercept=0))+theme_base(base_size=11)+scale_color_manual(values=c("orchid4", "springgreen4"))+xlim(-8,8)
+dev.off()
+
+
+
+###does the
+
+
 
 
 ###Analysis 4cd
 source("..//Scripts/continuous_mod_prep.R")
-
+HF<-filter(HF,species!=("QUAL"))
 spforcontmods<-traits$species
 
 HF.continuous.data<-filter(HF,species %in% c(spforcontmods))
@@ -249,12 +356,93 @@ HF.continuous.data$cent_pol<-(HF.continuous.data$pol-mean(HF.continuous.data$pol
 HF.continuous.data$cent_minP<-(HF.continuous.data$min_precip-mean(HF.continuous.data$min_precip))/(2*sd(HF.continuous.data$min_precip))
 HF.continuous.data$cent_floday<-(HF.continuous.data$fopn.jd-mean(HF.continuous.data$fopn.jd,na.rm=TRUE))/(2*sd(HF.continuous.data$fopn.jd,na.rm=TRUE))
 
+###phylo lm can only handle one value per species in the tree
+pol.sum<- HF.continuous.data %>% group_by(name) %>%summarise(mean_pol=mean(cent_pol,na.rm=TRUE))
+flo.sum<- HF.continuous.data %>% group_by(name)%>%summarise(mean_floday=mean(cent_floday,na.rm=TRUE))
+P.sum<- HF.continuous.data %>% group_by(name)%>%summarise(mean_minP=mean(cent_minP,na.rm=TRUE))
+funct.sum<-HF.continuous.data %>% group_by(name)%>%summarise(mean_funct_offset=mean(funct.offset,na.rm=TRUE))
+phys.sum<-HF.continuous.data %>% group_by(name)%>%summarise(mean_phys_offset=mean(phys.offset,na.rm=TRUE))
+mean.continuous.dat<-left_join(funct.sum,phys.sum)
+mean.continuous.dat<-left_join(mean.continuous.dat,P.sum)
+mean.continuous.dat<-left_join(mean.continuous.dat,flo.sum)
+mean.continuous.dat<-left_join(mean.continuous.dat,pol.sum)
+
+
+df.cont<-mean.continuous.dat[match(mytree.names, mean.continuous.dat$name),]
+df.cont$funct.bin<-ifelse(df.cont$mean_funct_offset>=0,1,0)
+df.cont$phys.bin<-ifelse(df.cont$mean_phys_offset>=0,1,0)
+df.cont<-as.data.frame(df.cont)
+###HF phylosig
+d3<-comparative.data(HF.tree.pruned,df.cont,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+#physiological hysteranthy
+phylo.d(d3, binvar=phys.bin) 
+phylo.d(d3, binvar=funct.bin)
+
+df.cont<- df.cont%>% remove_rownames %>% column_to_rownames(var="name")
+
+
+write.csv(df.cont,"HarvardForest/HF.means.data.csv")
+write.tree(HF.tree.pruned,"HarvardForest/HFtree.tre")
+### continuous models
+HF.cont.funct<-phylolm(mean_funct_offset~mean_pol+mean_floday+mean_minP+mean_pol:mean_floday+mean_pol:mean_minP+mean_floday:mean_minP,data=df.cont,phy=HF.tree.pruned,boot=599)
+summary(HF.cont.funct)
+
+HF.cont.phys<-phylolm(mean_phys_offset~mean_pol+mean_floday+mean_minP+mean_pol:mean_floday+mean_pol:mean_minP+mean_floday:mean_minP,data=df.cont,phy=HF.tree.pruned,boot=599)
+summary(HF.cont.phys)
+
+HF.fuct.continuous<-full_join(extract_coefs(HF.cont.funct),extract_CIs(HF.cont.funct),by="trait")
+colnames(HF.fuct.continuous)<-c("trait","estimate","low","high")
+HF.fuct.continuous$class<-"functional"
+
+HF.phys.continuous<-full_join(extract_coefs(HF.cont.phys),extract_CIs(HF.cont.phys),by="trait")
+colnames(HF.phys.continuous)<-c("trait","estimate","low","high")
+HF.phys.continuous$class<-"physiological"
+
+
+HF.cont.comps<-rbind(HF.phys.continuous,HF.fuct.continuous)
+HF.cont.comps$trait[which(HF.cont.comps$trait=="mean_pol")] <- "main effect: pollination syndrome"
+HF.cont.comps$trait[which(HF.cont.comps$trait=="mean_floday")] <- "main effect: flowering time"
+HF.cont.comps$trait[which(HF.cont.comps$trait=="mean_minP")] <- "main effect: minimum precipitation"
+HF.cont.comps$trait[which(HF.cont.comps$trait=="mean_floday:mean_minP")] <- "interaction: flowering x precip."
+HF.cont.comps$trait[which(HF.cont.comps$trait=="mean_pol:mean_minP")] <- "interaction: pollination x precip."
+HF.cont.comps$trait[which(HF.cont.comps$trait=="mean_pol:mean_floday")] <- "interaction: pollination x flowering"
+
+HF.cont.comps<-filter(HF.cont.comps,trait!="sigma2")
+
+jpeg("..//figure/HF_cont_effectsize.jpeg",width = 800, height = 350)
+ggplot(HF.cont.comps,aes(estimate,trait))+geom_point(size=4,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_base(base_size = 11)+scale_color_manual(values=c("orchid4", "springgreen4"))
+dev.off()
+
+###binary doesn't really work in phylglm
+HF.bin.funct<-phyloglm(funct.bin~mean_pol+mean_floday+mean_minP,df.cont, HF.tree.pruned, method = "logistic_MPLE", btol = 10, log.alpha.bound = 8,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
+summary(HF.bin.funct)
+
+HF.bin.phys<-phyloglm(phys.bin~mean_pol+mean_floday+mean_minP,df.cont, HF.tree.pruned, method = "logistic_MPLE", btol = 800, log.alpha.bound = 10,
+                      start.beta=NULL, start.alpha=NULL,
+                      boot=599,full.matrix = TRUE)
+summary(HF.bin.phys)
+
+HF.fuct.bin<-full_join(extract_coefs(HF.bin.funct),extract_CIs(HF.bin.funct),by="trait")
+colnames(HF.fuct.bin)<-c("trait","estimate","low","high")
+HF.fuct.bin$class<-"functional"
+
+HF.phys.bin<-full_join(extract_coefs(HF.bin.phys),extract_CIs(HF.bin.phys),by="trait")
+colnames(HF.phys.bin)<-c("trait","estimate","low","high")
+HF.phys.bin$class<-"physiological"
+
+
+HF.bin.comps<-rbind(HF.phys.bin,HF.fuct.bin)
+ggplot(HF.bin.comps,aes(estimate,trait))+geom_point(size=4,aes(color=class),position=pd)+geom_errorbarh(position=pd,width=0,aes(xmin=low,xmax=high,color=class))+geom_vline(aes(xintercept=0))+theme_base(base_size = 11)+scale_color_manual(values=c("orchid4", "springgreen4"))
+
+
 inv.phylo <- MCMCglmm::inverseA(HF.tree.pruned, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 
 ###continuous models
-modelcont.funct.noint <- brm(funct.offset~ cent_pol+cent_floday+cent_minP+(1|name), data = HF.continuous.data, 
+modelcont.funct.noint <- brm(funct.offset~ cent_pol+cent_floday+cent_minP+cent_pol:cent_floday+cent_pol:cent_minP+cent_floday:cent_minP+(1|name), data = HF.continuous.data, 
                              family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
 modelcont.phys.noint <- brm(phys.offset~ cent_pol+cent_floday+cent_minP+(1|name), data = HF.continuous.data, 
@@ -266,7 +454,7 @@ modelbin.funct.noint <- brm(hyst.funct~ cent_pol+cent_floday+cent_minP+(1|name),
 modelbin.phys.noint <- brm(hyst.phys~ cent_pol+cent_floday+cent_minP+(1|name), data = HF.continuous.data, 
                            family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
 
-extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.10,.25,.75,0.90))),"trait")
+#extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.10,.25,.75,0.90))),"trait")
 }
 
 funct.cont<-extract_coefs4HF(modelcont.funct.noint)
