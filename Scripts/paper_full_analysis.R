@@ -280,7 +280,25 @@ z.funct.drought.silvics<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent
 z.phys.drought.silvics<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                                  start.beta=NULL, start.alpha=NULL,
                                  boot=599,full.matrix = TRUE)
+###side bar compare phylo to brms###########
 
+inv.phylo <- MCMCglmm::inverseA(mich.tre, nodes = "TIPS", scale = TRUE)
+A <- solve(inv.phylo$Ainv)
+rownames(A) <- rownames(inv.phylo$Ainv)
+
+###
+
+mich.data$name<-rownames(mich.data)
+
+modelcont.funct.noint <- brm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent+(1|name), data = mich.data, 
+                             family = bernoulli(link = "logit"), cov_ranef = list(name= A),iter=3000) 
+
+binaryPGLMM(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre)
+
+z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
+summary( z.funct.drought)
 
 ##prep for plotting
 mich.funct.wint.dat<-full_join(extract_coefs(z.funct.drought),extract_CIs(z.funct.drought),by="trait")
@@ -506,6 +524,7 @@ intra.df$SM<-Soil
 intra.df$flo.cent<-intra.df$flower-mean(intra.df$flower,na.rm=TRUE)
 intra.df$leaf.cent<-intra.df$leaf-mean(intra.df$leaf,na.rm=TRUE)
 intra.df$soil.cent<-intra.df$SM-mean(intra.df$SM,na.rm=TRUE)
+intra.df$offset.cent<-intra.df$offset-mean(intra.df$offset,na.rm=TRUE)
 
 ####now run each species model's seperately
 df.intra.alnus<-filter(intra.df,taxa=="Alnus glutinosa")
@@ -513,19 +532,64 @@ df.intra.frax<-filter(intra.df,taxa=="Fraxinus excelsior")
 df.intra.bet<-filter(intra.df,taxa=="Betula pendula")
 df.intra.aes<-filter(intra.df,taxa=="Aesculus hippocastenum")
 
-##model with just soil moisture
-mod.intra.aln.sm<-brm(offset~soil.cent,data=df.intra.alnus)
-summary(mod.intra.aln.sm)
-mod.intra.frax.sm<-brm(offset~soil.cent,data=df.intra.frax)
-summary(mod.intra.frax.sm)
-mod.intra.bet.sm<-brm(offset~soil.cent,data=df.intra.bet)
-summary(mod.intra.bet.sm)
-mod.intra.aes.sm<-brm(offset~soil.cent,data=df.intra.aes)
-summary(mod.intra.bet.sm)
 
-priorz<-get_prior(offset~flo.cent*soil.cent,data=df.intra.alnus)
-mod.intra.flo.sm.aln<-brm(offset~flo.cent*soil.cent,data=df.intra.alnus,prior=priorz)
+
+
+lm(offset.cent~soil.cent,data=df.intra.alnus)
+lm(offset~soil.cent,data=df.intra.aes)
+lm(offset~soil.cent,data=df.intra.frax)
+
+colnames(intra.df)
+mean(df.intra.alnus$offset)
+summary(lm(offset~flo.cent,data=df.intra.alnus))
+summary(lm(offset~leaf.cent,data=df.intra.alnus))
+
+
+summary(lm(offset~flo.cent,data=df.intra.frax))
+summary(lm(offset~leaf.cent,data=df.intra.frax))
+summary(lm(offset~flo.cent,data=df.intra.aes))
+summary(lm(offset~leaf.cent,data=df.intra.aes))
+summary(lm(offset~flo.cent,data=df.intra.bet))
+summary(lm(offset~leaf.cent,data=df.intra.bet))
+
+par(mfrow=c(1, 2) )
+plot(c(-10,10), c(-80,80), type = "n", xlab = "Flowering day (deviation from mean)", ylab = "change in FLS offset", bty='l')
+segments(x=0,y0=6.964847 ,x1=10,y1=6.964847-.67*10,col="darkgreen",lty="solid" )
+segments(x=0,y0=6.964847 ,x1=-10,y1=6.964847+.67*10,col="darkgreen",lty="solid" )
+points(x=df.intra.alnus$flo.cent,y=df.intra.alnus$offset,col="darkgreen",pch=".",size=0.4)
+
+segments(x=0,y0=12.193582 ,x1=10,y1=12.193582-.53*10,col="red",lty="solid" )
+segments(x=0,y0=12.193582 ,x1=-10,y1=12.193582+.53*10,col="red",lty="solid" )
+segments(x=0,y0=-14.127707 ,x1=10,y1=-14.127707-.28*10,col="blue",lty="solid" )
+segments(x=0,y0=-14.127707 ,x1=-10,y1=-14.127707+.28*10,col="blue",lty="solid" )
+
+plot(c(-10,10), c(-40,40), type = "n", xlab = "Leafing day (deviation from mean)", ylab = "chang in FLS offset", bty='l')
+segments(x=0,y0=32.810102 ,x1=10,y1=32.810102+.23*10,col="darkgreen",lty="solid" )
+segments(x=0,y0=32.810102 ,x1=-10,y1=32.810102-.23*10,col="darkgreen",lty="solid" )
+segments(x=0,y0=6.746710  ,x1=10,y1=6.746710 +.24*10,col="red",lty="solid" )
+segments(x=0,y0=6.746710  ,x1=-10,y1=6.746710 -.24*10,col="red",lty="solid" )
+segments(x=0,y0=-17.618607 ,x1=10,y1=-17.618607+.4*10,col="blue",lty="solid" )
+segments(x=0,y0=-17.618607 ,x1=-10,y1=-17.618607-.4*10,col="blue",lty="solid" )
+
+library(lme4)
+summary(lmer(offset~soil.cent+(1|taxa),data=intra.df))
+summary(lmer(offset~flo.cent+soil.cent+(1|taxa),data=intra.df))
+
+jpeg("..//figure/SM_comp.jpeg")
+par(mfrow=c(1, 1) )
+plot(c(-10,10), c(0,6), type = "n", xlab = "Soil moisture (deviation from mean)", ylab = "change in FLS offset", bty='l')
+segments(x=0,y0=4.809891 ,x1=10,y1=4.809891-0.036298*10,col="black",lty="solid",lwd=3 )
+segments(x=0,y0=4.809891 ,x1=-10,y1=4.809891+0.036298*10,col="black",lty="solid" ,lwd=3)
+segments(x=0,y0=1.799010 ,x1=10,y1=1.799010+0.133845*10,col="black",lty="dashed",lwd=3 )
+segments(x=0,y0=1.799010 ,x1=-10,y1=1.799010-0.133845*10,col="black",lty="dashed",lwd=3 )
+dev.off()
+
+
+priorz<-get_prior(offset~flo.cent+leaf.cent+soil.cent,data=df.intra.alnus)
+mod.intra.flo.sm.aln<-brm(offset~flo.cent+soil.cent,data=df.intra.alnus,prior=priorz)
 summary(mod.intra.flo.sm.aln)
+
+priorz.fr<-get_prior(offset~flo.cent+soil.cent,data=df.intra.frax)
 mod.intra.flo.sm.frax<-brm(offset~flo.cent*soil.cent,data=df.intra.frax,prior=priorz)
 summary(mod.intra.flo.sm.frax)
 mod.intra.flo.sm.sm<-brm(offset~flo.cent*soil.cent,data=df.intra.bet,prior=priorz)

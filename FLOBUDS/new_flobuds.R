@@ -16,16 +16,19 @@ library(survminer)
 library(ggthemes)
 library("Hmisc")
 
-#load("new_flobud.mods.Rda")
+load("new_flobud.mods.Rda")
 setwd("~/Documents/git/proterant/FLOBUDS")
 dat<-read.csv("flobudsdata.use.csv",header = TRUE)
 
 dat$Light<-ifelse(dat$Light=="S",0,1)
 dat$Force<-ifelse(dat$Force=="C",0,1)
 
-
-
 dat<-filter(dat, !GEN.SPA %in% c("AME.SPP","BET.SPP"))
+
+
+plot.raw.dat<-gather(dat,phase,DOY,2:4)
+ggplot(plot.raw.dat)
+
 
 bb.int<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
 mod.bb.int<-brm(budburst.9. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
@@ -245,14 +248,22 @@ ggplot(sps.plot.2effectonly,aes(Estimate,Predictor))+geom_point(aes(shape=phase,
 dev.off()
 
 
+
 sps.plot3<-rbind(leafout.sps,leaf.sps,flo.sps)
-jpeg("Plots/flo_buds_figures/3phase_sppeffects.wintercept.jpeg")
+jpeg("Plots/flo_buds_figures/3phase_sppeffects_wintercept.jpeg")
 pd2=position_dodgev(height=.6)
 ggplot(sps.plot3,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()
 
+goodsps<-dplyr::filter(sps.plot3, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
+
+pd2=position_dodgev(height=.6)
+ggplot(goodsps,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
+
+
+
 sps.plot.3effectonly<-filter(sps.plot3, Predictor!="Intercept")
-jpeg("Plots/flo_buds_figures/3phase_sppeffects.nointercept.jpeg")
+jpeg("Plots/flo_buds_figures/3phase_sppeffects_nointercept.jpeg")
 ggplot(sps.plot.3effectonly,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()
 
@@ -276,13 +287,17 @@ dev.off()
 FLS<-filter(dat, !GEN.SPA %in% c("ACE.SAC","BET.ALL"))
 hys<-c("ACE.RUB","COM.PER","COR.COR")
 
-newdata <- data.frame(Chill = c(0,0),
-                      Light = c(0,1),
-                      Force=  c(0,1),
-                      GEN.SPA=c("VAC.COR"))
-predict(mod.bb.int, newdata = newdata)
 
-predict(mod.flo.int, newdata = newdata)
+newdata<-data.frame(Chill = c(0,0,1,1,0,1,1,0),
+                      Light = c(0,1,0,1,0,1,0,1),
+                      Force=  c(0,1,1,0,1,1,0,0),
+                      GEN.SPA=c("VAC.COR"))
+                                
+newdata<-unite(newdata,treatcode,1:3,remove=FALSE)
+
+bb.pred<-predict(mod.bb.int, newdata = newdata,summary=TRUE,   probs = c(0.025, 0.975))
+flo.pred<-predict(mod.flo.int, newdata = newdata,summary=TRUE,   probs = c(0.025, 0.975))
+
 
 
 save.image("new_flobud.mods.Rda")
