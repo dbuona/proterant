@@ -202,14 +202,14 @@ HF.averages$name[HF.averages$species=="QURU"]<-"Q. rubra"
 
 
 colnames(HF.averages)
-colnames(HF.averages)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (75%)","flower budburst","flower open","physiological offset","functional offset","name")
+colnames(HF.averages)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (75%)","flower budburst","flower open","physiological offset","functional offset","Funct. hysteranthy","Phys. hysteranthy","name")
 HF.averages<-tidyr::gather(HF.averages, phase,DOY,4:7)
 
 HF.averages$name <- factor(HF.averages$name, levels = c("A. rubrum","B. alleghaniensis" ,"Q. rubra","A. pensylvanicum","N. sylvatica"))
 pd<-position_dodge(width=0.0)
 
 jpeg("..//figure/HFmeans.jpeg",width = 800, height = 550)
-ggplot(HF.averages,(aes(name,DOY)))+stat_summary(fun.data = "mean_cl_boot",aes(color=phase,shape=phase),position=pd,size=0.78)+scale_color_manual(values=c("lawngreen","firebrick1","deeppink","darkgreen"))+scale_shape_manual(values=c(0,16,8,23))+theme_base()+ylab("Day of Year")+xlab(NULL)#+theme(axis.text.x = element_text(angle = 300,hjust=0.5))
+ggplot(HF.averages,(aes(name,DOY)))+stat_summary(fun.data = "mean_cl_boot",aes(color=phase,shape=phase),position=pd,size=0.78)+scale_color_manual(values=c("firebrick1","deeppink","lawngreen","darkgreen"))+scale_shape_manual(values=c(16,8,0,23))+theme_base()+ylab("Day of Year")+xlab(NULL)#+theme(axis.text.x = element_text(angle = 300,hjust=0.5))
 dev.off()
 
 ########Analysis 3 Quercus rubra at HF.........

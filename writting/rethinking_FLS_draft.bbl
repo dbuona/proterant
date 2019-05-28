@@ -1,5 +1,9 @@
-\begin{thebibliography}{28}
+\begin{thebibliography}{31}
 \providecommand{\natexlab}[1]{#1}
+
+\bibitem[{DWD(2019)}]{DWD}
+ (2019) Dwd climate data center (cdc): Multi-annual grids of soil moisture in
+  5cm depth under grass and sandy loam, version 0.x,. digital.
 
 \bibitem[{Barnes \& Wagner(1981,2004)}]{Barnes2004}
 Barnes, B.V. \& Wagner, W.H.J. (1981,2004) \emph{Michigan Trees: A guide to the
@@ -14,6 +18,10 @@ Bolmgren, K., Eriksson, O. \& Linder, H.P. (2003) Contrasting flowering
 \bibitem[{Borchert({1983})}]{Borchert1983}
 Borchert, R. ({1983}) {PHENOLOGY AND CONTROL OF FLOWERING IN TROPICAL TREES}.
   \emph{{BIOTROPICA}} \textbf{{15}}, {81--89}.
+
+\bibitem[{B{\"u}rkner(2018)}]{Burkner2018}
+B{\"u}rkner, P.C. (2018) Advanced bayesian multilevel modeling with the r
+  package brms. \emph{R Journal} \textbf{10}, 395--411.
 
 \bibitem[{Burns \emph{et~al.}(1990)Burns, Honkala \&
   coordinators{$]$}}]{Burns1990}
@@ -70,6 +78,13 @@ Friedman, J. \& Barrett, S.C.H. (2009) Wind of change: new insights on the
 Gougherty, A.V. \& Gougherty, S.W. (2018) Sequence of flower and leaf emergence
   in deciduous trees is linked to ecological traits, phylogenetics, and
   climate. \emph{New Phytologist} \textbf{220}, 121--131.
+
+\bibitem[{Ivits \emph{et~al.}(2013)Ivits, Horion, Fensholt \&
+  Cherlet}]{Ivits_2013}
+Ivits, E., Horion, S., Fensholt, R. \& Cherlet, M. (2013) Drought footprint on
+  european ecosystems between 1999 and 2010 assessed by remotely sensed
+  vegetation phenology and productivity. \emph{Global Change Biology}
+  \textbf{20}, 581--593.
 
 \bibitem[{Janzen(1967)}]{Janzen1967}
 Janzen, D.H. (1967) Synchronization of sexual reproduction of trees within the
