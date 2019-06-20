@@ -44,7 +44,7 @@ HF.tree.pruned<-chronoMPL(HF.tree.pruned)
 is.ultrametric(HF.tree.pruned)
 
 ###add one species
-HF.tree.pruned<-add.species.to.genus(HF.tree.pruned, "Viburnum_lantanoides",genus=NULL,where="root")
+#HF.tree.pruned<-add.species.to.genus(HF.tree.pruned, "Viburnum_lantanoides",genus=NULL,where="root")
 
 ##matchthem ### not sure if I need to do this for brms
 df<-traits[match(mytree.names, traits$name),]
