@@ -16,19 +16,59 @@ library(survminer)
 library(ggthemes)
 library("Hmisc")
 
-load("new_flobud.mods.Rda")
+
 setwd("~/Documents/git/proterant/FLOBUDS")
+load("new_flobud.mods.Rda")
 dat<-read.csv("flobudsdata.use.csv",header = TRUE)
 
 dat$Light<-ifelse(dat$Light=="S",0,1)
 dat$Force<-ifelse(dat$Force=="C",0,1)
 
 dat<-filter(dat, !GEN.SPA %in% c("AME.SPP","BET.SPP"))
-
+dat
 
 plot.raw.dat<-gather(dat,phase,DOY,2:4)
-ggplot(plot.raw.dat)
 
+plot.raw.dat<-unite(plot.raw.dat,Treatcode,5:7,remove=FALSE)
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_1_0"]<-"WL28"
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_1_1"]<-"WL56"
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_1_0"]<-"CL28"
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_0_0"]<-"CS28"
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_0_1"]<-"CS56"
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_1_1"]<-"CL56"
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_0_1"]<-"WS56"
+plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_0_0"]<-"WS28"
+plot.raw.dat$phase[plot.raw.dat$phase=="budburst.9."]<-"leaf budburst"
+plot.raw.dat$phase[plot.raw.dat$phase=="leaf_day.15."]<-"leaf expansion"
+plot.raw.dat$phase[plot.raw.dat$phase=="flo_day"]<-"flower open"
+
+plot.raw.dat.lo<-filter(plot.raw.dat,phase!="leaf budburst")
+plot.raw.dat.bb<-filter(plot.raw.dat,phase!="leaf expansion")
+goodsp<-c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR")
+plot.raw.dat.lo<-filter(plot.raw.dat.lo,GEN.SPA %in% c(goodsp) )
+plot.raw.dat.bb<-filter(plot.raw.dat.bb,GEN.SPA %in% c(goodsp) )
+##clean up variables
+
+
+loraw<-ggplot(plot.raw.dat.lo,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+scale_color_manual(values= c("purple","darkgreen"))+scale_shape_manual(values= c(17,15))+facet_wrap(~GEN.SPA)+theme(axis.text.x = element_text(angle=45))+theme_linedraw()
+bbraw<-ggplot(plot.raw.dat.bb,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+facet_wrap(~GEN.SPA)+scale_color_manual(values= c("purple","darkgreen"))+scale_shape_manual(values= c(17,0))+theme(axis.text.x = element_text(size = .3))+theme_linedraw()
+grid.arrange(bbraw,loraw)
+
+plot.raw.dat$taxa<-NA
+plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="ACE.PEN"]<-"A. pensylvanicum"
+plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="COM.PER"]<-"C. peregrina"
+plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="COR.COR"]<-"C. cornuta"
+plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="ILE.MUC"]<-"I. mucronata"
+plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="PRU.PEN"]<-"P. pensylvanica"
+plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="VAC.COR"]<-"V corymbosum"
+
+spp.raw<-ggplot(plot.raw.dat,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+scale_shape_manual(values= c(0,2,6))+facet_wrap(~GEN.SPA)+theme(axis.text.x = element_text(angle=45))
+
+goodspfull<-filter(plot.raw.dat,GEN.SPA %in% c(goodsp)) 
+
+jpeg("Plots/flo_buds_figures/goodsps_rawplots.jpeg",width = 762,height=440)
+ggplot(goodspfull,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+facet_wrap(~taxa)+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
+dev.off()
 
 bb.int<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
 mod.bb.int<-brm(budburst.9. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
@@ -64,9 +104,13 @@ bothy$Predictor[bothy$Predictor=="Chill:Light"]<-"int:Chill:Light"
 bothy$Predictor[bothy$Predictor=="Light:Force"]<-"int:Light:Force"
 bothy$Predictor[bothy$Predictor=="Chill:Force"]<-"int:Chill:Force"
 
+
+bothy$phase[bothy$phase=="floral"]<-"flower open"
+bothy$phase[bothy$phase=="foliate"]<-"leaf budburst"
+bothy$phase[bothy$phase=="foliate-lo"]<-"leaf expansion"
 jpeg("Plots/flo_buds_figures/fobb_maineffects.jpeg")
 pd2=position_dodgev(height=0.3)
-ggplot(bothy,aes(Estimate,Predictor))+geom_point(aes(color=phase,shape=phase),position=pd2, size=4)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("darkgrey", "black"))+ggtitle("Main effects Flower vs. budburst")
+ggplot(bothy,aes(Estimate,Predictor))+geom_point(aes(color=phase,shape=phase),position=pd2, size=4)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()
 ##random effects
 
@@ -166,6 +210,7 @@ jpeg("Plots/flo_buds_figures/fobb_sppeffects.wintercept.jpeg")
 pd2=position_dodgev(height=.6)
 ggplot(sps.plot,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()
+
 #without intecepts
 sps.plot.effectonly<-filter(sps.plot, Predictor!="Intercept")
 jpeg("Plots/flo_buds_figures/fobb_sppeffects.nointercept.jpeg")
@@ -242,29 +287,35 @@ pd2=position_dodgev(height=.6)
 ggplot(sps.plot2,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()
 
-sps.plot.2effectonly<-filter(sps.plot2, Predictor!="Intercept")
-jpeg("Plots/flo_buds_figures/folo_sppeffects.nointercept.jpeg")
-ggplot(sps.plot.2effectonly,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
-dev.off()
-
-
 
 sps.plot3<-rbind(leafout.sps,leaf.sps,flo.sps)
-jpeg("Plots/flo_buds_figures/3phase_sppeffects_wintercept.jpeg")
+jpeg("Plots/flo_buds_figures/3phase_sppeffects_forsupplimnet.jpeg")
 pd2=position_dodgev(height=.6)
 ggplot(sps.plot3,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()
 
-goodsps<-dplyr::filter(sps.plot3, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
+goodsps2<-dplyr::filter(sps.plot3, GEN.SPA %in% c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR"))
 
+goodsps2$phase[goodsps2$phase=="floral"]<-"flower open"
+goodsps2$phase[goodsps2$phase=="foliate"]<-"leaf budburst"
+goodsps2$phase[goodsps2$phase=="foliate-lo"]<-"leaf expansion"
+goodsps2$taxa<-NA
+goodsps2$taxa[goodsps2$GEN.SPA=="ACE.PEN"]<-"A. pensylvanicum"
+goodsps2$taxa[goodsps2$GEN.SPA=="COM.PER"]<-"C. peregrina"
+goodsps2$taxa[goodsps2$GEN.SPA=="COR.COR"]<-"C. cornuta"
+goodsps2$taxa[goodsps2$GEN.SPA=="ILE.MUC"]<-"I. mucronata"
+goodsps2$taxa[goodsps2$GEN.SPA=="PRU.PEN"]<-"P. pensylvanica"
+goodsps2$taxa[goodsps2$GEN.SPA=="VAC.COR"]<-"V. corymbosum"
+
+jpeg("Plots/flo_buds_figures/3phase_sppeffects_goodsps.jpeg")
 pd2=position_dodgev(height=.6)
-ggplot(goodsps,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
+ggplot(goodsps2,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
+dev.off()
 
+sps.plot.3effectonly<-filter(goodsps2, Predictor!="Intercept")
 
-
-sps.plot.3effectonly<-filter(sps.plot3, Predictor!="Intercept")
-jpeg("Plots/flo_buds_figures/3phase_sppeffects_nointercept.jpeg")
-ggplot(sps.plot.3effectonly,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=3)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~GEN.SPA)+geom_vline(aes(xintercept=0),color="black")+theme_base()
+jpeg("Plots/flo_buds_figures/3phase_sppeffectsgoodsps_nointercept.jpeg",height=500)
+ggplot(sps.plot.3effectonly,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.5)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~taxa)+geom_vline(aes(xintercept=0),color="black")+theme_base(base_size = 10)
 dev.off()
 
 bothy<-rbind(flowy,leafouty,leafy)
@@ -282,12 +333,31 @@ ggplot(bothy,aes(Estimate,Predictor))+geom_point(aes(color=phase,shape=phase),po
 dev.off()
 
 
-####3 hysteranthy
+####Do hysteranthous species flower earlier than no hysteranthous
 
 FLS<-filter(dat, !GEN.SPA %in% c("ACE.SAC","BET.ALL"))
-hys<-c("ACE.RUB","COM.PER","COR.COR")
+unique(FLS$GEN.SPA)
+hys<-c("ACE.RUB","COM.PER","COR.COR","ACE.SAC","BET.ALL")
+syn<-c("ACE.PEN","PRU.PEN","VAC.COR")
+ser<-c("ILE.MUC","ILE.VER","PRU.VIR","VIB.ACE")
 
+colnames(dat)
+meanf<-dat %>% group_by(GEN.SPA)%>% dplyr::summarise(meano=mean(flo_day,na.rm=TRUE))
+meanl<-dat %>% group_by(GEN.SPA)%>% dplyr::summarise(meanl=mean(budburst.9.,na.rm=TRUE))
+averages<-left_join(meanf,meanl)
+averages$FLS.cont<-averages$meanl-averages$meano
+dat<-left_join(dat,averages,by="GEN.SPA")
+dat$FLS.bin.phys<-ifelse(dat$GEN.SPA %in% hys,1,0)
+colnames(dat)
+summary(lm(flo_day~FLS.bin.phys,data=dat))
+summary(lm(leaf_day.15.~FLS.bin.phys,data=dat))
+summary(lm(budburst.9.~FLS.bin.phys,data=dat))
 
+summary(lm(flo_day~FLS.cont,data=dat))
+summary(lm(leaf_day.15.~FLS.cont,data=dat))
+summary(lm(budburst.9.~FLS.cont,data=dat))
+
+?summarise()
 newdata<-data.frame(Chill = c(0,0,1,1,0,1,1,0),
                       Light = c(0,1,0,1,0,1,0,1),
                       Force=  c(0,1,1,0,1,1,0,0),
