@@ -26,3 +26,10 @@ Input/.Rhistory
 FLOBUDS/.Rhistory
 FLOBUDS/.Rhistory
 Input/.Rhistory
+*.aux
+*.bbl
+*.blg
+*.blg
+*.log
+*.gz
+writting/rethinking_FLS_draft-concordance.tex

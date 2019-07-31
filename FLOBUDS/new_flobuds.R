@@ -38,12 +38,12 @@ plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_0_1"]<-"CS56"
 plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_1_1"]<-"CL56"
 plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_0_1"]<-"WS56"
 plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_0_0"]<-"WS28"
-plot.raw.dat$phase[plot.raw.dat$phase=="budburst.9."]<-"leaf budburst"
-plot.raw.dat$phase[plot.raw.dat$phase=="leaf_day.15."]<-"leaf expansion"
-plot.raw.dat$phase[plot.raw.dat$phase=="flo_day"]<-"flower open"
+plot.raw.dat$phase[plot.raw.dat$phase=="budburst.9."]<-"budburst"
+plot.raw.dat$phase[plot.raw.dat$phase=="leaf_day.15."]<-"expansion"
+plot.raw.dat$phase[plot.raw.dat$phase=="flo_day"]<-"flower"
 
-plot.raw.dat.lo<-filter(plot.raw.dat,phase!="leaf budburst")
-plot.raw.dat.bb<-filter(plot.raw.dat,phase!="leaf expansion")
+plot.raw.dat.lo<-filter(plot.raw.dat,phase!="budburst")
+plot.raw.dat.bb<-filter(plot.raw.dat,phase!="expansion")
 goodsp<-c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR")
 plot.raw.dat.lo<-filter(plot.raw.dat.lo,GEN.SPA %in% c(goodsp) )
 plot.raw.dat.bb<-filter(plot.raw.dat.bb,GEN.SPA %in% c(goodsp) )
@@ -65,9 +65,18 @@ plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="VAC.COR"]<-"V corymbosum"
 spp.raw<-ggplot(plot.raw.dat,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+scale_shape_manual(values= c(0,2,6))+facet_wrap(~GEN.SPA)+theme(axis.text.x = element_text(angle=45))
 
 goodspfull<-filter(plot.raw.dat,GEN.SPA %in% c(goodsp)) 
+goodspfull$force<-ifelse(goodspfull$Force==1,"High","Low")
+goodspfull$photo<-ifelse(goodspfull$Light==1,"Long day","Short day")
+goodspfull$chill<-ifelse(goodspfull$Chill==1,"High chill","Low chill")
 
-jpeg("Plots/flo_buds_figures/goodsps_rawplots.jpeg",width = 762,height=440)
-ggplot(goodspfull,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+facet_wrap(~taxa)+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
+ggplot(goodspfull,aes(taxa,DOY))+geom_point(aes(color=phase,shape=force),size=0.8)+stat_summary(aes(color=phase,shape=force))+facet_grid(chill~photo)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
+
+pdf("Plots/flo_buds_figures/goodsps_rawplots2.pdf",width=11, height=6)
+#ggplot(goodspfull,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+facet_wrap(~taxa)+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
+#ggplot(goodspfull,aes(force,DOY))+geom_point(aes(color=phase,shape=photo),size=0.8)+stat_summary(aes(color=phase,shape=photo))+facet_grid(chill~taxa)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 12)
+ggplot(goodspfull,aes(phase,DOY))+geom_point(aes(color=force,shape=photo),size=0.8)+stat_summary(aes(color=force,shape=photo))+facet_grid(chill~taxa)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Phenophase")+theme_base(base_size = 8)
+
+#ggplot(goodspfull,aes(force,DOY))+geom_point(aes(color=taxa,shape=phase),size=0.8)+stat_summary(aes(color=taxa,shape=phase))+facet_grid(chill~photo)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
 dev.off()
 
 bb.int<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
@@ -108,7 +117,9 @@ bothy$Predictor[bothy$Predictor=="Chill:Force"]<-"int:Chill:Force"
 bothy$phase[bothy$phase=="floral"]<-"flower open"
 bothy$phase[bothy$phase=="foliate"]<-"leaf budburst"
 bothy$phase[bothy$phase=="foliate-lo"]<-"leaf expansion"
-jpeg("Plots/flo_buds_figures/fobb_maineffects.jpeg")
+
+
+pdf("Plots/flo_buds_figures/fobb_maineffects.pdf",width=8.5, height=6)
 pd2=position_dodgev(height=0.3)
 ggplot(bothy,aes(Estimate,Predictor))+geom_point(aes(color=phase,shape=phase),position=pd2, size=4)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  21 JUN 2019 10:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  31 JUL 2019 15:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -172,18 +172,18 @@ tim
 (./rethinking_FLS_draft.aux)
 \openout1 = `rethinking_FLS_draft.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 66.
-LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
+LaTeX Font Info:    ... okay on input line 70.
 
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -285,7 +285,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.71 \end{enumerate}
+l.75 \end{enumerate}
                     
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -294,12 +294,12 @@ If that doesn't work, type  X <return>  to quit.
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2] [3] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 105--108
+Underfull \hbox (badness 10000) in paragraph at lines 127--131
 
  []
 
 [5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 121--123
+Underfull \hbox (badness 10000) in paragraph at lines 144--146
 
  []
 
@@ -309,14 +309,14 @@ File: ..//figure/FLS_climate_change.jpeg Graphic file (type jpg)
 
 <use ..//figure/FLS_climate_change.jpeg>
 Package pdftex.def Info: ..//figure/FLS_climate_change.jpeg used on input line 
-187.
+216.
 (pdftex.def)             Requested size: 455.30013pt x 455.31075pt.
 
 <..//figure/HFmeans.jpeg, id=39, 803.0pt x 552.0625pt>
 File: ..//figure/HFmeans.jpeg Graphic file (type jpg)
 
 <use ..//figure/HFmeans.jpeg>
-Package pdftex.def Info: ..//figure/HFmeans.jpeg used on input line 193.
+Package pdftex.def Info: ..//figure/HFmeans.jpeg used on input line 222.
 (pdftex.def)             Requested size: 455.30013pt x 313.02783pt.
 
 <..//figure/HF_Q_ru_interannual.jpeg, id=40, 803.0pt x 552.0625pt>
@@ -324,28 +324,28 @@ File: ..//figure/HF_Q_ru_interannual.jpeg Graphic file (type jpg)
 
 <use ..//figure/HF_Q_ru_interannual.jpeg>
 Package pdftex.def Info: ..//figure/HF_Q_ru_interannual.jpeg used on input line
- 199.
+ 228.
 (pdftex.def)             Requested size: 455.30013pt x 313.02783pt.
 
 <..//figure/allcases.jpeg, id=41, 803.0pt x 351.3125pt>
 File: ..//figure/allcases.jpeg Graphic file (type jpg)
 
 <use ..//figure/allcases.jpeg>
-Package pdftex.def Info: ..//figure/allcases.jpeg used on input line 206.
+Package pdftex.def Info: ..//figure/allcases.jpeg used on input line 235.
 (pdftex.def)             Requested size: 455.30013pt x 199.19952pt.
 
 <..//figure/cases_2pannel.jpeg, id=42, 702.625pt x 552.0625pt>
 File: ..//figure/cases_2pannel.jpeg Graphic file (type jpg)
 
 <use ..//figure/cases_2pannel.jpeg>
-Package pdftex.def Info: ..//figure/cases_2pannel.jpeg used on input line 213.
+Package pdftex.def Info: ..//figure/cases_2pannel.jpeg used on input line 242.
 (pdftex.def)             Requested size: 455.30013pt x 357.7497pt.
 
 <..//figure/SM_comp.jpeg, id=43, 481.8pt x 481.8pt>
 File: ..//figure/SM_comp.jpeg Graphic file (type jpg)
 
 <use ..//figure/SM_comp.jpeg>
-Package pdftex.def Info: ..//figure/SM_comp.jpeg used on input line 221.
+Package pdftex.def Info: ..//figure/SM_comp.jpeg used on input line 250.
 (pdftex.def)             Requested size: 455.30013pt x 455.31075pt.
 
 
@@ -382,22 +382,9 @@ might try typing `S' now just to see what is salvageable.
 Missing character: There is no ‚ in font cmr12!
 Missing character: There is no Ä in font cmr12!
 Missing character: There is no ê in font cmr12!
-[17]
+[17] [18]
 ! Misplaced alignment tab character &.
-<argument> Trends in Ecology /&
-                                Evolution
-l.140 ...on? \emph{Trends in Ecology /& Evolution}
-                                                   \textbf{7}, 274
-I can't figure out why you would want to use a tab mark
-here. If you just want an ampersand, the remedy is
-simple: Just type `I\&' now. But if some right brace
-up above has ended a previous alignment prematurely,
-you're probably due for more error messages, and you
-might try typing `S' now just to see what is salvageable.
-
-[18]
-! Misplaced alignment tab character &.
-l.180 ...1980) \emph{Forest Ecology}. John Wiley &
+l.175 ...1980) \emph{Forest Ecology}. John Wiley &
                                                   Sons, 3rd
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -408,13 +395,13 @@ might try typing `S' now just to see what is salvageable.
 
 )
 
-Package natbib Warning: Citation `(' on page 19 undefined on input line 232.
+Package natbib Warning: Citation `(' on page 19 undefined on input line 261.
 
 [19]
 ! Undefined control sequence.
 <recently read> \ident 
                        
-l.235 \ident
+l.264 \ident
              For modeling trait associates we chose three predictors to repr...
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -424,14 +411,14 @@ and I'll forget about whatever was undefined.
 
 
 Package natbib Warning: Citation `Wilcox2000' on page 20 undefined on input lin
-e 237.
+e 266.
 
 
 Package natbib Warning: Citation `Bates2014' on page 20 undefined on input line
- 238.
+ 267.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--240
+Underfull \hbox (badness 10000) in paragraph at lines 263--269
 
  []
 
@@ -439,7 +426,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 234--240
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.259 Species&Effect size flowering (sd)&R^
+l.288 Species&Effect size flowering (sd)&R^
                                            2&Effect size leafing (sd)&R^2\\
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -447,7 +434,7 @@ you left one out. Proceed, with fingers crossed.
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.259 Species&Effect size flowering (sd)&R^2&
+l.288 Species&Effect size flowering (sd)&R^2&
                                              Effect size leafing (sd)&R^2\\
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -458,7 +445,7 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.259 Species&Effect size flowering (sd)&R^2&
+l.288 Species&Effect size flowering (sd)&R^2&
                                              Effect size leafing (sd)&R^2\\
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -466,7 +453,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.259 Species&Effect size flowering (sd)&R^2&
+l.288 Species&Effect size flowering (sd)&R^2&
                                              Effect size leafing (sd)&R^2\\
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -477,7 +464,7 @@ my insertion and my current dilemma will both disappear.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.259 ...ring (sd)&R^2&Effect size leafing (sd)&R^
+l.288 ...ring (sd)&R^2&Effect size leafing (sd)&R^
                                                   2\\
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -485,7 +472,7 @@ you left one out. Proceed, with fingers crossed.
 ! Extra }, or forgotten $.
 <template> \unskip \hfil }
                           \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.260 \hline
+l.289 \hline
             
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -496,7 +483,7 @@ deleted material, e.g., by typing `I$}'.
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.260 \hline
+l.289 \hline
             
 I've inserted a begin-math/end-math symbol since I think
 you left one out. Proceed, with fingers crossed.
@@ -504,7 +491,7 @@ you left one out. Proceed, with fingers crossed.
 ! Missing } inserted.
 <inserted text> 
                 }
-l.260 \hline
+l.289 \hline
             
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -513,7 +500,7 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 
-Overfull \hbox (0.72772pt too wide) in paragraph at lines 257--266
+Overfull \hbox (0.72772pt too wide) in paragraph at lines 286--295
 [][] 
  []
 
@@ -521,10 +508,10 @@ Overfull \hbox (0.72772pt too wide) in paragraph at lines 257--266
 File: ..//figure/michtreeplot.jpeg Graphic file (type jpg)
 
 <use ..//figure/michtreeplot.jpeg>
-Package pdftex.def Info: ..//figure/michtreeplot.jpeg used on input line 274.
+Package pdftex.def Info: ..//figure/michtreeplot.jpeg used on input line 303.
 (pdftex.def)             Requested size: 535.74765pt x 520.34598pt.
 
-Overfull \hbox (80.44753pt too wide) in paragraph at lines 274--275
+Overfull \hbox (80.44753pt too wide) in paragraph at lines 303--304
  [][] 
  []
 
@@ -535,10 +522,10 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: ..//figure/silvtreeplot.jpeg Graphic file (type jpg)
 
 <use ..//figure/silvtreeplot.jpeg>
-Package pdftex.def Info: ..//figure/silvtreeplot.jpeg used on input line 281.
+Package pdftex.def Info: ..//figure/silvtreeplot.jpeg used on input line 310.
 (pdftex.def)             Requested size: 535.74765pt x 520.34598pt.
 
-Overfull \hbox (80.44753pt too wide) in paragraph at lines 281--282
+Overfull \hbox (80.44753pt too wide) in paragraph at lines 310--311
  [][] 
  []
 
@@ -546,10 +533,10 @@ Overfull \hbox (80.44753pt too wide) in paragraph at lines 281--282
 File: ..//figure/HFtreeplot.jpeg Graphic file (type jpg)
 
 <use ..//figure/HFtreeplot.jpeg>
-Package pdftex.def Info: ..//figure/HFtreeplot.jpeg used on input line 288.
+Package pdftex.def Info: ..//figure/HFtreeplot.jpeg used on input line 317.
 (pdftex.def)             Requested size: 535.74765pt x 520.34598pt.
 
-Overfull \hbox (80.44753pt too wide) in paragraph at lines 288--289
+Overfull \hbox (80.44753pt too wide) in paragraph at lines 317--318
  [][] 
  []
 
@@ -557,22 +544,26 @@ Overfull \hbox (80.44753pt too wide) in paragraph at lines 288--289
 Package natbib Warning: There were undefined citations.
 
 [21] [22 <..//figure/michtreeplot.jpeg>] [23 <..//figure/silvtreeplot.jpeg>]
-[24 <..//figure/HFtreeplot.jpeg>] (./rethinking_FLS_draft.aux) ) 
+[24 <..//figure/HFtreeplot.jpeg>] (./rethinking_FLS_draft.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+) ) 
 Here is how much of TeX's memory you used:
- 3245 strings out of 492995
- 45675 string characters out of 6132704
- 131502 words of memory out of 5000000
- 6745 multiletter control sequences out of 15000+600000
+ 3243 strings out of 492995
+ 45627 string characters out of 6132704
+ 131511 words of memory out of 5000000
+ 6743 multiletter control sequences out of 15000+600000
  10280 words of font info for 37 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  39i,10n,26p,2568b,276s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/tex
-live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texl
-ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texliv
-e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/
-2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/201
-7/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on rethinking_FLS_draft.pdf (24 pages, 610166 bytes).
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pf
+b></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></
+usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on rethinking_FLS_draft.pdf (24 pages, 609705 bytes).
 PDF statistics:
  110 PDF objects out of 1000 (max. 8388607)
  69 compressed objects within 1 object stream
