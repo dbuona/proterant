@@ -34,7 +34,7 @@ frax<-read.csv("datasheets_derived/fraxinus_delta_hyst.csv",header=TRUE)
 aes<-read.csv("datasheets_derived/aes_delta_hyst.csv",header=TRUE)
 
 #data 2,3, and 4c
-HF<-read.csv("hf003-05-mean-ind.csv",header=TRUE)
+HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
 HF$phys.offset<-HF$bb.jd-HF$fbb.jd
 HF$funct.offset<-HF$l75.jd-HF$fopn.jd
 
@@ -107,8 +107,8 @@ alphaALN<-mean(aln.dat$Intercept)
 alphaALNlow<-mean(aln.dat$Intercept.2.5)
 alphaALNhigh<-mean(aln.dat$Intercept.97.5)
 betaALN<-mean(aln.dat$slope)
-#betaALNlow<-mean(aln.dat$slope.2.5)
-#betaALNhigh<-mean(aln.dat$slope.97.5)
+betaALNlow<-mean(aln.dat$slope.2.5)
+betaALNhigh<-mean(aln.dat$slope.97.5)
 
 ####Fraxinus model
 fit.frax.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=frax) 
@@ -167,32 +167,64 @@ allalphas2<-aes.dat$Intercept
 
 # graph
 
-jpeg("..//figure/FLS_climate_change.jpeg")
-plot(c(1960,2015), c(-30,45), type = "n", xlab = "year", ylab = "FLS offset", bty='l')
+png("..//figure/FLS_climate_change.png",width = 5, height = 6, units = 'in', res = 300)
+plot(c(1960,2015), c(-30,50), type = "n", xlab = "year", ylab = "Days between flowering and leafing", bty='l')
 #rect(xleft=1960, ybottom=-30, xright=1980, ytop=50,col="ivory1" )
 #rect(xleft=1980, ybottom=-30, xright=2015, ytop=50,col="ivory2")
-segments(x0=1980,y0=allalphas,x1=2015,y1=allalphas+allbetas*35,col="azure3",lty="dotted",alpha= 0.4 )
-segments(x0=1960,y0=allalphas,x1=1980,y1=allalphas,col="azure3",lty="dotted",alpha=0.4 )
-segments(x0=1980,y0=allalphas1,x1=2015,y1=allalphas1+allbetas1*35,col="azure3")
-segments(x0=1960,y0=allalphas1,x1=1980,y1=allalphas1,col="azure3",alpha=0.4 )
-segments(x0=1980,y0=allalphas2,x1=2015,y1=allalphas2+allbetas2*35,col="azure3",lty="dashed",alpha=0.4 )
-segments(x0=1960,y0=allalphas2,x1=1980,y1=allalphas2,col="azure3",lty="dashed",alpha=0.4 )
-segments(x0=1960,y0=alphaALN, x1=1980,y1=alphaALN,col="darkgreen",lwd=3)
-segments(x0=1980,y0=alphaALN, x1=2015,y1=alphaALN+betaALN*35,col="darkgreen",lwd=3)
-segments(x0=1960,y0=alphaALNlow, x1=2015,y1=alphaALNlow, lty=2, col="darkgreen",lwd=2)
-segments(x0=1960,y0=alphaALNhigh, x1=2015,y1=alphaALNhigh, lty=2, col="darkgreen",lwd=2)
-segments(x0=1960,y0=alphaFRAX, x1=1980,y1=alphaFRAX,col="red",lwd=3)
-segments(x0=1980,y0=alphaFRAX, x1=2015,y1=alphaFRAX+betaFRAX*35,col="red",lwd=3)
-segments(x0=1960,y0=alphaFRAXlow, x1=2015,y1=alphaFRAXlow, lty=2,col="red",lwd=2)
-segments(x0=1960,y0=alphaFRAXhigh, x1=2015,y1=alphaFRAXhigh, lty=2,col="red",lwd=2)
+segments(x0=1980,y0=allalphas,x1=2015,y1=allalphas+allbetas*35,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted", lwd=0.1 )
+segments(x0=1960,y0=allalphas,x1=1980,y1=allalphas,col=rgb(.1,.1,.1,alpha=0.1),lty="dotted",lwd=0.1 )
+segments(x0=1980,y0=allalphas1,x1=2015,y1=allalphas1+allbetas1*35,col=rgb(0,0,0,alpha=0.1),lty="dotted",lwd=0.1)
+segments(x0=1960,y0=allalphas1,x1=1980,y1=allalphas1,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted",lwd=0.1)
+segments(x0=1980,y0=allalphas2,x1=2015,y1=allalphas2+allbetas2*35,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted",lwd=0.1 )
+segments(x0=1960,y0=allalphas2,x1=1980,y1=allalphas2,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted",lwd=0.1 )
+segments(x0=1960,y0=alphaALN, x1=1980,y1=alphaALN,col="red",lwd=3)
+segments(x0=1980,y0=alphaALN, x1=2015,y1=alphaALN+betaALN*35,col="red",lwd=3)
+rect(xleft=1960,xright=2015,ybottom=alphaALNlow,ytop=alphaALNhigh,col=rgb(1,0,0,alpha=0.3),border=NA)
+#segments(x0=1980, y0=alphaALN-betaALNlow,x1=2015,y1=alphaALN-betaALNlow+betaALN*35) was trying to add cis to slope but too small to see
+
+#segments(x0=1960,y0=alphaALNlow, x1=2015,y1=alphaALNlow, lty=4, col="red",lwd=1)
+#segments(x0=1960,y0=alphaALNhigh, x1=2015,y1=alphaALNhigh, lty=4, col="red",lwd=1)
+segments(x0=1960,y0=alphaFRAX, x1=1980,y1=alphaFRAX,col="darkgoldenrod1",lwd=3)
+segments(x0=1980,y0=alphaFRAX, x1=2015,y1=alphaFRAX+betaFRAX*35,col="darkgoldenrod1",lwd=3)
+rect(xleft=1960,xright=2015,ybottom=alphaFRAXlow,ytop=alphaFRAXhigh,col=rgb(1,.8,0,alpha=0.3),border=NA)
+
+#segments(x0=1960,y0=alphaFRAXlow, x1=2015,y1=alphaFRAXlow, lty=4,col="yellow",lwd=1)
+#segments(x0=1960,y0=alphaFRAXhigh, x1=2015,y1=alphaFRAXhigh, lty=4,col="yellow",lwd=1)
 segments(x0=1960,y0=alphaAES, x1=1980,y1=alphaAES,col="blue",lwd=3)
 segments(x0=1980,y0=alphaAES, x1=2015,y1=alphaAES+betaAES*35,col="blue",lwd=3)
-segments(x0=1960,y0=alphaAESlow, x1=2015,y1=alphaAESlow, lty=2,col="blue",lwd=2)
-segments(x0=1960,y0=alphaAEShigh, x1=2015,y1=alphaAEShigh, lty=2,col="blue",lwd=2)
-legend(2000,3, legend=c("A. glutinosa", "F. excelsior","A. hippocastanum"),col=c("darkgreen", "red","blue"), lwd=2, cex=0.6)
+rect(xleft=1960,xright=2015,ybottom=alphaAESlow,ytop=alphaAEShigh,col=rgb(0,0,1,alpha=0.3),border=NA)
+
+#segments(x0=1960,y0=alphaAESlow, x1=2015,y1=alphaAESlow, lty=4,col="blue",lwd=1)
+#segments(x0=1960,y0=alphaAEShigh, x1=2015,y1=alphaAEShigh, lty=4,col="blue",lwd=1)
+par(xpd=FALSE)
+legend("top", legend=c("A. glutinosa", "F. excelsior","A. hippocastanum"),col=c("red", "darkgoldenrod1","blue"), lwd=2, cex=0.6, horiz=TRUE)
 dev.off()
 
 ##################################Analysis II####################################################
+unique(HF$species)
+#rename all taxa
+HF$name[HF$species=="ACPE"]<-"A. pensylvanicum"
+HF$name[HF$species=="ACRU"]<-"*A. rubrum*"
+HF$name[HF$species=="ACSA"]<-"*A. saccharrum*"
+HF$name[HF$species=="AMSP"]<-"A. species"
+HF$name[HF$species=="BEAL"]<-"*B. allegheniensis*"
+HF$name[HF$species=="BELE"]<-"*B. lenta*"
+HF$name[HF$species=="BEPA"]<-"*B. papyrifera*"
+HF$name[HF$species=="BEPO"]<-"*B. populifolia*"
+HF$name[HF$species=="FAGR"]<-"*F. grandifolia*"
+HF$name[HF$species=="FRAM"]<-"*F. americana*"
+HF$name[HF$species=="HAVI"]<-"H. virginiana"
+HF$name[HF$species=="ILVE"]<-"I. verticillata"
+HF$name[HF$species=="KAAN"]<-"K. angustifolia"
+HF$name[HF$species=="KALA"]<-"K. latifolia"
+HF$name[HF$species=="NEMU"]<-"I. mucronata"
+HF$name[HF$species=="NYSY"]<-"N. sylvatica"
+HF$name[HF$species=="POTR"]<-"*P. tremuloides*"
+HF$name[HF$species=="PRSU"]<-"P. serotina"
+HF$name[HF$species=="QURU"]<-"*Q. rubra*"
+HF$name[HF$species=="QUVE"]<-"*Q. velutina*"
+
+
 HF.averages<-dplyr::filter(HF, species %in% c("ACRU","BEAL" ,"QURU","ACPE","NYSY" ))
 
 HF.averages$name[HF.averages$species=="ACPE"]<-"A. pensylvanicum"
@@ -209,6 +241,15 @@ HF.averages<-tidyr::gather(HF.averages, phase,DOY,4:7)
 HF.averages$name <- factor(HF.averages$name, levels = c("A. rubrum","B. alleghaniensis" ,"Q. rubra","A. pensylvanicum","N. sylvatica"))
 pd<-position_dodge(width=0.0)
 
+###if you want a bigger data set to plot
+colnames(HF)
+colnames(HF)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (75%)","flower budburst","flower open","physiological offset","functional offset","name")
+HF2<-tidyr::gather(HF2, phase,DOY,4:7)
+HF2<-filter(HF2,!is.na(name))
+png("..//figure/HFmeans_expanded.png",width = 8, height = 6, units = 'in', res=300)
+ggplot(HF2,(aes(name,DOY)))+stat_summary(fun.y = mean, fun.ymin = min, fun.ymax = max,aes(color=phase))+scale_color_manual(values=c("blue","purple","green","darkgreen"))+theme_base()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(angle = 300,hjust=0))
+dev.off()
+###reduce sp
 jpeg("..//figure/HFmeans.jpeg",width = 800, height = 550)
 ggplot(HF.averages,(aes(name,DOY)))+stat_summary(fun.data = "mean_cl_boot",aes(color=phase,shape=phase),position=pd,size=0.78)+scale_color_manual(values=c("firebrick1","deeppink","lawngreen","darkgreen"))+scale_shape_manual(values=c(16,8,0,23))+theme_base()+ylab("Day of Year")+xlab(NULL)#+theme(axis.text.x = element_text(angle = 300,hjust=0.5))
 dev.off()
@@ -216,7 +257,9 @@ dev.off()
 ########Analysis 3 Quercus rubra at HF.........
 QURU<-filter(HF,species=="QURU")
 QURU<-filter(QURU,tree.id!="QURU-02")
-QURU$FLS<-ifelse(QURU$phys.offset<0,"seranthous","hysteranthous")
+colnames(QURU)
+QURU$FLS<-ifelse(QURU$"physiological offset"<0,"seranthous","hysteranthous")
+colnames(QURU)<-c("year","tree.id","species","leaf_budburst","leaf_expansion(75%)","flower_budburst","flower_open","physiological_offset","functional_offset","name","FLS")
 QURU<-drop_na(QURU)
 QURU$tree.id[QURU$tree.id=="QURU-01"]<-"1"
 QURU$tree.id[QURU$tree.id=="QURU-03"]<-"3"
@@ -224,7 +267,9 @@ QURU$tree.id[QURU$tree.id=="QURU-04"]<-"4"
 
 jpeg("..//figure/HF_Q_ru_interannual.jpeg",width = 800, height = 550)
 pd2<-position_dodge2(0.8)
-ggplot(QURU,aes(year,fbb.jd))+geom_point(aes(year,fbb.jd,color=tree.id,group = row.names(QURU)),shape=8, size=4,position=pd2)+geom_point(aes(year,bb.jd,color=tree.id,group = row.names(QURU)),shape=18,size=3,position=pd2)+geom_linerange(aes(x=year,ymin=fbb.jd,ymax=bb.jd, linetype=FLS,color=tree.id,group = row.names(QURU)),position=pd2)+theme_base()+labs(y = "Day of year",color= "Tree I.D.")+scale_color_manual(values=c("red","blue","darkgreen"))
+
+ggplot(QURU,aes(year,flower_open))+geom_point(aes(year,flower_open,color=tree.id,group = row.names(QURU)),shape=8, size=4,position=pd2)+
+  geom_point(aes(year,leaf_budburst,color=tree.id,group = row.names(QURU)),shape=18,size=3,position=pd2)+geom_linerange(aes(x=year,ymin=flower_open,ymax=bb.jd, linetype=FLS,color=tree.id,group = row.names(QURU)),position=pd2)+theme_base()+labs(y = "Day of year",color= "Tree I.D.")+scale_color_manual(values=c("red","blue","darkgreen"))
 dev.off()
 
 #######Analysis 3 come back to this once Lizzie talk to Jonath.
@@ -538,7 +583,7 @@ pd2=position_dodgev(height=0.4)
 hf.cont.noint<-ggplot(cont.noint,aes(Estimate,trait))+geom_point(aes(color=class),position=pd2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=class),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=class),linetype="dotted",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("HF-Continuous")
 hf.bin.noint<-ggplot(bin.noint,aes(Estimate,trait))+geom_point(aes(color=class),position=pd2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=class),linetype="solid",position=pd2,width=0)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=class),linetype="dotted",position=pd2,width=0)+geom_vline(aes(xintercept=0),color="black")+theme_base()+scale_color_manual(values=c("orchid4", "springgreen4"))+ggtitle("HF-Binary")
 
-jpeg("..//figure/HF_cont_and_bin.jpeg")
+png("..//figure/HF_cont_and_bin.png",)
 grid.arrange(hf.cont.noint,hf.bin.noint,nrow=1) ###50 and 80 CIS
 dev.off()
 
