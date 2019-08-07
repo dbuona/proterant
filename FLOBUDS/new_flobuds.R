@@ -325,7 +325,7 @@ dev.off()
 
 sps.plot.3effectonly<-filter(goodsps2, Predictor!="Intercept")
 
-jpeg("Plots/flo_buds_figures/3phase_sppeffectsgoodsps_nointercept.jpeg",height=500)
+jpeg("Plots/flo_buds_figures/3phase_sppeffectsgoodsps_nointercept.jpeg",width=1800,height=1000,res=200)
 ggplot(sps.plot.3effectonly,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.5)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~taxa)+geom_vline(aes(xintercept=0),color="black")+theme_base(base_size = 10)
 dev.off()
 
