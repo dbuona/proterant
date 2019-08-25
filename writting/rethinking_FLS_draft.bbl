@@ -1,4 +1,4 @@
-\begin{thebibliography}{40}
+\begin{thebibliography}{33}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{DWD(2019)}]{DWD}
@@ -18,10 +18,6 @@ Bolmgren, K., Eriksson, O. \& Linder, H.P. (2003) Contrasting flowering
 \bibitem[{Borchert({1983})}]{Borchert1983}
 Borchert, R. ({1983}) {PHENOLOGY AND CONTROL OF FLOWERING IN TROPICAL TREES}.
   \emph{{BIOTROPICA}} \textbf{{15}}, {81--89}.
-
-\bibitem[{B{\"u}rkner(2018)}]{Burkner2018}
-B{\"u}rkner, P.C. (2018) Advanced bayesian multilevel modeling with the r
-  package brms. \emph{R Journal} \textbf{10}, 395--411.
 
 \bibitem[{Burns \emph{et~al.}(1990)Burns, Honkala \&
   coordinators{$]$}}]{Burns1990}
@@ -79,10 +75,6 @@ Friedman, J. \& Barrett, S.C.H. (2009) Wind of change: new insights on the
   ecology and evolution of pollination and mating in wind-pollinated plants.
   \emph{Annals of Botany} \textbf{103}, 1515--1527.
 
-\bibitem[{Gellman \& Hill(2997)}]{Gelman2007}
-Gellman, A. \& Hill, J. (2997) \emph{Data Analysis Using Regression and
-  Multilevel/Hierarchical Models}. Cambridge University Press.
-
 \bibitem[{Gougherty \& Gougherty(2018)}]{Gougherty2018}
 Gougherty, A.V. \& Gougherty, S.W. (2018) Sequence of flower and leaf emergence
   in deciduous trees is linked to ecological traits, phylogenetics, and
@@ -92,25 +84,9 @@ Gougherty, A.V. \& Gougherty, S.W. (2018) Sequence of flower and leaf emergence
 Heinig, R. (1899) Glossary of the botanic terms used in describing flowering
   plants. Calcutta, India.
 
-\bibitem[{Ho \& Ane(2014)}]{Ho2014}
-Ho, L.S.T. \& Ane, C. (2014) A linear-time algorithm for gaussian and
-  non-gaussian trait evolution models. \emph{Systematic Biology} \textbf{63},
-  397--408.
-
-\bibitem[{Ives \& Garland(2010)Ives \& Garland, Jr.}]{Ives2010}
-Ives, A.R. \& Garland, Jr., T. (2010) Phylogenetic logistic regression for
-  binary dependent variables. \emph{Systematic Biology} \textbf{59}, 9--26.
-
-\bibitem[{Ivits \emph{et~al.}(2013)Ivits, Horion, Fensholt \&
-  Cherlet}]{Ivits_2013}
-Ivits, E., Horion, S., Fensholt, R. \& Cherlet, M. (2013) Drought footprint on
-  european ecosystems between 1999 and 2010 assessed by remotely sensed
-  vegetation phenology and productivity. \emph{Global Change Biology}
-  \textbf{20}, 581--593.
-
 \bibitem[{Janzen(1967)}]{Janzen1967}
 Janzen, D.H. (1967) Synchronization of sexual reproduction of trees within the
-  dry season in central america \textbf{21}, 620--637.
+  dry season in central america. \emph{Evolution} \textbf{21}, 620--637.
 
 \bibitem[{Lamont \& Downes(2011)}]{Lamont2011}
 Lamont, B.B. \& Downes, K.S. (2011) Fire-stimulated flowering among resprouters
@@ -139,12 +115,6 @@ Niklas, K.J. (1985) The aerodynamics of wind pollination \textbf{51}, 328--386.
 
 \bibitem[{O'Keefe(2015)}]{OKeefe2015}
 O'Keefe, J. (2015) Phenology of woody species at harvard forest since 1990.
-
-\bibitem[{Orme \emph{et~al.}(2013)Orme, Freckleton, Thomas, Petzoldt, Fritz,
-  Isaac \& Pearse}]{Orme2013}
-Orme, D., Freckleton, R., Thomas, G., Petzoldt, T., Fritz, S., Isaac, N. \&
-  Pearse, W. (2013) \emph{caper: Comparative Analyses of Phylogenetics and
-  Evolution in R}.
 
 \bibitem[{Piao \emph{et~al.}(2007)Piao, Friedlingstein, Ciais, Viovy \&
   Demarty}]{Piao2007}
@@ -188,7 +158,7 @@ Templ, B., Koch, E., K.Bolmgren, Ungersb{\"o}ck, M., Paul, A., Scheifinger, H.
 
 \bibitem[{Whitehead(1969)}]{Whitehead1969}
 Whitehead, D.R. (1969) Wind pollination in the angiosperms: Evolutionary and
-  environmental considerations \textbf{23}, 28--35.
+  environmental considerations. \emph{Evolution} \textbf{23}, 28--35.
 
 \bibitem[{Wilczek \emph{et~al.}(2010)Wilczek, Burghardt, Cobb, Cooper, Welch \&
   Schmitt}]{Wilczek2010}
@@ -197,12 +167,5 @@ Wilczek, A.M., Burghardt, L.T., Cobb, A.R., Cooper, M.D., Welch, S.M. \&
   to current and predicted climates. \emph{Philosophical transactions of the
   Royal Society of London. Series B, Biological sciences} \textbf{365},
   3129--3147.
-
-\bibitem[{Zanne \emph{et~al.}(2013)Zanne, Tank, Cornwell, Eastman, Smith,
-  FitzJohn, McGlinn, O'Meara, Moles, Reich \& et~al.}]{Zanne2013}
-Zanne, A.E., Tank, D.C., Cornwell, W.K., Eastman, J.M., Smith, S.A., FitzJohn,
-  R.G., McGlinn, D.J., O'Meara, B.C., Moles, A.T., Reich, P.B. \& et~al. (2013)
-  Three keys to the radiation of angiosperms into freezing environments.
-  \emph{Nature} \textbf{506}, 89--92.
 
 \end{thebibliography}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  5 AUG 2019 15:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  14 AUG 2019 13:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -165,39 +165,56 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 LaTeX Info: Redefining \[ on input line 2817.
 LaTeX Info: Redefining \] on input line 2818.
 )
+(/usr/local/texlive/2017/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2005/11/02 line numbers on paragraphs v4.41
+\linenopenalty=\count104
+\output=\toks21
+\linenoprevgraf=\count105
+\linenumbersep=\dimen126
+\linenumberwidth=\dimen127
+\c@linenumber=\count106
+\c@pagewiselinenumber=\count107
+\c@LN@truepage=\count108
+\c@internallinenumber=\count109
+\c@internallinenumbers=\count110
+\quotelinenumbersep=\dimen128
+\bframerule=\dimen129
+\bframesep=\dimen130
+\bframebox=\box28
+LaTeX Info: Redefining \\ on input line 3056.
+)
 (/usr/local/texlive/2017/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 )
-(./rethinking_FLS_draft.aux)
+No file rethinking_FLS_draft.aux.
 \openout1 = `rethinking_FLS_draft.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 72.
+LaTeX Font Info:    ... okay on input line 72.
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count104
-\scratchdimen=\dimen126
-\scratchbox=\box28
-\nofMPsegments=\count105
-\nofMParguments=\count106
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count107
-\MPscratchDim=\dimen127
-\MPnumerator=\count108
-\makeMPintoPDFobject=\count109
-\everyMPtoPDFconversion=\toks22
+\scratchcounter=\count111
+\scratchdimen=\dimen131
+\scratchbox=\box29
+\nofMPsegments=\count112
+\nofMParguments=\count113
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count114
+\MPscratchDim=\dimen132
+\MPnumerator=\count115
+\makeMPintoPDFobject=\count116
+\everyMPtoPDFconversion=\toks23
 ) (/usr/local/texlive/2017/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -285,7 +302,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.75 \end{enumerate}
+l.77 \end{enumerate}
                     
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -293,91 +310,305 @@ If that doesn't work, type  X <return>  to quit.
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2] [3] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 120--124
+
+Package natbib Warning: Citation `Forrest2010' on page 2 undefined on input lin
+e 93.
+
+
+Package natbib Warning: Citation `Cleland2007' on page 2 undefined on input lin
+e 93.
+
+
+Package natbib Warning: Citation `Piao2007' on page 2 undefined on input line 9
+3.
+
+
+Package natbib Warning: Citation `Ettinger2018' on page 2 undefined on input li
+ne 93.
+
+
+Package natbib Warning: Citation `Robertson1895' on page 2 undefined on input l
+ine 94.
+
+
+Package natbib Warning: Citation `Savage2019' on page 2 undefined on input line
+ 94.
+
+
+Package natbib Warning: Citation `Gougherty2018' on page 2 undefined on input l
+ine 94.
+
+
+Package natbib Warning: Citation `Rathcke_1985' on page 2 undefined on input li
+ne 94.
+
+
+LaTeX Warning: Reference `fig:Figure 1' on page 2 undefined on input line 95.
+
+
+Package natbib Warning: Citation `Gougherty2018' on page 2 undefined on input l
+ine 97.
+
+
+Package natbib Warning: Citation `Savage2019' on page 2 undefined on input line
+ 97.
+
+
+Package natbib Warning: Citation `Lechowicz_1995' on page 2 undefined on input 
+line 97.
+
+
+Package natbib Warning: Citation `Ettinger2018' on page 2 undefined on input li
+ne 97.
+
+
+Package natbib Warning: Citation `OKeefe2015' on page 2 undefined on input line
+ 100.
+
+
+Package natbib Warning: Citation `Lamont2011' on page 2 undefined on input line
+ 101.
+
+
+Package natbib Warning: Citation `Heinig1899' on page 2 undefined on input line
+ 101.
+
+
+LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 101.
+
+
+LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 102.
+
+
+Package natbib Warning: Citation `Lamont2011' on page 2 undefined on input line
+ 103.
+
+
+LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 104.
+
+
+LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 104.
+
+[2] [3]
+
+Package natbib Warning: Citation `Whitehead1969' on page 4 undefined on input l
+ine 112.
+
+
+Package natbib Warning: Citation `Spurr1980' on page 4 undefined on input line 
+112.
+
+
+Package natbib Warning: Citation `Friedman2009' on page 4 undefined on input li
+ne 112.
+
+
+LaTeX Warning: Reference `fig:Figure 2' on page 4 undefined on input line 113.
+
+
+Package natbib Warning: Citation `Janzen1967' on page 4 undefined on input line
+ 116.
+
+
+Package natbib Warning: Citation `Franklin2016' on page 4 undefined on input li
+ne 116.
+
+
+Package natbib Warning: Citation `Primack1987' on page 4 undefined on input lin
+e 119.
+
+
+Package natbib Warning: Citation `Savage2019' on page 4 undefined on input line
+ 121.
+
+
+LaTeX Warning: Reference `fig:Figure 2' on page 4 undefined on input line 121.
+
+
+Package natbib Warning: Citation `Savage2019' on page 4 undefined on input line
+ 121.
+
+[4]
+
+Package natbib Warning: Citation `OKeefe2015' on page 5 undefined on input line
+ 128.
+
+
+LaTeX Warning: Reference `fig: Figure 3' on page 5 undefined on input line 128.
+
+
+
+Package natbib Warning: Citation `PEP725' on page 5 undefined on input line 128
+.
+
+[5]
+
+Package natbib Warning: Citation `Flynn2018' on page 6 undefined on input line 
+137.
+
+
+Package natbib Warning: Citation `Rathcke_1985' on page 6 undefined on input li
+ne 137.
+
+[6]
+
+Package natbib Warning: Citation `Wilczek2010' on page 7 undefined on input lin
+e 139.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 139--141
 
  []
 
-[5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 137--139
 
+Package natbib Warning: Citation `Niklas1985' on page 7 undefined on input line
+ 145.
+
+
+Package natbib Warning: Citation `Nathan2005' on page 7 undefined on input line
+ 145.
+
+
+Package natbib Warning: Citation `Milleron2012' on page 7 undefined on input li
+ne 145.
+
+
+Package natbib Warning: Citation `Primack1987' on page 7 undefined on input lin
+e 145.
+
+
+Package natbib Warning: Citation `Borchert1983' on page 7 undefined on input li
+ne 145.
+
+
+Package natbib Warning: Citation `Reich1984' on page 7 undefined on input line 
+145.
+
+
+Package natbib Warning: Citation `Gougherty2018' on page 7 undefined on input l
+ine 145.
+
+
+Package natbib Warning: Citation `Bolmgren2003' on page 7 undefined on input li
+ne 146.
+
+
+Package natbib Warning: Citation `Gougherty2018' on page 7 undefined on input l
+ine 146.
+
+
+Package natbib Warning: Citation `Barnes2004' on page 7 undefined on input line
+ 148.
+
+
+Package natbib Warning: Citation `Barnes2016' on page 7 undefined on input line
+ 148.
+
+
+Package natbib Warning: Citation `Burns1990' on page 7 undefined on input line 
+148.
+
+
+Package natbib Warning: Citation `OKeefe2015' on page 7 undefined on input line
+ 148.
+
+
+Package natbib Warning: Citation `PEP725' on page 7 undefined on input line 148
+.
+
+
+LaTeX Warning: Reference `fig:Figure 4' on page 7 undefined on input line 149.
+
+
+LaTeX Warning: Reference `fig:Figure S1' on page 7 undefined on input line 149.
+
+
+
+Package natbib Warning: Citation `DWD' on page 7 undefined on input line 150.
+
+
+LaTeX Warning: Reference `fig:Figure 4' on page 7 undefined on input line 150.
+
+
+LaTeX Warning: Reference `fig:Figure S2' on page 7 undefined on input line 151.
+
+
+
+Overfull \hbox (1.64816pt too wide) in paragraph at lines 145--153
+[]\OT1/cmr/m/n/12 Direct tests of these hy-pothe-ses are rel-a-tively rare in t
+he lit-er-a-ture, and--when tested---
  []
 
 [7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 155--157
+
+Package natbib Warning: Citation `Davies2019' on page 9 undefined on input line
+ 158.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 157--159
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 158--159
+Underfull \hbox (badness 10000) in paragraph at lines 160--161
+
+ []
+
+
+Package natbib Warning: Citation `Finn2007' on page 10 undefined on input line 
+162.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 164--166
 
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 162--164
 
- []
+Package natbib Warning: Citation `Forrest2010' on page 11 undefined on input li
+ne 167.
 
 
-Package natbib Warning: Citation `Flynn2019' on page 11 undefined on input line
- 165.
+Package natbib Warning: Citation `Flynn2018' on page 11 undefined on input line
+ 167.
 
-<..//figure/FLS_climate_change.png, id=38, 1505.625pt x 1806.75pt>
+<..//figure/FLS_climate_change.png, id=39, 1505.625pt x 1806.75pt>
 File: ..//figure/FLS_climate_change.png Graphic file (type png)
 
 <use ..//figure/FLS_climate_change.png>
 Package pdftex.def Info: ..//figure/FLS_climate_change.png used on input line 2
-13.
+14.
 (pdftex.def)             Requested size: 455.30013pt x 546.35748pt.
 
-<..//figure/HFmeans_expanded.png, id=40, 2409.0pt x 1806.75pt>
+<..//figure/HFmeans_expanded.png, id=41, 2409.0pt x 1806.75pt>
 File: ..//figure/HFmeans_expanded.png Graphic file (type png)
 
 <use ..//figure/HFmeans_expanded.png>
-Package pdftex.def Info: ..//figure/HFmeans_expanded.png used on input line 219
+Package pdftex.def Info: ..//figure/HFmeans_expanded.png used on input line 221
 .
 (pdftex.def)             Requested size: 455.30013pt x 341.46654pt.
 
-<..//figure/HF_Q_ru_interannual.jpeg, id=41, 803.0pt x 552.0625pt>
+<..//figure/HF_Q_ru_interannual.jpeg, id=42, 1505.625pt x 752.8125pt>
 File: ..//figure/HF_Q_ru_interannual.jpeg Graphic file (type jpg)
 
 <use ..//figure/HF_Q_ru_interannual.jpeg>
 Package pdftex.def Info: ..//figure/HF_Q_ru_interannual.jpeg used on input line
- 225.
-(pdftex.def)             Requested size: 455.30013pt x 313.02783pt.
+ 228.
+(pdftex.def)             Requested size: 455.30013pt x 227.64894pt.
 
-<..//figure/allcases.jpeg, id=42, 803.0pt x 351.3125pt>
-File: ..//figure/allcases.jpeg Graphic file (type jpg)
+<..//figure/allmods_effectsizes_combined.jpeg, id=43, 1405.25pt x 702.625pt>
+File: ..//figure/allmods_effectsizes_combined.jpeg Graphic file (type jpg)
 
-<use ..//figure/allcases.jpeg>
-Package pdftex.def Info: ..//figure/allcases.jpeg used on input line 232.
-(pdftex.def)             Requested size: 455.30013pt x 199.19952pt.
-
-<..//figure/cases_2pannel.jpeg, id=43, 702.625pt x 552.0625pt>
-File: ..//figure/cases_2pannel.jpeg Graphic file (type jpg)
-
-<use ..//figure/cases_2pannel.jpeg>
-Package pdftex.def Info: ..//figure/cases_2pannel.jpeg used on input line 239.
-(pdftex.def)             Requested size: 455.30013pt x 357.7497pt.
-
-<..//figure/SM_comp.jpeg, id=44, 481.8pt x 481.8pt>
-File: ..//figure/SM_comp.jpeg Graphic file (type jpg)
-
-<use ..//figure/SM_comp.jpeg>
-Package pdftex.def Info: ..//figure/SM_comp.jpeg used on input line 247.
-(pdftex.def)             Requested size: 455.30013pt x 455.31075pt.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-[11] [12 <..//figure/FLS_climate_change.png>] [13 <..//figure/HFmeans_expanded.
-png>] [14 <..//figure/HF_Q_ru_interannual.jpeg> <..//figure/allcases.jpeg>]
-[15 <..//figure/cases_2pannel.jpeg>] (./rethinking_FLS_draft.bbl [16 <..//figur
-e/SM_comp.jpeg>]
+<use ..//figure/allmods_effectsizes_combined.jpeg>
+Package pdftex.def Info: ..//figure/allmods_effectsizes_combined.jpeg used on i
+nput line 236.
+(pdftex.def)             Requested size: 455.30013pt x 227.65353pt.
+ (./rethinking_FLS_draft.bbl
+[11]
 ! Misplaced alignment tab character &.
 <argument> Michgan Shrubs &
                             Vines: A guide to species of the Great Lakes Region
-l.34 ...uide to species of the Great Lakes Region}
+l.30 ...uide to species of the Great Lakes Region}
                                                   . University of Michigan
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -389,7 +620,7 @@ might try typing `S' now just to see what is salvageable.
 ! Misplaced alignment tab character &.
 <argument> Trends in Ecology &
                                Evolution
-l.41   Ecology & Evolution}
+l.37   Ecology & Evolution}
                             \textbf{22}, 357 -- 365.
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -401,9 +632,9 @@ might try typing `S' now just to see what is salvageable.
 Missing character: There is no ‚ in font cmr12!
 Missing character: There is no Ä in font cmr12!
 Missing character: There is no ê in font cmr12!
-[17] [18]
+[12]
 ! Misplaced alignment tab character &.
-l.180 ...1980) \emph{Forest Ecology}. John Wiley &
+l.150 ...1980) \emph{Forest Ecology}. John Wiley &
                                                   Sons, 3rd
 I can't figure out why you would want to use a tab mark
 here. If you just want an ampersand, the remedy is
@@ -412,176 +643,42 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-)
-
-Package natbib Warning: Citation `(' on page 19 undefined on input line 258.
-
-[19]
-! Undefined control sequence.
-<recently read> \ident 
-                       
-l.261 \ident
-             For modeling trait associates we chose three predictors to repr...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Package natbib Warning: Citation `Wilcox2000' on page 20 undefined on input lin
-e 263.
-
-
-Package natbib Warning: Citation `Bates2014' on page 20 undefined on input line
- 264.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--266
-
- []
-
-[20]
-! Missing $ inserted.
-<inserted text> 
-                $
-l.285 Species&Effect size flowering (sd)&R^
-                                           2&Effect size leafing (sd)&R^2\\
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Extra }, or forgotten $.
-<template> \unskip \hfil }
-                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.285 Species&Effect size flowering (sd)&R^2&
-                                             Effect size leafing (sd)&R^2\\
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.285 Species&Effect size flowering (sd)&R^2&
-                                             Effect size leafing (sd)&R^2\\
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.285 Species&Effect size flowering (sd)&R^2&
-                                             Effect size leafing (sd)&R^2\\
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.285 ...ring (sd)&R^2&Effect size leafing (sd)&R^
-                                                  2\\
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Extra }, or forgotten $.
-<template> \unskip \hfil }
-                          \hskip \tabcolsep \hskip -.5\arrayrulewidth \vrule...
-l.286 \hline
-            
-I've deleted a group-closing symbol because it seems to be
-spurious, as in `$x}$'. But perhaps the } is legitimate and
-you forgot something else, as in `\hbox{$x}'. In such cases
-the way to recover is to insert both the forgotten and the
-deleted material, e.g., by typing `I$}'.
-
-! Missing $ inserted.
-<inserted text> 
-                $
-l.286 \hline
-            
-I've inserted a begin-math/end-math symbol since I think
-you left one out. Proceed, with fingers crossed.
-
-! Missing } inserted.
-<inserted text> 
-                }
-l.286 \hline
-            
-I've inserted something that you may have forgotten.
-(See the <inserted text> above.)
-With luck, this will get me unwedged. But if you
-really didn't forget anything, try typing `2' now; then
-my insertion and my current dilemma will both disappear.
-
-
-Overfull \hbox (0.72772pt too wide) in paragraph at lines 283--292
-[][] 
- []
-
-<..//figure/michtreeplot.jpeg, id=79, 804.00375pt x 780.9175pt>
-File: ..//figure/michtreeplot.jpeg Graphic file (type jpg)
-
-<use ..//figure/michtreeplot.jpeg>
-Package pdftex.def Info: ..//figure/michtreeplot.jpeg used on input line 300.
-(pdftex.def)             Requested size: 535.74765pt x 520.34598pt.
-
-Overfull \hbox (80.44753pt too wide) in paragraph at lines 300--301
- [][] 
- []
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<..//figure/silvtreeplot.jpeg, id=80, 804.00375pt x 780.9175pt>
-File: ..//figure/silvtreeplot.jpeg Graphic file (type jpg)
-
-<use ..//figure/silvtreeplot.jpeg>
-Package pdftex.def Info: ..//figure/silvtreeplot.jpeg used on input line 307.
-(pdftex.def)             Requested size: 535.74765pt x 520.34598pt.
-
-Overfull \hbox (80.44753pt too wide) in paragraph at lines 307--308
- [][] 
- []
-
-<..//figure/HFtreeplot.jpeg, id=81, 804.00375pt x 780.9175pt>
-File: ..//figure/HFtreeplot.jpeg Graphic file (type jpg)
-
-<use ..//figure/HFtreeplot.jpeg>
-Package pdftex.def Info: ..//figure/HFtreeplot.jpeg used on input line 314.
-(pdftex.def)             Requested size: 535.74765pt x 520.34598pt.
-
-Overfull \hbox (80.44753pt too wide) in paragraph at lines 314--315
- [][] 
- []
-
+[13])
 
 Package natbib Warning: There were undefined citations.
 
-[21] [22 <..//figure/michtreeplot.jpeg>] [23 <..//figure/silvtreeplot.jpeg>]
-[24 <..//figure/HFtreeplot.jpeg>] (./rethinking_FLS_draft.aux) ) 
+[14] [15 <..//figure/FLS_climate_change.png>] [16 <..//figure/HFmeans_expanded.
+png>] [17 <..//figure/HF_Q_ru_interannual.jpeg>] [18 <..//figure/allmods_effect
+sizes_combined.jpeg>] (./rethinking_FLS_draft.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 3247 strings out of 492995
- 45712 string characters out of 6132704
- 129538 words of memory out of 5000000
- 6746 multiletter control sequences out of 15000+600000
- 10280 words of font info for 37 fonts, out of 8000000 for 9000
+ 3394 strings out of 492995
+ 47649 string characters out of 6132704
+ 129731 words of memory out of 5000000
+ 6895 multiletter control sequences out of 15000+600000
+ 10580 words of font info for 38 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,10n,26p,1722b,276s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/tex
-live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texl
-ive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texliv
-e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/
-2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/201
-7/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on rethinking_FLS_draft.pdf (24 pages, 928835 bytes).
+ 39i,6n,25p,1722b,323s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
+/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></u
+sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on rethinking_FLS_draft.pdf (18 pages, 831664 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
- 70 compressed objects within 1 object stream
+ 89 PDF objects out of 1000 (max. 8388607)
+ 57 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

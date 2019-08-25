@@ -3,11 +3,6 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: rethinking_FLS_draft.aux
 The style file: ..//refs/styles/besjournals.bst.bst
 Database file #1: ..//refs/hyst_outline.bib.bib
-Warning--I didn't find a database entry for "Flynn2019"
-Warning--I didn't find a database entry for "("
-Warning--I didn't find a database entry for ""
-Warning--I didn't find a database entry for "Wilcox2000"
-Warning--I didn't find a database entry for "Bates2014"
 Name 2 in "Templ, B. and E. Koch, and K.Bolmgren, and M. Ungersb{\"o}ck, and A. Paul, and H. Scheifinger and et al." has a comma at the end for entry PEP725
 while executing---line 1620 of file ..//refs/styles/besjournals.bst.bst
 Name 3 in "Templ, B. and E. Koch, and K.Bolmgren, and M. Ungersb{\"o}ck, and A. Paul, and H. Scheifinger and et al." has a comma at the end for entry PEP725
@@ -29,10 +24,6 @@ while executing---line 1620 of file ..//refs/styles/besjournals.bst.bst
 Name 3 in "Burns, Russell M. and Honkala, Barbara H. and {$[$}Technical coordinators{$]$}," has a comma at the end for entry Burns1990
 while executing---line 1620 of file ..//refs/styles/besjournals.bst.bst
 Warning--to sort, need author or key in DWD
-Name 3 in "David Orme and Rob Freckleton and Gavan Thomas, and Thomas Petzoldt and Susanne Fritz, and Nick Isaac and Will Pearse" has a comma at the end for entry Orme2013
-while executing---line 1620 of file ..//refs/styles/besjournals.bst.bst
-Name 5 in "David Orme and Rob Freckleton and Gavan Thomas, and Thomas Petzoldt and Susanne Fritz, and Nick Isaac and Will Pearse" has a comma at the end for entry Orme2013
-while executing---line 1620 of file ..//refs/styles/besjournals.bst.bst
 Name 1 in "Barnes, Burton V, and Wagner, Warren H. JR.," has a comma at the end for entry Barnes2004
 while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
 Name 2 in "Barnes, Burton V, and Wagner, Warren H. JR.," has a comma at the end for entry Barnes2004
@@ -53,16 +44,7 @@ Name 3 in "Burns, Russell M. and Honkala, Barbara H. and {$[$}Technical coordina
 while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
 Name 3 in "Burns, Russell M. and Honkala, Barbara H. and {$[$}Technical coordinators{$]$}," has a comma at the end for entry Burns1990
 while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
-Warning--empty journal in Janzen1967
 Warning--empty journal in Niklas1985
-Name 3 in "David Orme and Rob Freckleton and Gavan Thomas, and Thomas Petzoldt and Susanne Fritz, and Nick Isaac and Will Pearse" has a comma at the end for entry Orme2013
-while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
-Name 5 in "David Orme and Rob Freckleton and Gavan Thomas, and Thomas Petzoldt and Susanne Fritz, and Nick Isaac and Will Pearse" has a comma at the end for entry Orme2013
-while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
-Name 3 in "David Orme and Rob Freckleton and Gavan Thomas, and Thomas Petzoldt and Susanne Fritz, and Nick Isaac and Will Pearse" has a comma at the end for entry Orme2013
-while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
-Name 5 in "David Orme and Rob Freckleton and Gavan Thomas, and Thomas Petzoldt and Susanne Fritz, and Nick Isaac and Will Pearse" has a comma at the end for entry Orme2013
-while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
 Warning--empty journal in Robertson1895
 Name 2 in "Templ, B. and E. Koch, and K.Bolmgren, and M. Ungersb{\"o}ck, and A. Paul, and H. Scheifinger and et al." has a comma at the end for entry PEP725
 while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
@@ -80,46 +62,45 @@ Name 4 in "Templ, B. and E. Koch, and K.Bolmgren, and M. Ungersb{\"o}ck, and A. 
 while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
 Name 5 in "Templ, B. and E. Koch, and K.Bolmgren, and M. Ungersb{\"o}ck, and A. Paul, and H. Scheifinger and et al." has a comma at the end for entry PEP725
 while executing---line 1700 of file ..//refs/styles/besjournals.bst.bst
-Warning--empty journal in Whitehead1969
-You've used 40 entries,
+You've used 33 entries,
             2805 wiz_defined-function locations,
-            1359 strings with 19879 characters,
-and the built_in function-call counts, 22459 in all, are:
-= -- 1916
-> -- 934
-< -- 26
-+ -- 369
-- -- 322
-* -- 1773
-:= -- 3638
-add.period$ -- 74
-call.type$ -- 40
-change.case$ -- 304
-chr.to.int$ -- 41
-cite$ -- 47
-duplicate$ -- 1555
-empty$ -- 1641
-format.name$ -- 434
-if$ -- 4390
+            1305 strings with 18472 characters,
+and the built_in function-call counts, 18019 in all, are:
+= -- 1567
+> -- 688
+< -- 22
++ -- 273
+- -- 235
+* -- 1397
+:= -- 2920
+add.period$ -- 63
+call.type$ -- 33
+change.case$ -- 242
+chr.to.int$ -- 34
+cite$ -- 38
+duplicate$ -- 1260
+empty$ -- 1350
+format.name$ -- 322
+if$ -- 3544
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 331
-newline$ -- 124
-num.names$ -- 156
-pop$ -- 624
+missing$ -- 263
+newline$ -- 103
+num.names$ -- 128
+pop$ -- 486
 preamble$ -- 1
-purify$ -- 267
+purify$ -- 210
 quote$ -- 0
-skip$ -- 563
+skip$ -- 455
 stack$ -- 0
-substring$ -- 1150
-swap$ -- 795
+substring$ -- 969
+swap$ -- 635
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 348
-warning$ -- 5
-while$ -- 161
+type$ -- 288
+warning$ -- 3
+while$ -- 132
 width$ -- 0
-write$ -- 428
-(There were 34 error messages)
+write$ -- 356
+(There were 28 error messages)

@@ -1,0 +1,18 @@
+\documentclass{article}
+
+\begin{document}
+Dear Dr. X,
+We propose a ``Viewpoint" about reconciling historic hypotheses to explain variation in flower-leaf phenological sequences (FLSs) in decididuous woody plants. There are several long-standing hypotheses regarding the evolution and function of this phenological syndrome, but even the best studies testing them are limited by our conceptual understanding of this phenologcal trait.  In  this ``Viewpoint" we would identify several overlooked aspects of the biology of FLS and detail a new framework for future study.
+We believe this work would be of broad interested to the readers of \textit{New Phytologist.}  The flower-leaf sequence is a key compenent of the fitness of deciduous species in seasonal environments and therefore important to researchers interested in the fundamental biology of these organisms. Beyond basic science, we believe that this subject would be of interest to researchers studying global change phenological sequences like FLS are being reshaped climate change.\\
+\indent FLSs have long been described in the literature qualatatively, e.g. ``flowers before leaves",  at the species level. This approach blurs important interspecific differences between species (ie species that flower several weeks before leaf emergence and species that flower several days) that could be accounted for if FLS data was recorded as quantitive data. This approach also ignore the high levels of intra-specific variation observered in nature. We argue that ignoring these fundamental elements of FLS biology has long hindered our ability to advance our understanding of this phenological pattern (wordy.)\\
+ \indent In our ``Viewpoint" we would first re-examining the exisiting hypotheses FLS hypotheses, interrogating how their biological implications differ when considering qualitative vs. quantitative measures of FLS and inter- vs. interspecitic variation. We would then test utility of this approach by analyzing FLS trait associations predicted by the hypotheses across multiple intra- and interspecific datasets that vary in their temporal, taxonomic and geopgraphic scope. Our ``Viewpoint" would add to the small but growing body literature addressing the multiplicity of FLS hypotheses \citep{}, with several novelties. While previous work on FLS has been restructed to individual data collections, our we synthesize results across multiple datasets, revealing more comprehensive trends and anomolies in FLS data. Our "Viewpoint" would also be the first FLS to control for the confounding factors of trait association models by utalize intra-specific variation in hypothesis testing. Based on this thorough conceptual and quantitative treatment of the topic, our ``Viewpoint" would present a new framework for the study of FLS, concluding by presenting several indespensible components of new research agenda both basic and applied research in plant phenological sequences. 
+ \indent We expect this manuscript will be titled ``Reconciling historic hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology". It will be co-authored by I. Morales-Castilla, and E.M. Wolkovich. This proposed manuscript is not under consideration anywhere else. Thank you for your
+consideration.
+
+
+
+Yet...
+
+
+
+\end{document}

@@ -1,0 +1,45 @@
+\documentclass[]{article}
+\usepackage[top=0.75in, bottom=1.0in, left=1.1 in, right=1.1 in]{geometry}
+\renewcommand{\baselinestretch}{1.1}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\bibliographystyle{..//refs/styles/nature.bst}
+\def\labelitemi{--}
+\parindent=24pt
+
+\begin{document}
+\includegraphics[width=0.3\textwidth]{/Users/danielbuonaiuto/Desktop/arb_logo.png}
+
+\subsubsection*{Instructions from New Phytologist}
+
+\textbf{Presubmissions:} If you are unsure whether your paper falls within the scope of New Phytologist you may submit a presubmission enquiry. Send the abstract of your paper, together with a covering letter that includes answers to the three questions below, to the Managing Editor:\\
+What hypotheses or questions does this work address?\\
+How does this work advance our current understanding of plant science?\\
+Why is this work important and timely?\\
+...
+Is this covered in my letter or should I use this format more explictely?\\
+Viewpoints are to be sent with a 200 word summary. My abstract is 297 words. Should I shorten this now?\\
+\subsubsection*{Letter}
+\opening{Dear Dr. X,}%%Who do we address it to?
+\par We propose a ``Viewpoint" about reconciling historic hypotheses explaining variation in the flower-leaf phenological sequences (FLSs) of deciduous woody plants. Decades of research suggests that flowering before leafing may be an adaptation for wind-pollination \citep{Whitehead1969}, for reducing water stress \citep{Reich1984,Franklin2016}, or to facilitate extreme early season flowering \citep{Primack1987}. However, studies that directly compare these hypotheses are rare, and those that do, tend to find support for more than one \citep{Gougherty2018,Bolmgren2003}. We argue that accurate evaluation of these hypotheses has been limited by our conceptual understanding of FLSs. In  this ``Viewpoint" we would identify several overlooked aspects of the biology of FLSs and detail a new framework for future study.
+\par We believe this work would be of broad interested to the readers of \textit{New Phytologist.} FLSs are a key component of the fitness of deciduous species and important to researchers interested in the fundamental biology of these organisms\citep{Rathcke_1985,Ettinger2018}. This topic would also be of interest to applied scientists because phenological sequences are being reshaped climate change and alterations to FLSs and may impact the ability of woody plants to persist in the future \citep{Savage2019}.
+\par FLS patterns are usually recorded as qualitative descriptors, for example, \textit{``flowers emerge before leaves"}. This approach masks important inter-specific variation, ignoring the fact species that flower several weeks before leafing are likely responding to different selection pressures than those that flower only days before. Further, FLS categories are almost always attributed at the species level, and don't account for the significant intra-specific FLS variation seen in nature (include HF oak Fig?). 
+ \par In our ``Viewpoint", we detail how utilizing quantitative measures of FLS variation with a focus at the intra-specific level would advance our understanding FLSs. We would begin by re-examining the existing hypotheses, interrogating how their biological implications differ when considering  quantitative measures of FLS intra-specific FLS variation. We would then test these considerations by statistically analyzing the relationships between the flowering-first FLS and other plant traits predicted by the hypotheses. Seeking synthesis, we would perform this analysis across multiple intra- and inter-specific datasets that vary in their temporal, taxonomic and geographic scope. Our ``Viewpoint" would introduce a new framework for the study of FLS, and outline a new research agenda for both basic and applied research in plant phenological sequences.
+ \par Our ``Viewpoint" would add to the growing body of literature addressing the multiplicity of FLS hypotheses with several novelties. While previous work on FLSs has been restricted to single data collections, we gather results across multiple datasets, revealing more comprehensive trends and anomalies in FLS patterns. We also would be the first to utilize intra-specific variation in hypothesis testing, controlling for many confounding factors that hinder trait-association models. 
+ \par We expect this manuscript will be titled ``Reconciling historic hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology". It will be co-authored by I. Morales-Castilla, and E.M. Wolkovich. This proposed manuscript is not under consideration anywhere else. Thank you for your
+consideration.\\
+Sincerely,\\
+
+Daniel Buonaiuto\\
+
+\section*{Abstract}
+
+\indent\indent As the study of phenology progresses as a discipline, it is increasing clear that it is not only individual phenological events that affect organism fitness and ecological functioning, but also the relationship between stages. Deciduous woody plants exhibit considerable variation in the relative order of their reproductive and vegetative events, or their flower-leaf  sequence (FLS). A century of research suggests that FLS patterns are adaptive, and several competing hypotheses stand to explain their evolution and function. \\
+\indent Reconciling these hypotheses has been impeded by our conceptual orientation towards them. Classically, FLSs are treated as discrete categories and described at the species level. However, this framework obscures important inter-specific differences and masks substantial intra-specific variation ignored by the hypotheses. Here, we review and modify the existing hypotheses to account for the high levels of both inter- and intra-specific FLS variation seen in nature. We then evaluate these hypotheses with four case studies from temperate forest species.\\ 
+ \indent Our review and case studies provide three major insights towards a new conceptual framework for understanding FLSs. First, we find concurrent support for multiple hypotheses. Future research should accommodate this coincidence by allowing for overlapping hypotheses in large community models and by testing individual hypotheses in smaller sub-groupings that control for variation in other traits. Second, we show that the support for FLS hypotheses is highly sensitive to how FLSs are defined. Researchers should, when possible, move away from the classic categorization scheme and use continuous measures of FLS, such as number of days between flowering and leafing. Finally, researchers should use these intra-specific, continuous data to test for fitness consequences in FLS variation. This will advance our understanding of the fundamental biology of FLSs, and help us to predict how climate-related alterations to FLSs will affect tree communities in the changing future.
+
+
+\bibliography{..//refs/hyst_outline.bib}
+
+\end{document}

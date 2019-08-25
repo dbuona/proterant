@@ -39,3 +39,7 @@ writting/rethinking_FLS_draft-concordance.tex
 *.gz
 FLOBUDS/.Rhistory
 Input/.Rhistory
+FLOBUDS/Plots/.DS_Store
+Input/.Rhistory
+writting/rethinking_FLS_draft-concordance.tex
+*.bbl

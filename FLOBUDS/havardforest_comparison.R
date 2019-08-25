@@ -171,11 +171,29 @@ mod.daty$zGDD2<-(mod.daty$GDDave2-mean(mod.daty$GDDave2,na.rm=TRUE))/sd(mod.daty
 mod.daty$zPhoto2<-(mod.daty$daylenghave2-mean(mod.daty$daylenghave2,na.rm=TRUE))/sd(mod.daty$daylenghave2,na.rm=TRUE)
 
 
+bbonly<-brm(bb.jd~zGDD1+zchill1+zPhoto1+zGDD1:zchill1+zGDD1:zPhoto1+zchill1:zPhoto1,data=mod.daty)
+fonly<-brm(fopn.jd~zGDD1+zchill1+zPhoto1+zGDD1:zchill1+zGDD1:zPhoto1+zchill1:zPhoto1,data=mod.daty)
+
+bbonly.nophoto<-brm(bb.jd~zGDD1*zchill1,data=mod.daty)
+fonly.nophoto<-brm(fopn.jd~zGDD1*zchill1,data=mod.daty)
+
+bbploot<-extract_cof(bbonly.nophoto)
+bbploot$phase<-"leaf budburst"
+
+fploot<-extract_cof(fonly.nophoto)
+fploot$phase<-"flower open"
+ploots<-rbind(bbploot,fploot)
+ploots<-dplyr::filter(ploots,cue!="Intercept")
+ploots %>%
+arrange(Estimate) %>%
+  mutate(cue = factor(cue, levels=c("zGDD1:zchill1", "zGDD1:zPhoto1", "zchill1:zPhoto1", "zGDD1", "zchill1", "zPhoto1"))) %>%
+ggplot(aes(Estimate,cue))+geom_point(aes(color=phase),size=3)+geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=phase),size=.5,linetype="dashed",stat="identity",height=0)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),size=.5,height=0)+geom_vline(aes(xintercept=0),color="black")+theme_bw()
 
 ##predict for FLS just
 bbtoflo<-brm(FLS~zGDD1+zchill1+zPhoto1+zGDD1:zchill1+zGDD1:zPhoto1+zchill1:zPhoto1,data=mod.daty)
 extract_cof<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,.25,.75,0.975))),"cue")} 
 bbtofloplot<-extract_cof(bbtoflo) 
+
 
 
 ## predictions
