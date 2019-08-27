@@ -1,4 +1,8 @@
-.DS_Store
+*.log
+*.bbl
+*.aux
+*.synctex.gz
+*.concordence.tex
 *.DS_Store
 *.Rda
 *.RData

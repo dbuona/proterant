@@ -162,7 +162,7 @@ This hypothesis predicts strong phylogenetic patterning in the FLS with no corre
 \begin{figure}[ht]
     \centering
  \includegraphics[width=\textwidth]{..//figure/FLS_climate_change.png} 
-    \caption{Trends in average FLS offset across Europe for three tree species from 1960 to 2015. Highlighted regions indicate historic range of FLS variability. For all species, the time between flowering and leafing is increasing but the rate of change differs between species and and sites}
+    \caption{Trends in average FLS offset across Europe for three tree species from 1960 to 2015. Highlighted regions indicate historic range of FLS variability. For all species, the time between flowering and leafing is increasing but the rate of change differs between species and sites}
     \label{fig:Figure 1}
 \end{figure}
 

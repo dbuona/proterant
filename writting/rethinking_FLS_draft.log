@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  14 AUG 2019 13:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  27 AUG 2019 08:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -187,7 +187,7 @@ LaTeX Info: Redefining \\ on input line 3056.
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 )
-No file rethinking_FLS_draft.aux.
+(./rethinking_FLS_draft.aux)
 \openout1 = `rethinking_FLS_draft.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 72.
@@ -202,6 +202,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 72.
 LaTeX Font Info:    ... okay on input line 72.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 72.
 LaTeX Font Info:    ... okay on input line 72.
+
 (/usr/local/texlive/2017/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count111
@@ -310,224 +311,14 @@ If that doesn't work, type  X <return>  to quit.
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-
-Package natbib Warning: Citation `Forrest2010' on page 2 undefined on input lin
-e 93.
-
-
-Package natbib Warning: Citation `Cleland2007' on page 2 undefined on input lin
-e 93.
-
-
-Package natbib Warning: Citation `Piao2007' on page 2 undefined on input line 9
-3.
-
-
-Package natbib Warning: Citation `Ettinger2018' on page 2 undefined on input li
-ne 93.
-
-
-Package natbib Warning: Citation `Robertson1895' on page 2 undefined on input l
-ine 94.
-
-
-Package natbib Warning: Citation `Savage2019' on page 2 undefined on input line
- 94.
-
-
-Package natbib Warning: Citation `Gougherty2018' on page 2 undefined on input l
-ine 94.
-
-
-Package natbib Warning: Citation `Rathcke_1985' on page 2 undefined on input li
-ne 94.
-
-
-LaTeX Warning: Reference `fig:Figure 1' on page 2 undefined on input line 95.
-
-
-Package natbib Warning: Citation `Gougherty2018' on page 2 undefined on input l
-ine 97.
-
-
-Package natbib Warning: Citation `Savage2019' on page 2 undefined on input line
- 97.
-
-
-Package natbib Warning: Citation `Lechowicz_1995' on page 2 undefined on input 
-line 97.
-
-
-Package natbib Warning: Citation `Ettinger2018' on page 2 undefined on input li
-ne 97.
-
-
-Package natbib Warning: Citation `OKeefe2015' on page 2 undefined on input line
- 100.
-
-
-Package natbib Warning: Citation `Lamont2011' on page 2 undefined on input line
- 101.
-
-
-Package natbib Warning: Citation `Heinig1899' on page 2 undefined on input line
- 101.
-
-
-LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 101.
-
-
-LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 102.
-
-
-Package natbib Warning: Citation `Lamont2011' on page 2 undefined on input line
- 103.
-
-
-LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 104.
-
-
-LaTeX Warning: Reference `fig:Figure 2' on page 2 undefined on input line 104.
-
-[2] [3]
-
-Package natbib Warning: Citation `Whitehead1969' on page 4 undefined on input l
-ine 112.
-
-
-Package natbib Warning: Citation `Spurr1980' on page 4 undefined on input line 
-112.
-
-
-Package natbib Warning: Citation `Friedman2009' on page 4 undefined on input li
-ne 112.
-
-
-LaTeX Warning: Reference `fig:Figure 2' on page 4 undefined on input line 113.
-
-
-Package natbib Warning: Citation `Janzen1967' on page 4 undefined on input line
- 116.
-
-
-Package natbib Warning: Citation `Franklin2016' on page 4 undefined on input li
-ne 116.
-
-
-Package natbib Warning: Citation `Primack1987' on page 4 undefined on input lin
-e 119.
-
-
-Package natbib Warning: Citation `Savage2019' on page 4 undefined on input line
- 121.
-
-
-LaTeX Warning: Reference `fig:Figure 2' on page 4 undefined on input line 121.
-
-
-Package natbib Warning: Citation `Savage2019' on page 4 undefined on input line
- 121.
-
-[4]
-
-Package natbib Warning: Citation `OKeefe2015' on page 5 undefined on input line
- 128.
-
-
-LaTeX Warning: Reference `fig: Figure 3' on page 5 undefined on input line 128.
-
-
-
-Package natbib Warning: Citation `PEP725' on page 5 undefined on input line 128
-.
-
-[5]
-
-Package natbib Warning: Citation `Flynn2018' on page 6 undefined on input line 
-137.
-
-
-Package natbib Warning: Citation `Rathcke_1985' on page 6 undefined on input li
-ne 137.
-
-[6]
-
-Package natbib Warning: Citation `Wilczek2010' on page 7 undefined on input lin
-e 139.
-
-
+[2] [3] [4] [5] [6]
 Underfull \hbox (badness 10000) in paragraph at lines 139--141
 
  []
 
 
-Package natbib Warning: Citation `Niklas1985' on page 7 undefined on input line
- 145.
-
-
-Package natbib Warning: Citation `Nathan2005' on page 7 undefined on input line
- 145.
-
-
-Package natbib Warning: Citation `Milleron2012' on page 7 undefined on input li
-ne 145.
-
-
-Package natbib Warning: Citation `Primack1987' on page 7 undefined on input lin
-e 145.
-
-
-Package natbib Warning: Citation `Borchert1983' on page 7 undefined on input li
-ne 145.
-
-
-Package natbib Warning: Citation `Reich1984' on page 7 undefined on input line 
-145.
-
-
-Package natbib Warning: Citation `Gougherty2018' on page 7 undefined on input l
-ine 145.
-
-
-Package natbib Warning: Citation `Bolmgren2003' on page 7 undefined on input li
-ne 146.
-
-
-Package natbib Warning: Citation `Gougherty2018' on page 7 undefined on input l
-ine 146.
-
-
-Package natbib Warning: Citation `Barnes2004' on page 7 undefined on input line
- 148.
-
-
-Package natbib Warning: Citation `Barnes2016' on page 7 undefined on input line
- 148.
-
-
-Package natbib Warning: Citation `Burns1990' on page 7 undefined on input line 
-148.
-
-
-Package natbib Warning: Citation `OKeefe2015' on page 7 undefined on input line
- 148.
-
-
-Package natbib Warning: Citation `PEP725' on page 7 undefined on input line 148
-.
-
-
-LaTeX Warning: Reference `fig:Figure 4' on page 7 undefined on input line 149.
-
-
 LaTeX Warning: Reference `fig:Figure S1' on page 7 undefined on input line 149.
 
-
-
-Package natbib Warning: Citation `DWD' on page 7 undefined on input line 150.
-
-
-LaTeX Warning: Reference `fig:Figure 4' on page 7 undefined on input line 150.
 
 
 LaTeX Warning: Reference `fig:Figure S2' on page 7 undefined on input line 151.
@@ -540,11 +331,6 @@ he lit-er-a-ture, and--when tested---
  []
 
 [7] [8]
-
-Package natbib Warning: Citation `Davies2019' on page 9 undefined on input line
- 158.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 157--159
 
  []
@@ -554,23 +340,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 160--161
 
  []
 
-
-Package natbib Warning: Citation `Finn2007' on page 10 undefined on input line 
-162.
-
-
+[10]
 Underfull \hbox (badness 10000) in paragraph at lines 164--166
 
  []
-
-[10]
-
-Package natbib Warning: Citation `Forrest2010' on page 11 undefined on input li
-ne 167.
-
-
-Package natbib Warning: Citation `Flynn2018' on page 11 undefined on input line
- 167.
 
 <..//figure/FLS_climate_change.png, id=39, 1505.625pt x 1806.75pt>
 File: ..//figure/FLS_climate_change.png Graphic file (type png)
@@ -632,7 +405,7 @@ might try typing `S' now just to see what is salvageable.
 Missing character: There is no ‚ in font cmr12!
 Missing character: There is no Ä in font cmr12!
 Missing character: There is no ê in font cmr12!
-[12]
+[12] [13]
 ! Misplaced alignment tab character &.
 l.150 ...1980) \emph{Forest Ecology}. John Wiley &
                                                   Sons, 3rd
@@ -643,39 +416,27 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-[13])
-
-Package natbib Warning: There were undefined citations.
-
-[14] [15 <..//figure/FLS_climate_change.png>] [16 <..//figure/HFmeans_expanded.
-png>] [17 <..//figure/HF_Q_ru_interannual.jpeg>] [18 <..//figure/allmods_effect
-sizes_combined.jpeg>] (./rethinking_FLS_draft.aux
-
-Package natbib Warning: Citation(s) may have changed.
-(natbib)                Rerun to get citations correct.
-
-)
+) [14] [15 <..//figure/FLS_climate_change.png>] [16 <..//figure/HFmeans_expande
+d.png>] [17 <..//figure/HF_Q_ru_interannual.jpeg>] [18 <..//figure/allmods_effe
+ctsizes_combined.jpeg>] (./rethinking_FLS_draft.aux)
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 3394 strings out of 492995
- 47649 string characters out of 6132704
- 129731 words of memory out of 5000000
- 6895 multiletter control sequences out of 15000+600000
+ 3397 strings out of 492995
+ 47739 string characters out of 6132704
+ 133301 words of memory out of 5000000
+ 6896 multiletter control sequences out of 15000+600000
  10580 words of font info for 38 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,6n,25p,1722b,323s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,6n,26p,1722b,284s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
 /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></u
 sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr
 /local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on rethinking_FLS_draft.pdf (18 pages, 831664 bytes).
+Output written on rethinking_FLS_draft.pdf (18 pages, 831977 bytes).
 PDF statistics:
  89 PDF objects out of 1000 (max. 8388607)
  57 compressed objects within 1 object stream
