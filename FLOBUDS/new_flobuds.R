@@ -73,8 +73,10 @@ ggplot(goodspfull,aes(taxa,DOY))+geom_point(aes(color=phase,shape=force),size=0.
 
 pdf("Plots/flo_buds_figures/goodsps_rawplots2.pdf",width=11, height=6)
 #ggplot(goodspfull,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+facet_wrap(~taxa)+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
-#ggplot(goodspfull,aes(force,DOY))+geom_point(aes(color=phase,shape=photo),size=0.8)+stat_summary(aes(color=phase,shape=photo))+facet_grid(chill~taxa)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 12)
-ggplot(goodspfull,aes(phase,DOY))+geom_point(aes(color=force,shape=photo),size=0.8)+stat_summary(aes(color=force,shape=photo))+facet_grid(chill~taxa)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Phenophase")+theme_base(base_size = 8)
+pd=position_dodge2(width=.8,preserve="total")
+ggplot(goodspfull,aes(force,DOY))+geom_point(aes(shape=photo,color=phase),size=0.8)+stat_summary(aes(shape=photo,color=phase),position=pd)+facet_grid(chill~taxa)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Forcing")+theme_base(base_size = 12)
+
+#ggplot(goodspfull,aes(phase,DOY))+geom_point(aes(color=force,shape=photo),size=0.8)+stat_summary(aes(color=force,shape=phase,position=pd)+facet_grid(chill~taxa)+theme_bw()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Phenophase")+theme_bw(base_size = 8)
 
 #ggplot(goodspfull,aes(force,DOY))+geom_point(aes(color=taxa,shape=phase),size=0.8)+stat_summary(aes(color=taxa,shape=phase))+facet_grid(chill~photo)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
 dev.off()

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  27 AUG 2019 08:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  28 AUG 2019 08:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -308,40 +308,45 @@ l.77 \end{enumerate}
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 79--80
+
+ []
+
 [1
 
 {/usr/local/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2] [3] [4] [5] [6]
-Underfull \hbox (badness 10000) in paragraph at lines 139--141
+Underfull \hbox (badness 10000) in paragraph at lines 138--140
 
  []
 
 
-LaTeX Warning: Reference `fig:Figure S1' on page 7 undefined on input line 149.
+LaTeX Warning: Reference `fig:Figure S1' on page 7 undefined on input line 148.
 
 
 
-LaTeX Warning: Reference `fig:Figure S2' on page 7 undefined on input line 151.
+LaTeX Warning: Reference `fig:Figure S2' on page 7 undefined on input line 150.
 
 
 
-Overfull \hbox (1.64816pt too wide) in paragraph at lines 145--153
+Overfull \hbox (1.64816pt too wide) in paragraph at lines 144--152
 []\OT1/cmr/m/n/12 Direct tests of these hy-pothe-ses are rel-a-tively rare in t
 he lit-er-a-ture, and--when tested---
  []
 
 [7] [8]
-Underfull \hbox (badness 10000) in paragraph at lines 157--159
+Underfull \hbox (badness 10000) in paragraph at lines 156--158
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 160--161
+Underfull \hbox (badness 10000) in paragraph at lines 159--160
 
  []
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 164--166
+Underfull \hbox (badness 10000) in paragraph at lines 163--165
 
  []
 
@@ -350,14 +355,14 @@ File: ..//figure/FLS_climate_change.png Graphic file (type png)
 
 <use ..//figure/FLS_climate_change.png>
 Package pdftex.def Info: ..//figure/FLS_climate_change.png used on input line 2
-14.
+13.
 (pdftex.def)             Requested size: 455.30013pt x 546.35748pt.
 
 <..//figure/HFmeans_expanded.png, id=41, 2409.0pt x 1806.75pt>
 File: ..//figure/HFmeans_expanded.png Graphic file (type png)
 
 <use ..//figure/HFmeans_expanded.png>
-Package pdftex.def Info: ..//figure/HFmeans_expanded.png used on input line 221
+Package pdftex.def Info: ..//figure/HFmeans_expanded.png used on input line 220
 .
 (pdftex.def)             Requested size: 455.30013pt x 341.46654pt.
 
@@ -366,7 +371,7 @@ File: ..//figure/HF_Q_ru_interannual.jpeg Graphic file (type jpg)
 
 <use ..//figure/HF_Q_ru_interannual.jpeg>
 Package pdftex.def Info: ..//figure/HF_Q_ru_interannual.jpeg used on input line
- 228.
+ 227.
 (pdftex.def)             Requested size: 455.30013pt x 227.64894pt.
 
 <..//figure/allmods_effectsizes_combined.jpeg, id=43, 1405.25pt x 702.625pt>
@@ -374,7 +379,7 @@ File: ..//figure/allmods_effectsizes_combined.jpeg Graphic file (type jpg)
 
 <use ..//figure/allmods_effectsizes_combined.jpeg>
 Package pdftex.def Info: ..//figure/allmods_effectsizes_combined.jpeg used on i
-nput line 236.
+nput line 235.
 (pdftex.def)             Requested size: 455.30013pt x 227.65353pt.
  (./rethinking_FLS_draft.bbl
 [11]
@@ -405,7 +410,7 @@ might try typing `S' now just to see what is salvageable.
 Missing character: There is no ‚ in font cmr12!
 Missing character: There is no Ä in font cmr12!
 Missing character: There is no ê in font cmr12!
-[12] [13]
+[12]
 ! Misplaced alignment tab character &.
 l.150 ...1980) \emph{Forest Ecology}. John Wiley &
                                                   Sons, 3rd
@@ -416,9 +421,9 @@ up above has ended a previous alignment prematurely,
 you're probably due for more error messages, and you
 might try typing `S' now just to see what is salvageable.
 
-) [14] [15 <..//figure/FLS_climate_change.png>] [16 <..//figure/HFmeans_expande
-d.png>] [17 <..//figure/HF_Q_ru_interannual.jpeg>] [18 <..//figure/allmods_effe
-ctsizes_combined.jpeg>] (./rethinking_FLS_draft.aux)
+[13]) [14] [15 <..//figure/FLS_climate_change.png>] [16 <..//figure/HFmeans_exp
+anded.png>] [17 <..//figure/HF_Q_ru_interannual.jpeg>] [18 <..//figure/allmods_
+effectsizes_combined.jpeg>] (./rethinking_FLS_draft.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -426,17 +431,17 @@ LaTeX Warning: There were undefined references.
 Here is how much of TeX's memory you used:
  3397 strings out of 492995
  47739 string characters out of 6132704
- 133301 words of memory out of 5000000
+ 131301 words of memory out of 5000000
  6896 multiletter control sequences out of 15000+600000
  10580 words of font info for 38 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,6n,26p,1722b,284s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 39i,6n,26p,1722b,292s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
 /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></u
 sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr
 /local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on rethinking_FLS_draft.pdf (18 pages, 831977 bytes).
+Output written on rethinking_FLS_draft.pdf (18 pages, 830783 bytes).
 PDF statistics:
  89 PDF objects out of 1000 (max. 8388607)
  57 compressed objects within 1 object stream
