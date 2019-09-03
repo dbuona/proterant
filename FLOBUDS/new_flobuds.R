@@ -345,7 +345,11 @@ pd2=position_dodgev(height=0.3)
 ggplot(bothy,aes(Estimate,Predictor))+geom_point(aes(color=phase,shape=phase),position=pd2, size=4)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")+theme_base()
 dev.off()
 
-
+colnames(sps.plot.3effectonly)
+Vaccy<-filter(sps.plot.3effectonly,GEN.SPA=="VAC.COR")
+jpeg("Plots/flo_buds_figures/Vac.cor_effect.jpeg",width=1800,height=1000,res=200)
+ggplot(Vaccy,aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd2, size=2)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.5)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+facet_wrap(~taxa)+geom_vline(aes(xintercept=0),color="black")+theme_base(base_size = 10)
+dev.off()
 ####Do hysteranthous species flower earlier than no hysteranthous
 
 FLS<-filter(dat, !GEN.SPA %in% c("ACE.SAC","BET.ALL"))

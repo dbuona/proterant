@@ -173,25 +173,48 @@ mod.daty$zPhoto2<-(mod.daty$daylenghave2-mean(mod.daty$daylenghave2,na.rm=TRUE))
 
 bbonly<-brm(bb.jd~zGDD1+zchill1+zPhoto1+zGDD1:zchill1+zGDD1:zPhoto1+zchill1:zPhoto1,data=mod.daty)
 fonly<-brm(fopn.jd~zGDD1+zchill1+zPhoto1+zGDD1:zchill1+zGDD1:zPhoto1+zchill1:zPhoto1,data=mod.daty)
+l75only<-brm(l75.jd~zGDD2+zchill2+zPhoto2+zGDD2:zchill2+zGDD2:zPhoto2+zchill2:zPhoto2,data=mod.daty)
+
 
 bbonly.nophoto<-brm(bb.jd~zGDD1*zchill1,data=mod.daty)
 fonly.nophoto<-brm(fopn.jd~zGDD1*zchill1,data=mod.daty)
 
-bbploot<-extract_cof(bbonly.nophoto)
+extract_cof<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,.25,.75,0.975))),"cue")} 
+
+bbploot<-extract_cof(bbonly)
 bbploot$phase<-"leaf budburst"
 
-fploot<-extract_cof(fonly.nophoto)
+llploot<-extract_cof(l75only)
+llploot$phase<-"leaf expansion"
+
+fploot<-extract_cof(fonly)
 fploot$phase<-"flower open"
-ploots<-rbind(bbploot,fploot)
+ploots<-rbind(bbploot,fploot,llploot)
 ploots<-dplyr::filter(ploots,cue!="Intercept")
+
+ploots$cue[ploots$cue=="zPhoto2"]<-"zPhoto"
+ploots$cue[ploots$cue=="zPhoto1"]<-"zPhoto"
+ploots$cue[ploots$cue=="zGDD2"]<-"zGDD"
+ploots$cue[ploots$cue=="zGDD1"]<-"zGDD"
+ploots$cue[ploots$cue=="zchill1"]<-"zchill"
+ploots$cue[ploots$cue=="zchill2"]<-"zchill"
+ploots$cue[ploots$cue=="zGDD2:zPhoto2"]<-"zGDD:zPhoto"
+ploots$cue[ploots$cue=="zGDD1:zPhoto1"]<-"zGDD:zPhoto"
+ploots$cue[ploots$cue=="zchill1:zPhoto1"]<-"zPhoto:zchill"
+ploots$cue[ploots$cue=="zchill2:zPhoto2"]<-"zPhoto:zchill"
+ploots$cue[ploots$cue=="zGDD1:zchill1"]<-"zGDD:zchill"
+ploots$cue[ploots$cue=="zGDD2:zchill2"]<-"zGDD:zchill"
+jpeg("..//FLOBUDS/Plots/flo_buds_figures/Vac_at_HF.jpeg",width=1800,height=1000,res=200)
 ploots %>%
 arrange(Estimate) %>%
-  mutate(cue = factor(cue, levels=c("zGDD1:zchill1", "zGDD1:zPhoto1", "zchill1:zPhoto1", "zGDD1", "zchill1", "zPhoto1"))) %>%
-ggplot(aes(Estimate,cue))+geom_point(aes(color=phase),size=3)+geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=phase),size=.5,linetype="dashed",stat="identity",height=0)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),size=.5,height=0)+geom_vline(aes(xintercept=0),color="black")+theme_bw()
+  mutate(cue = factor(cue, levels=c("zGDD:zchill",  "zPhoto:zchill","zGDD:zPhoto", "zchill", "zGDD", "zPhoto"))) %>%
+ggplot(aes(Estimate,cue))+geom_point(aes(color=phase,shape=phase),size=3)+geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=phase),size=.5,linetype="dashed",stat="identity",height=0)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),size=.5,height=0)+geom_vline(aes(xintercept=0),color="black")+theme_bw()
+dev.off()
 
+ggplot(ploots,aes(Estimate,cue))+geom_point(aes(color=phase,shape=phase),size=3)+geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=phase),size=.5,linetype="dashed",stat="identity",height=0)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),size=.5,height=0)+geom_vline(aes(xintercept=0),color="black")+theme_bw()
 ##predict for FLS just
 bbtoflo<-brm(FLS~zGDD1+zchill1+zPhoto1+zGDD1:zchill1+zGDD1:zPhoto1+zchill1:zPhoto1,data=mod.daty)
-extract_cof<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,.25,.75,0.975))),"cue")} 
+
 bbtofloplot<-extract_cof(bbtoflo) 
 
 
@@ -238,4 +261,6 @@ plotymody2  %>%
   mutate(measure = factor(measure, levels=c("zGDD2","zPhoto2","zchill2"))) %>%
   ggplot()+theme_bw()+geom_bar(stat="identity",position="dodge",aes(x=year,y=accum,fill=measure))+stat_summary(aes(x=year,y=zFLS2),shape=15)+geom_hline(yintercept=0)+ylab("Standardize deviation from mean")
 dev.off()
+
+save.image("HF_comps_vaccor.Rda")
 ?geom_bar()
