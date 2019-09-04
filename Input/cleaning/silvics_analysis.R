@@ -22,7 +22,7 @@ library(phylolm)
 ###read in tree from Zanne et al
 treee<-read.tree("Vascular_Plants_rooted.dated.tre")
 is.ultrametric(treee)### is not ultrametric
-anthy<-read.csv("silvics_data.csv", header = TRUE)
+anthy<-read.csv("..//Data/silvics_data.csv", header = TRUE)
 #anthy<-filter(anthy, !is.na(av_fruit_time))
 anthy<-na.omit(anthy)
 
@@ -65,15 +65,15 @@ setdiff(namelist,mytree.names) #2
 
 ##add them back
 #pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_barbatum",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Populus_heterophylla",genus=NULL,where="random") added
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Ulmus_thomasii",genus=NULL,where="random") added
 #pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Salix_nigra",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_phellos",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_nuttallii",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_laciniosa",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_aquatica",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random")
-#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Aesculus_octandra",genus=NULL,where="random")
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_phellos",genus=NULL,where="random") added
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Quercus_nuttallii",genus=NULL,where="random") added
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_laciniosa",genus=NULL,where="random") added
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Carya_aquatica",genus=NULL,where="random") added
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Acer_nigrum",genus=NULL,where="random") added
+#pruned.by.anthy<-add.species.to.genus(pruned.by.anthy, "Aesculus_octandra",genus=NULL,where="random") added
 
 ###make ultrametric (using mean path length smoothing, could also try penalized maximum likelihood with chronos())
 

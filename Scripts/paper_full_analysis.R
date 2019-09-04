@@ -29,9 +29,9 @@ library(RColorBrewer)
 load("RData/paper_full_analysis.RData")
  ###Data#####################################################################
 #Read in Pep data
-aln<-read.csv("datasheets_derived/alnus_delta_hyst.csv",header=TRUE)
-frax<-read.csv("datasheets_derived/fraxinus_delta_hyst.csv",header=TRUE)
-aes<-read.csv("datasheets_derived/aes_delta_hyst.csv",header=TRUE)
+aln<-read.csv("datasheets_derived/PEP/alnus_delta_hyst.csv",header=TRUE)
+frax<-read.csv("datasheets_derived/PEP/fraxinus_delta_hyst.csv",header=TRUE)
+aes<-read.csv("datasheets_derived/PEP/aes_delta_hyst.csv",header=TRUE)
 
 # Readin Harard forest data 2,3, and 4c
 HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
@@ -44,10 +44,10 @@ HF$funct.offset<-HF$l75.jd-HF$fopn.jd
 #drought.dat<-read.csv("..//Data/USDA_traitfor_MTSV.csv",header=TRUE)
 
 ##Read in larger pep data
-aln10<-read.csv("datasheets_derived/alnus10_delta_hyst.csv",header=TRUE)
-frax10<-read.csv("datasheets_derived/fraxinus10_delta_hyst.csv",header=TRUE)
-bet10<-read.csv("datasheets_derived/betpen10_delta_hyst.csv",head=TRUE)
-aes10<-read.csv("datasheets_derived/aes10_delta_hyst.csv",header=TRUE)
+aln10<-read.csv("datasheets_derived/PEP/alnus10_delta_hyst.csv",header=TRUE)
+frax10<-read.csv("datasheets_derived/PEP/fraxinus10_delta_hyst.csv",header=TRUE)
+bet10<-read.csv("datasheets_derived/PEP/betpen10_delta_hyst.csv",head=TRUE)
+aes10<-read.csv("datasheets_derived/PEP/aes10_delta_hyst.csv",header=TRUE)
 
 aln10$taxa<-"Alnus glutinosa" ##assign species
 frax10$taxa<-"Fraxinus excelsior"
@@ -650,10 +650,10 @@ intra.df$soil.cent<-intra.df$SM-mean(intra.df$SM,na.rm=TRUE)
 intra.df$offset.cent<-intra.df$offset-mean(intra.df$offset,na.rm=TRUE)
 table(intra.df$soil.cent)
 ####now run each species model's seperately
-#df.intra.alnus<-filter(intra.df,taxa=="Alnus glutinosa")
-#df.intra.frax<-filter(intra.df,taxa=="Fraxinus excelsior")
-#df.intra.bet<-filter(intra.df,taxa=="Betula pendula")
-#df.intra.aes<-filter(intra.df,taxa=="Aesculus hippocastenum")
+df.intra.alnus<-filter(intra.df,taxa=="Alnus glutinosa")
+df.intra.frax<-filter(intra.df,taxa=="Fraxinus excelsior")
+df.intra.bet<-filter(intra.df,taxa=="Betula pendula")
+df.intra.aes<-filter(intra.df,taxa=="Aesculus hippocastenum")
 
 
 
@@ -742,3 +742,4 @@ dev.off()
 
 
 save.image("paper_full_analysis.RData")
+citation("base")
