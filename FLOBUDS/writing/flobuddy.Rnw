@@ -1,0 +1,43 @@
+\documentclass{article}
+
+\begin{document}
+\section*{Introduction}
+\subsubsection*{Phenology is important, so it has been well studied}
+\begin{itemize}
+\item Phenology, the timing of life-cycle events and transitions, is a critical biological trait. Phenology structures the life-history of organisms \citep{}, mediates species interactions \citep{}, and play a major role in determining ecosystem structure and function \citep{}.
+\item In recent decades, pronounced phenological adjustments across a broad taxonmic range have emerged as one of the most apparent signatures of antrhopogenic climate change. Plant phenology has advanced by 3-5 days on average per decade \citep{Menzel2006, Parmesan2003, Root2003}, but phenological responses differ substantial between species \citep{Cleland2012,Ovaskainen2013}.
+
+\subsubsection*{Phenological sequences are also important, but are less well studied}
+\item Because of the importance of phenology in fundamental and applied biology, there has been a strong and sustained research effort towards understanding the environmental cues that dictate phenological activity.
+\item Decades of research suggests that for woody plants in temperate regions, cool winter temperatures (chilling), warm spring temperatures (forcing) and day-length (photoperiod) are the primary drivers of phenology \citep{}. 
+\item But recently, serveral authors have suggested that is it not only individual phenophases but phenological sequences that are fundamental to fitness of woody species. Variation in order and time between phenophases may affect an indivudal's reproductive success \citep{}, productivity \citep{} and survival \citep{}. 
+\item While studies show that the proximate environmental cues of phenology are conserved for almost all phases including flowering and fruiting \citep{}, leaf budburst, expansion, coloration and drop\citep{}, vegetatitive growth and cesation\citep{} and dormancy \citep{}, exactly how woody plants integrate these interacting cues to establish and regulate phenological sequences remains controversial. %maybe not controversial.
+\end{itemize}
+\subsubsection*{A few observations about phenological sequences and narrowing on FLS}
+\begin{itemize}
+\item Certain aspects of phenological sequences are developmentally determined. For example, flowering must always proceed fruit set, and budburst must proceed leaf growth.
+However, while the order of these events in prescribed, the time between events is only weakly constrained \citep{} can be quite variable over time. For these sequential and often temporally distant pheno-phases it is possible that inter-annual variation in phenological sequence is a product of intra-annual climate variation. %Do I need to explain thsi more?
+\item But we also see significant inter-annual variaton in the sequences of relatively contemporaneous phenophases. Variation in relative timing and order of spring time flower and leaf development has recieved particular treatment in the literature \citep{}.  There is strong evidence flower-leaf sequences (FLSs) varition itself is an important component of woody plant fitness, but we have noyla baseline understanding of the physiological and environmental factors that contirbute the this variation \citep{}.
+\item In many species, these phenophases are physiologically independent and are initiated under relatively similar environmental conditions. Therefore, we suggest that sequence variation must be a product of differences in how the cues are integrated for each phases rather than differnces in the cues themselves.
+\end{itemize}
+
+\subsection*{The need}
+\begin{itemize}
+\item The idea that cues that dominate specific phenophases may only weakly influence other parts of a plants seasonal cycle has been well supported when comparing 
+spring phenology, which is thought be to dominated by temperature cues, to autumn phenology, reported to respond primarirly to photoperiod \citep{}, but has never been evaluated for these contemporaneous phases.
+\item As climate change continues to alter plant phenology, the need to clarify our understanding of fine scale dynamics of environmental controls of FLS is more urgent than ever. Differential sensitivity to the environment between flower and leaf phenology has potential to dramatically alter FLS patterns. Because FLSs are a key component of woody plant fitmess. depending on the magnitude and direction of these sensitivity differences, shifts in FLS patterns may favor some species over other, influencing which species can persisit in the future.
+\end{itemize}
+\subsubsection*{Transition}
+\begin{itemize}
+\item In this study, we evaluate the phenological response  
+by sing a fully factorial design charaterizing the differences and partition the sensitivity of each phase to 
+\end{itemize}
+\section*{Methods}
+\subsection*{Plant materials}
+\subsection*{Treatment in chambers}
+\subsection*{Statistical analyses}
+
+
+
+
+\end{document}
