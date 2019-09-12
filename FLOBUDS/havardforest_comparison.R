@@ -128,17 +128,24 @@ colnames(HFtempsL75)<-c("End_year" ,  "Season","GDH.L75","Chill_portions.L75" ,"
 HFtempsboth<-left_join(HFtempsbb,HFtempsflo)
 HFtempsboth<-left_join(HFtempsboth,HFtempsL75)
 
-HFtempsboth$GDDave1<-(HFtempsboth$GDD.bb+HFtempsboth$GDD.flo)/2
-HFtempsboth$CPave1<-(HFtempsboth$Chill_portions.bb+HFtempsboth$Chill_portions.flo)/2
 
-HFtempsboth$GDDave2<-(HFtempsboth$GDD.L75+HFtempsboth$GDD.flo)/2
-HFtempsboth$CPave2<-(HFtempsboth$Chill_portions.L75+HFtempsboth$Chill_portions.flo)/2
+
+
+#####below might be obsolete
+
+#HFtempsboth$GDDave1<-(HFtempsboth$GDD.bb+HFtempsboth$GDD.flo)/2
+#HFtempsboth$CPave1<-(HFtempsboth$Chill_portions.bb+HFtempsboth$Chill_portions.flo)/2
+
+#HFtempsboth$GDDave2<-(HFtempsboth$GDD.L75+HFtempsboth$GDD.flo)/2
+#HFtempsboth$CPave2<-(HFtempsboth$Chill_portions.L75+HFtempsboth$Chill_portions.flo)/2
 
 
 
 ## combine with phenology
-mod.dat<-select(HFtempsboth,c("End_year","Season","GDDave1","CPave1","GDDave2","CPave2"))
-colnames(mod.dat)<-c("year","Season","GDDave1","CPave1","GDDave2","CPave2")
+mod.dat<-HFtempsboth
+colnames(mod.dat)
+#select(HFtempsboth,c("End_year","Season","GDDave1","CPave1","GDDave2","CPave2"))
+colnames(mod.dat)[1]<-"year"
 mod.dat<-left_join(Vcraw,mod.dat,by="year")
 ##add daylength
 colnames(ad)<-c("bb.jd","Sunrise","Sunset","Daylength.leaf")
@@ -151,15 +158,42 @@ colnames(ad)<-c("l75.jd","Sunrise","Sunset","Daylength.l75")
 mod.dat<-left_join(mod.dat,ad,by="l75.jd")
 
 
-mod.dat$daylenghave1<-(mod.dat$Daylength.leaf+mod.dat$Daylength.flo)/2
-mod.dat$daylenghave2<-(mod.dat$Daylength.l75+mod.dat$Daylength.flo)/2
+#mod.dat$daylenghave1<-(mod.dat$Daylength.leaf+mod.dat$Daylength.flo)/2
+#mod.dat$daylenghave2<-(mod.dat$Daylength.l75+mod.dat$Daylength.flo)/2
 
-mod.daty<-select(mod.dat, c("year"       ,    "tree.id",        "species"  ,      "bb.jd"      ,    "l75.jd"   ,      "fbb.jd"   ,      "fopn.jd",        "FLS"   ,"FLS2"     ,      "Season"      ,   "GDDave1"      ,   "CPave1","GDDave2"      ,   "CPave2","daylenghave1","daylenghave2"))
+#mod.daty<-select(mod.dat, c("year"       ,    "tree.id",        "species"  ,      "bb.jd"      ,    "l75.jd"   ,      "fbb.jd"   ,      "fopn.jd",        "FLS"   ,"FLS2"     ,      "Season"      ,   "GDDave1"      ,   "CPave1","GDDave2"      ,   "CPave2","daylenghave1","daylenghave2"))
+
+mod.dat$zchill.bb<-(mod.dat$Chill_portions.bb-mean(mod.dat$Chill_portions.bb,na.rm=TRUE))/sd(mod.dat$Chill_portions.bb,na.rm=TRUE)
+ggplot(mod.dat,aes(year,zchill.bb))+geom_bar(stat="identity",position="dodge",fill="blue")
+
+mod.dat$zchill.flo<-(mod.dat$Chill_portions.flo-mean(mod.dat$Chill_portions.flo,na.rm=TRUE))/sd(mod.dat$Chill_portions.flo,na.rm=TRUE)
+ggplot(mod.dat,aes(year,zchill.flo))+geom_bar(stat="identity",position="dodge", fill="red")
+
+mod.dat$zphoto.bb<-(mod.dat$Daylength.leaf-mean(mod.dat$Daylength.leaf,na.rm=TRUE))/sd(mod.dat$Daylength.leaf,na.rm=TRUE)
+ggplot(mod.dat,aes(year,zphoto.bb))+geom_bar(stat="identity",position="dodge",fill="blue")
+
+mod.dat$zphoto.flo<-(mod.dat$Daylength.flo-mean(mod.dat$Daylength.flo,na.rm=TRUE))/sd(mod.dat$Daylength.flo,na.rm=TRUE)
+ggplot(mod.dat,aes(year,zphoto.flo))+geom_bar(stat="identity",position="dodge",fill="red")
+
+mod.dat$zGDD.flo<-(mod.dat$GDD.flo-mean(mod.dat$GDD.flo,na.rm=TRUE))/sd(mod.dat$GDD.flo,na.rm=TRUE)
+mod.dat$zGDD.bb<-(mod.dat$GDD.bb-mean(mod.dat$GDD.bb,na.rm=TRUE))/sd(mod.dat$GDD.bb,na.rm=TRUE)
+
+mod.dat$bin_photo_flo<-ifelse(mod.dat$zphoto.flo>0,1,0)
+mod.dat$bin_photo_bb<-ifelse(mod.dat$zphoto.bb>0,1,0)
+
+mod.dat$bin_chill_flo<-ifelse(mod.dat$zchill.flo>0,1,0)
+mod.dat$bin_chill_bb<-ifelse(mod.dat$zchill.bb>0,1,0)
+
+mod.dat$bin_GDD_flo<-ifelse(mod.dat$zGDD.flo>0,1,0)
+mod.dat$bin_GDD_bb<-ifelse(mod.dat$zGDD.bb>0,1,0)
 
 
 
 ##model
-
+budi<-brm(FLS~bin_chill_bb*bin_GDD_bb,dat=mod.dat)
+ summary(budi)
+floi<-brm(FLS~bin_chill_flo*bin_GDD_flo,dat=mod.dat)
+summary(floi)
 ###zscore
 
 mod.daty$zchill1<-(mod.daty$CPave1-mean(mod.daty$CPave1,na.rm=TRUE))/sd(mod.daty$CPave1,na.rm=TRUE)
