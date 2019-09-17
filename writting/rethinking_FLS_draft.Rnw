@@ -11,7 +11,7 @@
 \linenumbers
 
 
-\title{Reconciling historic hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology}
+\title{Reconciling competing hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology}
 % Alt: Re-ordering phenology: Reconciling historic hypotheses regarding flower-leaf sequences with their high variability
 % Alt: Why many species flower before they leaf in temperate forests and how climate change may reshape phenological sequences
 % Alt: Reconciling historic hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology
@@ -43,34 +43,31 @@
 
 \indent A deep inquiry into the nature of this phenological pattern is necessary and particularly timely now because anthropogenic climate change is altering FLSs (Fig. \ref{fig:Figure 1}). For the three European tree species we examined, the number of days between flowering and leafout have increased as a result of climate change, but the rate of change differs among them. If, as suggested, optimum not FLS patterning is an important component of fitness, this differential FLS sensitivity to climate change may influence which species will persist under altered climate conditions.\\
 
-% Explain in a sentence with example or such why you might get a change? DB cues?
 \indent Despite recent advances in characterizing the evolution and underlying physiology of FLS \citep{Gougherty2018,Savage2019}, a major challenge to predicting how FLS patterns will shift in response to climate change is that we do not have a solid baseline understanding of variability in FLS. While some authors present general correlations between flowering and leafing phenology \citep{Lechowicz_1995, Ettinger2018}, fine scale FLS variability has never been evaluated. We suggest that characterizing FLS variation among individuals and populations will not only improve our ability to predict how FLS patterns will change in the future, but also allow for a more biologically relevant evaluation of the current FLS hypotheses, revealing avenues for future, direct hypothesis testing.\\
 
 \indent Here we 1) Review the hypotheses of woody plant FLSs and their respective predictions, 2) Evaluate variation in FLSs, and explore how FLS variation within species, populations and individuals alters the predictions of the hypotheses, 3) Show how the incorporation of variation reveals consistencies and anomalies in support for FLS hypotheses using several case studies from temperate forests, and 4) make recommendations for future study of FLSs. 
 
 \section*{Defining FLS}
 
-\indent\indent Flower-leaf sequences have traditionally been classified into qualitative categories that are almost always defined at the species level. The terms hysteranthy, protanthy, proteranthy or precocious flowering describe plants that produce flowers before their leaves. Synanthy describes species whose flowering period overlaps their leaf development and seranthy describes plants whose flowers open after their leaves emerge \citep{Lamont2011, Heinig1899}. There are two major ways that this catagorial approach hinders our ability to evaluate the function of FLS variation.\\
+\indent\indent Flower-leaf sequences have traditionally been classified into qualitative categories that are almost always defined at the species level. The terms hysteranthy, protanthy, proteranthy or precocious flowering describe plants that produce flowers before their leaves. Synanthy describes species whose flowering period overlaps their leaf development and seranthy describes plants whose flowers open after their leaves emerge \citep{Lamont2011, Heinig1899}. FIX THIS But applying these catagories is not so straightforward, and the ambiguity impedes hypothesis testing.
 
-First, both flowering and leaf phenological sequences consist of multiple sub-stages, and this introduces significant ambiguity into how we interpret qualitative FLS descriptions. Consider a species who spring FLS is as follows:\\ Flower budburst\rightarrow leaf budburst\rightarrow flower open \rightarrow  leafout.\\
+Both flowering and leaf phenological sequences consist of multiple sub-stages, and this introduces significant ambiguity into how we interpret qualitative FLS descriptions. Consider a species with the following FLS:\\
+\begin{center}
+\textbf{Flower budburst}\rightarrow \textbf{leaf budburst}\rightarrow \textbf{flower open} \rightarrow \textbf{leafout}\\
+\end{center}
 
-\indent Phenological observers might classify this species as hysteranthous because flower budburst proceeds leaf budburst. They would also be justified if they called this species synathous because flowers open during the time between leafbudburst and leafout. But they could just as easily catagorize this species as seranthous because flowers open after leaf budburst. If a species is called hysteranthous in one data set and synanthous in another, we have know way of knowing whether this discrepancy reflects temporal or geographic variability in FLS, or is simply an artifact of observer decision-making. This uncertainty hampers our ability to accurately test the existing FLS hypotheses because any statistical relationship between FLS and other traits is biased by the subjectivity of the original observer.\\
+\indent Phenological observers might classify this species as hysteranthous because flower budburst proceeds leaf budburst. They would also be justified if they called this species synanthous because flowers open during the time between leaf budburst and leafout. But they could just as easily categorize this species as seranthous because flowers open after leaf budburst. If a species is called hysteranthous in one data set and synanthous in another, we have know way of knowing whether this discrepancy reflects temporal or geographic variability in FLSs or is simply an artifact of observer decision-making. 
 
-\indent Second, it is not clear that there is any biological significance to these particular determinations and these catagories obscure significant inter-specific difference in FLS. We have \textit{a priori} no reason to expect that a species whose flowers open two days after leaf budburst would be more similar to another species that flowers two week after leaf budburst than a species whose flowers open two days before, though the first two would both be classified as synanthous and the later as hysteranthous.\\
+\indent Further, it is not clear that there is any biological significance to these particular FLS determinations. When we consider selection on FLS variation, we have no \textit{a priori} reason to expect that a species whose flowers open two days after leaf budburst would be more similar to another species that flowers two week after leaf budburst than to a species whose flowers open two days before, though the first two would both be classified as synanthous and the later as hysteranthous.\\
 
-\indent We can solve this trough biology
+This uncertainty hampers our ability to accurately test the existing FLS hypotheses because any statistical relationship between FLS and other traits is biased by the subjectivity of the original observer.\\
 
- 
+\indent In order begin to  for the traditional inter-specific categorical approach to FLSs to be useful for identify the evolutionary significance of FLS variation, we must consider FLS patterns in the biological context of the various FLS hypotheses. The biological mechanisms underlying each hypothesis make different predictions the degrees of overlap between vegetative and floral phenophases, which is instructive for how to group or divide FLS patterns for hypothesis testing.
 
 
-%EMW: This sounds good, but the main messages here are a touch murky -- can you clarify?
-\indent However, we can extend our thinking regarding the hypotheses to overcome this bias. By examining the biological mechanisms underlying each hypotheses and incorporating their predictions regarding variability and overlapping phenophases in FLSs into analyses, we can arrive at better ways to utilize existing data and identify a new framework for treating FLS moving forward.
- 
-\section*{Hypotheses of FLS and their predictions about flower-leaf overlap}
-%EMW ... there is a connecting phrase or thought missing below ... see [].
-\indent \indent Behind each prevailing FLS hypothesis are evolutionary drivers that yield the phenological sequences observed today. These mechanisms inherently predict different degrees of overlap between vegetative and floral phenophases [connecting thought missing]. Here, we review the current FLS hypotheses, identify the underlying biology of each, and clarify how much overlap between flowering and vegetative growth they predict.
-
+Below, we review the current FLS hypotheses, identify the underlying biology of each, and clarify how much overlap between flowering and vegetative growth they predict.
 \subsubsection*{ Wind pollination}
+
 \indent\indent The most prevalent FLS hypothesis suggests that hysteranthy is an adaptation critical for effective wind pollination, with leafless flowering allowing for more efficient pollen dispersal and transfer \citep{Whitehead1969, Spurr1980,Friedman2009}. %In support of this hypothesis, it has been shown that wind velocities in forests are considerably higher in the leafless season than when a canopy is full \citep*{Brown1969,Whitehead1969}. and that vegetation structure and canopy closure reduce particle diffusion through a forest\citep{Brown1969}. Other studies have shown that there is significant filtration of pollen by leaves \citep*{Milleron2012, Tauber1967}, with the amount of pollen impacted on non-floral structure increasing by ~400\% between the leafless season and canopy expansion \citep{Tauber1967}.\\
  This hypothesis hinges on the fact that leaves create a substantial physical disruption to pollen transfer, a premise that we would not necessarily expect to be true for the early stages of leaf expansion when tiny leaf primordia would have little impact on environmental structure. In this framework, we expect that trees that flower during the early stages of leaf expansion would gain similar mechanical advantage to those who complete their flowering before any leaf activity. We see that in Harvard Forest, while wind-pollinated species flower both before and after bud burst, they all flower before their leaves reach 75\% of their final size (Fig. \ref{fig:Figure 2}). This hypothesis predicts that wind pollinated species should flower before or with their leaves, while in animal pollinated species, FLS should be random or co-vary with pollinator activities.
 
@@ -85,6 +82,8 @@ However, recent work from \citet{Savage2019} has demonstrated that floral hydrat
 \subsubsection*{Phylogenetics} 
 \indent\indent Finally, it is also possible that FLSs are highly conserved traits, and the preponderance of hysteranthy in the temperate zone is a product of phylogenetic representation of the region rather than an adaptive aspect of the trait. In this framework, a species' FLS is under very weak or no selection so there are no expectations regarding the degree of overlap between flower and leaf phenological activity.  This hypothesis predicts strong phylogenetic patterning in the FLS with no correlation with other traits.\\
 
+
+\subsection*{A second problem}
 %EMW: What approach? The phylogenetic one? If so, I would say that and explain HOW it could help determine categories ... if, instead, 'this approach' means something else re-work for clarity and explain how whatever approach can help. 
 \indent This approach can increase the utility of FLS categorization by helping researchers determine which categories should be separated or grouped given each hypothesis; however we must address a second problematic assumption of the classification system. 
 %EMW: The below is important, I would try to have it (or its basic information) in a topic sentence, not buried in the middle of a paragraph. 
