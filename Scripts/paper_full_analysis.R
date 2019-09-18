@@ -27,6 +27,9 @@ library(reshape2)
 library(RColorBrewer)
 
 load("RData/paper_full_analysis.RData")
+##after you load quiery how many unique species we have total
+setdiff(silv.data$name,mich.data$name)
+unique(HF$species)
  ###Data#####################################################################
 #Read in Pep data
 aln<-read.csv("datasheets_derived/PEP/alnus_delta_hyst.csv",header=TRUE)
