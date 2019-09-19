@@ -5,27 +5,25 @@
 \subsubsection*{Phenology is important, so it has been well studied}
 \begin{itemize}
 \item Phenology, the timing of life-cycle events and transitions, is a critical biological trait. Phenology structures the life-history of organisms \citep{}, mediates species interactions \citep{}, and play a major role in determining ecosystem structure and function \citep{}.
-\item In recent decades, pronounced phenological adjustments across a broad taxonmic range have emerged as one of the most apparent signatures of antrhopogenic climate change. Plant phenology has advanced by 3-5 days on average per decade \citep{Menzel2006, Parmesan2003, Root2003}, but phenological responses differ substantial between species \citep{Cleland2012,Ovaskainen2013}.
+\item In recent decades, pronounced phenological adjustments across a broad taxonmic range have emerged as one of the most apparent signatures of anthropogenic climate change. Plant phenology has advanced by 3-5 days on average per decade \citep{Menzel2006, Parmesan2003, Root2003}, but phenological responses differ substantial between species \citep{Cleland2012,Ovaskainen2013}.
 
 \subsubsection*{Phenological sequences are also important, but are less well studied}
 \item Because of the importance of phenology in fundamental and applied biology, there has been a strong and sustained research effort towards understanding the environmental cues that dictate phenological activity.
 \item Decades of research suggests that for woody plants in temperate regions, cool winter temperatures (chilling), warm spring temperatures (forcing) and day-length (photoperiod) are the primary drivers of phenology \citep{}. 
 \item But recently, serveral authors have suggested that is it not only individual phenophases but phenological sequences that are fundamental to fitness of woody species. Variation in order and time between phenophases may affect an indivudal's reproductive success \citep{}, productivity \citep{} and survival \citep{}. 
-\item While studies show that the proximate environmental cues of phenology are conserved for almost all phases including flowering and fruiting \citep{}, leaf budburst, expansion, coloration and drop\citep{}, vegetatitive growth and cesation\citep{} and dormancy \citep{}, exactly how woody plants integrate these interacting cues to establish and regulate phenological sequences remains controversial. %maybe not controversial.
+\item While studies show that the proximate environmental cues of phenology are conserved for almost all phases including flowering and fruiting \citep{}, leaf budburst, expansion, coloration and drop\citep{}, vegetatitive growth and cesation\citep{} and dormancy \citep{}, we do not know exactly how woody plants integrate these interacting cues to establish and regulate phenological sequences.
 \end{itemize}
 \subsubsection*{A few observations about phenological sequences and narrowing on FLS}
 \begin{itemize}
-\item Certain aspects of phenological sequences are developmentally determined. For example, flowering must always proceed fruit set, and budburst must proceed leaf growth.
-However, while the order of these events in prescribed, the time between events is only weakly constrained \citep{} can be quite variable over time. For these sequential and often temporally distant pheno-phases it is possible that inter-annual variation in phenological sequence is a product of intra-annual climate variation. %Do I need to explain thsi more?
-\item But we also see significant inter-annual variaton in the sequences of relatively contemporaneous phenophases. Variation in relative timing and order of spring time flower and leaf development has recieved particular treatment in the literature \citep{}.  There is strong evidence flower-leaf sequences (FLSs) varition itself is an important component of woody plant fitness, but we have noyla baseline understanding of the physiological and environmental factors that contirbute the this variation \citep{}.
-\item In many species, these phenophases are physiologically independent and are initiated under relatively similar environmental conditions. Therefore, we suggest that sequence variation must be a product of differences in how the cues are integrated for each phases rather than differnces in the cues themselves.
+\item Certain aspects of phenological sequences are developmentally determined. For example, flowering must always proceed fruit set, and budburst must proceed leaf growth. However, while the order of these events in prescribed, the time between events is only weakly constrained and can can be quite variable over time \citep{}. For temporally disperate phenopases, this sequences variation may be a product of of local environmental variation between seasons, physiological differences between phenophases, or a combination of these two factors.
+\item But we also see significant inter-annual variaton in the sequences of relatively contemporaneous phenophases like spring flower and leaf development. In many species, these phenophases are physiologically independent of each other and are initiated contemporaneously under relatively similar environmental conditions \citep{}. Therefore, unlike with the case of seasonally-disperate phenological sequences, sequence variation here must be a product of physiological differences in how the cues are integrated for each phases rather than differnces in the cues themselves.
+\indentThe idea that cues that dominate specific phenophases may only weakly influence other parts of a plants seasonal cycle is well supported when comparing distant seasonal phases. For example, the dominant cue for  spring phenology is temperature and photoperiod for autumn phenology \citep{}. But this differential sensitivity to climate has never been evaluated for contemporaneous phases and we have no baseline understanding of the specifics of how physiological and environmental factors that contribute the FLS variation \citep{}.
 \end{itemize}
 
 \subsection*{The need}
 \begin{itemize}
-\item The idea that cues that dominate specific phenophases may only weakly influence other parts of a plants seasonal cycle has been well supported when comparing 
-spring phenology, which is thought be to dominated by temperature cues, to autumn phenology, reported to respond primarirly to photoperiod \citep{}, but has never been evaluated for these contemporaneous phases.
-\item As climate change continues to alter plant phenology, the need to clarify our understanding of fine scale dynamics of environmental controls of FLS is more urgent than ever. Differential sensitivity to the environment between flower and leaf phenology has potential to dramatically alter FLS patterns. Because FLSs are a key component of woody plant fitmess. depending on the magnitude and direction of these sensitivity differences, shifts in FLS patterns may favor some species over other, influencing which species can persisit in the future.
+ 
+ \item As climate change continues to alter plant phenology, the need to clarify our understanding of fine scale dynamics of environmental controls of FLS is more urgent than ever. Recent attention in the literature to the function significance of FLS variation has demonstrated that FLSs are a key component of woody plant fitness \citep{}. Differential sensitivity to a changing environment between flower and leaf phenology has potential to dramatically alter FLS patterns, and depending on the magnitude and direction of these sensitivity differences, shifts in FLS patterns may favor some species over other, influencing which species can persisit in the future.
 \end{itemize}
 \subsubsection*{Transition}
 \begin{itemize}
@@ -33,9 +31,19 @@ spring phenology, which is thought be to dominated by temperature cues, to autum
 by sing a fully factorial design charaterizing the differences and partition the sensitivity of each phase to 
 \end{itemize}
 \section*{Methods}
-\subsection*{Plant materials}
-\subsection*{Treatment in chambers}
+\subsection*{Plant materials and preperation}
+\begin{itemize}
+\item We sampled all plant material used in this experiment from Harvard Forest in Petersham, MA. On October 25, 2016, immediatedly after most plants in the area entered dormancy but before they could accumulate any significant chilling in the field,  we collected branch cuttings from 7-13 individuals 12 woody plant species (4-12 cutting per individual for a total of 48-56 per species). The species consisted of a mix of deciduous shrubs, understory and canopy trees commonly found in mesic hardward forests of the eastern United States (see S1 for species list).
+\item We transported all cuttings to the the Arnold Arboretum in Boston, MA where they were recut in water to prevent caalousing and cavitation and place in Erlenmeyer flasks with distilled water.
+\end{itemize}
+\subsection*{Growth Chamber experiment}
+\begin{itemize}
+\item We randomly assigned cuttings to a full set of eight experimental treatments; 2 levels of chilling (4 vs 8 weeks at 4\degree C), 2 levels of temperature (24\degree C:18\degree C warm vs 18\degree:12\degree C cool) and 2 levels of photoperiod (12 vs 8 hours). We alternated day/night temperature periodicity on a 12 hour schedule to reduce covaration with photoperiodicty. We re-cut all twig and changed the water every 7-10 days and rotated all treatments between growth chambers every two weeks to mimimize chamber effects. We made phenological observations every 2-3 days using the modified BBCH scale for woody plants \citep{} for 3 month following release from chilling conditions. In this periods we assess three phenological phases: bud break (BBCH phase 07), leaf unfolding (BBCH phase 15) and first flower open (BBCH 60). At the conclusion of this period we assessed all individuals that did not undergo bud break and excluded any dead indivudals for analysis.
+\end{itemize}
 \subsection*{Statistical analyses}
+\begin{itemize}
+\item For responses time to each phenophases of interest, we fit mixed-effect hierarchical models with chilling, forcing, photoperiod and all two-way interactions as the fixed effects and species as a random effect grouping factor. We chose a Bayesian, hierarchical approach in order to identify systematic trends accross species' responses while accounting for sample size, varience and the unique effect of each species. We fit all models using the pack BRMS in R. The models we fit appear below:
+y_i_,_j_,_k ~ N(\alpha_sp_[i_j_k]+ ) etc
 
 
 
