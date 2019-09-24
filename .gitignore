@@ -1,8 +1,7 @@
 *.log
 *.bbl
 *.aux
-*.synctex.gz
-*.concordence.tex
+*.synctex.gzx
 *.DS_Store
 *.Rda
 *.RData
