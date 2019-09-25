@@ -721,7 +721,7 @@ head(pepbayes)
 biggest<-rbind(alleffectos,pepbayes)
 biggest$trait[which(biggest$trait=="minimum precipitation")] <- "water dynamics"
 
-jpeg("..//figure/allmods_effectsizes_combined.jpeg",width=1400,height=1000,res=200)
+jpeg("..//figure/allmods_effectsizes_combined.jpeg",width = 8, height = 6, units = 'in', res=300))
 ggplot(biggest,aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3,stroke=1.5)+scale_shape_manual(values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey",other="beige"))+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data,alpha=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
   scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
