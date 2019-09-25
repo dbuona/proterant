@@ -174,33 +174,33 @@ png("..//figure/FLS_climate_change.png",width = 5, height = 6, units = 'in', res
 plot(c(1960,2015), c(-30,50), type = "n", xlab = "year", ylab = "Days between flowering and leafing", bty='l')
 #rect(xleft=1960, ybottom=-30, xright=1980, ytop=50,col="ivory1" )
 #rect(xleft=1980, ybottom=-30, xright=2015, ytop=50,col="ivory2")
-segments(x0=1980,y0=allalphas,x1=2015,y1=allalphas+allbetas*35,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted", lwd=0.1 )
-segments(x0=1960,y0=allalphas,x1=1980,y1=allalphas,col=rgb(.1,.1,.1,alpha=0.1),lty="dotted",lwd=0.1 )
-segments(x0=1980,y0=allalphas1,x1=2015,y1=allalphas1+allbetas1*35,col=rgb(0,0,0,alpha=0.1),lty="dotted",lwd=0.1)
-segments(x0=1960,y0=allalphas1,x1=1980,y1=allalphas1,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted",lwd=0.1)
-segments(x0=1980,y0=allalphas2,x1=2015,y1=allalphas2+allbetas2*35,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted",lwd=0.1 )
-segments(x0=1960,y0=allalphas2,x1=1980,y1=allalphas2,col=rgb(0.1,0.1,0.1,alpha=0.1),lty="dotted",lwd=0.1 )
+segments(x0=1980,y0=allalphas,x1=2015,y1=allalphas+allbetas*35,col=rgb(1,0,0,alpha=0.1),lty="solid", lwd=0.1 )
+segments(x0=1960,y0=allalphas,x1=1980,y1=allalphas,col=rgb(1,0,0,alpha=0.1),lty="solid",lwd=0.1 )
+segments(x0=1980,y0=allalphas1,x1=2015,y1=allalphas1+allbetas1*35,col=rgb(1,.8,0,alpha=0.1),lty="solid",lwd=0.1)
+segments(x0=1960,y0=allalphas1,x1=1980,y1=allalphas1,col=rgb(1,.8,0,alpha=0.1),lty="solid",lwd=0.1)
+segments(x0=1980,y0=allalphas2,x1=2015,y1=allalphas2+allbetas2*35,col=rgb(0,0.6,.8,alpha=0.1),lty="solid",lwd=0.1 )
+segments(x0=1960,y0=allalphas2,x1=1980,y1=allalphas2,col=rgb(0,0.6,.8,alpha=0.1),lty="solid",lwd=0.1 )
 segments(x0=1960,y0=alphaALN, x1=1980,y1=alphaALN,col="red",lwd=3)
 segments(x0=1980,y0=alphaALN, x1=2015,y1=alphaALN+betaALN*35,col="red",lwd=3)
-rect(xleft=1960,xright=2015,ybottom=alphaALNlow,ytop=alphaALNhigh,col=rgb(1,0,0,alpha=0.3),border=NA)
+rect(xleft=1960,xright=2015,ybottom=alphaALNlow,ytop=alphaALNhigh,col=rgb(1,0,0,alpha=0.4),border=NA)
 #segments(x0=1980, y0=alphaALN-betaALNlow,x1=2015,y1=alphaALN-betaALNlow+betaALN*35) was trying to add cis to slope but too small to see
 
 #segments(x0=1960,y0=alphaALNlow, x1=2015,y1=alphaALNlow, lty=4, col="red",lwd=1)
 #segments(x0=1960,y0=alphaALNhigh, x1=2015,y1=alphaALNhigh, lty=4, col="red",lwd=1)
 segments(x0=1960,y0=alphaFRAX, x1=1980,y1=alphaFRAX,col="darkgoldenrod1",lwd=3)
 segments(x0=1980,y0=alphaFRAX, x1=2015,y1=alphaFRAX+betaFRAX*35,col="darkgoldenrod1",lwd=3)
-rect(xleft=1960,xright=2015,ybottom=alphaFRAXlow,ytop=alphaFRAXhigh,col=rgb(1,.8,0,alpha=0.3),border=NA)
+rect(xleft=1960,xright=2015,ybottom=alphaFRAXlow,ytop=alphaFRAXhigh,col=rgb(1,.9,0,alpha=0.4),border=NA)
 
 #segments(x0=1960,y0=alphaFRAXlow, x1=2015,y1=alphaFRAXlow, lty=4,col="yellow",lwd=1)
 #segments(x0=1960,y0=alphaFRAXhigh, x1=2015,y1=alphaFRAXhigh, lty=4,col="yellow",lwd=1)
-segments(x0=1960,y0=alphaAES, x1=1980,y1=alphaAES,col="blue",lwd=3)
-segments(x0=1980,y0=alphaAES, x1=2015,y1=alphaAES+betaAES*35,col="blue",lwd=3)
-rect(xleft=1960,xright=2015,ybottom=alphaAESlow,ytop=alphaAEShigh,col=rgb(0,0,1,alpha=0.3),border=NA)
+segments(x0=1960,y0=alphaAES, x1=1980,y1=alphaAES,col="navyblue",lwd=3)
+segments(x0=1980,y0=alphaAES, x1=2015,y1=alphaAES+betaAES*35,col="navyblue",lwd=3)
+rect(xleft=1960,xright=2015,ybottom=alphaAESlow,ytop=alphaAEShigh,col=rgb(.4,.4,1,alpha=0.3),border=NA)
 
 #segments(x0=1960,y0=alphaAESlow, x1=2015,y1=alphaAESlow, lty=4,col="blue",lwd=1)
 #segments(x0=1960,y0=alphaAEShigh, x1=2015,y1=alphaAEShigh, lty=4,col="blue",lwd=1)
 par(xpd=FALSE)
-legend("top", legend=c("A. glutinosa", "F. excelsior","A. hippocastanum"),col=c("red", "darkgoldenrod1","blue"), lwd=2, cex=0.6, horiz=TRUE)
+legend("top", legend=c("A. glutinosa", "F. excelsior","A. hippocastanum"),col=c("red", "darkgoldenrod1","blue"), lwd=2, cex=0.6, horiz=TRUE, text.font = 3)
 dev.off()
 
 ##################################Analysis II####################################################
@@ -209,26 +209,28 @@ unique(HF$species)
 HF$name[HF$species=="ACPE"]<-"A. pensylvanicum"
 HF$name[HF$species=="ACRU"]<-"*A. rubrum"
 HF$name[HF$species=="ACSA"]<-"*A. saccharrum"
-HF$name[HF$species=="AMSP"]<-"A. species"
+HF$name[HF$species=="AMSP"]<-"Amelanchier spp."
 HF$name[HF$species=="BEAL"]<-"*B. allegheniensis"
 HF$name[HF$species=="BELE"]<-"*B. lenta"
 HF$name[HF$species=="BEPA"]<-"*B. papyrifera"
 HF$name[HF$species=="BEPO"]<-"*B. populifolia"
 HF$name[HF$species=="FAGR"]<-"*F. grandifolia"
 HF$name[HF$species=="FRAM"]<-"*F. americana"
-HF$name[HF$species=="HAVI"]<-"H. virginiana"
 HF$name[HF$species=="ILVE"]<-"I. verticillata"
 HF$name[HF$species=="KAAN"]<-"K. angustifolia"
 HF$name[HF$species=="KALA"]<-"K. latifolia"
 HF$name[HF$species=="NEMU"]<-"I. mucronata"
 HF$name[HF$species=="NYSY"]<-"N. sylvatica"
 HF$name[HF$species=="POTR"]<-"*P. tremuloides"
-HF$name[HF$species=="PRSU"]<-"P. serotina"
+HF$name[HF$species=="PRSE"]<-"P. serotina"
 HF$name[HF$species=="QURU"]<-"*Q. rubra"
-HF$name[HF$species=="QUVE"]<-"*Q. velutina*"
-
-
-HF.averages<-dplyr::filter(HF, species %in% c("ACRU","BEAL" ,"QURU","ACPE","NYSY" ))
+HF$name[HF$species=="QUVE"]<-"*Q. velutina"
+HF$name[HF$species=="VACO"]<-"V. corymbosum"
+HF$name[HF$species=="SAPU"]<-"S. racemosa"
+HF$name[HF$species=="VICA"]<-"V. cassinoides"
+HF$name[HF$species=="VIAL"]<-"V. latinoides"
+HF$name[HF$species=="COAL"]<-"C. alternifolia"
+#HF.averages<-dplyr::filter(HF, species %in% c("ACRU","BEAL" ,"QURU","ACPE","NYSY" ))
 
 #HF.averages$name[HF.averages$species=="ACPE"]<-"A. pensylvanicum"
 #HF.averages$name[HF.averages$species=="ACRU"]<-"A. rubrum"
@@ -237,12 +239,12 @@ HF.averages<-dplyr::filter(HF, species %in% c("ACRU","BEAL" ,"QURU","ACPE","NYSY
 #HF.averages$name[HF.averages$species=="QURU"]<-"Q. rubra"
 
 
-colnames(HF.averages)
-colnames(HF.averages)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (75%)","flower budburst","flower open","physiological offset","functional offset","Funct. hysteranthy","Phys. hysteranthy","name")
-HF.averages<-tidyr::gather(HF.averages, phase,DOY,4:7)
+#colnames(HF.averages)
+#colnames(HF.averages)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (75%)","flower budburst","flower open","physiological offset","functional offset","Funct. hysteranthy","Phys. hysteranthy","name")
+#HF.averages<-tidyr::gather(HF.averages, phase,DOY,4:7)
 
-HF.averages$name <- factor(HF.averages$name, levels = c("A. rubrum","B. alleghaniensis" ,"Q. rubra","A. pensylvanicum","N. sylvatica"))
-pd<-position_dodge(width=0.0)
+#HF.averages$name <- factor(HF.averages$name, levels = c("A. rubrum","B. alleghaniensis" ,"Q. rubra","A. pensylvanicum","N. sylvatica"))
+#pd<-position_dodge(width=0.0)
 
 ###if you want a bigger data set to plot
 colnames(HF)
@@ -250,8 +252,9 @@ colnames(HF)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (7
 HF2<-tidyr::gather(HF, phase,DOY,4:7)
 HF2<-filter(HF2,!is.na(name))
 png("..//figure/HFmeans_expanded.png",width = 8, height = 6, units = 'in', res=300)
-ggplot(HF2,(aes(name,DOY)))+stat_summary(fun.y = mean, fun.ymin = min, fun.ymax = max,aes(shape=phase,color=phase))+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_base()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(angle = 300,hjust=0))
+ggplot(HF2,(aes(name,DOY)))+stat_summary(aes(shape=phase,color=phase))+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_linedraw()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(angle = 300,hjust=0,face="italic"))
 dev.off()
+?stat_summary()
 ###reduce sp
 #jpeg("..//figure/HFmeans.jpeg",width = 800, height = 550)
 #ggplot(HF.averages,(aes(name,DOY)))+stat_summary(fun.data = "mean_cl_boot",aes(color=phase,shape=phase),position=pd,size=0.78)+scale_color_manual(values=c("firebrick1","deeppink","lawngreen","darkgreen"))+scale_shape_manual(values=c(16,8,0,23))+theme_base()+ylab("Day of Year")+xlab(NULL)#+theme(axis.text.x = element_text(angle = 300,hjust=0.5))
@@ -268,11 +271,14 @@ QURU$tree.id[QURU$tree.id=="QURU-01"]<-"1"
 QURU$tree.id[QURU$tree.id=="QURU-03"]<-"3"
 QURU$tree.id[QURU$tree.id=="QURU-04"]<-"4"
 
-jpeg("..//figure/HF_Q_ru_interannual.jpeg",width = 1500, height = 750,res=250)
+jpeg("..//figure/HF_Q_ru_interannual.jpeg",width = 8, height = 6, units = 'in', res=300)
 pd2<-position_dodge2(0.8)
 
-ggplot(QURU,aes(year,flower_budburst))+geom_point(aes(year,flower_budburst,color=tree.id,group = row.names(QURU)),shape=2, ,position=pd2)+
-  geom_point(aes(year,leaf_budburst,color=tree.id,group = row.names(QURU)),shape=17,position=pd2)+geom_linerange(aes(x=year,ymin=flower_budburst,ymax=leaf_budburst, linetype=FLS,color=tree.id,group = row.names(QURU)),position=pd2)+theme_base()+labs(y = "Day of year",color= "Tree I.D.")+scale_color_manual(values=c("red","blue","darkgreen"))
+ggplot(QURU,aes(year,flower_budburst))+geom_point(aes(year,flower_budburst,color=tree.id,group = row.names(QURU),shape="flower budburst") ,position=pd2)+
+  geom_point(aes(year,leaf_budburst,color=tree.id,group = row.names(QURU),shape="leaf budburst"),position=pd2)+
+  geom_linerange(aes(x=year,ymin=flower_budburst,ymax=leaf_budburst, linetype=FLS,color=tree.id,group = row.names(QURU)),position=pd2)+
+  theme_linedraw()+labs(y = "Day of year",color= "Tree I.D.")+
+  scale_color_manual(values=c("red","blue","darkgreen"))+scale_shape_manual(name="Phenophase",values=c("leaf budburst"=17,"flower budburst"=2), label=c("flower budburst","leaf budburst"))
 dev.off()
 
 #######Analysis 3 come back to this once Lizzie talk to Jonath.
@@ -549,7 +555,7 @@ modelbin.funct.noint <- brm(hyst.funct~ cent_pol+cent_floday+cent_minP+(1|name),
 modelbin.phys.noint <- brm(hyst.phys~ cent_pol+cent_floday+cent_minP+(1|name), data = HF.continuous.data, 
                            family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=3000) 
 
-extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,.25,.75,0.975))),"trait")
+extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,0.975))),"trait")
 }
 
 funct.cont<-extract_coefs4HF(modelcont.funct.noint)
@@ -579,8 +585,8 @@ colnames(hfboth)[colnames(hfboth)=="Estimate"] <- "estimate"
 comps2<-comps
 colnames(comps2)<-c("trait","estimate","Q2.5","Q97.5","class","category","data")
 comps2<-dplyr::select(comps2,-class)
-hfboth<-dplyr::select(hfboth,-Q25)
-hfboth<-dplyr::select(hfboth,-Q75)
+#hfboth<-dplyr::select(hfboth,-Q25)
+#hfboth<-dplyr::select(hfboth,-Q75)
 hfboth<-dplyr::select(hfboth,-Est.Error)
 
 colnames(hfboth)
@@ -703,21 +709,22 @@ summary(smflo.bayes)
 pepbayes<-extract_coefs4HF(smflo.bayes)
 colnames(alleffectos)
 colnames(pepbayes)
-pepbayes<-dplyr::select(pepbayes,-Est.Error,-Q75,-Q25)
+pepbayes<-dplyr::select(pepbayes,-Est.Error)
 pepbayes$category<-"other"
 pepbayes$data_type<-"continuous"
 pepbayes$data<-"PEP725"
 colnames(pepbayes)<-c("trait"  ,   "estimate",  "Q2.5"    ,  "Q97.5"   ,  "category",  "data_type" ,"data"  )
 pepbayes$trait[which(pepbayes$trait=="flo.cent")] <- "flowering time"
 pepbayes$trait[which(pepbayes$trait=="soil.cent")] <- "minimum precipitation"
-pepbayes<-filter(pepbayes,trait!="Intercept")
+pepbayes<-dplyr::filter(pepbayes,trait!="Intercept")
+head(pepbayes)
 biggest<-rbind(alleffectos,pepbayes)
 biggest$trait[which(biggest$trait=="minimum precipitation")] <- "water dynamics"
 
-jpeg("..//figure/allmods_effectsizes_combined.jpeg",width=1400,height=900,res=180)
+jpeg("..//figure/allmods_effectsizes_combined.jpeg",width=1400,height=1000,res=200)
 ggplot(biggest,aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3,stroke=1.5)+scale_shape_manual(values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey",other="beige"))+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data,alpha=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
-  scale_linetype_manual(values=c("solid","solid"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
+  scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
   scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4","skyblue1"))+
   guides(fill=guide_legend(override.aes=list(colour=c(functional="black",other="beige",physiological="gray"))))
 dev.off()
