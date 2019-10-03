@@ -24,19 +24,136 @@ We ran the models with 599 bootstrapped re-sampling iterations for each data set
 \indent Using same PEP725 species records, we used r-squared values extracted from linear models \citep{baseR} to evaluate whether FLS variation was primarily driven by flower or leaf timing variation (tab. \ref{tab:Table S2})\\
 
 
-\begin{table}[h!]
-\begin{tabular}[width=\textwidth]{|c|c|c|}
-\hline
-Data set&Physiological&Functional\\
-\hline
-MTSV&0.22&0.07\\
-USFS&0.13&0.65\\
-HF&0.01&0.27\\
-\hline
-\end{tabular}
-\caption{\textbf{Phylogentic signal for categorically hysteranthous flowering in three case studies}. The D statistic \citep{Fritz 2010} is variable depending on how FLS is defined and across case studies. With values of zero indicating a trait phylogenetically conserved as expected under a Brownian threshold modeland 1 indicating phylgenetic randomness, these case studies tend to produce a moderate to strong phylgenetic signal.}
-\label{tab:Table S1}
-\end{table}
+\section*{Supplimental Tables and Figures}
+<<Code_chunk_Minimal_example, results='asis', echo=FALSE>>=
+rm(list=ls()) 
+options(stringsAsFactors = FALSE)
+graphics.off()
+setwd("~/Documents/git/proterant/Input")
+library(xtable,quietly=TRUE)
+library(caper,quietly=TRUE)
+
+#read in data
+mich.data<-read.csv("datasheets_derived/MTSV_USFS/michdata_final.csv")
+mich.tre<-read.tree("datasheets_derived/MTSV_USFS/michtre_final.tre")
+
+silv.data<-read.csv("datasheets_derived/MTSV_USFS/silvdata_final.csv")
+silv.tre<-read.tree("datasheets_derived/MTSV_USFS/silvtre_final.tre")
+mich.tre$node.label<-NULL
+silv.tre$node.label<-NULL
+d<-comparative.data(mich.tre,mich.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+Phylo.Pro.phys<-phylo.d(d, binvar=pro3) 
+
+##functionalhysteranthy
+PhyloPro.funct<-phylo.d(d,binvar=pro2)
+
+
+
+d.silv<-comparative.data(silv.tre,silv.data,name,vcv = TRUE,vcv.dim = 2, na.omit = FALSE)
+silv.Pro.phys<-phylo.d(d.silv, binvar=pro3) 
+silv.Pro.funct<-phylo.d(d.silv,binvar=pro2)
+
+df <- data.frame(Dataset = c("MTSV","MTSV","USFS","USFS"),
+                 category  = c("Functional","Physiological","Functional","Physiological"),
+                 D = c(PhyloPro.funct$DEstimate,Phylo.Pro.phys$DEstimate,silv.Pro.funct$DEstimate,silv.Pro.phys$DEstimate))
+
+strCaption <- paste0("\\textbf{Table Whatever} This table is just produced with some",
+                     "random data and does not mean anything. Just to show you how ",
+                     "things work.")
+table1<-xtable(df, digits=2, caption=strCaption, label="Test_table") 
+align(table1) <- "|l|l|l|l|"
+print(table1,
+      include.rownames=FALSE, #Don't print rownames
+
+      caption.placement="bottom") 
+      
+     
+                        
+      
+                 
+             
+
+
+@
+
+<<Code_chunk_Minimal_example2, results='asis', echo=FALSE>>=
+library("raster")
+library("remote")
+library(reshape2)
+library(RColorBrewer)
+library(rgdal)
+aln10<-read.csv("datasheets_derived/PEP/alnus10_delta_hyst.csv",header=TRUE)
+frax10<-read.csv("datasheets_derived/PEP/fraxinus10_delta_hyst.csv",header=TRUE)
+bet10<-read.csv("datasheets_derived/PEP/betpen10_delta_hyst.csv",head=TRUE)
+aes10<-read.csv("datasheets_derived/PEP/aes10_delta_hyst.csv",header=TRUE)
+
+aln10$taxa<-"Alnus glutinosa" ##assign species
+frax10$taxa<-"Fraxinus excelsior"
+aes10$taxa<-"Aesculus hippocastenum"
+
+intra.d<-rbind(aln10,frax10,bet10,aes10)
+moist.aug<-raster("climate_data/grids_germany_multi_annual_soil_moist_1991-2010_08.asc") ##Gause Kruger 3 for August
+moist.apr<-raster("grids_germany_multi_annual_soil_moist_1991-2010_04.asc")
+coordinates(intra.d)<- ~lon + lat ###PEP site coordinates
+proj4string(intra.d) <- CRS("+proj=longlat +datum=WGS84") ##establish the project
+
+#   <- spTransform(d, CRS("+proj=tmerc +lat_0=47.2700 +lon_0=7.5000 +k=1 +x_0=3386564.9400+y_0=5237917.9109 +ellps=krass +units=m +no_defs")) ### this doesnt work
+p <- spTransform(intra.d, CRS("+proj=tmerc +lat_0=50.625 +lon_0=9.84375, +k=1 +x_0=3559832.734474 +y_0=5610860.187573 +ellps=krass +units=m +no_defs")) ###convert our coordinate to Gausse Kruger
+
+
+gaas<-coordinates(p) ### make these values coordinates in structure
+
+gaas.cord<-as.data.frame(gaas)
+pep.cord<-as.data.frame(intra.d)
+colnames(gaas.cord)<-c("x","y")
+
+
+intra.df<-cbind(pep.cord,gaas.cord) ### aff the next
+
+###Extract soil moisture baluse
+Soil<-extract(moist.aug, matrix(c(intra.df$x,intra.df$y), ncol = 2)) ### extract the soil moisture at the pep sites
+intra.df$SM<-Soil
+
+###center phenology
+intra.df$flo.cent<-intra.df$flower-mean(intra.df$flower,na.rm=TRUE)
+intra.df$leaf.cent<-intra.df$leaf-mean(intra.df$leaf,na.rm=TRUE)
+intra.df$soil.cent<-intra.df$SM-mean(intra.df$SM,na.rm=TRUE)
+intra.df$offset.cent<-intra.df$offset-mean(intra.df$offset,na.rm=TRUE)
+
+####now run each species model's seperately
+df.intra.alnus<-filter(intra.df,taxa=="Alnus glutinosa")
+df.intra.frax<-filter(intra.df,taxa=="Fraxinus excelsior")
+df.intra.bet<-filter(intra.df,taxa=="Betula pendula")
+df.intra.aes<-filter(intra.df,taxa=="Aesculus hippocastenum")
+
+
+
+
+
+### leafing or flowering driving variation
+
+
+
+
+
+RsquareAdj(lm(offset~leaf.cent,data=df.intra.alnus))[2]
+
+
+summary(lm(offset~flo.cent,data=df.intra.frax))
+summary(lm(offset~leaf.cent,data=df.intra.frax))
+summary(lm(offset~flo.cent,data=df.intra.aes))
+summary(lm(offset~leaf.cent,data=df.intra.aes))
+summary(lm(offset~flo.cent,data=df.intra.bet))
+summary(lm(offset~leaf.cent,data=df.intra.bet))
+df2 <- data.frame(Species = c("Alnus glutinosa","Fraxinus excelsior","Betula pendula","Aesculus hippocastanum"),
+                  Flowering  = c(coef(lm(offset~flo.cent,data=df.intra.alnus))[2],coef(lm(offset~flo.cent,data=df.intra.frax))[2],coef(lm(offset~flo.cent,data=df.intra.bet))[2],coef(lm(offset~flo.cent,data=df.intra.aes))[2]),
+                  Std.error.flo=c(coef(summary(lm(offset~flo.cent,data=df.intra.alnus)))[2,2],coef(summary(lm(offset~flo.cent,data=df.intra.frax)))[2,2],coef(summary(lm(offset~flo.cent,data=df.intra.bet)))[2,2],coef(summary(lm(offset~flo.cent,data=df.intra.aes)))[2,2]),
+                  Leafing=c(coef(lm(offset~leaf.cent,data=df.intra.alnus))[2],coef(lm(offset~leaf.cent,data=df.intra.frax))[2],coef(lm(offset~leaf.cent,data=df.intra.bet))[2],coef(lm(offset~leaf.cent,data=df.intra.aes))[2]),
+                  Std.error.leaf=c(coef(summary(lm(offset~leaf.cent,data=df.intra.alnus)))[2,2],coef(summary(lm(offset~leaf.cent,data=df.intra.frax)))[2,2],coef(summary(lm(offset~leaf.cent,data=df.intra.bet)))[2,2],coef(summary(lm(offset~leaf.cent,data=df.intra.aes)))[2,2]))
+ 
+
+
+@
 
 \begin{table}[h!]
 \begin{tabular}[width=\textwidth]{|c|c|c|c|c|}
