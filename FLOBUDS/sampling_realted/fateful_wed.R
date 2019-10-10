@@ -9,11 +9,11 @@ library(splitstackshape)
 library(reshape)
 library(randomizr)
 
-setwd("~/Documents/git/proterant/fLOBUDS")
 
+setwd("~/Documents/git/proterant/FLOBUDS")
 
 #1organize all bags by species
-dat<-read.csv("final_flobud_datapoints.csv")
+dat<-read.csv("sampling_realted/final_flobud_datapoints.csv")
 dat$collected<-as.numeric(dat$collected)
 sheet<-filter(dat,!is.na(collected))
 
@@ -56,7 +56,8 @@ useful<-as.data.frame(useful)
 ###defoliate and put in new bags
 
 #assign to treatment
-Z <- block_ra(block_var = exper$nomen, condition_names = c("WL0", "WS0", "WL1","WS1","CL0","CS0","CL1","CS1"))
+?block_ra()
+Z <- block_ra(blocks = exper$nomen, conditions = c("WL0", "WS0", "WL1","WS1","CL0","CS0","CL1","CS1"))
 exper$assignment<-Z
   
 ###check it
@@ -69,7 +70,7 @@ nrow(CP) ###should be 48
 table(CP$assignment)
 
 ###assign to beaker
-X <- block_ra(block_var = exper$assignment,condition_names = 1:24)
+X <- block_ra(blocks = exper$assignment,condition = 1:24)
 exper$group<-X
 table(exper$group)
 exper$flask_id<-paste(exper$assignment,exper$group,sep="_")
