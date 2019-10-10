@@ -170,7 +170,7 @@ allalphas2<-aes.dat$Intercept
 
 # graph
 
-png("..//figure/FLS_climate_change.png",width = 5, height = 6, units = 'in', res = 300)
+png("..//figure/FLS_climate_change.png",width = 6, height = 5, units = 'in', res = 300)
 plot(c(1960,2015), c(-30,50), type = "n", xlab = "Year", ylab = "Days between flowering and leafing", bty='l')
 #rect(xleft=1960, ybottom=-30, xright=1980, ytop=50,col="ivory1" )
 #rect(xleft=1980, ybottom=-30, xright=2015, ytop=50,col="ivory2")
@@ -200,9 +200,19 @@ rect(xleft=1960,xright=2015,ybottom=alphaAESlow,ytop=alphaAEShigh,col=rgb(.4,.4,
 #segments(x0=1960,y0=alphaAESlow, x1=2015,y1=alphaAESlow, lty=4,col="blue",lwd=1)
 #segments(x0=1960,y0=alphaAEShigh, x1=2015,y1=alphaAEShigh, lty=4,col="blue",lwd=1)
 par(xpd=FALSE)
-legend("top", legend=c("Alnus glutinosa", "Fraxinus excelsior","Aesculus hippocastanum"),col=c("red", "darkgoldenrod1","blue"), lwd=2, cex=0.6, horiz=TRUE, text.font = 3)
+legend("top", legend=c("Alnus glutinosa", "Fraxinus excelsior","Aesculus hippocastanum"),col=c("red", "darkgoldenrod1","blue"), lwd=2, cex=0.6, horiz=TRUE, text.font = 3, x.intersp=.2)
 dev.off()
-
+plot(c(1960,2015), c(-30,50), type = "n", xlab = "Year", ylab = "Days between flowering and leafing", bty='l')
+#rect(xleft=1960, ybottom=-30, xright=1980, ytop=50,col="ivory1" )
+#rect(xleft=1980, ybottom=-30, xright=2015, ytop=50,col="ivory2")
+segments(x0=1980,y0=allalphas,x1=2015,y1=allalphas+allbetas*35,col=rgb(1,0,0,alpha=.3),lty="solid", lwd=0.1 )
+segments(x0=1960,y0=allalphas,x1=1980,y1=allalphas,col=rgb(1,0,0,alpha=0.3),lty="solid",lwd=0.1 )
+segments(x0=1980,y0=allalphas1,x1=2015,y1=allalphas1+allbetas1*35,col=rgb(1,.8,0,alpha=0.3),lty="solid",lwd=0.1)
+segments(x0=1960,y0=allalphas1,x1=1980,y1=allalphas1,col=rgb(1,.8,0,alpha=0.3),lty="solid",lwd=0.1)
+segments(x0=1980,y0=allalphas2,x1=2015,y1=allalphas2+allbetas2*35,col=rgb(0,0.6,.8,alpha=0.3),lty="solid",lwd=0.1 )
+segments(x0=1960,y0=allalphas2,x1=1980,y1=allalphas2,col=rgb(0,0.6,.8,alpha=0.3),lty="solid",lwd=0.1 )
+par(xpd=FALSE)
+legend("top", legend=c("Alnus glutinosa", "Fraxinus excelsior","Aesculus hippocastanum"),col=c("red", "darkgoldenrod1","blue"), lwd=2, cex=0.6, horiz=TRUE, text.font = 3, x.intersp=.2)
 ##################################Analysis II####################################################
 unique(HF$species)
 #rename all taxa
