@@ -134,7 +134,7 @@ alphaFRAX<-mean(frax.dat$Intercept)
 alphaFRAXlow<-mean(frax.dat$Intercept.2.5)
 alphaFRAXhigh<-mean(frax.dat$Intercept.97.5)
 betaFRAX<-mean(frax.dat$slope)
-
+mean(frax.dat$slope.2.5)
 
 ###Aesculus model
 fit.aes.brms<-brm(offset~YEAR.hin+(YEAR.hin|peporder),data=aes) 
