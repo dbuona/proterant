@@ -36,15 +36,15 @@ to.prune<-which(!names.intree%in%namelist)
 HF.tree.pruned<-drop.tip(treee,to.prune)
 mytree.names<-HF.tree.pruned$tip.label
 
-setdiff(namelist,mytree.names) ###Viburum
-intersect(namelist,mytree.names)
+#setdiff(namelist,mytree.names) ###Viburum
+#intersect(namelist,mytree.names)
 
 ###make ultrametric
 HF.tree.pruned<-chronoMPL(HF.tree.pruned)
 is.ultrametric(HF.tree.pruned)
 
 ###add one species
-#HF.tree.pruned<-add.species.to.genus(HF.tree.pruned, "Viburnum_lantanoides",genus=NULL,where="root")
+HF.tree.pruned<-add.species.to.genus(HF.tree.pruned, "Viburnum_lantanoides",genus=NULL,where="root")
 
 ##matchthem ### not sure if I need to do this for brms
 df<-traits[match(mytree.names, traits$name),]

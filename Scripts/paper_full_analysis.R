@@ -55,10 +55,11 @@ aes10<-read.csv("datasheets_derived/PEP/aes10_delta_hyst.csv",header=TRUE)
 aln10$taxa<-"Alnus glutinosa" ##assign species
 frax10$taxa<-"Fraxinus excelsior"
 aes10$taxa<-"Aesculus hippocastenum"
+bet10$taxa<-"Betula pendula"
 
 intra.d<-rbind(aln10,frax10,bet10,aes10)
-moist.aug<-raster("grids_germany_multi_annual_soil_moist_1991-2010_08.asc") ##Gause Kruger 3 for August
-moist.apr<-raster("grids_germany_multi_annual_soil_moist_1991-2010_04.asc")
+moist.aug<-raster("climate_data/grids_germany_multi_annual_soil_moist_1991-2010_08.asc") ##Gause Kruger 3 for August
+moist.apr<-raster("climate_data/grids_germany_multi_annual_soil_moist_1991-2010_04.asc")
 
 ###analysis 1: Is hysteranthy changing with time? featureing PEP725 data
 
@@ -329,30 +330,30 @@ mich.data<-  mich.data %>% remove_rownames %>% column_to_rownames(var="name")
 silv.data<- silv.data %>% remove_rownames %>% column_to_rownames(var="name")
 
 ##without Interactions
-z.funct.drought.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                          start.beta=NULL, start.alpha=NULL,
-                          boot=599,full.matrix = TRUE)
+#z.funct.drought.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                     #     start.beta=NULL, start.alpha=NULL,
+                      #    boot=599,full.matrix = TRUE)
 
-z.phys.drought.noint<-phyloglm(pro3~pol_cent+flo_cent+precip_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                         start.beta=NULL, start.alpha=NULL,
-                         boot=599,full.matrix = TRUE)
-
-#With
-#z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                          #start.beta=NULL, start.alpha=NULL,
-                          #boot=599,full.matrix = TRUE)
-
-
-#z.phys.drought<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+#z.phys.drought.noint<-phyloglm(pro3~pol_cent+flo_cent+precip_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
  #                        start.beta=NULL, start.alpha=NULL,
   #                       boot=599,full.matrix = TRUE)
 
-z.funct.drought.silvics.noint<-phyloglm(pro2~pol_cent+flo_cent+precip_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                                  start.beta=NULL, start.alpha=NULL,
-                                  boot=599,full.matrix = TRUE)
+#With
+z.funct.drought<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                          start.beta=NULL, start.alpha=NULL,
+                          boot=599,full.matrix = TRUE)
 
-z.phys.drought.silvics.noint<-phyloglm(pro3~pol_cent+flo_cent+precip_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                                 start.beta=NULL, start.alpha=NULL,
+
+z.phys.drought<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                         start.beta=NULL, start.alpha=NULL,
+                         boot=599,full.matrix = TRUE)
+
+z.funct.drought.silvics<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                                  start.beta=NULL, start.alpha=NULL,
+                                 boot=599,full.matrix = TRUE)
+
+z.phys.drought.silvics<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                               start.beta=NULL, start.alpha=NULL,
                                  boot=599,full.matrix = TRUE)
 ###side bar compare phylo to brms###########
 
@@ -375,9 +376,9 @@ z.phys.drought.silvics.noint<-phyloglm(pro3~pol_cent+flo_cent+precip_cent,silv.d
 #summary( z.funct.drought)
 
 ##prep for plotting
-mich.funct.noint.dat<-full_join(extract_coefs(z.funct.drought.noint),extract_CIs(z.funct.drought.noint),by="trait")
-colnames(mich.funct.noint.dat)<-c("trait","estimate","low","high")
-mich.funct.noint.dat$class<-"functional-MTSV"
+mich.funct.dat<-full_join(extract_coefs(z.funct.drought),extract_CIs(z.funct.drought),by="trait")
+colnames(mich.funct.dat)<-c("trait","estimate","low","high")
+mich.funct.dat$class<-"functional-MTSV"
 
 mich.phys.noint.dat<-full_join(extract_coefs(z.phys.drought.noint),extract_CIs(z.phys.drought.noint),by="trait")
 colnames(mich.phys.noint.dat)<-c("trait","estimate","low","high")
@@ -434,6 +435,7 @@ pd=position_dodgev(height=0.4)
 #
 ###Analysis 4cd
 source("..//Scripts/continuous_mod_prep.R")
+write.tree(HF.tree.pruned,"HarvardForest/HF.tree.pruned.tre")
 HF<-filter(HF,species!=("QUAL"))
 spforcontmods<-df$species
 
@@ -611,7 +613,11 @@ alleffectos<-filter(alleffectos,trait!="(Intercept)")
 pd=position_dodgev(height=0.8)
 
 jpeg("..//figure/allmods_effectsizes_combined.jpeg",width=1200,height=650,res=180)
-ggplot(alleffectos,aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3,stroke=1.5)+scale_shape_manual(values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
+
+alleffectos %>%
+  arrange(estimate) %>%
+  mutate(trait = factor(trait, levels=c("pol_cent:precip_cent","pol_cent:flo_cent","flo_cent:precip_cent","pol_cent","precip_cent","flo_cent"))) %>%
+ggplot(aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3,stroke=1.5)+scale_shape_manual(values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data,alpha=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
   scale_linetype_manual(values=c("solid","solid"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
   scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4"))+
@@ -663,11 +669,10 @@ Soil<-extract(moist.aug, matrix(c(intra.df$x,intra.df$y), ncol = 2)) ### extract
 intra.df$SM<-Soil
 
 ###center phenology
-intra.df$flo.cent<-intra.df$flower-mean(intra.df$flower,na.rm=TRUE)
-intra.df$leaf.cent<-intra.df$leaf-mean(intra.df$leaf,na.rm=TRUE)
-intra.df$soil.cent<-intra.df$SM-mean(intra.df$SM,na.rm=TRUE)
-intra.df$offset.cent<-intra.df$offset-mean(intra.df$offset,na.rm=TRUE)
-table(intra.df$soil.cent)
+intra.df$flo.cent<-intra.df$flower-mean(intra.df$flower,na.rm=TRUE)/(2*sd(intra.df$flower,na.rm=TRUE))
+intra.df$leaf.cent<-intra.df$leaf-mean(intra.df$leaf,na.rm=TRUE)/(2*sd(intra.df$leaf,na.rm=TRUE))
+intra.df$soil.cent<-intra.df$SM-mean(intra.df$SM,na.rm=TRUE)/(2*sd(intra.df$SM,na.rm=TRUE))
+write.csv(intra.df,"datasheets_derived/PEP/PEP_smmodel_data.csv",row.names=FALSE)
 ####now run each species model's seperately
 df.intra.alnus<-filter(intra.df,taxa=="Alnus glutinosa")
 df.intra.frax<-filter(intra.df,taxa=="Fraxinus excelsior")

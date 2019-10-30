@@ -77,157 +77,65 @@ We ran the models with 599 bootstrapped re-sampling iterations for each data set
 
 \section*{Supplimental Tables and Figures}
 % latex table generated in R 3.6.0 by xtable 1.8-4 package
-% Thu Sep 26 12:46:42 2019
+% Wed Oct 30 13:10:34 2019
 \begin{table}[ht]
 \centering
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{l|l|l}
   \hline
 Dataset & category & D \\ 
   \hline
 MTSV & Functional & 0.08 \\ 
   MTSV & Physiological & 0.21 \\ 
-  USFS & Functional & 0.66 \\ 
-  USFS & Physiological & 0.13 \\ 
+  USFS & Functional & 0.65 \\ 
+  USFS & Physiological & 0.11 \\ 
    \hline
 \end{tabular}
-\caption{\textbf{Table Whatever} This table is just produced with somerandom data and does not mean anything. Just to show you how things work.} 
+\caption{\textbf{Table 1} D statistics for the inter-specific FLS datasets with different classifications of hysteranthy} 
 \label{Test_table}
 \end{table}
 
 
-\begin{kframe}
-
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: sp}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# Attaching package: 'raster'}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# The following objects are masked from 'package:MASS':\\\#\# \\\#\#\ \ \ \  area, select}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# The following objects are masked from 'package:ape':\\\#\# \\\#\#\ \ \ \  rotate, zoom}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: Rcpp}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\#\# rgdal: version: 1.4-4, (SVN revision 833)\\\#\#\ \ Geospatial Data Abstraction Library extensions to R successfully loaded\\\#\#\ \ Loaded GDAL runtime: GDAL 2.4.2, released 2019/06/28\\\#\#\ \ Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/3.6/Resources/library/rgdal/gdal\\\#\#\ \ GDAL binary built with GEOS: FALSE \\\#\#\ \ Loaded PROJ.4 runtime: Rel. 5.2.0, September 15th, 2018, [PJ\_VERSION: 520]\\\#\#\ \ Path to PROJ.4 shared files: /Library/Frameworks/R.framework/Versions/3.6/Resources/library/rgdal/proj\\\#\#\ \ Linking to sp version: 1.3-1}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning in file(file, "{}rt"{}): cannot open file 'datasheets\_derived/PEP/alnus10\_delta\_hyst.csv': No such file or directory}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in file(file, "{}rt"{}): cannot open the connection}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning in file(file, "{}rt"{}): cannot open file 'datasheets\_derived/PEP/fraxinus10\_delta\_hyst.csv': No such file or directory}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in file(file, "{}rt"{}): cannot open the connection}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning in file(file, "{}rt"{}): cannot open file 'datasheets\_derived/PEP/betpen10\_delta\_hyst.csv': No such file or directory}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in file(file, "{}rt"{}): cannot open the connection}}
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning in file(file, "{}rt"{}): cannot open file 'datasheets\_derived/PEP/aes10\_delta\_hyst.csv': No such file or directory}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in file(file, "{}rt"{}): cannot open the connection}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in aln10\$taxa <- "{}Alnus glutinosa"{}: object 'aln10' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in frax10\$taxa <- "{}Fraxinus excelsior"{}: object 'frax10' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in aes10\$taxa <- "{}Aesculus hippocastenum"{}: object 'aes10' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in rbind(aln10, frax10, bet10, aes10): object 'aln10' not found}}\end{kframe}Error in .local(.Object, ...) : 
-
-\begin{kframe}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in .rasterObjectFromFile(x, band = band, objecttype = "{}RasterLayer"{}, : Cannot create a RasterLayer object from this file. (file does not exist)}}\end{kframe}Error in .local(.Object, ...) : 
-
-\begin{kframe}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in .rasterObjectFromFile(x, band = band, objecttype = "{}RasterLayer"{}, : Cannot create a RasterLayer object from this file. (file does not exist)}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coordinates(intra.d) <- \textasciitilde{}lon + lat: object 'intra.d' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in proj4string(intra.d) <- CRS("{}+proj=longlat +datum=WGS84"{}): object 'intra.d' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in spTransform(intra.d, CRS("{}+proj=tmerc +lat\_0=50.625 +lon\_0=9.84375, +k=1 +x\_0=3559832.734474 +y\_0=5610860.187573 +ellps=krass +units=m +no\_defs"{})): object 'intra.d' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in coordinates(p): object 'p' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in as.data.frame(gaas): object 'gaas' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in as.data.frame(intra.d): object 'intra.d' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in colnames(gaas.cord) <- c("{}x"{}, "{}y"{}): object 'gaas.cord' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in cbind(pep.cord, gaas.cord): object 'pep.cord' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in extract(moist.aug, matrix(c(intra.df\$x, intra.df\$y), ncol = 2)): object 'moist.aug' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'Soil' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in as.ts(x): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in as.ts(x): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in as.ts(x): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in as.ts(x): object 'intra.df' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in RsquareAdj(lm(offset \textasciitilde{} leaf.cent, data = df.intra.alnus)): could not find function "{}RsquareAdj"{}}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'df.intra.frax' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'df.intra.frax' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'df.intra.aes' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'df.intra.aes' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'df.intra.bet' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'df.intra.bet' not found}}
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in is.data.frame(data): object 'df.intra.alnus' not found}}\end{kframe}
-
-\begin{table}[h!]
-\begin{tabular}[width=\textwidth]{|c|c|c|c|c|}
-\hline
-Species&Effect size flowering (sd)&R^2&Effect size leafing (sd)&R^2\\
-\hline
-\textit{Alnus glutinosa}&-0.67 (0.002) &0.58&0.24(0.005)&0.03\\
-\textit{Fraxinus excelsior}&-0.53 (0.002)&0.41&0.24 (0.004)&0.05\\
-\textit{Betula pendula}&-0.4 (0.003)&0.32&0.13 (0.005)&0.02\\
-\textit{Aesculus hippocastanum}& -0.28 (0.002)&0.10&0.411 (0.0019)&0.26 \\
-\hline
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Wed Oct 30 13:10:39 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{lcc|c||cc|c}
+  & \multicolumn{3}{c}{Flowering} & \multicolumn{3}{c}{Leafing}\\
+ \hline
+Species & Estimate & Std.error & R^2 & Estimate & Std.error & R^2 \\ 
+  \hline
+\textit{Alnus glutinosa} & -0.674 & 0.005 & 0.585 & 0.238 & 0.002 & 0.031 \\ 
+  \textit{Fraxinus excelsior} & -0.534 & 0.004 & 0.417 & 0.241 & 0.003 & 0.052 \\ 
+  \textit{Betula pendula} & -0.400 & 0.005 & 0.324 & 0.134 & 0.004 & 0.025 \\ 
+  \textit{Aesculus hippocastanum} & -0.282 & 0.002 & 0.101 & 0.134 & 0.002 & 0.264 \\ 
+   \hline
 \end{tabular}
-    \caption{\textbf{The influence of intra-specific of flower and leaf phenological variation influence on quantitative FLS variability in four European tree species}. For the three hysteranthous species, flowering time is strong correlated with FLS variability while in the seranthous species \textit{Aesculus hippocastanum} FLS is more tightly associated with leaf phenology}
-    \label{tab:Table S2}
-    \end{table}
+\caption{\textbf{The influence of intra-specific of flower and leaf phenological variation influence on quantitative FLS variability in four European tree species}. For the three hysteranthous species, flowering time is strong correlated with FLS variability while in the seranthous species 	extit{Aesculus hippocastanum} FLS is more tightly associated with leaf phenology} 
+\label{Table2}
+\end{table}
 
 
-\subsection*{Phylogenies}
- \begin{figure}[h!]
-    \centering
-    \includegraphics[width=.8\textwidth]{..//figure/michtreeplot.jpeg}
+
+\pagebreak
+
+
+
+\includegraphics[width=\maxwidth]{figure/Code_chunk_Minimal_example3-1} 
+
+\includegraphics[width=\maxwidth]{figure/Code_chunk_Minimal_example3-2} 
+
+
+\pagebreak 
     \caption{\textbf{Phylogenetic structure of FLS in MTSV.} As in the other two case studies, a large number of species get re-assigned to hysteranthy or seranthy (blue squares) depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogentical signal for this trait.}
     \label{fig:Figure S1}
     \end{figure}
-    
-     \begin{figure}
-    \centering
-    \includegraphics[width=.8\textwidth]{..//figure/silvtreeplot.jpeg}
+ 
+
     \caption{\textbf{Phylogenetic structure of FLS in USFS.} As in the other two case studies, a large number of species get re-assigned to hysteranthy or seranthy (blue squares) depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogentic signal for this trait.}
     \label{fig:Figure S2}
     \end{figure}
     
-    \begin{figure}
-    \centering
-    \includegraphics[width=.8\textwidth]{..//figure/HFtreeplot.jpeg}
+
     \caption{\textbf{Phylogenetic structure of FLS in HF.} As in the other two case studies, a large number of species get re-assigned to hysteranthy or seranthy (blue squares) depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed). This modeling choice dramatically alters FLS patterning across the tree, resultinng in an unstable phylogentical signal for this trait.}
     \label{fig:Figure S3}
     \end{figure}
