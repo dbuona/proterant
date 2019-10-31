@@ -25,6 +25,7 @@ library("remote")
 library(reshape2)
 library(RColorBrewer)
 
+load("consensis_plot.Rdata")
 
 ### For Final plot
 extract_coefs<-function(x){
@@ -131,6 +132,7 @@ rownames(A) <- rownames(inv.phylo$Ainv)
 modelcont.funct <- brm(funct.offset~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.continuous.data, 
                              family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
+
 modelcont.phys <- brm(phys.offset~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.continuous.data, 
                             family = gaussian(), cov_ranef = list(name= A),iter=3000) 
 
@@ -139,6 +141,11 @@ modelbin.funct<- brm(hyst.funct~ pol_cent+flo_cent.neg+precip_cent+precip_cent:f
 
 modelbin.phys<- brm(hyst.phys~pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.continuous.data, 
                            family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000) 
+
+#pp_check(modelcont.funct)
+#pp_check(modelcont.phys)
+#pp_check(modelbin.funct)
+#pp_check(modelbin.phys)
 
 extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,0.975))),"trait")
 }
@@ -286,13 +293,26 @@ library("ggeffects")
 ##take a model where there are interactions
 
 goober<- ggpredict(modelbin.phys,c("precip_cent","pol_cent","flo_cent.neg[.2]"), ci.lvl=0.50) ##May 15
-plot(goober)
+apc.phys<-plot(goober)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1),labels=c(15,33,50,67,84,101))+
+  xlab("Min. precipitation across range (cm)")+ylab("Likelihood of flower before leaf budburst")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
+  labs(title = NULL,tag="a)")+theme_linedraw()
 
 goober2<- ggpredict(modelcont.funct,c("precip_cent","pol_cent","flo_cent.neg[.2]"), ci.lvl=0.50)  #may 15
-plot(goober2)
+apc.funct<-plot(goober2)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1),labels=c(15,33,50,67,84,101))+
+  xlab("Min. precipitation across range (cm)")+ylab("Flowers opening to 75% leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
+  labs(title = NULL,tag="b)")+theme_linedraw()
 
+jpeg("..//figure/HF_apcs.jpeg",width = 8, height = 6, units = 'in', res=300)
+ggpubr::ggarrange(apc.phys,apc.funct,ncol=2,legend="bottom",common.legend = TRUE)
+dev.off()
 ### for insect offset decreases as minp goes up, but for wind chance of hysteranthy goes up
-.2*(2*sd(HF.continuous.data$fbb.jd,na.rm=TRUE))+mean(HF.continuous.data$fbb.jd,na.rm=TRUE)
+z.p<-c(-1.5,-1.0,-0.5,0,0.5,1)
 
+(1*(2*sd(HF.continuous.data$min_precip,na.rm=TRUE))+mean(HF.continuous.data$min_precip,na.rm=TRUE))*2.54
+
+.2*(2*sd(HF.continuous.data$fbb.jd,na.rm=TRUE))+mean(HF.continuous.data$fbb.jd,na.rm=TRUE)
+31+28+31+31+15
 save.image("consensis_plot.Rdata")
 
+citation("base")
+"citation"
