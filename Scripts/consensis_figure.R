@@ -192,16 +192,134 @@ comps2<-comps2[,c(1,2,3,4,5,7,6)]
 alleffectos<-rbind(comps2,hfboth)
 alleffectos<-dplyr::filter(alleffectos,trait!="(Intercept)")
 alleffectos<-dplyr::filter(alleffectos,trait!="Intercept")
-pd=position_dodgev(height=0.7)
+alleffectos$trait[which(alleffectos$trait=="pol_cent")]<-"pollination syndrome"
+alleffectos$trait[which(alleffectos$trait=="flo_cent.neg")]<- "earlier flowering"
+alleffectos$trait[which(alleffectos$trait=="precip_cent")]  <- "water dynamics"
+alleffectos$trait[which(alleffectos$trait=="pol_cent:precip_cent")]<- "pollination:water dynamics"
+alleffectos$trait[which(alleffectos$trait=="pol_cent:flo_cent.neg")]<-"pollination:flowering"
+alleffectos$trait[which(alleffectos$trait=="flo_cent.neg:precip_cent")]<-"flowering:water dynamics"
 
+
+
+
+allos<-filter(alleffectos,data!="HF")
+
+jpeg("..//figure/option1.jpeg",width = 8.6, height = 4, units = 'in', res=200)
+pd=position_dodgev(height=0.4)
 alleffectos %>%
   arrange(estimate) %>%
-  mutate(trait = factor(trait, levels=c("pol_cent:precip_cent","pol_cent:flo_cent.neg","flo_cent.neg:precip_cent","pol_cent","precip_cent","flo_cent.neg"))) %>%
-  ggplot(aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3,stroke=1.5)+scale_shape_manual(values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
-  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data,alpha=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
-  scale_linetype_manual(values=c("solid","solid"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
-  scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4"))+
+  mutate(trait = factor(trait, levels=c("flowering:water dynamics","pollination:flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(shape=data_type,color=data),position=pd,size=3,stroke=1.5)+scale_shape_manual(name="data type",values=c(15,16))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
+  scale_linetype_manual(values=c("dotted","dotted"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
+  scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4"))+guides(size = "legend", linetype= "none")+
+  annotate("text", x = 24.2, y = 6.4, label = "Hysteranthy",fontface="bold",size=3)+annotate("text", x = -24.9, y = 6.4, label = "Seranthy",fontface="bold",size=3)+
+  #guides(fill=guide_legend(override.aes=list(colour=c(functional="black",physiological="gray"))))
+  facet_wrap(~category)
+dev.off()
+
+binneys<-filter(alleffectos, data_type=="binary")
+
+pd=position_dodgev(height=0.4)
+twoa<-binneys %>%
+  arrange(estimate) %>%
+  mutate(trait = factor(trait, levels=c("flowering:water dynamics","pollination:flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(color=data,fill=category),shape=21,position=pd,size=3,stroke=1.5)+
+ scale_fill_manual(values=c(functional="black",physiological="grey"))+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=data,linetype=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
+  scale_linetype_manual(values=c("solid","solid"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-10,12)+
+  scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4"))+guides(size = "legend", linetype= "none")+
+  annotate("text", x = 11, y = 6.4, label = "Hysteranthy",fontface="bold",size=3)+annotate("text", x = -9, y = 6.4, label = "Seranthy",fontface="bold",size=3)+
   guides(fill=guide_legend(override.aes=list(colour=c(functional="black",physiological="gray"))))
+
+
+cont<-filter(alleffectos, data_type!="binary")
+
+pd=position_dodgev(height=0.4)
+twob<-cont %>%
+  arrange(estimate) %>%
+  mutate(trait = factor(trait, levels=c("flowering:water dynamics","pollination:flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(color=data,fill=category),shape=22,position=pd,size=3,stroke=1.5)+
+  scale_fill_manual(values=c(functional="black",physiological="grey"))+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=data,linetype=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
+  scale_linetype_manual(values=c("solid","solid"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
+  scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4"))+guides(size = "legend", linetype= "none")+
+  annotate("text", x = 21.2, y = 6.4, label = "Hysteranthy",fontface="bold",size=3)+annotate("text", x = -21.9, y = 6.4, label = "Seranthy",fontface="bold",size=3)+
+  guides(fill=guide_legend(override.aes=list(colour=c(functional="black",physiological="gray"))))
+
+jpeg("..//figure/option2.jpeg",width = 12, height = 4, units = 'in', res=100)
+ggpubr::ggarrange(twoa,twob)
+dev.off()
+
+pd=position_dodgev(height=0.4)
+threea<-allos %>%
+  arrange(estimate) %>%
+  mutate(trait = factor(trait, levels=c("flowering:water dynamics","pollination:flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3)+scale_shape_manual(name="data type",values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data,alpha=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
+  scale_linetype_manual(name=NULL, values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,8)+
+  scale_color_manual(name="data set",values=c("darkgoldenrod1", "springgreen4"))+
+  guides(fill=guide_legend(override.aes=list(colour=c(functional="black",physiological="gray"))))+
+  guides(size = "legend", linetype= "none")+
+  guides(size = "legend", shape= "none")+
+  annotate("text", x = 6.4, y = 6.5, label = "Hysteranthy",fontface="bold")+annotate("text", x = -7, y = 6.5, label = "Seranthy",fontface="bold")
+
+HFer<-filter(alleffectos,data=="HF")
+threeb<-HFer %>%
+  arrange(estimate) %>%
+  mutate(trait = factor(trait, levels=c("flowering:water dynamics","pollination:flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3,stroke=1.5)+scale_shape_manual(name="data type",values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data,fill=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
+  scale_linetype_manual(values=c("solid","solid"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-30,30)+
+  scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4"))+guides(size = "legend", linetype= "none")+
+  annotate("text", x = 24.2, y = 6.4, label = "Hysteranthy",fontface="bold",size=3)+annotate("text", x = -24.9, y = 6.4, label = "Seranthy",fontface="bold",size=3)+
+  guides(fill=guide_legend(override.aes=list(colour=c(functional="black",physiological="gray"))))+
+ guides(size = "legend", color= "none")
+
+jpeg("..//figure/option3.jpeg",width = 12, height = 4, units = 'in', res=100)
+ggpubr::ggarrange(threea,threeb)
+dev.off()
+
+
+
+foura<-binneys %>%
+  arrange(estimate) %>%
+  mutate(trait = factor(trait, levels=c("flowering:water dynamics","pollination:flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(shape=data_type,color=data,fill=category),position=pd,size=3,stroke=1.5)+scale_shape_manual(name="data type",values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,linetype=data_type,color=data,alpha=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
+  scale_linetype_manual(name=NULL, values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,12)+
+  facet_wrap(~data)+scale_color_manual(name="data set",values=c("orchid4","darkgoldenrod1", "springgreen4"))+
+  guides(fill=guide_legend(override.aes=list(colour=c(functional="black",physiological="gray"))))+
+  guides(size = "legend", linetype= "none")+
+  annotate("text", x = 26, y = 6.5, label = "Hysteranthy",fontface="bold")+annotate("text", x = -27.5, y = 6.5, label = "Seranthy",fontface="bold")
+jpeg("..//figure/option4.jpeg",width = 12, height = 6, units = 'in', res=100)
+ggpubr::ggarrange(foura,twob,nrow=2)
+dev.off()
+alleffectos.noint<-dplyr::filter(alleffectos,trait %in% c("pollination syndrome"    ,   "earlier flowering"     ,     "water dynamics"))
+
+jpeg("..//figure/option5.jpeg",width = 8.6, height = 4, units = 'in', res=200)
+pd=position_dodgev(height=0.6)
+alleffectos.noint %>%
+  arrange(estimate) %>%
+  mutate(trait = factor(trait, levels=c("flowering:water dynamics","pollination:flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(color=data,shape=data_type,fill=category),position=pd,size=3,stroke=1.5)+
+  scale_shape_manual(name="data type",values=c(21,22))+scale_fill_manual(values=c(functional="black",physiological="grey"))+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=data,linetype=data_type,fill=category),position=pd,width=0)+scale_alpha_manual(values=c(1,1,1))+
+  scale_linetype_manual(values=c("solid","solid"))+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-15,30)+
+  scale_color_manual(values=c("orchid4","darkgoldenrod1", "springgreen4"))+guides(size = "legend", linetype= "none")+
+  annotate("text", x = 24.2, y = 3.4, label = "Hysteranthy",fontface="bold",size=3)+annotate("text", x = -9.9, y = 3.4, label = "Seranthy",fontface="bold",size=3)+
+  guides(fill=guide_legend(override.aes=list(colour=c(functional="black",physiological="gray"))))
+
+dev.off()
+
+
+
+
+
+
+
+
+
 
 ####now add intra specific
 aln10<-read.csv("datasheets_derived/PEP/alnus10_delta_hyst.csv",header=TRUE)
@@ -273,6 +391,7 @@ alleffectos$trait[which(alleffectos$trait=="flo_cent.neg:precip_cent")]<-"flower
 
 biggest<-rbind(alleffectos,pepbayes)
 pd=position_dodgev(height=0.4)
+
 
 
 jpeg("..//figure/allmods_effectsizes_combined.jpeg",width = 8, height = 6, units = 'in', res=300)
