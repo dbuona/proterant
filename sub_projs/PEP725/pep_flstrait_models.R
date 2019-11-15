@@ -45,10 +45,12 @@ intra.df<-cbind(pep.cord,gaas.cord)
 Soil<-extract(moist.aug, matrix(c(intra.df$x,intra.df$y), ncol = 2)) ### extract the soil moisture at the pep sites
 intra.df$SM<-Soil
 
-intra.df$flo.cent<-intra.df$flo_day-mean(intra.df$flo_day,na.rm=TRUE)/(2*sd(intra.df$flo_day,na.rm=TRUE))
-intra.df$leaf.cent<-intra.df$leaf_day-mean(intra.df$leaf_day,na.rm=TRUE)/(2*sd(intra.df$leaf_day,na.rm=TRUE))
-intra.df$soil.cent<-intra.df$SM-mean(intra.df$SM,na.rm=TRUE)/(2*sd(intra.df$SM,na.rm=TRUE))
+intra.df$flo.cent<-(intra.df$flo_day-mean(intra.df$flo_day,na.rm=TRUE))/(sd(intra.df$flo_day,na.rm=TRUE))
+intra.df$flo.cent.neg<--(intra.df$flo_day-mean(intra.df$flo_day,na.rm=TRUE))/(sd(intra.df$flo_day,na.rm=TRUE))
+intra.df$leaf.cent<-(intra.df$leaf_day-mean(intra.df$leaf_day,na.rm=TRUE))/(sd(intra.df$leaf_day,na.rm=TRUE))
+intra.df$soil.cent<-(intra.df$SM-mean(intra.df$SM,na.rm=TRUE))/(sd(intra.df$SM,na.rm=TRUE))
 
+wind<-c("ALN.GLU")
 df.intra.alnus<-filter(intra.df,taxa=="ALN.GLU")
 df.intra.frax<-filter(intra.df,taxa=="FRA.EXC")
 df.intra.bet<-filter(intra.df,taxa=="BET.PEN")
@@ -58,5 +60,22 @@ df.intra.tili<-filter(intra.df,taxa=="TIL.HET")
 
 
 ###does fleaf time or flow time predict fls
-mo1<-brm(FLS~leaf.cent+(leaf.cent|taxa),data=intra.df)
+
+####soil moisture by species
+aln.mod<-lm(FLS~soil.cent*flo.cent.neg,data=df.intra.alnus)
+summary(aln.mod)
+
+bet.mod<-lm(FLS~soil.cent*flo.cent.neg,data=df.intra.bet)
+summary(bet.mod)
+
+aes.mod<-lm(FLS~soil.cent*flo.cent.neg,data=df.intra.aes)
+summary(aes.mod)
+
+tili.mod<-lm(FLS~soil.cent*flo.cent.neg,data=df.intra.tili)
+summary(tili.mod)
+
+frax.mod<-lm(FLS~soil.cent*flo.cent.neg,data=df.intra.frax)
+summary(frax.mod)
+##3
+
 
