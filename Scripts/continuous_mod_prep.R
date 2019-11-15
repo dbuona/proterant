@@ -6,12 +6,11 @@
 
 ####code offset as binary
 
-HF$hyst.funct<-ifelse(HF$funct.offset>0,1,0)
-HF$hyst.phys<-ifelse(HF$phys.offset>0,1,0)
+
 
 ### This file is for prepping USDA traits for merging with hf
 traits<-read.csv("HarvardForest/HF.species.trait.data.csv",header=TRUE)
-traits<-filter(traits,species!="QUAL")
+traits<-dplyr::filter(traits,species!="QUAL")
 ###make things numeric
 traits$pol<-ifelse(traits$pollination=="insect",0,1)
 traits$flo_view<-ifelse(traits$fl_conspic=="Y",0,1)

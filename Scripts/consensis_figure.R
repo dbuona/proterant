@@ -130,11 +130,11 @@ A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 
 modelcont.funct <- brm(funct.offset~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.continuous.data, 
-                             family = gaussian(), cov_ranef = list(name= A),iter=3000) 
+                             family = gaussian(), cov_ranef = list(name= A),iter=4000) 
 
 
 modelcont.phys <- brm(phys.offset~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.continuous.data, 
-                            family = gaussian(), cov_ranef = list(name= A),iter=3000) 
+                            family = gaussian(), cov_ranef = list(name= A),iter=4000) 
 
 modelbin.funct<- brm(hyst.funct~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.continuous.data, 
                             family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000) 
