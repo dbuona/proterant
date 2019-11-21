@@ -58,8 +58,11 @@ rect(xleft=1960,xright=2015,ybottom=fixef(fit.aesc50.brms)[1,3],ytop=fixef(fit.a
 segments(x0=1960,y0=fixef(fit.betu50.brms)[1], x1=1980,y1=fixef(fit.betu50.brms)[1],col="darkgreen",lwd=3)
 segments(x0=1980,y0=fixef(fit.betu50.brms)[1], x1=2015,y1=fixef(fit.betu50.brms)[1]+fixef(fit.betu50.brms)[2]*35,col="darkgreen",lwd=3)
 rect(xleft=1960,xright=2015,ybottom=fixef(fit.betu50.brms)[1,3],ytop=fixef(fit.betu50.brms)[1,4],col=rgb(.3,1,.1,alpha=0.3),border=NA)
-par(xpd=TRUE)
-legend("top", legend=c("Alnus glutinosa", "Fraxinus excelsior","Betula pendula","Aesculus hippocastanum"),col=c("red", "darkgoldenrod1","darkgreen","blue"), lwd=2, cex=.55, horiz=TRUE, text.font = 3, x.intersp=.3)
 
+text(x=1965, 24,font=3,cex=.8,"Alnus glutinosa")
+text(x=1966, 12,font=3,cex=.8,"Fraxinus excelsior")
+text(x=1965, 4,font=3,cex=.8,"Betula pendula")
+text(x=1969, -16,font=3,cex=.8,"Aesculus hippocastanum")
+save.image("..//PEP725/hinge.models")
 
 

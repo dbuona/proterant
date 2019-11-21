@@ -1,0 +1,115 @@
+﻿genus,species,silvics_pollin,silvic_phen_seq,flower_class,av_fruit_time,locality,flower_time,flower_locality,shade,height,imputed,imputed_pred
+Acacia,koa,NA,,,,,,,,,Y,N
+Acer,barbatum,NA,pro/syn,polygamo-dio,early_summer,southeast,4,,,,N,N
+Acer,macrophyllum,insect,pro,polygamous,11.5,oregon?,4.5,,tolerant,30,N,N
+Acer,nigrum,ambo,syn,mono,9.5,New england,4.5,range ave,very_tolerant,34,N,N
+Acer,saccharum,wind,pro,polygamous,8.5,,4,,very_tolerant,37,N,N
+Acer,rubrum,wind,pro,polygamo-dio,5.5,,4,,tolerant,27,N,N
+Acer,saccharinum,wind,pro,polygamo-dio,5,,3.5,,tolerant,37,N,N
+Acer,pensylvanicum,insect,ser,mono/dio,10.5,,5.5,,very_tolerant,15,N,N
+Acer,negundo,wind,pro/syn,dio,9,,4,,tolerant,23,N,N
+Aesculus,glabra,insect,ser,polygamo-mono,9.5,,4,,tolerant,21.3,N,N
+Aesculus,octandra,insect,ser,polygamo-mono,9,,5,,tolerant,26,N,N
+Ailthanthus,altissima,insect,ser,dio,9.5,,5.5,,intolerant,27,N,N
+Alnus,glutinosa,wind,pro/syn,mono,9.5,,3,,intolerant,,Y,shade
+Alnus,rubra,wind,pro/syn,mono,10.5,,3,,intolerant,40,Y,flowertime
+Arbutus,menzesii,,evergreen,,,,,,,,Y,N
+Betula,alleghaniensis,wind,syn,mono,9.5,,5.5,,medium_tolerant,30.5,N,N
+Betula,lenta,wind,syn,mono,10,,4.5,,intolerant,24,N,N
+Betula,nigra,wind,syn,mono,late_spring/early_summer,,4.5,,intolerant,24.4,N,N
+Betula,papyrifera,,undescribed,,,,,,,,Y,N
+Carpinus,caroliniana,wind,syn,mono,10,,4.5,north,very_tolerant,11,N,Fruit
+Calophyllum,calaba,,evergreen,,,,,,,,Y,N
+Carya,aquatica,wind,syn,mono,11,,4.5,,medium_tolerant,33.5,N,N
+Carya,laciniosa,wind,ser,mono,10,,5,,very_tolerant,40,N,N
+Carya,myristiciformis,wind,syn,mono,10.5,,4.5,,intolerant,30,N,N
+Carya,tomentosa,wind,syn,mono,10.5,,4.5,,intolerant,30,Y,N
+Carya,glabra,wind,syn,mono,10.5,,4.5,,medium_tolerant,37,Y,N
+Carya,cordiformis,wind,syn,mono,10.5,,4.5,,intolerant,30,Y,N
+Carya,illinoensis,wind,syn,mono,9.5,,4.5,,intolerant,55,Y,N
+Carya,ovata,wind,syn/ser,mono,10.5,,6,north,medium_tolerant,24,N,N
+Celtis,occidentalis,wind,syn/ser,polygamo-mono,9.5,,5,north,medium_tolerant,40,N,N
+Celtis,laevigata,wind,syn,polygamo-mono,9.5,,4,,tolerant,30,N,pol
+Cercis,canadensis,insect,pro,bisexual,10,,4,,tolerant,15,N,"height,fruittime"
+Cornus,florida,insect,pro,bisexual,9.5,,5,north,very_tolerant,12,N,class
+Diospyros,virginiana,insect,syn,dio,10,,4.5,,very_tolerant,18,N,N
+Fagus,grandifolia,wind,syn,mono,10,,4.5,,very_tolerant,24,N,N
+Fraxinus,americana,wind,pro/syn,dio,10,,4.5,,intolerant,27,N,N
+Fraxinus,latifolia,wind,syn,dio,8.5,,4.5,,medium_tolerant,24,N,N
+Fraxinus,nigra,wind,pro/syn,polygamous,8.5,,5.5,,intolerant,21,N,N
+Fraxinus,pensylvanica,wind,pro/syn,dio,9.5,,4.5,north,tolerant,18,N,N
+Fraxinus,profunda,wind,pro,dio,11,,4.5,,medium_tolerant,40,N,N
+Gleditsia,triacanthos,insect,syn,polygamo-dio,10.5,,6,north,intolerant,24,N,N
+Gordonia,lasianthus,insect,ser,perfect,10.5,,6.5,,tolerant,6.5,N,N
+Halesia,carolina,insect,syn,perfect,12,,5,,tolerant,12,N,fruit
+Juglans,cinerea,insect,syn,mono,9.5,,5,,intolerant,30,N,N
+Juglans,nigra,wind,syn,mono,10,,6,north,intolerant,37,N,N
+Liquidambar,styraciflua,wind,syn,mono,10,,4,,intolerant,20,Y,"pol,pro,height"
+Liriodenron,tulipifera,insect,syn/ser,perfect,10.5,,5,,intolerant,61,Y,N
+Magnolia,fraseri,insect,ser,perfect,9,,5.5,,medium_tolerant,24,Y,fruit
+Magnolia,grandifolia,insect,evergreen,,,,,,,,Y,
+Magnolia,virginiana,,evergreen,,,,5.5,,,,Y,
+Magnolia,acuminata,insect,syn/ser,perfect,9,,5.5,,medium_tolerant,30,N,N
+Maclura,pomifera,wind,ser,dio,9.5,,5,,intolerant,9,N,N
+Morus,rubra,wind,syn,mono,7,,4.5,,tolerant,21,Y,N
+Nyssa,aquatica,ambo,pro/syn,polygamo-dio,10.5,,3.5,,intolerant,23,N,N
+Nyssa,sylvatica,insect,syn,polygamo-dio,10,,5,,tolerant,36,Y,N
+Nyssa,ogeche,insect,ser,polygamo-dio,11.5,,4,,intolerant,10.7,N,N
+Ostrya,virginiana,wind,syn,mono,9,range,6,north,tolerant,12,N,N
+Oxydendrum,arboreum,insect,ser,perect,9.5,,7,,tolerant,24,Y,N
+Paulownia,tomentosa,insect,ser,perfect,9.5,,4.5,,intolerant,21,Y,N
+Platanus,occidentalis,wind,syn,mono,9.5,,4,,medium_tolerant,43,Y,N
+Populus,deltoides,wind,pro,dio,6.5,north,3,,very_intolerant,58,N,N
+Populus,grandidentata,wind,pro,dio,5.5,,4.5,,very_intolerant,24,N,N
+Populus,tremuloides,wind,pro,dio,5.5,,4,,very_intolerant,26,N,N
+Populus,balsamifera,wind,pro,dio,5.5,range,4.5,range,very_intolerant,30,N,N
+Populus,heterophylla,wind,pro,dio,5.5,,4,,intolerant,40,N,N
+Populus,trichocarpa,wind,pro,dio,6,,4.5,,very_intolerant,60,Y,N
+Prunus,pensylvanica,insect,syn,perfect,7,,5,,very_intolerant,24,N,N
+Prunus,serotina,insect,syn,perfect,8.5,allegheny,5,,intolerant,25,N,N
+Quercus,alba,wind,syn,mono,9.5,,4,,medium_tolerant,30,N,N
+Quercus,bicolor,wind,syn,mono,9.5,,5.5,,medium_tolerant,23,N,N
+Quercus,macrocarpa,wind,ser,mono,9.5,,6.5,north,medium_tolerant,30,N,N
+Quercus,rubra,wind,pro/syn,mono,21,,4.5,,medium_tolerant,30,N,N
+Quercus,velutina,wind,pro/syn,mono,21,,4.5,,medium,24,N,N
+Quercus,palustris,wind,syn,mono,22,,NA,,intolerant,,N,N
+Quercus,garryana,wind,syn,mono,9.5,,4.5,,intolerant,27,N,N
+Quercus,laurifolia,wind,pro,mono,21,,2.5,,tolerant,21,N,N
+Quercus,lyrata,wind,syn,mono,9.5,,4.5,,medium_tolerant,27,N,N
+Quercus,michauxii,wind,syn,mono,9.5,,4.5,,intolerant,30.5,N,N
+Quercus,nigra,wind,pro/syn,mono,21,,NA,,intolerant,38,N,N
+Quercus,nuttallii,wind,syn,mono,11.5,,3.5,,intolerant,37,N,N
+Quercus,phellos,wind,pro,mono,21,,3.5,,intolerant,37,N,N
+Quercus,stellata,wind,syn,mono,10,,5,north,intolerant,18.3,N,N
+Quercus,prinus,wind,syn,mono,9.5,,4.5,,medium_tolerant,24,N,flower
+Quercus sp,,,undescribed,,,,,,,,,N
+Robinia,pseudoacacia,insect,ser,perect,12.5,,5.5,,very_intolerant,18,N,N
+Salix,nigra,ambo,pro/syn,dio,6.5,,4,range,very_intolerant,15,N,N
+Sassafras,albidum,insect,syn,dio,8.5,,3.5,,intolerant,30,N,N
+Tilia,heterophylla,insect,ser,perfect,9.5,,6.5,,tolerant,27,Y,N
+Tilia,americana,insect,ser,perfect,9.5,,6,,tolerant,40,N,N
+Ulmus,alata,wind,pro,perfect,4,,3.5,,tolerant,15,N,N
+Ulmus,americana,wind,pro,perfect,4.5,range,3.5,range,medium_tolerant,38,N,N
+Ulmus,thomasii,wind,pro,perfect,5.5,,4,,medium_tolerant,27,N,N
+Ulmus,serotina,wind,ser,perfect,10.5,,9,,tolerant,25,N,N
+Ulmus,rubra,wind,pro,perfect,5,,3.5,,tolerant,21.3,N,N
+Ulmus,crassifolia,wind,ser,perfect,9.5,,8.5,,medium_tolerant,30,N,N
+Castanopsis,chrysophylla,,evergreen,,,,,,,,Y,N
+Casuarina,,,evergreen,,,,,,,,Y,N
+Cecropia peltata,,,evergreen,,,,,,,,Y,N
+Cedrela odorata,,,evergreen,,,,,,,,Y,N
+Cordia alliodora,,,evergreen,,,,,,,,,
+Dacryodes excelsa,,,evergreen,,,,,,,,,
+Didymopanax morototoni ,,,evergreen,,,,,,,,,
+Eucalyptus,sp,,evergreen,,,,,,,,,
+Grevillea robusta,,,evergreen,,,,,,,,,
+Ilex,opaca,,evergreen,,,,,,,,,
+Lithocarpus densiflorus,,,evergreen,,,,,,,,,
+Manilkara bidentata,,,evergreen,,,,,,,,,
+Melaleuca quinquenervia ,,,evergreen,,,,,,,,,
+Metrosideros polymorpha,,,evergreen,,,,,,,,,
+Persea,borbonia,,evergreen,,,,,,,,,
+Pithecellobium,saman,,evergreen,,,,,,,,,
+Prosopis,pallida,,evergreen,,,,,,,,,
+Sabal,palmetto,,,,,,,,,,,
+Tabebuia,heterophylla,,dry_deciduous,,,,,,,,,

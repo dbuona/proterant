@@ -76,7 +76,7 @@ mich.funct.dat<-full_join(extract_coefs(z.funct.drought),extract_CIs(z.funct.dro
 colnames(mich.funct.dat)<-c("trait","estimate","low","high")
 mich.funct.dat$class<-"functional-MTSV"
 
-mich.phys.dat<-full_join(extract_coefs(z.phys.drought),extract_CIs(z.phys.drought),by="trait")
+mich.phys.dat<-dplyr::full_join(extract_coefs(z.phys.drought),extract_CIs(z.phys.drought),by="trait")
 colnames(mich.phys.dat)<-c("trait","estimate","low","high")
 mich.phys.dat$class<-"physiological-MTSV"
 

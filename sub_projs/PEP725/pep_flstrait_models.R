@@ -49,8 +49,15 @@ intra.df$flo.cent<-(intra.df$flo_day-mean(intra.df$flo_day,na.rm=TRUE))/(sd(intr
 intra.df$flo.cent.neg<--(intra.df$flo_day-mean(intra.df$flo_day,na.rm=TRUE))/(sd(intra.df$flo_day,na.rm=TRUE))
 intra.df$leaf.cent<-(intra.df$leaf_day-mean(intra.df$leaf_day,na.rm=TRUE))/(sd(intra.df$leaf_day,na.rm=TRUE))
 intra.df$soil.cent<-(intra.df$SM-mean(intra.df$SM,na.rm=TRUE))/(sd(intra.df$SM,na.rm=TRUE))
+intra.df$soil.cent.neg<--(intra.df$soil.cent)
 
-wind<-c("ALN.GLU")
+intra.df<-filter(intra.df, year>1991)
+table(intra.df$taxa)
+
+intra.df.hyst<-filter(intra.df, FLS>=0)
+summary(lmer(leaf.cent~flo.cent+(flo.cent|taxa), intra.df))
+
+
 df.intra.alnus<-filter(intra.df,taxa=="ALN.GLU")
 df.intra.frax<-filter(intra.df,taxa=="FRA.EXC")
 df.intra.bet<-filter(intra.df,taxa=="BET.PEN")
@@ -58,6 +65,19 @@ df.intra.aes<-filter(intra.df,taxa=="AES.HIP")
 df.intra.fag<-filter(intra.df,taxa=="FAG.SYL")
 df.intra.tili<-filter(intra.df,taxa=="TIL.HET")
 
+
+aln.f<-lm(FLS~flo.cent,data=df.intra.alnus)
+aln.l<-lm(FLS~leaf.cent,data=df.intra.alnus)
+frax.f<-lm(FLS~flo.cent,data=df.intra.frax)
+frax.l<-lm(FLS~leaf.cent,data=df.intra.frax)
+aes.f<-lm(FLS~flo.cent,data=df.intra.aes)
+aes.l<-lm(FLS~leaf.cent,data=df.intra.aes)
+bet.f<-lm(FLS~flo.cent,data=df.intra.bet)
+bet.l<-lm(FLS~leaf.cent,data=df.intra.bet)
+fag.f<-lm(FLS~flo.cent+leaf.cent,data=df.intra.fag)
+fag.l<-lm(FLS~leaf.cent,data=df.intra.fag)
+tili.f<-lm(FLS~flo.cent+leaf.cent,data=df.intra.tili)
+tili.l<-lm(FLS~leaf.cent,data=df.intra.tili)
 
 ###does fleaf time or flow time predict fls
 
@@ -76,6 +96,8 @@ summary(tili.mod)
 
 frax.mod<-lm(FLS~soil.cent*flo.cent.neg,data=df.intra.frax)
 summary(frax.mod)
+
+
 ##3
 
 
