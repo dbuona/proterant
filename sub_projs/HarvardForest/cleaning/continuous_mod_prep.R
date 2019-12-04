@@ -27,7 +27,7 @@ traits$frost_free<-as.numeric(traits$frost_free)
 #traits$seed_cent<-(traits$seed_pound-mean(traits$seed_pound,na.rm=TRUE))/(2*sd(traits$seed_pound,na.rm=TRUE))
 
 ###prep the tree
-treee<-read.tree("HarvardForest/Vascular_Plants_rooted.dated.tre")
+treee<-read.tree("Vascular_Plants_rooted.dated.tre")
 names.intree<-treee$tip.label
 namelist<-unique(traits$name)
 

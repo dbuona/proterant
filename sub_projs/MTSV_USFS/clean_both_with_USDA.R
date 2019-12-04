@@ -70,5 +70,5 @@ setdiff(namelist,mytree.names)
 intersect(namelist,mytree.names)
 
 write.csv(silv.data,"../sub_projs/MTSV_USFS/silvdata_final.csv")
-write.tree(silv.tree.droughtprune,"../sub_projs/datasheets_derived/MTSV_USFS/silvtre_final.tre")
+write.tree(silv.tree.droughtprune,"../sub_projs/MTSV_USFS/silvtre_final.tre")
 

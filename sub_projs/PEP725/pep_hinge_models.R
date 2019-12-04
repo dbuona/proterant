@@ -8,6 +8,7 @@ library(tidyr)
 library(brms)
 library(ggplot2)
 library(tibble)
+load("..//PEP725/hinge.models")
 
 frax50<-read.csv("input/frax50year.csv")
 aesc50<-read.csv("input/aesc50year.csv")
@@ -40,8 +41,8 @@ fit.frax50.brms<-brm(FLS~YEAR.hin+(YEAR.hin|peporder),data=frax50)
 fit.aesc50.brms<-brm(FLS~YEAR.hin+(YEAR.hin|peporder),data=aesc50)
 
 fixef(fit.frax50.brms)[1,2]
-
-plot(c(1960,2020), c(-20,30), type = "n", xlab = "Year", ylab = "Days between flowering and leafing", bty='l')
+jpeg("FLS_climate_change.jpeg",width = 6, height = 5, units = 'in', res = 300)
+plot(c(1960,2015), c(-20,30), type = "n", xlab = "Year", ylab = "Days between flowering and leafing", bty='l')
 segments(x0=1960,y0=fixef(fit.aln50.brms)[1], x1=1980, y1=fixef(fit.aln50.brms)[1],col="red",lwd=3)
 segments(x0=1980,y0=fixef(fit.aln50.brms)[1], x1=2015,y1=fixef(fit.aln50.brms)[1]+fixef(fit.aln50.brms)[2]*35,col="red",lwd=3)
 segments(x0=1960,y0=coef(fit.aln50.brms)[1], x1=1980, y1=coef(fit.aln50.brms)[1],col="red",lwd=3)
@@ -63,6 +64,7 @@ text(x=1965, 24,font=3,cex=.8,"Alnus glutinosa")
 text(x=1966, 12,font=3,cex=.8,"Fraxinus excelsior")
 text(x=1965, 4,font=3,cex=.8,"Betula pendula")
 text(x=1969, -16,font=3,cex=.8,"Aesculus hippocastanum")
+dev.off()
 save.image("..//PEP725/hinge.models")
 
 

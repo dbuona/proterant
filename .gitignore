@@ -10,3 +10,5 @@
 *.DS_Store
 *.Rapp.history
 Input/.Rhistory
+sub_projs/MTSV_USFS/MTSVUSFS.mods
+sub_projs/HFmodeloutput
