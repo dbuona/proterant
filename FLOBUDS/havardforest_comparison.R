@@ -11,8 +11,8 @@ library(tibble)
 
 HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
 #HF2<-read.csv("HarvardForest/hf003-06-mean-spp.csv",header=TRUE)
-trendovertime.flo<-brm(fopn.jd~year+(year|species),data=HF)  
-trendovertime.lo<-brm(l75.jd~year+(year|species),data=HF) 
+#trendovertime.flo<-brm(fopn.jd~year+(year|species),data=HF)  
+#trendovertime.lo<-brm(l75.jd~year+(year|species),data=HF) 
 
 unique(HF$species)
 Vc<-filter(HF,species=="VACO") ## select just vaccinium

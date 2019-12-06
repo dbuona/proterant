@@ -52,10 +52,17 @@ intra.df$soil.cent<-(intra.df$SM-mean(intra.df$SM,na.rm=TRUE))/(sd(intra.df$SM,n
 intra.df$soil.cent.neg<--(intra.df$soil.cent)
 
 intra.df<-filter(intra.df, year>1991)
-table(intra.df$taxa)
+table(intra.df.hyst$taxa)
 
 intra.df.hyst<-filter(intra.df, FLS>=0)
-summary(lmer(leaf.cent~flo.cent+(flo.cent|taxa), intra.df))
+goo<-lm(FLS~soil.cent*flo.cent.neg,data=intra.df.hyst)
+summary(goo)
+rsqr(goo)
+
+intra.df.ser<-filter(intra.df, FLS<=0)
+table(intra.df.ser$taxa)
+goo2<-lmer(FLS~soil.cent*leaf.cent+(1|taxa),data=intra.df.ser)
+summary(goo2)
 
 
 df.intra.alnus<-filter(intra.df,taxa=="ALN.GLU")
