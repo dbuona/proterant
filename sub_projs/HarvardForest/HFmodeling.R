@@ -196,5 +196,16 @@ ggpubr::ggarrange(apc.funct,apc.funct.bin,common.legend = TRUE)
 dev.off()
 
 
+##messaround
+HF.weather<-read.csv("HarvardForest/mean.HF.precip.csv")
+colnames(HF.weather)[1]<-"year"
+HF.data<-left_join(HF.data,HF.weather, by="year")
+
+HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
+
+modelcont.weather <- brm(funct.fls~AP_cent+pol_cent+flo_cent.neg+(AP_cent+pol_cent+flo_cent.neg|name), data = HF.data, 
+                       family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
+fixef(modelcont.weather)
+
 save.image("HFmodeloutput")
 
