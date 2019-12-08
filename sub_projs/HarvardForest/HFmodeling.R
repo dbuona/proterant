@@ -203,9 +203,17 @@ HF.data<-left_join(HF.data,HF.weather, by="year")
 
 HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
 
-modelcont.weather <- brm(funct.fls~AP_cent+pol_cent+flo_cent.neg+(AP_cent+pol_cent+flo_cent.neg|name), data = HF.data, 
+modelcont.weather <- brm(funct.fls~AP_cent+pol_cent+flo_cent.neg+AP_cent:pol_cent+pol_cent:flo_cent.neg+flo_cent.neg:AP_cent+(1|name), data = HF.data, 
                        family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
 fixef(modelcont.weather)
+
+modelcont.wdh<- brm(funct.fls~AP_cent+precip_cent+flo_cent.neg+pol_cent+AP_cent:precip_cent+precip_cent:pol_cent+AP_cent:pol_cent+(1|name), data = HF.data, 
+                         family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000)
+
+wed.mod<-extract_coefs4HF(modelcont.weather)
+
+
+#all ints
 
 save.image("HFmodeloutput")
 
