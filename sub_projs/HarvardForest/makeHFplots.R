@@ -32,7 +32,7 @@ HF$name[HF$species=="NEMU"]<-"I. mucronata"
 HF$name[HF$species=="NYSY"]<-"N. sylvatica"
 HF$name[HF$species=="POTR"]<-"*P. tremuloides"
 HF$name[HF$species=="PRSE"]<-"P. serotina"
-HF$name[HF$species=="QURU"]<-"*Q. rubra"
+HF$name[HF$species=="QURU"]<-"Q. rubra"
 HF$name[HF$species=="QUVE"]<-"*Q. velutina"
 HF$name[HF$species=="VACO"]<-"V. corymbosum"
 HF$name[HF$species=="SAPU"]<-"S. racemosa"
@@ -47,14 +47,14 @@ colnames(HF)
 colnames(HF)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion (75%)","flower budburst","flower open","name","physiological offset","functional offset","intermediate offset")
 HF2<-tidyr::gather(HF, phase,DOY,4:7)
 HF2<-filter(HF2,!is.na(name))
-HFshort<-dplyr::filter(HF2,name %in% c("A. rubrum","Amelanchier spp."))
+HFshort<-dplyr::filter(HF2,name %in% c("Q. rubra","I. mucronata"))
 
 #jpeg("HarvardForest/HFmeans_expanded.jpeg",width = 8, height = 6, units = 'in', res=300)
-a<-ggplot(HFshort,(aes(name,DOY)))+stat_summary(aes(shape=phase,color=phase))+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_linedraw()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(hjust=0,face="italic"))
+a<-ggplot(HFshort,(aes(name,DOY)))+stat_summary(aes(shape=phase,color=phase),size=1)+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_linedraw()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(hjust=0,face="italic"))
 dev.off()
 
 ####does the graph work for these species
-shorty<-filter(HF,name %in% c("Amelanchier spp.","A. rubrum"))
+shorty<-filter(HF,name %in% c("*Q. rubra"))
 shorty<-filter(shorty,year<2002)
 colnames(shorty)
 shorty$FLS<-ifelse(shorty$"physiological offset"<0,"seranthous","hysteranthous")
@@ -77,7 +77,7 @@ b<-ggplot(shorty,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,
   scale_shape_manual(name="Phenophase",values=c(2,17), label=c("flower budburst","leaf budburst"))+facet_wrap(~name,nrow=2)
 
 dev.off()
-ggpubr::ggarrange(a,b)
+ggpubr::ggarrange(a,c,widths=c(1,2))
 
 ########Analysis 3 Quercus rubra at HF.........
 QURU<-filter(HF,species=="QURU")
@@ -92,11 +92,11 @@ QURU$tree.id[QURU$tree.id=="QURU-04"]<-"4"
 
 colnames(QURU)[6]<-"flower.budburst"
 colnames(QURU)[4]<-"leaf.budburst"
-jpeg("HarvardForest/HF_Q_ru_interannual.jpeg",width = 8, height = 6, units = 'in', res=350)
+#jpeg("HarvardForest/HF_Q_ru_interannual.jpeg",width = 8, height = 6, units = 'in', res=350)
 pd2<-position_dodge2(0.7)
 
-ggplot(QURU,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,color=tree.id,group = row.names(QURU),shape="flower.budburst") ,position=pd2)+
-  geom_point(aes(year,leaf.budburst,color=tree.id,group = row.names(QURU),shape="leaf.budburst"),position=pd2)+
+c<-ggplot(QURU,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,color=tree.id,group = row.names(QURU),shape="flower budburst") ,position=pd2)+
+  geom_point(aes(year,leaf.budburst,color=tree.id,group = row.names(QURU),shape="leaf budburst"),position=pd2)+
 geom_linerange(aes(x=year,ymin=flower.budburst,ymax=leaf.budburst, linetype=FLS,color=tree.id,group = row.names(QURU)),position=pd2)+
   theme_linedraw()+labs(y = "Day of year",color= "Tree I.D.")+
 scale_color_brewer(palette="Set1")+
