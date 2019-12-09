@@ -178,13 +178,9 @@ unique(HF.data$pol_cent)
 
 goober2<- ggeffects::ggpredict(modelcont.funct,c("precip_cent.neg","pol_cent","flo_cent.neg[-0.01]"), ci.lvl=0.50)  #May the fourth
 apc.funct<-plot(goober2)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(47,40,33,26,19,12,6))+
-  xlab("Min. precipitation across range (cm)")+ylab("Time between flowering and leaf expansion")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
+  xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
   labs(title = NULL,tag="a)")+theme_linedraw()
 
-goober<- ggeffects::ggpredict(modelbin.funct,c("precip_cent.neg","pol_cent","flo_cent.neg[-0.01]"), ci.lvl=0.50)  #May the fourth
-apc.funct.bin<-plot(goober)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(47,40,33,26,19,12,6))+
-  xlab("Min. precipitation across range (cm)")+ylab("Likelihood of hysteranthy")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
-  labs(title = NULL,tag="b)")+theme_linedraw()
 
 -(-0.01*(2*sd(HF.data$fopn.jd,na.rm=TRUE))-mean(HF.data$fopn.jd,na.rm=TRUE))
 
@@ -202,6 +198,7 @@ colnames(HF.weather)[1]<-"year"
 HF.data<-left_join(HF.data,HF.weather, by="year")
 
 HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
+HF.data$AP_cent.neg<--(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
 
 modelcont.weather <- brm(funct.fls~AP_cent+pol_cent+flo_cent.neg+AP_cent:pol_cent+pol_cent:flo_cent.neg+flo_cent.neg:AP_cent+(1|name), data = HF.data, 
                        family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
@@ -212,8 +209,16 @@ modelcont.wdh<- brm(funct.fls~AP_cent+precip_cent+flo_cent.neg+pol_cent+AP_cent:
 
 wed.mod<-extract_coefs4HF(modelcont.weather)
 
+goober3<- ggeffects::ggpredict(modelcont.weather,c("AP_cent","pol_cent","flo_cent.neg[-0.01]"), ci.lvl=0.50)  #May the fourth
+apc.funct2<-plot(goober3)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(429,646,863,1080,1298,1515,1732))+
+  xlab("Annual precip")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
+  labs(title = NULL,tag="b)")+theme_linedraw()
 
+ggpubr::ggarrange(apc.funct,apc.funct2,common.legend = TRUE)
 #all ints
+
+
+(1.5*(2*sd(HF.data$AP,na.rm=TRUE))+mean(HF.data$AP,na.rm=TRUE))
 
 save.image("HFmodeloutput")
 
