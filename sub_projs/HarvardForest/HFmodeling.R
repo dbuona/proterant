@@ -50,12 +50,14 @@ A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
 
 
-###continuous models
-modelcont.funct <- brm(funct.fls~ pol_cent+flo_cent.neg+precip_cent.neg+precip_cent.neg:flo_cent.neg+precip_cent.neg:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
+###continuous models normal
+modelcont.funct <- brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
                        family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
+pp_check(modelcont.funct)
+###checks
 
 
-#modelcont.phys <- brm(phys.fls~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
+#modelcont.phys <- brm(phys.fls~ pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent+(1|name), data = HF.data, 
  #                   family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
 
 #modelcont.inter<- brm(inter.fls~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
@@ -64,11 +66,11 @@ modelcont.funct <- brm(funct.fls~ pol_cent+flo_cent.neg+precip_cent.neg+precip_c
 
 
 ##binary
-modelbin.funct<- brm(hyst.funct~ pol_cent+flo_cent.neg+precip_cent.neg+precip_cent.neg:flo_cent.neg+precip_cent.neg:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
+modelbin.funct<- brm(hyst.funct~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
                      family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000,warmup=3000) 
 
-#modelbin.phys<- brm(hyst.phys~pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
-#                    family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000, warmup=3000)
+#modelbin.phys<- brm(hyst.phys~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent+(1|name), data = HF.data, 
+ #                  family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000, warmup=3000)
 
 #modelbin.inter<- brm(hyst.inter~pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
        #             family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000, warmup=3000)
@@ -98,21 +100,21 @@ bin$data_type<-"binary"
 
 bin<-dplyr::filter(bin,trait!="Intercept")
 bin$trait[which(bin$trait=="pol_cent")]<-"pollination syndrome"
-bin$trait[which(bin$trait=="flo_cent.neg")]<- "earlier flowering"
-bin$trait[which(bin$trait=="precip_cent.neg")]  <- "water dynamics"
-bin$trait[which(bin$trait=="pol_cent:precip_cent.neg")]<- "pollination:water dynamics"
-bin$trait[which(bin$trait=="pol_cent:flo_cent.neg")]<-"pollination:earlier flowering"
-bin$trait[which(bin$trait=="flo_cent.neg:precip_cent.neg")]<-"earlier flowering:water dynamics"
+bin$trait[which(bin$trait=="flo_cent")]<- "earlier flowering"
+bin$trait[which(bin$trait=="precip_cent")]  <- "water dynamics"
+bin$trait[which(bin$trait=="pol_cent:precip_cent")]<- "pollination:water dynamics"
+bin$trait[which(bin$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowering"
+bin$trait[which(bin$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 bin$data<-"HF"
 
 
 cont<-dplyr::filter(cont,trait!="Intercept")
-cont$trait[which(cont$trait=="pol_cent")]<-"pollination syndrome"
-cont$trait[which(cont$trait=="flo_cent.neg")]<- "earlier flowering"
-cont$trait[which(cont$trait=="precip_cent.neg")]  <- "water dynamics"
-cont$trait[which(cont$trait=="pol_cent:precip_cent.neg")]<- "pollination:water dynamics"
-cont$trait[which(cont$trait=="pol_cent:flo_cent.neg")]<-"pollination:earlier flowering"
-cont$trait[which(cont$trait=="flo_cent.neg:precip_cent.neg")]<-"earlier flowering:water dynamics"
+cont$trait[which(cont$trait=="pol")]<-"pollination syndrome"
+cont$trait[which(cont$trait=="flo_cent")]<- "earlier flowering"
+cont$trait[which(cont$trait=="precip_cent")]  <- "water dynamics"
+cont$trait[which(cont$trait=="pol:precip_cent")]<- "pollination:water dynamics"
+cont$trait[which(cont$trait=="pol:flo_cent")]<-"pollination:earlier flowering"
+cont$trait[which(cont$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 cont$data<-"HF"
 
 
@@ -122,67 +124,69 @@ b<-both %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(Estimate,trait))+geom_point(aes(color=data),shape=1,position=pd,size=2,stroke=.5)+
-  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=data),position=pd,height=0,linetype="dotted")+
-  geom_errorbarh(aes(xmin=Q10,xmax=Q90, color=data),position=pd,height=0,linetype="solid")+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=data),position=pd,width=0,linetype="dotted")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90, color=data),position=pd,width=0,linetype="solid")+
   theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
   xlim(-30,30)+scale_color_manual(values=c("firebrick4"))+facet_wrap(~data_type)+
   labs(title = NULL,tag="b)")
  
-load(file = "MTSV_USFS/MTSVUSFS.mods")
+#load(file = "MTSV_USFS/MTSVUSFS.mods")
 
 
 
-pd=position_dodgev(height=0.6)
-a<-comps %>%
-  arrange(estimate) %>%
-  mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
-  ggplot(aes(estimate,trait))+geom_point(aes(shape=class,color=data,stroke=1.5),position=pd,size=2)+
-  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0)+
-  scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,8)+
-  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")+
-  labs(title = NULL,tag="a)")
+##pd=position_dodgev(height=0.6)
+#a<-comps %>%
+#  arrange(estimate) %>%
+#  mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+#  ggplot(aes(estimate,trait))+geom_point(aes(shape=class,color=data,stroke=1.5),position=pd,size=2)+
+#  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0)+
+#  scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,8)+
+#  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")+
+#  labs(title = NULL,tag="a)")
 
 ###sno var species or and bin
-meanhf<-HF.data %>% group_by(name) %>% summarise(meanfunctFLS=mean(funct.fls,na.rm=TRUE))
-meanhf$FLSmeanfunctbin<-ifelse(meanhf$meanfunctFLS>0,1,0)
-meanhf<-left_join(meanhf,HFsubber)
+#meanhf<-HF.data %>% group_by(name,fopn.jd) %>% summarise(meanfunctFLS=mean(funct.fls,na.rm=TRUE))
+#meanhf$FLSmeanfunctbin<-ifelse(meanhf$meanfunctFLS>0,1,0)
+#meanhf<-left_join(meanhf,HFsubber)
 
-meanhf$pol_cent<-(meanhf$pol-mean(meanhf$pol,na.rm=TRUE))/(2*sd(meanhf$pol,na.rm=TRUE))
-meanhf$precip_cent<-(meanhf$min_precip-mean(meanhf$min_precip))/(2*sd(meanhf$min_precip))
-meanhf$flo_cent<-(meanhf$fopn.jd-mean(meanhf$fopn.jd,na.rm=TRUE))/(2*sd(meanhf$fopn.jd,na.rm=TRUE))
+#meanhf$pol_cent<-(meanhf$pol-mean(meanhf$pol,na.rm=TRUE))/(2*sd(meanhf$pol,na.rm=TRUE))
+#meanhf$precip_cent<-(meanhf$min_precip-mean(meanhf$min_precip))/(2*sd(meanhf$min_precip))
+#meanhf$flo_cent<-(meanhf$fopn.jd-mean(meanhf$fopn.jd,na.rm=TRUE))/(2*sd(meanhf$fopn.jd,na.rm=TRUE))
 
-meanhf$flo_cent.neg<--(meanhf$flo_cent)
-meanhf$precip_cent.neg<--(meanhf$precip_cent)
+#meanhf$flo_cent.neg<--(meanhf$flo_cent)
+#meanhf$precip_cent.neg<--(meanhf$precip_cent)
 
-modelbin.nosp<-brms::brm(FLSmeanfunctbin~ pol_cent+flo_cent.neg+precip_cent.neg+precip_cent.neg:flo_cent.neg+precip_cent.neg:pol_cent+pol_cent:flo_cent.neg+(1|name), data =meanhf, 
-                     family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000,warmup=3000) 
+#modelbin.nosp<-brms::brm(FLSmeanfunctbin~ pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent+(1|name), data =meanhf, 
+ #                    family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000,warmup=3000) 
 
 
 
-jpeg("muplots.jpeg",width = 7, height = 8, units = 'in', res=400)
-ggpubr::ggarrange(a+theme(axis.title=element_blank(),legend.title = element_blank() ),b+theme(axis.title.y=element_blank(),legend.title = element_blank() ),ncol=1,common.legend =FALSE, legend="top")
-dev.off()
 
 (-.15)*(2*sd(HF.data$fbb.jd,na.rm=TRUE))+mean(HF.data$fbb.jd,na.rm=TRUE)
 
+(max(HF.data$precip_cent)*(2*sd(HF.data$min_precip,na.rm=TRUE))+mean(HF.data$min_precip,na.rm=TRUE)) ##this is the maximum
+(min(HF.data$precip_cent)*(2*sd(HF.data$min_precip,na.rm=TRUE))+mean(HF.data$min_precip,na.rm=TRUE)) ## this is minumom
 
 
--(max(HF.data$precip_cent.neg)*(2*sd(HF.data$min_precip,na.rm=TRUE))-mean(HF.data$min_precip,na.rm=TRUE)) ##this is the minimum
--(min(HF.data$precip_cent.neg)*(2*sd(HF.data$min_precip,na.rm=TRUE))-mean(HF.data$min_precip,na.rm=TRUE))
-
--(.15*(2*sd(HF.data$fopn.jd,na.rm=TRUE))-mean(HF.data$fopn.jd,na.rm=TRUE)) ##this is the minimum
-
-unique(HF.data$pol_cent)
+(-.15)*(2*sd(HF.data$fbb.jd,na.rm=TRUE))+mean(HF.data$fbb.jd,na.rm=TRUE) ##Day 121 May first
 
 
 
-goober2<- ggeffects::ggpredict(modelcont.funct,c("precip_cent.neg","pol_cent","flo_cent.neg[-0.01]"), ci.lvl=0.50)  #May the fourth
-apc.funct<-plot(goober2)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(47,40,33,26,19,12,6))+
+#jpeg("muplots.jpeg",width = 7, height = 8, units = 'in', res=400)
+#ggpubr::ggarrange(a+theme(axis.title=element_blank(),legend.title = element_blank() ),b+theme(axis.title.y=element_blank(),legend.title = element_blank() ),ncol=1,common.legend =FALSE, legend="top")
+#dev.off()
+apc.funct<- ggeffects::ggpredict(modelcont.funct,c("precip_cent","pol","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
+apc.funct.plot<-plot(apc.funct)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
   xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
   labs(title = NULL,tag="a)")+theme_linedraw()
 
+#### unzscore precip values
+1.5*(2*sd(HF.data$min_precip,na.rm=TRUE))+mean(HF.data$min_precip,na.rm=TRUE)
 
--(-0.01*(2*sd(HF.data$fopn.jd,na.rm=TRUE))-mean(HF.data$fopn.jd,na.rm=TRUE))
+apc.funct.2<- ggeffects::ggpredict(modelcont.funct,c("flo_cent","pol","precip_cent[1]"), ci.lvl=0.50)  #May the fourth
+apc.funct.plot<-plot(apc.funct.2)+scale_x_continuous()+
+  xlab("BOY flowering")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
+  labs(title = NULL,tag="a)")+theme_linedraw()
 
 
 
@@ -192,33 +196,43 @@ ggpubr::ggarrange(apc.funct,apc.funct.bin,common.legend = TRUE)
 dev.off()
 
 
-##messaround
-HF.weather<-read.csv("HarvardForest/mean.HF.precip.csv")
-colnames(HF.weather)[1]<-"year"
-HF.data<-left_join(HF.data,HF.weather, by="year")
+##Noww is Annual precipitation a good predictor
+#HF.weather<-read.csv("HarvardForest/mean.HF.precip.csv")
+#colnames(HF.weather)[1]<-"year"
+#HF.data<-left_join(HF.data,HF.weather, by="year")
 
-HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
-HF.data$AP_cent.neg<--(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
+#HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
+#HF.data$AP_cent.neg<--(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
 
-modelcont.weather <- brm(funct.fls~AP_cent+pol_cent+flo_cent.neg+AP_cent:pol_cent+pol_cent:flo_cent.neg+flo_cent.neg:AP_cent+(1|name), data = HF.data, 
+##substitute annual precip for precip acorss range
+modelcont.weather <- brm(funct.fls~AP_cent+pol_cent+flo_cent+AP_cent:pol_cent+pol_cent:flo_cent+flo_cent:AP_cent+(1|name), data = HF.data, 
                        family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
-fixef(modelcont.weather)
 
-modelcont.wdh<- brm(funct.fls~AP_cent+precip_cent+flo_cent.neg+pol_cent+AP_cent:precip_cent+precip_cent:pol_cent+AP_cent:pol_cent+(1|name), data = HF.data, 
+plast.mod<-extract_coefs4HF(modelcont.weather)
+
+modelcont.wdh<- brm(funct.fls~AP_cent+precip_cent+flo_cent+pol_cent+AP_cent:precip_cent+AP_cent:flo_cent+AP_cent:pol_cent+precip_cent:flo_cent+precip_cent:pol_cent+flo_cent:pol_cent+(1|name), data = HF.data, 
                          family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000)
+goo<-extract_coefs4HF(modelcont.wdh)
 
-wed.mod<-extract_coefs4HF(modelcont.weather)
 
-goober3<- ggeffects::ggpredict(modelcont.weather,c("AP_cent","pol_cent","flo_cent.neg[-0.01]"), ci.lvl=0.50)  #May the fourth
-apc.funct2<-plot(goober3)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(429,646,863,1080,1298,1515,1732))+
+apc.plast<- ggeffects::ggpredict(modelcont.weather,c("AP_cent","pol_cent","flo_cent[-.15]"), ci.lvl=0.50)  #May the fourth
+apc.plat.plot<-plot(apc.plast)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5))+
   xlab("Annual precip")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
   labs(title = NULL,tag="b)")+theme_linedraw()
 
-ggpubr::ggarrange(apc.funct,apc.funct2,common.legend = TRUE)
+
+ggpubr::ggarrange(apc.funct.plot,apc.plat.plot,common.legend = TRUE)
 #all ints
 
 
 (1.5*(2*sd(HF.data$AP,na.rm=TRUE))+mean(HF.data$AP,na.rm=TRUE))
+
+#fl;owering time or leafing time
+summary(lm(funct.fls~fopn.jd,data=HF.data))
+summary(lm(funct.fls~l75.jd,data=HF.data))
+
+summary(lm(phys.fls~fbb.jd,data=HF.data))
+summary(lm(phys.fls~bb.jd,data=HF.data))
 
 save.image("HFmodeloutput")
 
