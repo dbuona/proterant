@@ -61,7 +61,7 @@ rsqr(goo)
 
 intra.df.ser<-filter(intra.df, FLS<=0)
 table(intra.df.ser$taxa)
-goo2<-lmer(FLS~soil.cent*leaf.cent+(1|taxa),data=intra.df.ser)
+goo2<-lmer(FLS~soil.cent*flo.cent+(soil.cent*flo.cent|taxa),data=intra.df.ser)
 summary(goo2)
 
 
@@ -72,6 +72,11 @@ df.intra.aes<-filter(intra.df,taxa=="AES.HIP")
 df.intra.fag<-filter(intra.df,taxa=="FAG.SYL")
 df.intra.tili<-filter(intra.df,taxa=="TIL.HET")
 
+
+frax.ind<-lmer(FLS~soil.cent+(soil.cent|year),data=df.intra.alnus)
+summary(frax.ind)
+frax.site<-lmer(FLS~soil.cent+flo.cent+(1|s_id),data=df.intra.frax)
+summary(frax.site)
 
 aln.f<-lm(FLS~flo.cent,data=df.intra.alnus)
 aln.l<-lm(FLS~leaf.cent,data=df.intra.alnus)

@@ -196,33 +196,17 @@ ggpubr::ggarrange(apc.funct,apc.funct.bin,common.legend = TRUE)
 dev.off()
 
 
-##Noww is Annual precipitation a good predictor
-#HF.weather<-read.csv("HarvardForest/mean.HF.precip.csv")
-#colnames(HF.weather)[1]<-"year"
-#HF.data<-left_join(HF.data,HF.weather, by="year")
+#Noww is Annual precipitation a good predictor
+HF.weather<-read.csv("HarvardForest/mean.HF.precip.csv")
+colnames(HF.weather)[1]<-"year"
+HF.data<-left_join(HF.data,HF.weather, by="year")
 
-#HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
-#HF.data$AP_cent.neg<--(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
-
-##substitute annual precip for precip acorss range
-modelcont.weather <- brm(funct.fls~AP_cent+pol_cent+flo_cent+AP_cent:pol_cent+pol_cent:flo_cent+flo_cent:AP_cent+(1|name), data = HF.data, 
-                       family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
-
-plast.mod<-extract_coefs4HF(modelcont.weather)
-
-modelcont.wdh<- brm(funct.fls~AP_cent+precip_cent+flo_cent+pol_cent+AP_cent:precip_cent+AP_cent:flo_cent+AP_cent:pol_cent+precip_cent:flo_cent+precip_cent:pol_cent+flo_cent:pol_cent+(1|name), data = HF.data, 
-                         family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000)
-goo<-extract_coefs4HF(modelcont.wdh)
+HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
+HF.data$AP_cent.neg<--(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
 
 
-apc.plast<- ggeffects::ggpredict(modelcont.weather,c("AP_cent","pol_cent","flo_cent[-.15]"), ci.lvl=0.50)  #May the fourth
-apc.plat.plot<-plot(apc.plast)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5))+
-  xlab("Annual precip")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
-  labs(title = NULL,tag="b)")+theme_linedraw()
-
-
-ggpubr::ggarrange(apc.funct.plot,apc.plat.plot,common.legend = TRUE)
-#all ints
+### Hysteranthous species
+HFwind<-filter(HF.data,pol==1)
 
 
 (1.5*(2*sd(HF.data$AP,na.rm=TRUE))+mean(HF.data$AP,na.rm=TRUE))
@@ -234,5 +218,8 @@ summary(lm(funct.fls~l75.jd,data=HF.data))
 summary(lm(phys.fls~fbb.jd,data=HF.data))
 summary(lm(phys.fls~bb.jd,data=HF.data))
 
+##In hysteranthous speces
+goo<-brm(funct.fls~precip_cent*AP_cent, data = HFwind, iter=4000, warmup=3000)
+goo
 save.image("HFmodeloutput")
 
