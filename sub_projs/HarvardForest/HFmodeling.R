@@ -119,30 +119,30 @@ cont$data<-"HF"
 
 
 both<-rbind(cont,bin)
+jpeg("HF.jpeg",width = 8, height = 4, units = 'in', res=200)
 pd=position_dodgev(height=0.4)
-b<-both %>%
+both %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
-  ggplot(aes(Estimate,trait))+geom_point(aes(color=data),shape=1,position=pd,size=2,stroke=.5)+
-  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=data),position=pd,width=0,linetype="dotted")+
-  geom_errorbarh(aes(xmin=Q10,xmax=Q90, color=data),position=pd,width=0,linetype="solid")+
+  ggplot(aes(Estimate,trait))+geom_point(shape=1,position=pd,size=2,stroke=.5)+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5),position=pd,width=0,linetype="dotted")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90),position=pd,width=0,linetype="solid")+
   theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  xlim(-30,30)+scale_color_manual(values=c("firebrick4"))+facet_wrap(~data_type)+
-  labs(title = NULL,tag="b)")
- 
-#load(file = "MTSV_USFS/MTSVUSFS.mods")
+  xlim(-30,30)+scale_color_manual(values=c("firebrick4"))+facet_wrap(~data_type)
+dev.off() 
+load(file = "MTSV_USFS/MTSVUSFS.mods")
 
 
 
-##pd=position_dodgev(height=0.6)
-#a<-comps %>%
-#  arrange(estimate) %>%
-#  mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
-#  ggplot(aes(estimate,trait))+geom_point(aes(shape=class,color=data,stroke=1.5),position=pd,size=2)+
-#  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0)+
-#  scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,8)+
-#  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")+
-#  labs(title = NULL,tag="a)")
+pd=position_dodgev(height=0.6)
+a<-comps %>%
+  arrange(estimate) %>%
+ mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
+  ggplot(aes(estimate,trait))+geom_point(aes(shape=class,color=data,stroke=1.5),position=pd,size=2)+
+  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0,size=1)+
+  scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,9)+
+  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")+
+  labs(title = NULL,tag="a)")
 
 ###sno var species or and bin
 #meanhf<-HF.data %>% group_by(name,fopn.jd) %>% summarise(meanfunctFLS=mean(funct.fls,na.rm=TRUE))
@@ -172,9 +172,9 @@ b<-both %>%
 
 
 
-#jpeg("muplots.jpeg",width = 7, height = 8, units = 'in', res=400)
-#ggpubr::ggarrange(a+theme(axis.title=element_blank(),legend.title = element_blank() ),b+theme(axis.title.y=element_blank(),legend.title = element_blank() ),ncol=1,common.legend =FALSE, legend="top")
-#dev.off()
+jpeg("muplots.jpeg",width = 7, height = 8, units = 'in', res=400)
+ggpubr::ggarrange(a+theme(axis.title=element_blank(),legend.title = element_blank() ),b+theme(axis.title.y=element_blank(),legend.title = element_blank() ),widths=c(1,2),ncol=2,common.legend =FALSE, legend="top")
+dev.off()
 apc.funct<- ggeffects::ggpredict(modelcont.funct,c("precip_cent","pol","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
 apc.funct.plot<-plot(apc.funct)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
   xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
@@ -201,13 +201,19 @@ HF.weather<-read.csv("HarvardForest/mean.HF.precip.csv")
 colnames(HF.weather)[1]<-"year"
 HF.data<-left_join(HF.data,HF.weather, by="year")
 
-HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
-HF.data$AP_cent.neg<--(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
+HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/100
 
-
+goo<-brm(funct.fls~ AP, data = HF.data, family = gaussian() ,iter=3000, warmup=2000) 
+summary(goo)
+pp_check(goo)
 ### Hysteranthous species
-HFwind<-filter(HF.data,pol==1)
+HFsect<-filter(HF.data,pol==0)
+goo2<-brm(funct.fls~ AP, data = HFsect, family = gaussian() ,iter=3000, warmup=2000) 
+summary(goo2)
 
+goo<-lm(inter.fls~ AP, data = HF.data)
+, family = gaussian() ,iter=3000, warmup=2000) 
+summary(goo)
 
 (1.5*(2*sd(HF.data$AP,na.rm=TRUE))+mean(HF.data$AP,na.rm=TRUE))
 

@@ -22,7 +22,7 @@ library("phylolm")
 library(ggstance)
 library(tibble)
 library(dplyr)
-load("MTSVUSFS.mods")
+#load("MTSVUSFS.mods")
 
 mich.data<-read.csv("michdata_final.csv")
 mich.tre<-read.tree("michtre_final.tre")
@@ -54,13 +54,13 @@ mich.data$precip.neg<--(mich.data$precip_cent)
 silv.data$precip.neg<--(silv.data$precip_cent)
 
 ###mtsv models
-z.funct.MTSV<-phyloglm(pro2~pol_cent+flo_cent.neg+precip.neg+precip.neg:flo_cent.neg+precip.neg:pol_cent+pol_cent:flo_cent.neg,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                          start.beta=NULL, start.alpha=NULL,
-                          boot=599,full.matrix = TRUE)
+z.funct.MTSV<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                        start.beta=NULL, start.alpha=NULL,
+                        boot=599,full.matrix = TRUE)
 
 
-z.phys.MTSV<-phyloglm(pro3~pol_cent+flo_cent.neg+precip.neg+precip.neg:flo_cent.neg+precip.neg:pol_cent+pol_cent:flo_cent.neg,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                         start.beta=NULL, start.alpha=NULL,
+z.phys.MTSV<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                        start.beta=NULL, start.alpha=NULL,
                          boot=599,full.matrix = TRUE)
 
 #z.flex.MTSV<-phyloglm(pro~pol_cent+flo_cent.neg+precip.neg+precip.neg:flo_cent.neg+precip.neg:pol_cent+pol_cent:flo_cent.neg,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
@@ -68,12 +68,12 @@ z.phys.MTSV<-phyloglm(pro3~pol_cent+flo_cent.neg+precip.neg+precip.neg:flo_cent.
  #                     boot=599,full.matrix = TRUE)
 
 #USFS models
-z.funct.USFS<-phyloglm(pro2~pol_cent+flo_cent.neg+precip.neg+precip.neg:flo_cent.neg+precip.neg:pol_cent+pol_cent:flo_cent.neg,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+z.funct.USFS<-phyloglm(pro2~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                        start.beta=NULL, start.alpha=NULL,
                        boot=599,full.matrix = TRUE)
 
 
-z.phys.USFS<-phyloglm(pro3~pol_cent+flo_cent.neg+precip.neg+precip.neg:flo_cent.neg+precip.neg:pol_cent+pol_cent:flo_cent.neg,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+z.phys.USFS<-phyloglm(pro3~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent,silv.data, silv.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                       start.beta=NULL, start.alpha=NULL,
                       boot=599,full.matrix = TRUE)
 
@@ -127,24 +127,24 @@ comps<-rbind(USFS,MTSV)
 comps<-dplyr::filter(comps,trait!="(Intercept)")
 
 comps$trait[which(comps$trait=="pol_cent")]<-"pollination syndrome"
-comps$trait[which(comps$trait=="flo_cent.neg")]<- "earlier flowering"
-comps$trait[which(comps$trait=="precip.neg")]  <- "water dynamics"
-comps$trait[which(comps$trait=="pol_cent:precip.neg")]<- "pollination:water dynamics"
-comps$trait[which(comps$trait=="pol_cent:flo_cent.neg")]<-"pollination:earlier flowering"
-comps$trait[which(comps$trait=="flo_cent.neg:precip.neg")]<-"earlier flowering:water dynamics"
+comps$trait[which(comps$trait=="flo_cent")]<- "earlier flowering"
+comps$trait[which(comps$trait=="precip_cent")]  <- "water dynamics"
+comps$trait[which(comps$trait=="pol_cent:precip_cent")]<- "pollination:water dynamics"
+comps$trait[which(comps$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowering"
+comps$trait[which(comps$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 
 
-jpeg("MTSV.USFS.jpeg",width = 8.6, height = 4, units = 'in', res=200)
+jpeg("MTSV.USFS.jpeg",width = 8, height = 4, units = 'in', res=200)
 pd=position_dodgev(height=0.4)
 comps %>%
   arrange(estimate) %>%
   mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(estimate,trait))+geom_point(aes(shape=class,color=data),position=pd,size=3)+
-  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0)+
- scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,8)+
-  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")+
-  annotate("text", x = 6.2, y = 6.4, label = "Hysteranthy",fontface="bold",size=3)+annotate("text", x = -6.9, y = 6.4, label = "Seranthy",fontface="bold",size=3)
-  dev.off()
+  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0,size=1)+
+ scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,9)+
+  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")
+  
+dev.off()
 
   save.image("MTSVUSFS.mods")  
   
