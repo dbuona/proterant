@@ -1,0 +1,138 @@
+\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[top=1.00in, bottom=1.0in, left=1.1in, right=1.1in]{geometry}
+\renewcommand{\baselinestretch}{1.1}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\bibliographystyle{..//refs/styles/besjournals.bst}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\usepackage{xr-hyper}
+\externaldocument{shortest_reconciling.tex}
+
+\def\labelitemi{--}
+\parindent=24pt
+\title{Supplement: Reconciling historic hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\maketitle
+
+\subsection*{Methods}
+\subsubsection*{Climate Change and FLS:}
+To evaluate how FLS patterns have changed over time in association with climate change we obtained phenological data for four European woody plant species with long term phenology records of both flower (BBCH 60) and leafout phenology (BBCH 11) from the Pan European Phenological Database \citep{PEP725}. We restricted the data set to include only stations with more than 50 years worth of data. For each species, we modeled the number of days between flowering and leafing as a function of time, using a hinge model with 1980 as break point in accordance with climate change models of \citet(). \textit{Lizzie do you have any citations for hinge models?} For each species, we display the pre-1980 mean and 95\% credible intervals of the time between flowering and leafing and the post-1980 change in mean time between phenophases that can be driven by climate change.
+
+\subsubsection*{Defining FLS with MTSV and USFS data}
+\indent\indent  For these two, categorical, species level case studies, we converted verbal descriptions of flower-leaf sequences into a binary response variable. For our more inclusive "functional" definition of hysteranthy which allows for overlap between phenophases, we included species entries with descriptions \textit{"flowers before the leaves"}, \textit{"flowers before or with leaves"} and textit{"flowers with leaves"} as hysteranthous. Our more restrictive "physiological" hysteranthy definition only included species described as \textit{"flowers before the leaves"} as hysteranthous.\\
+\ident For modeling trait associates we chose three predictors to represent the three major FLS hypothesis; pollination syndrome, average flowering time and minimum precipitation levels across the species range. We obtained pollination syndrome and average flowering time information directly from the respective data sources and estimates of minimum precipitation across range from the USDA/NRCS Conservation Plants Characteristics database. We coded pollination syndrome as binary, biotic- or wind-pollinated and assigned known ambophilous species in the genus \textit{Salix} to the ancestral, biotic-pollinated, state of angiosperms. We re-coded flowering time as the average of the range of months of flowering reported in each data source.\\
+\indent For these case studies, we modeled associations between hysteranthy and the trait predictors with logistical regressions in phylogenetic generalized linear modeling framework \citep{Ives2010} using the R package ``phylolm" \citep{Ho2014}.Our models incorporated a published angiosperm phylogenetic tree \citep{Zanne2013} pruned to match the species list for each case study. Species found in the trait data set but not in the original phylogenetic tree were added to the pruned tree at the generic root. In total 32 species were added to the generic roots for the MTSV data set and eight for the USFS data set. We visualize phylogentic patterning of FLS across the tree of each case study in figs. \ref{fig:Figure S1} and we report the phylogentic signal for each of the categorical case studies in (tab. \ref{tab:Table S1})
+We ran the models with 599 bootstrapped re-sampling iterations for each data set \citep{Wilcox2010}. We standardized all predictors by subtracting the mean and dividing by two standard deviations to allow for a reasonable comparison of effect sizes between the binary and continuous predictors in this model \citep{Gelman2007}. To assess the phylogenetic structure of hysteranthous flowering, we used the Caper package \citep{Orme2013} to calculate a phylogenetic D statistic.\\
+%Nacho is this actually what the D statistic is called? Do you know a citatation for it?
+
+\subsubsection*{Harvard Forest models}
+\indent \textbf{HF:} For each individual per year, we calculated the time between flowers opening and leaves reaching 75\% of their final size. To compare the inference from between catagorical and continuous measure of FLS we re-coded the HF continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets, except that we estimated the average flowering time directly from the HF data. All models the R package ``brms" \citep{Burkner2018} to estimate the relationship between FLS and the predictors with a phylogenetic mixed model in a Bayesian framework. We ran each model with loose priors, a warmup of 3000 iterations and 4000 sampling iterations.As our primary goal was to directly compare the effects each predictor we standardized these variables to allow for a reasonable comparision between them \emph{\citep{Gelman2006}}. 
+
+
+To test examine the relationship between inter-annual variation in FLS and precipitation, we obtained precipitation records from the Shaler meteorological station at Harvard Forest \citep{}. We modeled the association between FLS variatation and annual precipiation with both a complete pool and partial-pooling model with indiviudal tree as the random effect. As above, all models were run with loose priors, a warmup of 3000 iterations and 4000 sampling iterations.
+
+
+\indent  The three Harvard Forest models are detailed below:\\
+
+
+\indent We performed average predictive comparisons for the Harvard Forest continuous model in which interactions were large (HF-binary-physiological and HF-continuous-functional) using the R-package ``ggeffects" \citep{Ludecke2018}.\\
+
+\indent Though we make broad comparisons between the HF and MTSV/USFS case studies, differences in data structure between the HF  and MTSV/USFS datasets required us to use alternative modeling frameworks. The MTSV and USFS data provide one response variable for each species while the HF data contains intra-specific differences in FLS, providing several different response values per species. The current phylogenetic generalized linear model framework can only fit models with one response value per species, while the phylogenetic mixed model in brms over-fits models with this kind of data structure (Paul Burkner, personal communication) and performs better on multi-response per species datasets like HF. We ran both model types on each case study and while they do yield different absolute estimates, the patterns we found were consistent across each framework, and we report results from the most acurate model for each dataset.\\
+\section*{Supplimental Tables and Figures}
+PEP site varation
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//MTSV_USFS.jpeg} 
+    \caption{\textbf{Mean estimates of the effects of FLS predictors on the likehilood a species is hysteranthous vary across datasets and definitions of FLS.}  We used phylogenetic adjustments and standardized units to make a basic comparison of two datasets and classes (physiological= no overlap between flowering and leafing, functional= moderate overlap) of FLS. While there is some agreement accross models (strong effects of flowering time, no consistant effect interactions between predictors), the effect of other predictors (pollination syndrome, water dynamics) were highly sensitive to how data were defined, biasing any inference from models and compromising the ability to validate the exisitng FLS hypotheses. Lines represent 95\% bootstrap intervals.}
+    \label{fig: muplots.USMT}
+\end{figure}
+
+\begin{kframe}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'MASS' was built under R version 3.4.3}}\end{kframe}% latex table generated in R 3.4.2 by xtable 1.8-2 package
+% Mon Dec 16 11:19:44 2019
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|l|l}
+  \hline
+Dataset & category & D \\ 
+  \hline
+MTSV & Functional & 0.08 \\ 
+  MTSV & Physiological & 0.22 \\ 
+  USFS & Functional & 0.65 \\ 
+  USFS & Physiological & 0.11 \\ 
+   \hline
+\end{tabular}
+\caption{\textbf{Table 1} D statistics for the inter-specific FLS datasets with different classifications of hysteranthy} 
+\label{tab:Table S1}
+\end{table}
+
+
+\begin{figure}[H]
+
+\includegraphics[width=7.5in]{figure/Code_chunk_Minimal_example3-1} 
+
+   
+  \caption{\textbf{Phylogenetic structure of FLS in MTSV and USFS varies significantly depending on how FLSs are defined.} Many species get re-assigned to either hysteranthy or seranthy depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed) (blue squares). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogentical signal for this trait.}
+    \label{fig:Figure S1}
+    \end{figure}
+  
+  
+\pagebreak
+\bibliography{..//refs/hyst_outline.bib}
+\end{document}
+%o test for associations between FLS variability and inter-annual water availability we modeled the association between FLS and drought years from 2003-2010 using a bayesian linear modeling framework in BRMS\citep{}. Drought years were determined based on \citet{Ivits_2013}.
