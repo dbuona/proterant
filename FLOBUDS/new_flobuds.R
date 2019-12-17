@@ -1,3 +1,4 @@
+###TO DO run models without ACE.SAC and BET.ALL to see if figures work better
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -73,6 +74,7 @@ pd=position_dodge2(width=.3,preserve="single")
 ggplot(goodspfull,aes(force,DOY))+geom_point(aes(shape=photo,color=phase),size=0.8)+stat_summary(aes(shape=photo,color=phase),position=pd)+facet_grid(chill~taxa)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Forcing")+theme_base(base_size = 12)
 dev.off()
 
+
 #####plasticity models for 3 bbch stages 
 bb.int<-get_prior(budburst.9.~Chill+Light+Force,data = dat, family = gaussian())
 mod.bb.int<-brm(budburst.9. ~ Chill+Light+Force+(Chill+Light+Force|GEN.SPA),
@@ -82,8 +84,8 @@ mod.bb.int<-brm(budburst.9. ~ Chill+Light+Force+(Chill+Light+Force|GEN.SPA),
 summary(mod.bb.int)
 
 
-flo.int<-get_prior(flo_day~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
-mod.flo.int<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+flo.int<-get_prior(flo_day~Chill+Light+Force,data = dat, family = gaussian())
+mod.flo.int<-brm(flo_day~ Chill+Light+Force+(Chill+Light+Force|GEN.SPA),
                 data = dat, family = gaussian(),
                 iter= 4000,
                 warmup = 3200)   
@@ -107,63 +109,14 @@ xlab <- "Model estimate of change in phenophase day"
 spp <- unique(dat$GEN.SPA)
 
 modelhere <-mod.bb.int
+modelhere2<-mod.flo.int
+source("exp_muplot_brms.R")
+source("prep4plot.R")
 
-Intercept <- coef(modelhere, prob=c(0.25, 0.75))$GEN.SPA[, c(1, 3:4), 1] %>% ## here we make find the posterior distributions and means for each predictor
-  as.data.frame() %>%
-  round(digits = 2) %>% 
-  rename(mean = Estimate) %>%
-  rename(`25%` = Q25) %>%
-  rename(`75%` = Q75) %>%
-  dplyr::select(mean, `25%`, `75%`) ### can change according to uncertainty intervals you want
-new.names<-NULL
-for(i in 1:length(spp)){
-  new.names[i]<-paste("Intercept", "[", i, "]", sep="")}
- 
-Intercept$parameter<-new.names
-Chill <- coef(modelhere, prob=c(0.25, 0.75))$GEN.SPA[, c(1, 3:4), 2] %>%
-  as.data.frame() %>%
-  round(digits = 2) %>% 
-  rename(mean = Estimate) %>%
-  rename(`25%` = Q25) %>%
-  rename(`75%` = Q75) %>%
-  dplyr::select( mean, `25%`, `75%`) 
-new.names<-NULL
-for(i in 1:length(spp)){
-  new.names[i]<-paste("Chill", "[", i, "]", sep="")
-}
-Chill$parameter<-new.names
-mod.ranef<-full_join(Intercept, Chill)
-Light <- coef(modelhere, prob=c(0.25, 0.75))$GEN.SPA[, c(1, 3:4), 3] %>%
-  as.data.frame() %>%
-  round(digits = 2) %>% 
-  rename(mean = Estimate) %>%
-  rename(`25%` = Q25) %>%
-  rename(`75%` = Q75) %>%
-  dplyr::select( mean, `25%`, `75%`) 
-new.names<-NULL
-for(i in 1:length(spp)){
-  new.names[i]<-paste("Light", "[", i, "]", sep="")
-}
 
-Light$parameter<-new.names
-mod.ranef <- full_join(mod.ranef, Photo)
-Force <- coef(modelhere, prob=c(0.25, 0.75))$GEN.SPA[, c(1, 3:4), 4] %>%
-  as.data.frame() %>%
-  round(digits = 2) %>% 
-  rename(mean = Estimate) %>%
-  rename(`25%` = Q25) %>%
-  rename(`75%` = Q75) %>%
-  dplyr::select( mean, `25%`, `75%`) 
-new.names<-NULL
-for(i in 1:length(spp)){
-  new.names[i]<-paste("Force", "[", i, "]", sep="")
-}
 
-Force$parameter<-new.names
-mod.ranef<-full_join(mod.ranef, Force)
-
-muplotfx(modelhere, "goober", 8, 8, c(0,4), c(-50, 120) , 130, 3.5)
-
+muplotfx(modelhere,modelhere2, "budburst", 8, 8, c(0,4), c(-50, 120) , 130, 3.5)
+dev.off()
 
 ##############
 extract_coefs<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.05,.25,.75,0.95))),"Predictor")
