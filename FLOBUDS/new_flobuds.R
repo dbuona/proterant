@@ -19,7 +19,7 @@ library("Hmisc")
 library(brms)
 library(broom)
 library(RColorBrewer)
-
+options(device = "quartz")
 setwd("~/Documents/git/proterant/FLOBUDS")
 #load("new_flobud.mods.Rda")
 dat<-read.csv("flobudsdata.use.csv",header = TRUE)
@@ -97,6 +97,9 @@ mod.lo.int<-brm(leaf_day.15. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:L
                 data = dat, family = gaussian(),
                 iter= 4000,
                 warmup = 3000)   
+
+dev.new()
+pp_check(mod.bb.int)
 ##########
 figpath <- "Plots"
 
@@ -140,7 +143,6 @@ mod.flo.hyster<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Lig
                  data = hyster.dat,
                  iter= 4000,
                  warmup = 3000) 
-
 
 sers.dat<-filter(dat,!GEN.SPA %in% hysters)
 mod.flo.ser<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,
