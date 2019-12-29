@@ -175,7 +175,8 @@ a<-comps %>%
 jpeg("muplots.jpeg",width = 7, height = 8, units = 'in', res=400)
 ggpubr::ggarrange(a+theme(axis.title=element_blank(),legend.title = element_blank() ),b+theme(axis.title.y=element_blank(),legend.title = element_blank() ),widths=c(1,2),ncol=2,common.legend =FALSE, legend="top")
 dev.off()
-apc.funct<- ggeffects::ggpredict(modelcont.funct,c("precip_cent","pol","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
+
+apc.funct<- ggeffects::ggpredict(modelcont.funct,c("precip_cent","pol_cent","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
 apc.funct.plot<-plot(apc.funct)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
   xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
   labs(title = NULL,tag="a)")+theme_linedraw()
@@ -193,7 +194,7 @@ apc.funct.plot<-plot(apc.funct.2)+scale_x_continuous()+
 
 
 jpeg("HarvardForest/apcs.jpeg",width = 8.6, height = 4, units = 'in', res=200)
-ggpubr::ggarrange(apc.funct,apc.funct.bin,common.legend = TRUE)
+apc.funct.plot
 dev.off()
 
 

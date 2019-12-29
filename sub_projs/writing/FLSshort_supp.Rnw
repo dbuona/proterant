@@ -8,7 +8,7 @@
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
 \usepackage{xr-hyper}
-\externaldocument{shortest_reconciling.tex}
+\externaldocument{shortest_reconciling}
 
 \def\labelitemi{--}
 \parindent=24pt
@@ -32,7 +32,7 @@ For these two, categorical, species level case studies, we converted verbal desc
 %Nacho is this actually what the D statistic is called? Do you know a citatation for it?
 
 \subsubsection*{Harvard Forest models}
-For each individual tree per year in the data, we calculated the time between flowers opening and leaves reaching 75\% of their final size. To compare the inference from between catagorical and continuous measure of FLS we re-coded the HF continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets, except that we estimated the average flowering time directly from the HF data. All models the R package ``brms" \citep{Burkner2018} to estimate the relationship between FLS and the predictors with a phylogenetic mixed model in a Bayesian framework \citep{}. We ran each model with weak priors, a warmup of 3000 iterations and 4000 sampling iterations. As our primary goal was to directly compare the effects each predictor we standardized these variables to allow for a reasonable comparision between them {\citep{Gelman2006}. \\
+For each individual tree per year in the data, we calculated the time between flowers opening and leaves reaching 75\% of their final size. To compare the inference from between catagorical and continuous measure of FLS we re-coded the HF continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets, except that we estimated the average flowering time directly from the HF data. All models the R package ``brms" \citep{Burkner2018} to estimate the relationship between FLS and the predictors with a phylogenetic mixed model in a Bayesian framework \citep{}. We ran each model with weak priors, a warmup of 3000 iterations and 4000 sampling iterations. As our primary goal was to directly compare the effects each predictor we standardized these variables to allow for a reasonable comparision between them {\citep{Gelman2007}. \\
 
 \noindent To test examine the relationship between inter-annual variation in FLS and precipitation, we obtained precipitation records from the Shaler meteorological station at Harvard Forest \citep{}. We modeled the association between FLS variatation and annual precipiation with a complete pooling model. We also ran a model testing for interactions between the effects of annual precipitation and pollination syndrome on FLS.  As above, these models run with weak priors, a warmup of 3000 iterations and 4000 sampling iterations.\\
 
@@ -56,13 +56,13 @@ y_i &= \alpha_{sp[i]} + \beta_{pollination syndrome} + \beta_{flowering time} + 
     \centering
  \includegraphics[width=\textwidth]{..//MTSV_USFS.jpeg} 
     \caption{\textbf{Mean estimates of the effects of FLS predictors on the likehilood a species is hysteranthous vary across datasets and definitions of FLS.}  We used phylogenetic adjustments and standardized units to make a basic comparison of two datasets and classes (physiological= no overlap between flowering and leafing, functional= moderate overlap) of FLS. While there is some agreement accross models (strong effects of flowering time, no consistant effect interactions between predictors), the effect of other predictors (pollination syndrome, water dynamics) were highly sensitive to how data were defined, biasing any inference from models and compromising the ability to validate the exisitng FLS hypotheses. Lines represent 95\% bootstrap intervals.}
-    \label{fig: muplots.USMT}
+    \label{fig:muplots.USMT}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
- \includegraphics[width=\textwidth]{..//HarvardForst/HFmeans_expanded.jpeg} 
-    \caption{\textbf{}}
+ \includegraphics[width=\textwidth]{..//HarvardForest/HFmeans_expanded.jpeg} 
+    \caption{\textbf{Quantitative FLS patterns for woody plants at Harvard Forest in Pertersham, MA.} Because phenological sequences consist of serveral sub-stages if is difficult to unambiguously catagorize many species into the currently FLS categories. }
     \label{fig:HFmeans}
 \end{figure}
 
