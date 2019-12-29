@@ -54,15 +54,13 @@ HFshort<-dplyr::filter(HF2,name %in% c("A. rubrum","A. saccharrum","B. allegheni
 #jpeg("HarvardForest/HFmeans_expanded.jpeg",width = 8, height = 6, units = 'in', res=300)
 dater<-data_frame(name=rep(unique(HFshort$name),each=2),FLS=rep(c("first","second"),6),Phenophase=rep(c("flower","leaf"),6))
 
-a<-ggplot(dater,(aes(name,FLS)))+geom_point(aes(shape=Phenophase),size=2)+scale_color_manual(values=c("darkgray","black"))+scale_shape_manual(values=c(2,16))+theme_linedraw()+ylab("FLS")+xlab(NULL)+theme(axis.text.x = element_text(face="italic",angle=300,hjust = 0.1))+
-  labs(title = "Categorical/Inter-specific",tag="a)")+ theme(legend.position = "bottom",legend.box = "vertical")
 
-b<-ggplot(HFshort,(aes(name,DOY)))+stat_summary(aes(shape=Phenophase,color=Phenophase),size=.5)+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_linedraw()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(face="italic",angle=300,hjust = 0.1))+
-  labs(title = "Quantitative/Inter-specific",tag="b)")+ theme(legend.position = "bottom",legend.box = "vertical")
+a<-ggplot(HFshort,(aes(name,DOY)))+stat_summary(aes(shape=Phenophase,color=Phenophase),size=.5)+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_linedraw()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(face="italic",angle=300,hjust = 0.1))+
+  labs(title = "Quantitative/Inter-specific",tag="a)")#+ theme(legend.position = "bottom",legend.box = "vertical")
 
 AA<-ggpubr::ggarrange(a,b,nrow=2)
 ####does the graph work for these species
-shorty<-filter(HF,name %in% c("A. rubrum","B. allegheniensis","F. americana"))
+shorty<-filter(HF,name %in% c("B. allegheniensis","F. americana"))
 #shorty<-filter(shorty,year<2002)
 colnames(shorty)
 shorty$FLS<-ifelse(shorty$"physiological offset"<0,"seranthous","hysteranthous")
@@ -83,15 +81,14 @@ colourCount = length(unique(shorty$tree.id))
 c<-ggplot(shorty,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,color=tree.id,group = row.names(shorty),shape="flower.budburst") ,position=pd2)+
   geom_point(aes(year,leaf.budburst,color=tree.id,group = row.names(shorty),shape="leaf.budburst"),position=pd2)+
   geom_linerange(aes(x=year,ymin=flower.budburst,ymax=leaf.budburst, linetype=FLS,color=tree.id,group = row.names(shorty)),position=pd2)+
-  theme_linedraw()+labs(y = "Day of year",color= "Tree I.D.")+
-  scale_color_manual(values = getPalette(colourCount))+
+  theme_linedraw()+labs(y = "Day of year",color= "Tree I.D.")+guides(color = FALSE)+
   scale_shape_manual(name="Phenophase",values=c(2,17), label=c("flower budburst","leaf budburst"))+
-  labs(title = "Qunatitative/Intra-specific",tag="c)")+facet_wrap(~name)
+  labs(title = "Quantitative/Intra-specific",tag="b)")+facet_wrap(~name)+theme(strip.text.x = element_text(face="italic"))
 
-ggpubr::ggarrange(AA,c,widths=c(1,2))
+ggpubr::ggarrange(a,c,nrow=1,widths=c(1.3,2))
 
-jpeg("HarvardForest/FLS_viz.jpeg",width = 16, height = 8, units = 'in',res=100)
-ggpubr::ggarrange(AA,c,widths=c(1,2))
+jpeg("HarvardForest/FLS_viz.jpeg",width = 12, height = 6, units = 'in',res=300)
+ggpubr::ggarrange(a,c,widths=c(1.3,2))
 
 dev.off()
 

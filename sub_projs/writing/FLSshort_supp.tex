@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
-%% maxwidth is the original width if it is less than linewidth
-%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
 \def\maxwidth{ %
   \ifdim\Gin@nat@width>\linewidth
@@ -86,13 +86,21 @@ To test examine the relationship between inter-annual variation in FLS and preci
 
 
 \indent  The three Harvard Forest models are detailed below:\\
+\begin{enumerate}
+\item \underline{Categorical model}:\\
+\item \underline{Continuous model}:\\
+y_i &= \alpha_{sp[i]} + \beta_{pollination syndrome} + \beta_{flowering time} + \beta_{min. precipitation} +\beta_{pollination syndrome}:\beta_{flowering time}+\beta_{pollination syndrome}:\beta_{min. precipitation}+ \beta_{flowering time}:\beta_{min. precipitation} + \epsilon_i\\
+\epsilon_i & \sim N(0,\sigma^2_y) \\ %I Think this is wrong and should reflect the phyogeny
 
+\noindent The $\alpha$ was modeled at the species level, as follows:\\
+\alpha_{sp} & \sim N(\mu_{\alpha}, \sigma_{\alpha}) \\
 
-\indent We performed average predictive comparisons for the Harvard Forest continuous model in which interactions were large (HF-binary-physiological and HF-continuous-functional) using the R-package ``ggeffects" \citep{Ludecke2018}.\\
+\end{enumerate}
+\indent We calculated the marginal effects for the Harvard Forest continuous model using the R-package ``ggeffects" \citep{Ludecke2018}.\\
 
 \indent Though we make broad comparisons between the HF and MTSV/USFS case studies, differences in data structure between the HF  and MTSV/USFS datasets required us to use alternative modeling frameworks. The MTSV and USFS data provide one response variable for each species while the HF data contains intra-specific differences in FLS, providing several different response values per species. The current phylogenetic generalized linear model framework can only fit models with one response value per species, while the phylogenetic mixed model in brms over-fits models with this kind of data structure (Paul Burkner, personal communication) and performs better on multi-response per species datasets like HF. We ran both model types on each case study and while they do yield different absolute estimates, the patterns we found were consistent across each framework, and we report results from the most acurate model for each dataset.\\
 \section*{Supplimental Tables and Figures}
-PEP site varation
+
 \begin{figure}[h!]
     \centering
  \includegraphics[width=\textwidth]{..//MTSV_USFS.jpeg} 
@@ -100,11 +108,15 @@ PEP site varation
     \label{fig: muplots.USMT}
 \end{figure}
 
-\begin{kframe}
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//HarvardForst/HFmeans_expanded.jpeg} 
+    \caption{\textbf{}}
+    \label{fig:HFmeans}
+\end{figure}
 
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'MASS' was built under R version 3.4.3}}\end{kframe}% latex table generated in R 3.4.2 by xtable 1.8-2 package
-% Mon Dec 16 11:19:44 2019
+% latex table generated in R 3.6.0 by xtable 1.8-4 package
+% Thu Dec 26 09:55:03 2019
 \begin{table}[ht]
 \centering
 \begin{tabular}{l|l|l}
@@ -112,7 +124,7 @@ PEP site varation
 Dataset & category & D \\ 
   \hline
 MTSV & Functional & 0.08 \\ 
-  MTSV & Physiological & 0.22 \\ 
+  MTSV & Physiological & 0.23 \\ 
   USFS & Functional & 0.65 \\ 
   USFS & Physiological & 0.11 \\ 
    \hline
@@ -128,11 +140,10 @@ MTSV & Functional & 0.08 \\
 
    
   \caption{\textbf{Phylogenetic structure of FLS in MTSV and USFS varies significantly depending on how FLSs are defined.} Many species get re-assigned to either hysteranthy or seranthy depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed) (blue squares). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogentical signal for this trait.}
-    \label{fig:Figure S1}
+    \label{fig:phylogenies}
     \end{figure}
   
   
 \pagebreak
 \bibliography{..//refs/hyst_outline.bib}
 \end{document}
-%o test for associations between FLS variability and inter-annual water availability we modeled the association between FLS and drought years from 2003-2010 using a bayesian linear modeling framework in BRMS\citep{}. Drought years were determined based on \citet{Ivits_2013}.

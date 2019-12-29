@@ -183,6 +183,7 @@ apc.funct.plot<-plot(apc.funct)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.
 #### unzscore precip values
 1.5*(2*sd(HF.data$min_precip,na.rm=TRUE))+mean(HF.data$min_precip,na.rm=TRUE)
 
+?ggeffects::ggpredict()
 apc.funct.2<- ggeffects::ggpredict(modelcont.funct,c("flo_cent","pol","precip_cent[1]"), ci.lvl=0.50)  #May the fourth
 apc.funct.plot<-plot(apc.funct.2)+scale_x_continuous()+
   xlab("BOY flowering")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
@@ -201,31 +202,17 @@ HF.weather<-read.csv("HarvardForest/mean.HF.precip.csv")
 colnames(HF.weather)[1]<-"year"
 HF.data<-left_join(HF.data,HF.weather, by="year")
 
-HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/100
+HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
 
 goo<-brm(funct.fls~ AP, data = HF.data, family = gaussian() ,iter=3000, warmup=2000) 
 summary(goo)
 pp_check(goo)
-### Hysteranthous species
-HFsect<-filter(HF.data,pol==0)
-goo2<-brm(funct.fls~ AP, data = HFsect, family = gaussian() ,iter=3000, warmup=2000) 
+
+
+goo2<-brm(funct.fls~ AP*pol, data = HF.data, family = gaussian() ,iter=3000, warmup=2000) 
 summary(goo2)
 
-goo<-lm(inter.fls~ AP, data = HF.data)
-, family = gaussian() ,iter=3000, warmup=2000) 
-summary(goo)
 
-(1.5*(2*sd(HF.data$AP,na.rm=TRUE))+mean(HF.data$AP,na.rm=TRUE))
 
-#fl;owering time or leafing time
-summary(lm(funct.fls~fopn.jd,data=HF.data))
-summary(lm(funct.fls~l75.jd,data=HF.data))
-
-summary(lm(phys.fls~fbb.jd,data=HF.data))
-summary(lm(phys.fls~bb.jd,data=HF.data))
-
-##In hysteranthous speces
-goo<-brm(funct.fls~precip_cent*AP_cent, data = HFwind, iter=4000, warmup=3000)
-goo
 save.image("HFmodeloutput")
 
