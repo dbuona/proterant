@@ -8,11 +8,98 @@ library(dplyr)
 library(chillR)
 library(brms)
 library(tibble)
+library(lme4)
+library("lmerTest")
 
 HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
 #HF2<-read.csv("HarvardForest/hf003-06-mean-spp.csv",header=TRUE)
-#trendovertime.flo<-brm(fopn.jd~year+(year|species),data=HF)  
-#trendovertime.lo<-brm(l75.jd~year+(year|species),data=HF) 
+
+
+
+##Hypothesis 1: variation in FLS is a product of variation in climate between phases
+#https://cran.r-project.org/web/packages/chillR/vignettes/hourly_temperatures.html
+weather<-read.csv("..//FLOBUDS/data/hf000-01-daily-m.csv",header = TRUE)
+weather<-dplyr::select(weather,c("date","airtmax","airtmin"))
+weather<-separate(weather,date,c("Year","Month","Day"),sep="-",remove=TRUE)
+colnames(weather)<-c("Year","Month","Day","Tmax","Tmin")
+sapply(weather,mode) #mode(weather)
+weather$Year<-as.numeric(weather$Year)
+weather$Month<-as.numeric(weather$Month)
+weather$Day<-as.numeric(weather$Day)
+
+unique(weather$Year)
+weather<-filter(weather,Year>=1989)
+
+#all_daylengths<-cbind(JDay=1:365,sapply(daylength(latitude=42.5,JDay=1:365),cbind)) ## calculate day length at HF on every day of year
+#ad<-as.data.frame(all_daylengths) ## data frame of day length
+
+
+weather<-make_all_day_table(weather)
+
+hourtemps<-stack_hourly_temps(weather, latitude=42.5)$hourtemps ## make hourly
+hourtemps$DATE<-ISOdate(hourtemps$Year,hourtemps$Month,hourtemps$Day,hourtemps$Hour)
+
+
+HF.bb<-filter(HF,!is.na(bb.jd))
+indies<-unique(HF.bb$tree.id)
+df<-data.frame(Season=character(),End_year=numeric(),Season_days=numeric(),Data_days=numeric(), Perc_complete=numeric(),Chilling_Hours=numeric(),Utah_Model=numeric(),Chill_portions=numeric(), GDH=numeric(), tree.id=character(),species=character())
+
+
+for (i in seq_along(indies)){
+  dataoneplant<-filter(HF.bb,tree.id==indies[i])
+  burst<-dataoneplant$bb.jd
+for(k in c(1:length(burst))){ 
+  climatt<-as.data.frame(chilling(hourtemps,Start_JDay=1,End_JDay=burst[k]))
+  climatt$tree.id<-indies[i]
+  climatt$species<-unique(dataoneplant$species)}
+df<-rbind(climatt,df) }
+  
+
+
+
+
+HF.flo<-filter(HF,!is.na(fopn.jd))
+indies2<-unique(HF.flo$tree.id)
+df2<-data.frame(Season=character(),End_year=numeric(),Season_days=numeric(),Data_days=numeric(), Perc_complete=numeric(),Chilling_Hours=numeric(),Utah_Model=numeric(),Chill_portions=numeric(), GDH=numeric(), tree.id=character(),species=character())
+
+for (i in seq_along(indies2)){
+  dataoneplant<-filter(HF.flo,tree.id==indies2[i])
+  burst<-dataoneplant$fopn.jd
+  for(k in c(1:length(burst))){ 
+    climatt<-as.data.frame(chilling(hourtemps,Start_JDay=1,End_JDay=burst[k]))
+    climatt$tree.id<-indies2[i]
+    climatt$species<-unique(dataoneplant$species)}
+  df2<-rbind(climatt,df2) }
+
+df<-select(df,Season,End_year,GDH,tree.id,species)
+df2<-select(df2,Season,End_year,GDH,tree.id,species)
+
+colnames(df)<-c("Season","End_year","GDH_bb","tree.id","species")
+colnames(df2)<-c("Season","End_year","GDH_fl","tree.id","species")
+daters<-left_join(df2,df)
+
+
+daters$GDH_diff<-daters$GDH_bb-daters$GDH_fl
+?separate()
+daters<-separate(daters,tree.id,c("Sp","tree.num"),sep="-")
+write.csv(daters,"GDH_diffs_HF.csv",row.names = FALSE)
+
+daters.hyst<-filter(daters,GDH_diff>=0)
+ggplot(daters.hyst,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species)
+
+daters.ser<-filter(daters,GDH_diff<=0)
+ggplot(daters.ser,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species)
+
+ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_grid(tree.num~species)
+
+ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species))+facet_wrap(~species)+ylim(-1000,5000)
+
+model <- lmer(GDH_diff ~ End_year + (1|tree.id),
+             data=daters,
+             REML=TRUE)
+
+anova(model)
+
 
 unique(HF$species)
 Vc<-filter(HF,species=="VACO") ## select just vaccinium
@@ -36,27 +123,7 @@ ggplot(Vc2,aes(year,DOY))+stat_summary(aes(color=phase))+theme_bw()
 #'
 #'       
 
-#https://cran.r-project.org/web/packages/chillR/vignettes/hourly_temperatures.html
-weather<-read.csv("..//FLOBUDS/data/hf000-01-daily-m.csv",header = TRUE)
-weather<-dplyr::select(weather,c("date","airtmax","airtmin"))
-weather<-separate(weather,date,c("Year","Month","Day"),sep="-",remove=TRUE)
-colnames(weather)<-c("Year","Month","Day","Tmax","Tmin")
-sapply(weather,mode) #mode(weather)
-weather$Year<-as.numeric(weather$Year)
-weather$Month<-as.numeric(weather$Month)
-weather$Day<-as.numeric(weather$Day)
 
-unique(weather$Year)
-weather<-filter(weather,Year>=1989)
-
-all_daylengths<-cbind(JDay=1:365,sapply(daylength(latitude=42.5,JDay=1:365),cbind)) ## calculate day length at HF on every day of year
-ad<-as.data.frame(all_daylengths) ## data frame of day length
-
-
-weather<-make_all_day_table(weather)
-
-hourtemps<-stack_hourly_temps(weather, latitude=42.5)$hourtemps ## make hourly
-hourtemps$DATE<-ISOdate(hourtemps$Year,hourtemps$Month,hourtemps$Day,hourtemps$Hour)
 
 burst<-Vcraw$bb.jd
 
