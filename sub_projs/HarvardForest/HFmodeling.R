@@ -95,7 +95,7 @@ funct.cont$class<-"functional"
 cont<-funct.cont
 bin<-funct.bin
 cont$data_type<-"continuous"
-bin$data_type<-"binary"
+bin$data_type<-"categorical"
 
 
 bin<-dplyr::filter(bin,trait!="Intercept")
@@ -105,17 +105,17 @@ bin$trait[which(bin$trait=="precip_cent")]  <- "water dynamics"
 bin$trait[which(bin$trait=="pol_cent:precip_cent")]<- "pollination:water dynamics"
 bin$trait[which(bin$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowering"
 bin$trait[which(bin$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
-bin$data<-"HF"
+
 
 
 cont<-dplyr::filter(cont,trait!="Intercept")
-cont$trait[which(cont$trait=="pol")]<-"pollination syndrome"
+cont$trait[which(cont$trait=="pol_cent")]<-"pollination syndrome"
 cont$trait[which(cont$trait=="flo_cent")]<- "earlier flowering"
 cont$trait[which(cont$trait=="precip_cent")]  <- "water dynamics"
-cont$trait[which(cont$trait=="pol:precip_cent")]<- "pollination:water dynamics"
-cont$trait[which(cont$trait=="pol:flo_cent")]<-"pollination:earlier flowering"
+cont$trait[which(cont$trait=="pol_cent:precip_cent")]<- "pollination:water dynamics"
+cont$trait[which(cont$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowering"
 cont$trait[which(cont$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
-cont$data<-"HF"
+
 
 
 both<-rbind(cont,bin)
@@ -179,16 +179,8 @@ dev.off()
 apc.funct<- ggeffects::ggpredict(modelcont.funct,c("precip_cent","pol_cent","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
 apc.funct.plot<-plot(apc.funct)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
   xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
-  labs(title = NULL,tag="a)")+theme_linedraw()
+  labs(title = NULL,tag=NULL)+theme_linedraw()
 
-#### unzscore precip values
-1.5*(2*sd(HF.data$min_precip,na.rm=TRUE))+mean(HF.data$min_precip,na.rm=TRUE)
-
-?ggeffects::ggpredict()
-apc.funct.2<- ggeffects::ggpredict(modelcont.funct,c("flo_cent","pol","precip_cent[1]"), ci.lvl=0.50)  #May the fourth
-apc.funct.plot<-plot(apc.funct.2)+scale_x_continuous()+
-  xlab("BOY flowering")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
-  labs(title = NULL,tag="a)")+theme_linedraw()
 
 
 
