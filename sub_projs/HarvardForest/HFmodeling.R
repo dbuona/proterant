@@ -64,11 +64,20 @@ pp_check(modelcont.funct)
  #                     family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
 
 
+### phylo signal
+hyp <- "sd_name__Intercept^2 / (sd_name__Intercept^2 + sigma^2) = 0"
+
+lambda.FLS <- hypothesis(modelbin.funct, hyp, class = NULL)
+plot(lambda.FLS)
 
 ##binary
+
 modelbin.funct<- brm(hyst.funct~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
                      family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000,warmup=3000) 
 
+library(performance)
+binphylosig<-icc(modelbin.funct)
+binphylosig
 #modelbin.phys<- brm(hyst.phys~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent+(1|name), data = HF.data, 
  #                  family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000, warmup=3000)
 
