@@ -19,7 +19,7 @@ library("Hmisc")
 library(brms)
 library(broom)
 library(RColorBrewer)
-options(device = "quartz")
+#options(device = "quartz")
 setwd("~/Documents/git/proterant/FLOBUDS")
 #load("new_flobud.mods.Rda")
 dat<-read.csv("flobudsdata.use.csv",header = TRUE)
@@ -76,6 +76,7 @@ dat<-filter(dat, !GEN.SPA %in% c("AME.SPP","BET.SPP", "BET.ALL","ACE.SAC"))
 
 #####plasticity models for 3 bbch stages 
 bb.int<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
+
 mod.bb.int<-brm(budburst.9. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
                    data = dat, family = gaussian(),
                    iter= 4000,
@@ -88,9 +89,25 @@ mod.flo.int<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+
                 data = dat, family = gaussian(),
                 iter= 4000,
                 warmup = 3000)   
-summary(mod.flo.int)
 
 
+###check again only complete cases
+small<-filter(dat,!is.na(flo_day))
+small<-filter(small,!is.na(budburst.9.))
+bb.small<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
+
+mod.bb.small<-brm(budburst.9. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                data = small, family = gaussian(),control = list(adapt_delta = 0.95),
+                iter= 7000,
+                warmup = 6000)
+
+fo.small<-get_prior(flo_day~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
+mod.fo.small<-brm(flo_day ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                  data = small, family = gaussian(),control = list(adapt_delta = 0.95),
+                  iter= 7000,
+                  warmup = 6000)
+
+summary(mod.bb.small)
 
 lo.int<-get_prior(leaf_day.15.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
 mod.lo.int<-brm(leaf_day.15. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
@@ -118,14 +135,45 @@ source("exp_muplot_brms.R")
 source("prep4plot.R")
 
 
-
+dev.new()
 muplotfx(modelhere,modelhere2, "budburst vs. flowering", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
 dev.off()
 
 modelhere <-mod.lo.int
 source("prep4plot.R")
 source("exp_muplot_brms.R")
+
 muplotfx(modelhere,modelhere2, "leafout vs. flowering", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
+dev.off()
+
+modelhere <-mod.bb.int
+modelhere2<-mod.bb.small
+source("prep4plot.R")
+source("exp_muplot_brms.R")
+muplotfx(modelhere,modelhere2, "budburst pool vs. complete cases", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
+dev.off()
+
+modelhere <-mod.flo.int
+modelhere2<-mod.fo.small
+source("prep4plot.R")
+source("exp_muplot_brms.R")
+muplotfx(modelhere,modelhere2, "flowering pool vs. complete cases", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
+dev.off()
+
+small$FLS<-small$budburst.9.-small$flo_day
+small.fls<-get_prior(FLS~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
+mod.FLS.small<-brm(FLS ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                  data = small, family = gaussian(),control = list(adapt_delta = 0.95),
+                  iter= 7000,
+                  warmup = 6000)
+coef(mod.FLS.small)
+
+
+modelhere <-mod.FLS.small
+modelhere2<-mod.FLS.small
+source("prep4plot.R")
+source("exp_muplot_brms.R")
+muplotfx(modelhere,modelhere2, "FLS change", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
 dev.off()
 ##############
 
