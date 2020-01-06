@@ -64,20 +64,39 @@ pp_check(modelcont.funct)
  #                     family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
 
 
-### phylo signal
-hyp <- "sd_name__Intercept^2 / (sd_name__Intercept^2 + sigma^2) = 0"
-
-lambda.FLS <- hypothesis(modelbin.funct, hyp, class = NULL)
-plot(lambda.FLS)
 
 ##binary
 
 modelbin.funct<- brm(hyst.funct~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
                      family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000,warmup=3000) 
 
-library(performance)
-binphylosig<-icc(modelbin.funct)
-binphylosig
+tau2 <- brms::VarCorr(modelbin.funct)[[1]]$sd[1]^2
+
+# computing the ICC for the intercept
+ICC1 <- tau2 / (tau2 + (pi^2 / 3) )
+### phylo signal
+hyp <- "sd_name__Intercept^2 / (sd_name__Intercept^2 + sigma^2) = 0"
+
+lambda.FLS <- hypothesis(modelcont.funct, hyp, class = NULL)
+
+par(mfrow=c(1,2))
+d2 <- density(lambda.FLS$samples[,1])
+plot(d2,main="",xlab="",
+     xlim=c(0,1),col="darkblue")
+polygon(d2, col=adjustcolor("darkblue",0.4), border="darkblue")
+abline(v=mean(lambda.FLS$samples[,1]),lty=2,col="blue")
+
+
+hyp2<-"sd_name__Intercept^2/(sd_name__Intercept^2+ ( 3.141593^2 / 3)) = 0"
+
+lambdabin<-hypothesis(modelbin.funct, hyp2, class = NULL)
+
+d <- density(lambdabin$samples[,1])
+plot(d,main="",xlab="",
+     xlim=c(0,1),col="darkblue")
+polygon(d, col=adjustcolor("darkblue",0.4), border="darkblue")
+abline(v=mean(lambdabin$samples[,1]),lty=2,col="blue")
+
 #modelbin.phys<- brm(hyst.phys~pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent+(1|name), data = HF.data, 
  #                  family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000, warmup=3000)
 
