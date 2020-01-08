@@ -1,20 +1,21 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
-setwd("~/Documents/git/proterant/sub_proj/writing")
+setwd("~/Documents/git/proterant/sub_proj/")
 library(xtable,quietly=TRUE)
 library(caper,quietly=TRUE)
 library(dplyr,quietly=TRUE)
+library(brms)
 #read in data
-mich.data<-read.csv("..//MTSV_USFS/michdata_final.csv")
-mich.tre<-read.tree("..//MTSV_USFS/michtre_final.tre")
+mich.data<-read.csv("MTSV_USFS/michdata_final.csv")
+mich.tre<-read.tree("MTSV_USFS/michtre_final.tre")
 
-silv.data<-read.csv("..///MTSV_USFS/silvdata_final.csv")
-silv.tre<-read.tree("..//MTSV_USFS/silvtre_final.tre")
+silv.data<-read.csv("MTSV_USFS/silvdata_final.csv")
+silv.tre<-read.tree("MTSV_USFS/silvtre_final.tre")
 
-HF<-read.csv("..//HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
-HFsubber<-read.csv("..//HarvardForest/HFdata4modeling.csv",header=TRUE)
-HF.tree<-read.tree("..//HarvardForest/HFtree4modeling.tre")
+HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
+HFsubber<-read.csv("HarvardForest/HFdata4modeling.csv",header=TRUE)
+HF.tree<-read.tree("HarvardForest/HFtree4modeling.tre")
 ###make fls measure
 HF$phys.fls<-HF$bb.jd-HF$fbb.jd
 HF$funct.fls<-HF$l75.jd-HF$fopn.jd
@@ -80,15 +81,15 @@ lambda.FLS <- hypothesis(modelcont.funct, hyp, class = NULL)
 
 d2 <- density(lambda.FLS$samples[,1])
 
-
+jpeg("phylosig.jpeg",width = 4, height = 8, units = 'in', res=200)
 par(mfrow=c(3,2))
-plot(Phylo.Pro.phys,main="MTSV-physiological")
-plot(PhyloPro.funct,main="MTSV-functional")
-plot(silv.Pro.phys, main="USFS-physiological")
-plot(silv.Pro.funct,main="USFS-functional")
-plot(Phylo.D.hf,main="HF-categorical")
-plot(d2,main="HF-quantitative",xlab="Lambda",
+plot(Phylo.Pro.phys,main="a) MTSV-physiological")
+plot(PhyloPro.funct,main="b) MTSV-functional")
+plot(silv.Pro.phys, main="c) USFS-physiological")
+plot(silv.Pro.funct,main="d) USFS-functional")
+plot(Phylo.D.hf,main="e) HF-categorical")
+plot(d2,main="f) HF-quantitative",xlab="Lambda",
      xlim=c(0,1),col="darkgray",fill="lightgray")
 polygon(d2,col=adjustcolor("gray",0.4), border="gray")
 abline(v=mean(lambda.FLS$samples[,1]),lty=1,col="black")
-
+dev.off()
