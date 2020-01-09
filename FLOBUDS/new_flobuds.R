@@ -175,120 +175,43 @@ source("prep4plot.R")
 source("exp_muplot_brms.R")
 muplotfx(modelhere,modelhere2, "FLS change", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
 dev.off()
-##############
 
+
+### Vacccor is the only species that leafed and flower in every treatent
 
 
 #### 
 unique(dat$GEN.SPA)
 hysters<-c("COM.PER","COR.COR","ACE.RUB")
+hyst.dat<-filter(dat, GEN.SPA %in% hysters)
+
+mod.hyst.flo<-brm(flo_day ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                   data = hyst.dat, family = gaussian(),control = list(adapt_delta = 0.99),
+                   iter= 7000,
+                   warmup = 6000)
 
 
+ser.dat<-filter(dat, !GEN.SPA %in% hysters)
+mod.ser.flo<-brm(flo_day ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                    data = ser.dat, family = gaussian(),control = list(adapt_delta = 0.99),
+                    iter= 7000,
+                    warmup = 6000)
 
-dat$hysteranthous<-ifelse(dat$GEN.SPA %in% hysters,1,0)
-hyster.dat<-filter(dat,GEN.SPA %in% hysters)
-mod.flo.hyster<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,
-                 data = hyster.dat,
-                 iter= 4000,
-                 warmup = 3000) 
-
-sers.dat<-filter(dat,!GEN.SPA %in% hysters)
-mod.flo.ser<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,
-                    data = sers.dat,
-                    iter= 4000,
-                    warmup = 3200) 
-
-hys.flo<-extract_coefs(mod.flo.hyster)
-ser.flo<-extract_coefs(mod.flo.ser)
-ser.flo$FLS<-"ser"
-hys.flo$FLS<-"hys"
-
-flo<-rbind(ser.flo,hys.flo)
-flo$phase<-"flowering"
-
-
-mod.bb.hyster<-brm(budburst.9.~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,
-                    data = hyster.dat,
-                    iter= 4000,
-                    warmup = 3200) 
-
-
-mod.bb.ser<-brm(budburst.9.~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,
-                 data = sers.dat,
-                 iter= 4000,
-                 warmup = 3200) 
-
-
-ser.bb<-extract_coefs(mod.bb.ser)
-hys.bb<-extract_coefs(mod.bb.hyster)
-
-ser.bb$FLS<-"ser"
-hys.bb$FLS<-"hys"
-
-bb<-rbind(ser.bb,hys.bb)
-bb$phase<-"budburst"
-
-
-bb.flo<-rbind(bb,flo)
-
-
-mod.lo.hyster<-brm(leaf_day.15.~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,
-                   data = hyster.dat,
-                   iter= 4000,
-                   warmup = 3200) 
-
-
-mod.lo.ser<-brm(leaf_day.15.~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,
-                data = sers.dat,
-                iter= 4000,
-                warmup = 3200) 
-
-ser.lo<-extract_coefs(mod.lo.ser)
-hys.lo<-extract_coefs(mod.lo.hyster)
-
-ser.lo$FLS<-"ser"
-hys.lo$FLS<-"hys"
-
-lo<-rbind(ser.lo,hys.lo)
-lo$phase<-"leafout"
-bb.flo.lo<-rbind(bb.flo,lo)
-
-bb.flo.lo %>%
-  arrange(Estimate) %>%
-  mutate(Predictor = factor(Predictor, levels=c("Chill:Light","Chill:Force","Light:Force","Chill","Light","Force","Intercept"))) %>%
-  ggplot(aes(Estimate,Predictor))+geom_point(aes(shape=FLS,color=FLS),position=pd,size=3,stroke=0)+
-  geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=FLS),position=pd,width=0,linetype="solid",size=1)+
-  geom_errorbarh(aes(xmin=Q5,xmax=Q95,color=FLS),position=pd,width=0,linetype="solid")+
-  scale_color_manual(values=c("goldenrod1","purple"))+
-  scale_shape_manual(values=c(15,16))+
-  theme_linedraw(base_size = 10)+geom_vline(aes(xintercept=0),color="black")+facet_wrap(~phase)
-
-bb.flo.lo %>%
-  arrange(Estimate) %>%
-  mutate(Predictor = factor(Predictor, levels=c("Chill:Light","Chill:Force","Light:Force","Chill","Light","Force","Intercept"))) %>%
-  ggplot(aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd,size=3,stroke=0)+
-  geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),position=pd,width=0,linetype="solid",size=1)+
-  geom_errorbarh(aes(xmin=Q5,xmax=Q95,color=phase),position=pd,width=0,linetype="solid")+
-  scale_color_manual(values=c("green3","deeppink3","dodgerblue4"))+
-  scale_shape_manual(values=c(15,16,17))+
-  theme_linedraw(base_size = 10)+geom_vline(aes(xintercept=0),color="black")+facet_wrap(~FLS)
-
-bb.flo.lo.fect<-filter(bb.flo.lo,Predictor!="Intercept")
-jpeg("Plots/flo_buds_figures/FLSdiffs_fixeffs.jpeg",width=11, height=6,res=300,units = "in")
-bb.flo.lo.fect %>%
-  arrange(Estimate) %>%
-  mutate(Predictor = factor(Predictor, levels=c("Chill:Light","Chill:Force","Light:Force","Chill","Light","Force"))) %>%
-  ggplot(aes(Estimate,Predictor))+geom_point(aes(shape=phase,color=phase),position=pd,size=3,stroke=0)+
-  geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),position=pd,width=0,linetype="solid",size=1)+
-  geom_errorbarh(aes(xmin=Q5,xmax=Q95,color=phase),position=pd,width=0,linetype="solid")+
-  scale_color_manual(values=c("green3","deeppink3","dodgerblue4"))+
-  scale_shape_manual(values=c(15,16,17))+
-  theme_linedraw(base_size = 10)+geom_vline(aes(xintercept=0),color="black")+facet_wrap(~FLS)
-
+spp <- unique(hyst.dat$GEN.SPA)
+modelhere <-mod.hyst.flo
+modelhere2<-mod.hyst.flo
+source("prep4plot.R")
+source("exp_muplot_brms.R")
+muplotfx(modelhere,modelhere2, "Flo_hyst", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
 dev.off()
+
+spp <- unique(ser.dat$GEN.SPA)
+modelhere <-mod.ser.flo
+modelhere2<-mod.ser.flo
+source("prep4plot.R")
+source("exp_muplot_brms.R")
+muplotfx(modelhere,modelhere2, "Flo_ser", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
+dev.off()
+
+
 save.image("new_flobud.mods.Rda")
-
-
-
-m.bb = stan('stan/winter_2level.stan', data = datalistbb,
-              iter = 2500, warmup=1500,control = list(adapt_delta = 0.99))
