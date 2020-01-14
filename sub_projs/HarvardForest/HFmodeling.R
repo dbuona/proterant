@@ -51,33 +51,46 @@ rownames(A) <- rownames(inv.phylo$Ainv)
 
 
 ###continuous models normal
-modelcont.funct <- brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
-                       family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
+#modelcont.funct <- brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
+ #                      family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
 pp_check(modelcont.funct)
 ###checks
 
+modelcont.funct.wspecies.ind<-brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) 
 
-#modelcont.phys <- brm(phys.fls~ pol_cent+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol_cent+pol_cent:flo_cent+(1|name), data = HF.data, 
- #                   family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
+prior <- c(prior(student_t(3, 16, 45), class = Intercept),
+           prior(student_t(3, 0, 45) , class = sd),
+           prior(student_t(3, 0, 45) , class = sigma))
 
-#modelcont.inter<- brm(inter.fls~ pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
- #                     family = gaussian(), cov_ranef = list(name= A),iter=4000, warmup=3000) 
+modelcont.funct.wspecies.ind.altprior<-brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                  family = gaussian(), cov_ranef = list(name= A),prior=prior,control=list(adapt_delta=0.95),iter=4000, warmup=3000) 
+
 
 
 
 ##binary
 
-modelbin.funct<- brm(hyst.funct~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
-                     family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000,warmup=3000) 
+#modelbin.funct<- brm(hyst.funct~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name), data = HF.data, 
+ #                    family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000,warmup=3000) 
 
-tau2 <- brms::VarCorr(modelbin.funct)[[1]]$sd[1]^2
+modelbin.funct.sps.ind<- brm(hyst.funct~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                     family = bernoulli(link="logit"), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000,warmup=3000) 
+
+modelbin.funct.sps<- brm(hyst.funct~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|species), data = HF.data, 
+                             family = bernoulli(link="logit"), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000,warmup=3000) 
+
+prior_summary(modelcont.funct.wspecies.ind)
+prior_summary(modelbin.funct.sps)
+
+tau2 <- brms::VarCorr(modelbin.funct.wspecies.ind)[[1]]$sd[1]^2
 
 # computing the ICC for the intercept
 ICC1 <- tau2 / (tau2 + (pi^2 / 3) )
 ### phylo signal
 hyp <- "sd_name__Intercept^2 / (sd_name__Intercept^2 + sigma^2) = 0"
 
-lambda.FLS <- hypothesis(modelcont.funct, hyp, class = NULL)
+lambda.FLS <- hypothesis(modelcont.funct.wspecies.ind, hyp, class = NULL)
 
 par(mfrow=c(1,2))
 d2 <- density(lambda.FLS$samples[,1])
@@ -103,10 +116,8 @@ abline(v=mean(lambdabin$samples[,1]),lty=2,col="blue")
 #modelbin.inter<- brm(hyst.inter~pol_cent+flo_cent.neg+precip_cent+precip_cent:flo_cent.neg+precip_cent:pol_cent+pol_cent:flo_cent.neg+(1|name), data = HF.data, 
        #             family = bernoulli(link="logit"), cov_ranef = list(name= A),iter=4000, warmup=3000)
 
-funct.cont<-extract_coefs4HF(modelcont.funct)
-funct.bin<-extract_coefs4HF(modelbin.funct)
-funct.bin$class<-"functional"
-funct.cont$class<-"functional"
+funct.cont<-extract_coefs4HF(modelcont.funct.wspecies.ind)
+funct.bin<-extract_coefs4HF(modelbin.funct.sps)
 
 #phys.cont<-extract_coefs4HF(modelcont.phys)
 #phys.bin<-extract_coefs4HF(modelbin.phys)
@@ -127,36 +138,37 @@ bin$data_type<-"categorical"
 
 
 bin<-dplyr::filter(bin,trait!="Intercept")
-bin$trait[which(bin$trait=="pol_cent")]<-"pollination syndrome"
+bin$trait[which(bin$trait=="pol")]<-"pollination syndrome"
 bin$trait[which(bin$trait=="flo_cent")]<- "earlier flowering"
 bin$trait[which(bin$trait=="precip_cent")]  <- "water dynamics"
-bin$trait[which(bin$trait=="pol_cent:precip_cent")]<- "pollination:water dynamics"
-bin$trait[which(bin$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowering"
+bin$trait[which(bin$trait=="pol:precip_cent")]<- "pollination:water dynamics"
+bin$trait[which(bin$trait=="pol:flo_cent")]<-"pollination:earlier flowering"
 bin$trait[which(bin$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 
 
 
 cont<-dplyr::filter(cont,trait!="Intercept")
-cont$trait[which(cont$trait=="pol_cent")]<-"pollination syndrome"
+cont$trait[which(cont$trait=="pol")]<-"pollination syndrome"
 cont$trait[which(cont$trait=="flo_cent")]<- "earlier flowering"
 cont$trait[which(cont$trait=="precip_cent")]  <- "water dynamics"
-cont$trait[which(cont$trait=="pol_cent:precip_cent")]<- "pollination:water dynamics"
-cont$trait[which(cont$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowering"
+cont$trait[which(cont$trait=="pol:precip_cent")]<- "pollination:water dynamics"
+cont$trait[which(cont$trait=="pol:flo_cent")]<-"pollination:earlier flowering"
 cont$trait[which(cont$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 
 
 
+
 both<-rbind(cont,bin)
-jpeg("HF.jpeg",width = 8, height = 4, units = 'in', res=200)
+jpeg("HF.jpeg",width = 6, height = 4, units = 'in', res=350)
 pd=position_dodgev(height=0.4)
 both %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
-  ggplot(aes(Estimate,trait))+geom_point(shape=1,position=pd,size=2,stroke=.5)+
-  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5),position=pd,width=0,linetype="dotted")+
-  geom_errorbarh(aes(xmin=Q10,xmax=Q90),position=pd,width=0,linetype="solid")+
+  ggplot(aes(Estimate,trait))+geom_point(aes(shape=data_type),position=pd,size=3,stroke=.5)+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=data_type),position=pd,height=0,linetype="dotted")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90,group=data_type),position=pd,height=0,linetype="solid")+
   theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  xlim(-30,30)+scale_color_manual(values=c("firebrick4"))+facet_wrap(~data_type)
+  xlim(-30,30)+scale_color_manual(values=c("firebrick4"))+scale_shape_discrete(name = "data type")
 dev.off() 
 load(file = "MTSV_USFS/MTSVUSFS.mods")
 
@@ -204,7 +216,7 @@ jpeg("muplots.jpeg",width = 7, height = 8, units = 'in', res=400)
 ggpubr::ggarrange(a+theme(axis.title=element_blank(),legend.title = element_blank() ),b+theme(axis.title.y=element_blank(),legend.title = element_blank() ),widths=c(1,2),ncol=2,common.legend =FALSE, legend="top")
 dev.off()
 
-apc.funct<- ggeffects::ggpredict(modelcont.funct,c("precip_cent","pol_cent","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
+apc.funct<- ggeffects::ggpredict(modelcont.funct.wspecies.ind,c("precip_cent","pol","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
 apc.funct.plot<-plot(apc.funct)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
   xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
   labs(title = NULL,tag=NULL)+theme_linedraw()
@@ -225,9 +237,9 @@ HF.data<-left_join(HF.data,HF.weather, by="year")
 
 HF.data$AP_cent<-(HF.data$AP-mean(HF.data$AP,na.rm=TRUE))/(2*sd(HF.data$AP,na.rm=TRUE))
 
-goo<-brm(funct.fls~ AP, data = HF.data, family = gaussian() ,iter=3000, warmup=2000) 
-summary(goo)
-pp_check(goo)
+AP.mod<-brm(funct.fls~ AP, data = HF.data, family = gaussian() ,iter=5000, warmup=3000) 
+summary(AP.mod)
+
 
 
 goo2<-brm(funct.fls~ AP*pol, data = HF.data, family = gaussian() ,iter=3000, warmup=2000) 
