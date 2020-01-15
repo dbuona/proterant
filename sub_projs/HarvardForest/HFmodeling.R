@@ -58,7 +58,7 @@ pp_check(modelcont.funct)
 
 modelcont.funct.wspecies.ind<-brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
                                 family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) 
-
+pp_check(modelcont.funct.wspecies.ind)
 prior <- c(prior(student_t(3, 16, 45), class = Intercept),
            prior(student_t(3, 0, 45) , class = sd),
            prior(student_t(3, 0, 45) , class = sigma))
@@ -208,7 +208,7 @@ a<-comps %>%
 (min(HF.data$precip_cent)*(2*sd(HF.data$min_precip,na.rm=TRUE))+mean(HF.data$min_precip,na.rm=TRUE)) ## this is minumom
 
 
-(-.15)*(2*sd(HF.data$fbb.jd,na.rm=TRUE))+mean(HF.data$fbb.jd,na.rm=TRUE) ##Day 121 May first
+(.51)*(2*sd(HF.data$fbb.jd,na.rm=TRUE))+mean(HF.data$fbb.jd,na.rm=TRUE) ##Day 121 May first
 
 
 
@@ -218,6 +218,11 @@ dev.off()
 
 apc.funct<- ggeffects::ggpredict(modelcont.funct.wspecies.ind,c("precip_cent","pol","flo_cent[-0.15]"), ci.lvl=0.50)  #May the fourth
 apc.funct.plot<-plot(apc.funct)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
+  xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
+  labs(title = NULL,tag=NULL)+theme_linedraw()
+
+apc.funct2<- ggeffects::ggpredict(modelcont.funct.wspecies.ind,c("precip_cent","pol","flo_cent[.55]"), ci.lvl=0.50)  #May the fourth
+apc.funct.plot2<-plot(apc.funct2)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
   xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
   labs(title = NULL,tag=NULL)+theme_linedraw()
 

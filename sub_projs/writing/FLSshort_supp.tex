@@ -76,46 +76,47 @@ For these two, categorical, species level-case studies, we converted verbal desc
 
 \noindent For modeling trait associations with FLS, we chose three predictors to represent the three major FLS hypotheses; pollination syndrome, average flowering time and minimum precipitation levels across the species range. We obtained pollination syndrome and average flowering time information directly from the respective data sources and estimates of minimum precipitation across range from the USDA/NRCS Conservation Plants Characteristics database \citep{NRCS}. We coded pollination syndrome as biotic- or wind-pollinated, and assigned known ambophilous species in the genus \textit{Salix} as biotic-pollinated. We re-coded flowering time as the average of the range of months of flowering reported in each data source.\\
 
-\noindent For these case studies, we modeled associations between hysteranthy and the trait predictors with logistical regressions in phylogenetic generalized linear modeling framework \citep{Ives2010} using the R package ``phylolm" \citep{Ho2014}. Our models incorporated a published angiosperm phylogenetic tree \citep{Zanne2013} pruned to match the species list for each case study. Species found in the trait data set but not in the original phylogenetic tree were added to the pruned tree at the generic root. In total 32 species were added to the generic roots for the MTSV data set and eight for the USFS data set. We visualize phylogenetic patterning of FLS across the tree of each case study (Fig. \ref{fig:phylogeny}).\\
+\noindent For these case studies, we modeled associations between hysteranthy and the trait predictors with all two-way interactions with logistical regressions in phylogenetic generalized linear modeling framework \citep{Ives2010} using the R package ``phylolm" \citep{Ho2014}. Our models incorporated a published angiosperm phylogenetic tree \citep{Zanne2013} pruned to match the species list for each case study. Species found in the trait data set but not in the original phylogenetic tree were added to the pruned tree at the generic root. In total 32 species were added to the generic roots for the MTSV data set and eight for the USFS data set. We visualize phylogenetic patterning of FLS across the tree of each case study (Fig. \ref{fig:phylogeny}).\\
 
 \noindent We ran the models with 599 bootstrapped re-sampling iterations for each data set \citep{Wilcox2010}. We standardized all predictors by subtracting the mean and dividing by two standard deviations to allow for a reasonable comparison of effect sizes between the binary and continuous predictors in this model \citep{Gelman2007}. 
 
 
 
 \subsubsection*{Harvard Forest models}
-For each individual tree per year in the data, we calculated the time between flowers opening and leaves reaching 75\% of their final size. Positive FLS values indicate flowering-first and negative values leafing-first. To compare the inference between categorical and continuous measure of FLS, we re-coded the continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets, except that we estimated flowering time directly from the HF data. All models the R package ``brms" \citep{Burkner2018} to estimate the relationship between FLS and the predictors with a phylogenetic mixed model in a Bayesian framework \citep{Garamszegi2014}. We ran 4 chains with 4000 iterations and a
-warm-up of 3000 iterations each, resulting in 4000 total sampling iteration. All models used weakly informative priors. As our primary goal was to directly compare the effects each predictor, we standardized these variables to allow for a reasonable comparison between them {\citep{Gelman2007}. \\
+For each individual tree per year in the data, we calculated the time between flowers opening and leaves reaching 75\% of their final size. Positive FLS values indicate flowering-first and negative values leafing-first. To compare the inference between categorical and continuous measure of FLS, we re-coded the continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets (flowering time, pollination syndrome, minimum precipitation across species' range and all two way interactions between predictors), except that we estimated flowering time directly from the HF data. For the categorical model, we used a logistic regression with a binary outcome variable. The phylogeny and non-phylogenetic species effects were each modeled as separate, random intercepts in the model.
+For the continuous model, we used a linear mixed model. Here we included an effect of individual tree as random intercept nested within species in addition to the random intercept of phylogeny. We ran all models with the R package ``brms" \citep{Burkner2018} to estimate the relationship between FLS and the predictors with a phylogenetic mixed model in a Bayesian framework \citep{Garamszegi2014}. We ran 4 chains with 4000 iterations and a
+warm-up of 3000 iterations each, resulting in 4000 total sampling iterations. All models used weakly informative priors on the intercept and error terms. Increasing priors three-fold did not impact the model estimates. As our primary goal was to directly compare the effects each predictor, we standardized these variables to allow for a reasonable comparison between them {\citep{Gelman2007}. \\
 
-\noindent To examine the relationship between inter-annual variation in FLS and precipitation, we obtained precipitation records from the Shaler meteorological station at Harvard Forest \citep{Boose2004}. As above, these models run with weak priors, a warm up of 3000 iterations and 4000 sampling iterations.\\
+\noindent To examine the relationship between inter-annual variation in FLS and precipitation, we obtained precipitation records from the Shaler meteorological station at Harvard Forest \citep{Boose2004}. We modeled the effect of annual precipitation variation on time between flowering and leafing in a  completely pooling model with weakly informative priors on 4 chains with 4000 iterations and a warm-up of 3000 iterations each, resulting in 4000 total sampling iterations.\\
 
-\noindent The three Harvard Forest models are detailed below:\\
-\begin{enumerate}
-\item \underline{Categorical model}:\\
-Pr(y_i &=1) &= logit^{-1} \alpha_{sp[i]} + \alpha_{phylo[i]} + \beta_{pollination syndrome}X_1_[_i_] + \beta_{flowering time}X_2_[_i_] + \beta_{min. precipitation}X_3_[_i_] +\beta_{pollination syndrome}:\beta_{flowering time}X_4_[_i_]+\beta_{pollination syndrome}:\beta_{min. precipitation}X_5_[_i_]+ \beta_{flowering time}:\beta_{min. precipitation}X_6_[_i_] + \epsilon_i\\
+%\noindent The three Harvard Forest models are detailed below:\\
+%\begin{enumerate}
+%\item \underline{Categorical model}:\\
+%Pr(y_i &=1) &= logit^{-1} \alpha_{sp[i]} + \alpha_{phylo[i]} + \beta_{pollination syndrome}X_1_[_i_] + \beta_{flowering time}X_2_[_i_] + \beta_{min. precipitation}X_3_[_i_] +\beta_{pollination syndrome}:\beta_{flowering time}X_4_[_i_]+\beta_{pollination syndrome}:\beta_{min. precipitation}X_5_[_i_]+ \beta_{flowering time}:\beta_{min. precipitation}X_6_[_i_] + \epsilon_i\\
+%
+%\epsilon_i & \sim N(0,\sigma^2_y) \\ 
+%
+%\noindent The influence of the phylogeny $\alpha_phylo$ was modeled as follows:\\
+%\alpha_{sp} & \sim N(\mu_{\alpha}, COR[\sigma^2_{phylo}]) \\
+%
+%\noindent THe $\alpha$ for species effects indendent of the phylogeny was modeled as follows:\\
+%\alpha_{sp} & \sim N(\mu_{\alpha}, \sigma^2_{species}) \\
+%
+%\item \underline{Continuous model}: \\
+%y_i &= \alpha_{ind/sp[i]} +\alpha_{phylo[i]} + \beta_{pollination syndrome}X_1_[_i_] + \beta_{flowering time}X_2_[_i_] + \beta_{min. precipitation}X_3_[_i_] +\beta_{pollination syndrome}:\beta_{flowering time}X_4_[_i_]+\beta_{pollination syndrome}:\beta_{min. precipitation}X_5_[_i_]+ \beta_{flowering time}:\beta_{min. precipitation}X_6_[_i_] + \epsilon_i\\
 
-\epsilon_i & \sim N(0,\sigma^2_y) \\ 
+%\epsilon_i & \sim N(0,\sigma^2_y) \\ %I Think this is wrong and should reflect the phyogeny
+%
+%
+%\noindent The effect of the phylogeny was model as above and here, the individual effects within species were modeled:\\
+%\alpha_{ind/sp} & \sim N(\mu_{\alpha}, \sigma^2_{ind/sp}) \\
 
-\noindent The influence of the phylogeny $\alpha_phylo$ was modeled as follows:\\
-\alpha_{sp} & \sim N(\mu_{\alpha}, COR[\sigma^2_{phylo}]) \\
+%\item \underline{Inter-annual model}:\\
+%y_i &= \alpha_{i} + \beta_{annual precipitation}X_1[_i_] + \epsilon_i\\
+%\epsilon_i & \sim N(0,\sigma^2_y) \\
 
-\noindent THe $\alpha$ for species effects indendent of the phylogeny was modeled as follows:\\
-\alpha_{sp} & \sim N(\mu_{\alpha}, \sigma^2_{species}) \\
-
-\item \underline{Continuous model}: \\
-y_i &= \alpha_{ind/sp[i]} +\alpha_{phylo[i]} + \beta_{pollination syndrome}X_1_[_i_] + \beta_{flowering time}X_2_[_i_] + \beta_{min. precipitation}X_3_[_i_] +\beta_{pollination syndrome}:\beta_{flowering time}X_4_[_i_]+\beta_{pollination syndrome}:\beta_{min. precipitation}X_5_[_i_]+ \beta_{flowering time}:\beta_{min. precipitation}X_6_[_i_] + \epsilon_i\\
-
-\epsilon_i & \sim N(0,\sigma^2_y) \\ %I Think this is wrong and should reflect the phyogeny
-
-
-\noindent The effect of the phylogeny was model as above and here, the individual effects within species were modeled:\\
-\alpha_{ind/sp} & \sim N(\mu_{\alpha}, \sigma^2_{ind/sp}) \\
-
-\item \underline{Inter-annual model}:\\
-y_i &= \alpha_{i} + \beta_{annual precipitation}X_1[_i_] + \epsilon_i\\
-\epsilon_i & \sim N(0,\sigma^2_y) \\
-
-\end{enumerate}
-\indent We calculated the marginal effects for the Harvard Forest continuous model using the R-package ``ggeffects" \citep{Ludecke2018}.\\
+%\end{enumerate}
+\indent We calculated the marginal effects for the Harvard Forest continuous model using the R-package ``ggeffects" \citep{Ludecke2018}. Figure \ref{fig:apcs} shows the water dynamics effect of FLS give a flowering day of May 1. This relationship trends between pollination syndrome and minimum precipitation remained across flowering dates from mid April-June. \\
 
 \noindent Though we make broad comparisons between the HF and MTSV/USFS case studies, differences in data structure between the datasets required us to use alternative modeling frameworks. The MTSV and USFS data provide one response variable for each species while the HF data contains intra-specific differences in FLS, providing several different response values per species. The current phylogenetic generalized linear model framework can only fit models with one response value per species, while the phylogenetic mixed model in brms over-fits models with this kind of data structure (Paul Burkner, personal communication) and performs better on multi-response per species datasets like HF. We ran both model types on each case study and while they do yield different absolute estimates, the patterns we found were consistent across each framework, and we report results from the most accurate model for each dataset.\\
 
