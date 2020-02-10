@@ -105,20 +105,21 @@ colnames(shorty)[4]<-"leaf.budburst"
 pd2<-position_dodge2(0.6)
 colourCount = length(unique(shorty$tree.id))
 
+short<-filter(shorty,tree.id %in% c("FRAM-04","QURU-04"))
 
-b<-ggplot(shorty,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,color=tree.id,group = row.names(shorty),shape="flower.budburst") ,position=pd2)+
-  geom_point(aes(year,leaf.budburst,color=tree.id,group = row.names(shorty),shape="leaf.budburst"),position=pd2)+
-  geom_linerange(aes(x=year,ymin=flower.budburst,ymax=leaf.budburst, linetype=FLS,color=tree.id,group = row.names(shorty)),position=pd2)+
-  theme_linedraw()+labs(y = "Day of year",color= "Tree I.D.")+guides(color = FALSE)+
+b<-ggplot(short,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,color=tree.id,group = row.names(short),shape="flower.budburst") ,position=pd2,size=2)+
+  geom_point(aes(year,leaf.budburst,color=tree.id,group = row.names(short),shape="leaf.budburst"),position=pd2,size=2)+
+  geom_linerange(aes(x=year,ymin=flower.budburst,ymax=leaf.budburst, linetype=FLS,color=tree.id,group = row.names(short)),position=pd2)+
+  theme_linedraw()+labs(y = "Day of year",color= "Tree I.D.")+guides(color = FALSE)+scale_color_brewer(palette = "Set1",type="div")+
   scale_shape_manual(name="Phenophase",values=c(2,17), label=c("flower budburst","leaf budburst"))+
-  labs(title = "Intra-specific variation",tag="b)")+facet_wrap(~name)+theme(strip.text.x = element_text(face="italic"))+
+  labs(title = "Inter-annual individual variation",tag="b)")+facet_wrap(~name)+theme(strip.text.x = element_text(face="italic"))+
   theme(axis.text.x = element_text(angle=300,hjust = 0.1))
 
 
 
-ggpubr::ggarrange(a,b,ncol=2,widths=c(1.5,2))
+ggpubr::ggarrange(a,b,ncol=2,widths=c(1.8,2))
 
-jpeg("HarvardForest/FLS_viz.jpeg",width = 10, height = 8, units = 'in',res=350)
+jpeg("HarvardForest/FLS_viz.jpeg",width = 10, height = 8, units = 'in',res=250)
 ggpubr::ggarrange(a,b,nrow=2,heights=c(2.2,2))
 
 dev.off()

@@ -21,7 +21,7 @@ library(broom)
 library(RColorBrewer)
 #options(device = "quartz")
 setwd("~/Documents/git/proterant/FLOBUDS")
-#load("new_flobud.mods.Rda")
+load("new_flobud.mods.Rda")
 dat<-read.csv("flobudsdata.use.csv",header = TRUE)
 
 dat$Light<-ifelse(dat$Light=="S",0,1)
@@ -161,14 +161,34 @@ muplotfx(modelhere,modelhere2, "flowering pool vs. complete cases", 8, 8, c(0,7)
 dev.off()
 
 small$FLS<-small$budburst.9.-small$flo_day
+small$FLS2<-small$leaf_day.15.-small$flo_day
 small.fls<-get_prior(FLS~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
 mod.FLS.small<-brm(FLS ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
                   data = small, family = gaussian(),control = list(adapt_delta = 0.95),
                   iter= 7000,
                   warmup = 6000)
+
+small.fls2<-get_prior(FLS2~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
+mod.FLS2.small<-brm(FLS2 ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                   data = small, family = gaussian(),control = list(adapt_delta = 0.95),
+                   iter= 7000,
+                   warmup = 6000)
+
+
 coef(mod.FLS.small)
+new.data<-data.frame(GEN.SPA=rep(unique(small$GEN.SPA),each=9),
+                     Force=rep(c(0,0,0,1,1,1,2,2,2),10),
+                     Chill=rep(c(0,1,2),6),
+                     Light=rep(c(1),90))
 
 
+prediction<-predict(mod.FLS.small,newdata=new.data,probs = c(.25,.75))
+predy<-cbind(new.data,prediction)
+ggplot(predy,aes(as.factor(Force),Estimate))+geom_bar(stat="identity",position="dodge",aes(fill=as.factor(Chill)))+facet_wrap(~GEN.SPA,nrow=2)+geom_hline(yintercept=0)+
+scale_fill_manual(name="weeks of chilling",labels=c(4,8,12),values = c("lightblue","royalblue","navyblue"))+
+  scale_x_discrete(name="Forcing", labels=c("mean","+5","+10"))+ggthemes::theme_base(base_size = 10)
+
+?geom_bar()
 modelhere <-mod.FLS.small
 modelhere2<-mod.FLS.small
 source("prep4plot.R")
@@ -215,3 +235,4 @@ dev.off()
 
 
 save.image("new_flobud.mods.Rda")
+

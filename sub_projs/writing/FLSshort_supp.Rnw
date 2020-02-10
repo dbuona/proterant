@@ -76,6 +76,12 @@ For all categorical specifications of FLS (MTSV, USFS and HF), we assessed the p
 \noindent For the quantitative Harvard Forest model, we estimated the phylogenetic signal for FLS (lambda) based  covarience of residuals among species. Estimated phylogenetic signals from all case studies are reported below (Fig. \ref{fig:Dstat})  % I can probabalby elaborate on this. 
 
 \section*{Supplemental Tables and Figures}
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//PEP725/FLS_climate_change.jpeg} 
+    \caption{\textbf{FLSs across Europe for four tree species from 1960 to 2015 suggests climate change has generally increased the time between flowering and leafing}, but the direction and rate of change differs across species, which may exacerbate fitness differences within forest communities. To detect the effect of climate change on average FLS, we used models that allow for shifts in FLS after 1980. Lines represent the mean trend in FLS per species, and the highlighted regions indicate historic range of FLS variability (95\% credible intervals of the pre-1980 average) from the PEP725 database \citep{PEP725}.}
+    \label{fig:climchange}
+\end{figure}
 
 \begin{figure}[h!]
     \centering
@@ -125,7 +131,7 @@ par(mar=c(0,0,0,0))
 
 dd <- data.frame(taxa  = mich.data$name, hysteranthy = mich.data$synth2 )
 
-p<-ggtree(tr,layout="radial")
+p<-ggtree(tr,layout="circular")
 p <- p %<+% dd +geom_tippoint(aes(color=hysteranthy,shape=hysteranthy),size=2)
 p<-p+theme(legend.position = "none")
 
@@ -143,7 +149,7 @@ tr1 <-silv.tre
 dd1 <- data.frame(taxa  = silv.data$name, hysteranthy = silv.data$synth2 )
 
 
-q<-ggtree(tr1,layout="radial")
+q<-ggtree(tr1,layout="circular")
 q <- q %<+% dd1 +geom_tippoint(aes(color=hysteranthy,shape=hysteranthy),size=2)
 
 q<-q+theme(legend.position="bottom")

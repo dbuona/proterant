@@ -84,21 +84,26 @@ daters$GDH_diff<-daters$GDH_bb-daters$GDH_fl
 daters<-separate(daters,tree.id,c("Sp","tree.num"),sep="-")
 write.csv(daters,"GDH_diffs_HF.csv",row.names = FALSE)
 
+daters<-read.csv(file = "GDH_diffs_HF.csv",header=TRUE)
 daters.hyst<-filter(daters,GDH_diff>=0)
-ggplot(daters.hyst,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species)
+ggplot(daters.hyst,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species,scales="free")
+?facet_wrap()
 
 daters.ser<-filter(daters,GDH_diff<=0)
 ggplot(daters.ser,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species)
 
 ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_grid(tree.num~species)
 
-ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species))+facet_wrap(~species)+ylim(-1000,5000)
+ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species))+facet_wrap(~species)
 
-model <- lmer(GDH_diff ~ End_year + (1|tree.id),
-             data=daters,
-             REML=TRUE)
+model <-brm(GDH_diff ~ as.factor(End_year)+(1|tree.num/species),
+             data=daters.hyst,iter=9000,warmup=8000, control = list(adapt_delta=0.99))
 
-anova(model)
+
+
+
+
+summary(model)
 
 
 unique(HF$species)
