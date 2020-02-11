@@ -119,7 +119,7 @@ b<-ggplot(short,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,c
 
 ggpubr::ggarrange(a,b,ncol=2,widths=c(1.8,2))
 
-jpeg("HarvardForest/FLS_viz.jpeg",width = 10, height = 8, units = 'in',res=250)
+jpeg("HarvardForest/FLS_viz.jpeg",width = 6, height = 7, units = 'in',res=350)
 ggpubr::ggarrange(a,b,nrow=2,heights=c(2.2,2))
 
 dev.off()
