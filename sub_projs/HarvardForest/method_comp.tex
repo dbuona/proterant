@@ -1,0 +1,528 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{rm}\hlstd{(}\hlkwc{list}\hlstd{=}\hlkwd{ls}\hlstd{())}
+\hlkwd{options}\hlstd{(}\hlkwc{stringsAsFactors} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\hlkwd{graphics.off}\hlstd{()}
+\hlkwd{setwd}\hlstd{(}\hlstr{"~/Documents/git/proterant/sub_projs/"}\hlstd{)}
+
+\hlkwd{library}\hlstd{(ape)}
+\hlkwd{library}\hlstd{(phytools)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: maps}}\begin{alltt}
+\hlkwd{library}\hlstd{(brms)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: Rcpp}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Registered S3 method overwritten by 'xts':\\\#\#\ \  method\ \ \ \  from\\\#\#\ \  as.zoo.xts zoo}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading 'brms' package (version 2.11.1). Useful instructions\\\#\# can be found by typing help('brms'). A more detailed introduction\\\#\# to the package is available through vignette('brms\_overview').}}\begin{alltt}
+\hlkwd{library}\hlstd{(tibble)}
+\hlkwd{library}\hlstd{(ggstance)}
+\hlkwd{library}\hlstd{(ggplot2)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# Attaching package: 'ggplot2'}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# The following objects are masked from 'package:ggstance':\\\#\# \\\#\#\ \ \ \  geom\_errorbarh, GeomErrorbarh}}\begin{alltt}
+\hlkwd{library}\hlstd{(}\hlstr{"dplyr"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# \\\#\# Attaching package: 'dplyr'}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# The following objects are masked from 'package:stats':\\\#\# \\\#\#\ \ \ \  filter, lag}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# The following objects are masked from 'package:base':\\\#\# \\\#\#\ \ \ \  intersect, setdiff, setequal, union}}\begin{alltt}
+\hlkwd{library}\hlstd{(}\hlstr{"jpeg"}\hlstd{)}
+
+
+\hlcom{#useful function}
+\hlstd{extract_coefs4HF}\hlkwb{<-}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{}\hlkwd{rownames_to_column}\hlstd{(}\hlkwd{as.data.frame}\hlstd{(}\hlkwd{fixef}\hlstd{(x,} \hlkwc{summary}\hlstd{=}\hlnum{TRUE}\hlstd{,}\hlkwc{probs}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{0.025}\hlstd{,}\hlnum{0.1}\hlstd{,}\hlnum{0.9}\hlstd{,}\hlnum{0.975}\hlstd{))),}\hlstr{"trait"}\hlstd{)}
+\hlstd{\}}
+
+\hlcom{##read in the data}
+\hlstd{HF}\hlkwb{<-}\hlkwd{read.csv}\hlstd{(}\hlstr{"HarvardForest/hf003-05-mean-ind.csv"}\hlstd{,}\hlkwc{header}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\hlstd{HFsubber}\hlkwb{<-}\hlkwd{read.csv}\hlstd{(}\hlstr{"HarvardForest/HFdata4modeling.csv"}\hlstd{,}\hlkwc{header}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\hlstd{HF.tree}\hlkwb{<-}\hlkwd{read.tree}\hlstd{(}\hlstr{"HarvardForest/HFtree4modeling.tre"}\hlstd{)}
+\hlcom{###make fls measure}
+\hlstd{HF}\hlopt{$}\hlstd{phys.fls}\hlkwb{<-}\hlstd{HF}\hlopt{$}\hlstd{bb.jd}\hlopt{-}\hlstd{HF}\hlopt{$}\hlstd{fbb.jd}
+\hlstd{HF}\hlopt{$}\hlstd{funct.fls}\hlkwb{<-}\hlstd{HF}\hlopt{$}\hlstd{l75.jd}\hlopt{-}\hlstd{HF}\hlopt{$}\hlstd{fopn.jd}
+\hlstd{HF}\hlopt{$}\hlstd{inter.fls}\hlkwb{<-}\hlstd{HF}\hlopt{$}\hlstd{bb.jd}\hlopt{-}\hlstd{HF}\hlopt{$}\hlstd{fopn.jd}
+
+\hlcom{###make catagorical FLS}
+\hlstd{HF}\hlopt{$}\hlstd{hyst.funct}\hlkwb{<-}\hlkwd{ifelse}\hlstd{(HF}\hlopt{$}\hlstd{funct.fls}\hlopt{>}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{)}
+\hlstd{HF}\hlopt{$}\hlstd{hyst.phys}\hlkwb{<-}\hlkwd{ifelse}\hlstd{(HF}\hlopt{$}\hlstd{phys.fls}\hlopt{>}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{)}
+\hlstd{HF}\hlopt{$}\hlstd{hyst.inter}\hlkwb{<-}\hlkwd{ifelse}\hlstd{(HF}\hlopt{$}\hlstd{inter.fls}\hlopt{>}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{,}\hlnum{0}\hlstd{)}
+
+\hlcom{### prune the tree}
+\hlstd{HF}\hlkwb{<-}\hlstd{dplyr}\hlopt{::}\hlkwd{filter}\hlstd{(HF,species}\hlopt{!=}\hlstd{(}\hlstr{"QUAL"}\hlstd{))} \hlcom{## quercus alba has no flowers}
+\hlstd{spforcontmods}\hlkwb{<-}\hlstd{HFsubber}\hlopt{$}\hlstd{species} \hlcom{##subset of species good for this analysis}
+
+\hlstd{HF.data}\hlkwb{<-}\hlstd{dplyr}\hlopt{::}\hlkwd{filter}\hlstd{(HF,species} \hlopt{%in%} \hlkwd{c}\hlstd{(spforcontmods))}
+\hlstd{HF.data}\hlkwb{<-}\hlstd{dplyr}\hlopt{::}\hlkwd{left_join}\hlstd{(HF.data,HFsubber,} \hlkwc{by}\hlstd{=}\hlstr{"species"}\hlstd{)} \hlcom{###This is the data for the continuous models}
+\hlcom{##zscore predictors for these models}
+\hlstd{HF.data}\hlopt{$}\hlstd{pol_cent}\hlkwb{<-}\hlstd{(HF.data}\hlopt{$}\hlstd{pol}\hlopt{-}\hlkwd{mean}\hlstd{(HF.data}\hlopt{$}\hlstd{pol,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}\hlopt{/}\hlstd{(}\hlnum{2}\hlopt{*}\hlkwd{sd}\hlstd{(HF.data}\hlopt{$}\hlstd{pol,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+\hlstd{HF.data}\hlopt{$}\hlstd{precip_cent}\hlkwb{<-}\hlstd{(HF.data}\hlopt{$}\hlstd{min_precip}\hlopt{-}\hlkwd{mean}\hlstd{(HF.data}\hlopt{$}\hlstd{min_precip))}\hlopt{/}\hlstd{(}\hlnum{2}\hlopt{*}\hlkwd{sd}\hlstd{(HF.data}\hlopt{$}\hlstd{min_precip))}
+\hlstd{HF.data}\hlopt{$}\hlstd{flo_cent}\hlkwb{<-}\hlstd{(HF.data}\hlopt{$}\hlstd{fopn.jd}\hlopt{-}\hlkwd{mean}\hlstd{(HF.data}\hlopt{$}\hlstd{fopn.jd,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}\hlopt{/}\hlstd{(}\hlnum{2}\hlopt{*}\hlkwd{sd}\hlstd{(HF.data}\hlopt{$}\hlstd{fopn.jd,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+
+\hlstd{HF.data}\hlopt{$}\hlstd{flo_cent.neg}\hlkwb{<-}\hlopt{-}\hlstd{(HF.data}\hlopt{$}\hlstd{flo_cent)}
+\hlstd{HF.data}\hlopt{$}\hlstd{precip_cent.neg}\hlkwb{<-}\hlopt{-}\hlstd{(HF.data}\hlopt{$}\hlstd{precip_cent)}
+\hlcom{###group by phylogeny}
+\hlstd{inv.phylo} \hlkwb{<-} \hlstd{MCMCglmm}\hlopt{::}\hlkwd{inverseA}\hlstd{(HF.tree,} \hlkwc{nodes} \hlstd{=} \hlstr{"TIPS"}\hlstd{,} \hlkwc{scale} \hlstd{=} \hlnum{TRUE}\hlstd{)}
+\hlstd{A} \hlkwb{<-} \hlkwd{solve}\hlstd{(inv.phylo}\hlopt{$}\hlstd{Ainv)}
+\hlkwd{rownames}\hlstd{(A)} \hlkwb{<-} \hlkwd{rownames}\hlstd{(inv.phylo}\hlopt{$}\hlstd{Ainv)}
+
+
+\hlstd{modelcont.funct.wspecies.ind}\hlkwb{<-}\hlkwd{brm}\hlstd{(funct.fls}\hlopt{~} \hlstd{pol}\hlopt{+}\hlstd{flo_cent}\hlopt{+}\hlstd{precip_cent}\hlopt{+}\hlstd{precip_cent}\hlopt{:}\hlstd{flo_cent}\hlopt{+}\hlstd{precip_cent}\hlopt{:}\hlstd{pol}\hlopt{+}\hlstd{pol}\hlopt{:}\hlstd{flo_cent}\hlopt{+}\hlstd{(}\hlnum{1}\hlopt{|}\hlstd{name)}\hlopt{+}\hlstd{(}\hlnum{1}\hlopt{|}\hlstd{tree.id}\hlopt{/}\hlstd{species),} \hlkwc{data} \hlstd{= HF.data,} \hlkwc{family} \hlstd{=} \hlkwd{gaussian}\hlstd{(),} \hlkwc{cov_ranef} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwc{name}\hlstd{= A),}\hlkwc{control}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwc{adapt_delta}\hlstd{=}\hlnum{0.95}\hlstd{),}\hlkwc{iter}\hlstd{=}\hlnum{4000}\hlstd{,} \hlkwc{warmup}\hlstd{=}\hlnum{3000}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Rows containing NAs were excluded from the model.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Compiling the C++ model}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Start sampling}}\begin{verbatim}
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 0.000227 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.27 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 1: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 1: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 1: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 1: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 1: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 1: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 1: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 1: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 53.4073 seconds (Warm-up)
+## Chain 1:                17.1667 seconds (Sampling)
+## Chain 1:                70.5741 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 0.000138 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.38 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 2: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 2: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 2: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 2: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 2: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 2: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 2: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 2: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 52.267 seconds (Warm-up)
+## Chain 2:                17.3332 seconds (Sampling)
+## Chain 2:                69.6002 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 0.000135 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 1.35 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 3: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 3: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 3: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 3: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 3: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 3: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 3: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 3: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 51.7829 seconds (Warm-up)
+## Chain 3:                17.1044 seconds (Sampling)
+## Chain 3:                68.8874 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 0.000231 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 2.31 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 4: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 4: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 4: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 4: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 4: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 4: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 4: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 4: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 51.714 seconds (Warm-up)
+## Chain 4:                15.5456 seconds (Sampling)
+## Chain 4:                67.2596 seconds (Total)
+## Chain 4:
+\end{verbatim}
+\begin{alltt}
+\hlstd{meanflo}\hlkwb{<-}\hlstd{HF.data} \hlopt{%>%} \hlkwd{group_by}\hlstd{(name)} \hlopt{%>%} \hlkwd{summarise}\hlstd{(}\hlkwc{meanflotime}\hlstd{=}\hlkwd{mean}\hlstd{(fopn.jd,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+\hlstd{HF.data}\hlkwb{<-}\hlkwd{left_join}\hlstd{(HF.data,meanflo)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Joining, by = "{}name"{}}}\begin{alltt}
+\hlstd{HF.data}\hlopt{$}\hlstd{within_spec_cf} \hlkwb{<-} \hlstd{HF.data}\hlopt{$}\hlstd{fopn.j} \hlopt{-}\hlstd{HF.data}\hlopt{$}\hlstd{meanflotime}
+
+\hlstd{HF.data}\hlopt{$}\hlstd{meanflocent}\hlkwb{<-}\hlstd{(HF.data}\hlopt{$}\hlstd{meanflotime}\hlopt{-}\hlkwd{mean}\hlstd{(HF.data}\hlopt{$}\hlstd{meanflotime,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}\hlopt{/}\hlstd{(}\hlnum{2}\hlopt{*}\hlkwd{sd}\hlstd{(HF.data}\hlopt{$}\hlstd{meanflotime,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+\hlstd{HF.data}\hlopt{$}\hlstd{varflocent}\hlkwb{<-}\hlstd{(HF.data}\hlopt{$}\hlstd{within_spec_cf}\hlopt{-}\hlkwd{mean}\hlstd{(HF.data}\hlopt{$}\hlstd{within_spec_cf,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}\hlopt{/}\hlstd{(}\hlnum{2}\hlopt{*}\hlkwd{sd}\hlstd{(HF.data}\hlopt{$}\hlstd{within_spec_cf,}\hlkwc{na.rm}\hlstd{=}\hlnum{TRUE}\hlstd{))}
+\hlcom{##side bar what if we take the mean of flotime}
+\hlstd{modelcont.funct.wspecies.ind.proper}\hlkwb{<-}\hlkwd{brm}\hlstd{(funct.fls}\hlopt{~} \hlstd{pol}\hlopt{+}\hlstd{meanflocent}\hlopt{+}\hlstd{within_spec_cf}\hlopt{+}\hlstd{precip_cent}\hlopt{+}\hlstd{precip_cent}\hlopt{:}\hlstd{meanflocent}\hlopt{+}\hlstd{precip_cent}\hlopt{:}\hlstd{pol}\hlopt{+}\hlstd{pol}\hlopt{:}\hlstd{meanflocent}\hlopt{+}\hlstd{within_spec_cf}\hlopt{:}\hlstd{pol}\hlopt{+}\hlstd{within_spec_cf}\hlopt{:}\hlstd{precip_cent}\hlopt{+}\hlstd{(}\hlnum{1}\hlopt{|}\hlstd{name)}\hlopt{+}\hlstd{(}\hlnum{1}\hlopt{|}\hlstd{tree.id}\hlopt{/}\hlstd{species),} \hlkwc{data} \hlstd{= HF.data,}
+                                  \hlkwc{family} \hlstd{=} \hlkwd{gaussian}\hlstd{(),} \hlkwc{cov_ranef} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwc{name}\hlstd{= A),}\hlkwc{control}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwc{adapt_delta}\hlstd{=}\hlnum{0.95}\hlstd{),}\hlkwc{iter}\hlstd{=}\hlnum{4000}\hlstd{,} \hlkwc{warmup}\hlstd{=}\hlnum{3000}\hlstd{)} \hlcom{##ask nacho about this}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Rows containing NAs were excluded from the model.}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Compiling the C++ model}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# recompiling to avoid crashing R session}}
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Start sampling}}\begin{verbatim}
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 0.000357 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 3.57 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 1: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 1: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 1: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 1: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 1: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 1: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 1: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 1: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 56.7947 seconds (Warm-up)
+## Chain 1:                16.531 seconds (Sampling)
+## Chain 1:                73.3257 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 0.000133 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.33 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 2: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 2: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 2: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 2: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 2: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 2: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 2: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 2: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 53.3353 seconds (Warm-up)
+## Chain 2:                16.2208 seconds (Sampling)
+## Chain 2:                69.5561 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 0.000329 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 3.29 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 3: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 3: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 3: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 3: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 3: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 3: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 3: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 3: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 51.4752 seconds (Warm-up)
+## Chain 3:                16.4109 seconds (Sampling)
+## Chain 3:                67.8861 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL '3725a5ea07c66760c9301397ec859067' NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 0.000147 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 1.47 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 4000 [  0%]  (Warmup)
+## Chain 4: Iteration:  400 / 4000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  800 / 4000 [ 20%]  (Warmup)
+## Chain 4: Iteration: 1200 / 4000 [ 30%]  (Warmup)
+## Chain 4: Iteration: 1600 / 4000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 2000 / 4000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 2400 / 4000 [ 60%]  (Warmup)
+## Chain 4: Iteration: 2800 / 4000 [ 70%]  (Warmup)
+## Chain 4: Iteration: 3001 / 4000 [ 75%]  (Sampling)
+## Chain 4: Iteration: 3400 / 4000 [ 85%]  (Sampling)
+## Chain 4: Iteration: 3800 / 4000 [ 95%]  (Sampling)
+## Chain 4: Iteration: 4000 / 4000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 54.2723 seconds (Warm-up)
+## Chain 4:                16.4719 seconds (Sampling)
+## Chain 4:                70.7442 seconds (Total)
+## Chain 4:
+\end{verbatim}
+\begin{alltt}
+\hlstd{funct.cont}\hlkwb{<-}\hlkwd{extract_coefs4HF}\hlstd{(modelcont.funct.wspecies.ind)}
+\hlstd{funct.bin}\hlkwb{<-}\hlkwd{extract_coefs4HF}\hlstd{(modelcont.funct.wspecies.ind.proper)}
+
+\hlstd{cont}\hlkwb{<-}\hlstd{funct.cont}
+\hlstd{bin}\hlkwb{<-}\hlstd{funct.bin}
+\hlstd{cont}\hlopt{$}\hlstd{data_type}\hlkwb{<-}\hlstr{"my way"}
+\hlstd{bin}\hlopt{$}\hlstd{data_type}\hlkwb{<-}\hlstr{"proper"}
+
+
+\hlstd{bin}\hlkwb{<-}\hlstd{dplyr}\hlopt{::}\hlkwd{filter}\hlstd{(bin,trait}\hlopt{!=}\hlstr{"Intercept"}\hlstd{)}
+\hlstd{bin}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(bin}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"pol"}\hlstd{)]}\hlkwb{<-}\hlstr{"pollination syndrome"}
+\hlstd{bin}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(bin}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"flo_cent"}\hlstd{)]}\hlkwb{<-} \hlstr{"earlier flowering"}
+\hlstd{bin}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(bin}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"precip_cent"}\hlstd{)]}  \hlkwb{<-} \hlstr{"water dynamics"}
+\hlstd{bin}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(bin}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"pol:precip_cent"}\hlstd{)]}\hlkwb{<-} \hlstr{"pollination:water dynamics"}
+\hlstd{bin}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(bin}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"pol:flo_cent"}\hlstd{)]}\hlkwb{<-}\hlstr{"pollination:earlier flowering"}
+\hlstd{bin}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(bin}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"flo_cent:precip_cent"}\hlstd{)]}\hlkwb{<-}\hlstr{"earlier flowering:water dynamics"}
+
+
+
+\hlstd{cont}\hlkwb{<-}\hlstd{dplyr}\hlopt{::}\hlkwd{filter}\hlstd{(cont,trait}\hlopt{!=}\hlstr{"Intercept"}\hlstd{)}
+\hlstd{cont}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(cont}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"pol"}\hlstd{)]}\hlkwb{<-}\hlstr{"pollination syndrome"}
+\hlstd{cont}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(cont}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"flo_cent"}\hlstd{)]}\hlkwb{<-} \hlstr{"earlier flowering"}
+\hlstd{cont}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(cont}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"precip_cent"}\hlstd{)]}  \hlkwb{<-} \hlstr{"water dynamics"}
+\hlstd{cont}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(cont}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"pol:precip_cent"}\hlstd{)]}\hlkwb{<-} \hlstr{"pollination:water dynamics"}
+\hlstd{cont}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(cont}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"pol:flo_cent"}\hlstd{)]}\hlkwb{<-}\hlstr{"pollination:earlier flowering"}
+\hlstd{cont}\hlopt{$}\hlstd{trait[}\hlkwd{which}\hlstd{(cont}\hlopt{$}\hlstd{trait}\hlopt{==}\hlstr{"flo_cent:precip_cent"}\hlstd{)]}\hlkwb{<-}\hlstr{"earlier flowering:water dynamics"}
+
+\hlkwd{summary}\hlstd{(modelcont.funct.wspecies.ind)}
+\end{alltt}
+\begin{verbatim}
+##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: funct.fls ~ pol + flo_cent + precip_cent + precip_cent:flo_cent + precip_cent:pol + pol:flo_cent + (1 | name) + (1 | tree.id/species) 
+##    Data: HF.data (Number of observations: 679) 
+## Samples: 4 chains, each with iter = 4000; warmup = 3000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~name (Number of levels: 23) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)    11.44      2.47     7.36    17.18 1.00     1522     2417
+## 
+## ~tree.id (Number of levels: 78) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     1.33      0.80     0.08     2.98 1.01      663     1595
+## 
+## ~tree.id:species (Number of levels: 78) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     1.38      0.80     0.08     2.96 1.01      656     1454
+## 
+## Population-Level Effects: 
+##                      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+## Intercept                9.70      4.47     0.84    18.55 1.00     1116
+## pol                      7.22      5.09    -3.17    17.35 1.00     1682
+## flo_cent               -22.68      2.29   -27.07   -18.18 1.00     3351
+## precip_cent            -11.78      7.27   -26.72     2.05 1.00     1492
+## flo_cent:precip_cent     0.49      2.94    -5.20     6.36 1.00     4908
+## pol:precip_cent         13.56      7.63    -0.88    29.40 1.00     1493
+## pol:flo_cent            -5.72      2.89   -11.35    -0.11 1.00     3775
+##                      Tail_ESS
+## Intercept                1966
+## pol                      2013
+## flo_cent                 3039
+## precip_cent              1715
+## flo_cent:precip_cent     3088
+## pol:precip_cent          1979
+## pol:flo_cent             2959
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     6.64      0.19     6.28     7.04 1.00     4615     2991
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(modelcont.funct.wspecies.ind.proper)}
+\end{alltt}
+\begin{verbatim}
+##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: funct.fls ~ pol + meanflocent + within_spec_cf + precip_cent + precip_cent:meanflocent + precip_cent:pol + pol:meanflocent + within_spec_cf:pol + within_spec_cf:precip_cent + (1 | name) + (1 | tree.id/species) 
+##    Data: HF.data (Number of observations: 679) 
+## Samples: 4 chains, each with iter = 4000; warmup = 3000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~name (Number of levels: 23) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     8.46      1.88     5.47    12.67 1.00     1696     2582
+## 
+## ~tree.id (Number of levels: 78) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     1.42      0.82     0.06     3.11 1.01      538     1400
+## 
+## ~tree.id:species (Number of levels: 78) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)     1.35      0.80     0.08     2.97 1.01      558     1479
+## 
+## Population-Level Effects: 
+##                            Estimate Est.Error l-95% CI u-95% CI Rhat
+## Intercept                     10.56      3.53     3.61    17.61 1.00
+## pol                           -2.09      4.98   -11.98     7.34 1.00
+## meanflocent                  -31.58      5.03   -41.86   -21.75 1.00
+## within_spec_cf                -0.48      0.05    -0.58    -0.37 1.00
+## precip_cent                    2.95      7.77   -12.37    19.00 1.00
+## meanflocent:precip_cent       -5.44      6.89   -18.62     8.24 1.00
+## pol:precip_cent               -0.92      8.78   -18.79    16.05 1.00
+## pol:meanflocent              -10.01      8.87   -27.40     7.98 1.00
+## pol:within_spec_cf            -0.16      0.07    -0.29    -0.02 1.00
+## within_spec_cf:precip_cent     0.05      0.07    -0.09     0.19 1.00
+##                            Bulk_ESS Tail_ESS
+## Intercept                      1599     2170
+## pol                            1963     2239
+## meanflocent                    1753     2163
+## within_spec_cf                 4246     3396
+## precip_cent                    1581     1605
+## meanflocent:precip_cent        1919     2049
+## pol:precip_cent                1603     1708
+## pol:meanflocent                1904     2620
+## pol:within_spec_cf             4235     3274
+## within_spec_cf:precip_cent     7286     2817
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     6.63      0.19     6.27     7.00 1.00     4120     2763
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+\end{verbatim}
+\begin{alltt}
+\hlstd{both}\hlkwb{<-}\hlkwd{rbind}\hlstd{(cont,bin)}
+
+\hlstd{pd}\hlkwb{=}\hlkwd{position_dodgev}\hlstd{(}\hlkwc{height}\hlstd{=}\hlnum{0.4}\hlstd{)}
+\hlstd{both} \hlopt{%>%}
+  \hlkwd{arrange}\hlstd{(Estimate)} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}\hlkwc{trait} \hlstd{=} \hlkwd{factor}\hlstd{(trait,} \hlkwc{levels}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"earlier flowering:water dynamics"}\hlstd{,}\hlstr{"pollination:earlier flowering"}\hlstd{,}\hlstr{"pollination:water dynamics"}\hlstd{,}\hlstr{"earlier flowering"}\hlstd{,}\hlstr{"water dynamics"}\hlstd{,}\hlstr{"pollination syndrome"}\hlstd{)))} \hlopt{%>%}
+  \hlkwd{ggplot}\hlstd{(}\hlkwd{aes}\hlstd{(Estimate,trait))}\hlopt{+}\hlkwd{geom_point}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{shape}\hlstd{=data_type),}\hlkwc{position}\hlstd{=pd,}\hlkwc{size}\hlstd{=}\hlnum{3}\hlstd{,}\hlkwc{stroke}\hlstd{=}\hlnum{.5}\hlstd{)}\hlopt{+}
+  \hlkwd{geom_errorbarh}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{xmin}\hlstd{=Q2.5,}\hlkwc{xmax}\hlstd{=Q97.5,}\hlkwc{group}\hlstd{=data_type),}\hlkwc{position}\hlstd{=pd,}\hlkwc{height}\hlstd{=}\hlnum{0}\hlstd{,}\hlkwc{linetype}\hlstd{=}\hlstr{"dotted"}\hlstd{)}\hlopt{+}
+  \hlkwd{geom_errorbarh}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{xmin}\hlstd{=Q10,}\hlkwc{xmax}\hlstd{=Q90,}\hlkwc{group}\hlstd{=data_type),}\hlkwc{position}\hlstd{=pd,}\hlkwc{height}\hlstd{=}\hlnum{0}\hlstd{,}\hlkwc{linetype}\hlstd{=}\hlstr{"solid"}\hlstd{)}\hlopt{+}
+  \hlkwd{theme_linedraw}\hlstd{(}\hlkwc{base_size} \hlstd{=} \hlnum{11}\hlstd{)}\hlopt{+}\hlkwd{geom_vline}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{xintercept}\hlstd{=}\hlnum{0}\hlstd{),}\hlkwc{color}\hlstd{=}\hlstr{"black"}\hlstd{)}\hlopt{+}
+  \hlkwd{xlim}\hlstd{(}\hlopt{-}\hlnum{30}\hlstd{,}\hlnum{30}\hlstd{)}\hlopt{+}\hlkwd{scale_color_manual}\hlstd{(}\hlkwc{values}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"firebrick4"}\hlstd{))}\hlopt{+}\hlkwd{scale_shape_discrete}\hlstd{(}\hlkwc{name} \hlstd{=} \hlstr{"data type"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 1 rows containing missing values (geom\_point).}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 1 rows containing missing values (geom\_errorbarh).}}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 1 rows containing missing values (geom\_errorbarh).}}\end{kframe}
+\end{knitrout}
+
+
+
+\end{document}

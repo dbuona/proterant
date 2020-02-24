@@ -87,8 +87,6 @@ For each individual tree per year in the data, we calculated the time between fl
 For the continuous model, we used a linear mixed model. Here we included an effect of individual tree as random intercept nested within species in addition to the random intercept of phylogeny. We ran all models with the R package ``brms" \citep{Burkner2018} to estimate the relationship between FLS and the predictors with a phylogenetic mixed model in a Bayesian framework \citep{Garamszegi2014}. We ran 4 chains with 4000 iterations and a
 warm-up of 3000 iterations each, resulting in 4000 total sampling iterations. All models used weakly informative priors on the intercept and error terms. Increasing priors three-fold did not impact the model estimates. As our primary goal was to directly compare the effects each predictor, we standardized these variables to allow for a reasonable comparison between them {\citep{Gelman2007}. \\
 
-\noindent To examine the relationship between inter-annual variation in FLS and precipitation, we obtained precipitation records from the Shaler meteorological station at Harvard Forest \citep{Boose2004}. We modeled the effect of annual precipitation variation on time between flowering and leafing in a  completely pooling model with weakly informative priors on 4 chains with 4000 iterations and a warm-up of 3000 iterations each, resulting in 4000 total sampling iterations.\\
-
 %\noindent The three Harvard Forest models are detailed below:\\
 %\begin{enumerate}
 %\item \underline{Categorical model}:\\
@@ -123,15 +121,10 @@ warm-up of 3000 iterations each, resulting in 4000 total sampling iterations. Al
 \subsubsection*{Phylogenetic signals}
 For all categorical specifications of FLS (MTSV, USFS and HF), we assessed the phylogenetic structure of hysteranthous flowering in all  with Fritz's D-statistic \citep{FRITZ2010} using the ``Caper" package \citep{Orme2013} in R. Fritz's D calculates the sum of changes in estimated node values of a binary trait along edges in a phylogeny and compares this observed value to both a model of Phylogenetic randomness and Brownian threshold model. The means of the two data simulations scale values of D to set points of 0 (as phylogenetically conserved) and 1 (random)  \citep{Orme2013}.\\
 
-\noindent For the quantitative Harvard Forest model, we estimated the phylogenetic signal for FLS (lambda) based  covarience of residuals among species. Estimated phylogenetic signals from all case studies are reported below (Fig. \ref{fig:Dstat})  % I can probabalby elaborate on this. 
+\noindent For the quantitative Harvard Forest model, we estimated the phylogenetic signal for FLS (lambda) based  covarience of residuals among species. Estimated phylogenetic signals from all case studies are reported below (Fig. \ref{fig:Dstat}). Add citation for ggtree.  % I can probabalby elaborate on this. 
 
 \section*{Supplemental Tables and Figures}
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//PEP725/FLS_climate_change.jpeg} 
-    \caption{\textbf{FLSs across Europe for four tree species from 1960 to 2015 suggests climate change has generally increased the time between flowering and leafing}, but the direction and rate of change differs across species, which may exacerbate fitness differences within forest communities. To detect the effect of climate change on average FLS, we used models that allow for shifts in FLS after 1980. Lines represent the mean trend in FLS per species, and the highlighted regions indicate historic range of FLS variability (95\% credible intervals of the pre-1980 average) from the PEP725 database \citep{PEP725}.}
-    \label{fig:climchange}
-\end{figure}
+
 
 \begin{figure}[h!]
     \centering

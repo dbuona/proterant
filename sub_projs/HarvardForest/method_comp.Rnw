@@ -1,0 +1,116 @@
+\documentclass{article}
+
+\begin{document}
+
+<<figure=TRUE>>=
+rm(list=ls()) 
+options(stringsAsFactors = FALSE)
+graphics.off()
+setwd("~/Documents/git/proterant/sub_projs/")
+
+library(ape)
+library(phytools)
+library(brms)
+library(tibble)
+library(ggstance)
+library(ggplot2)
+library("dplyr")
+library("jpeg")
+
+
+#useful function
+extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,0.1,0.9,0.975))),"trait")
+}
+
+##read in the data
+HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
+HFsubber<-read.csv("HarvardForest/HFdata4modeling.csv",header=TRUE)
+HF.tree<-read.tree("HarvardForest/HFtree4modeling.tre")
+###make fls measure
+HF$phys.fls<-HF$bb.jd-HF$fbb.jd
+HF$funct.fls<-HF$l75.jd-HF$fopn.jd
+HF$inter.fls<-HF$bb.jd-HF$fopn.jd
+
+###make catagorical FLS
+HF$hyst.funct<-ifelse(HF$funct.fls>0,1,0)
+HF$hyst.phys<-ifelse(HF$phys.fls>0,1,0)
+HF$hyst.inter<-ifelse(HF$inter.fls>0,1,0)
+
+### prune the tree
+HF<-dplyr::filter(HF,species!=("QUAL")) ## quercus alba has no flowers
+spforcontmods<-HFsubber$species ##subset of species good for this analysis
+
+HF.data<-dplyr::filter(HF,species %in% c(spforcontmods))
+HF.data<-dplyr::left_join(HF.data,HFsubber, by="species") ###This is the data for the continuous models
+##zscore predictors for these models
+HF.data$pol_cent<-(HF.data$pol-mean(HF.data$pol,na.rm=TRUE))/(2*sd(HF.data$pol,na.rm=TRUE))
+HF.data$precip_cent<-(HF.data$min_precip-mean(HF.data$min_precip))/(2*sd(HF.data$min_precip))
+HF.data$flo_cent<-(HF.data$fopn.jd-mean(HF.data$fopn.jd,na.rm=TRUE))/(2*sd(HF.data$fopn.jd,na.rm=TRUE))
+
+HF.data$flo_cent.neg<--(HF.data$flo_cent)
+HF.data$precip_cent.neg<--(HF.data$precip_cent)
+###group by phylogeny
+inv.phylo <- MCMCglmm::inverseA(HF.tree, nodes = "TIPS", scale = TRUE)
+A <- solve(inv.phylo$Ainv)
+rownames(A) <- rownames(inv.phylo$Ainv)
+
+
+modelcont.funct.wspecies.ind<-brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) 
+
+
+meanflo<-HF.data %>% group_by(name) %>% summarise(meanflotime=mean(fopn.jd,na.rm=TRUE))
+HF.data<-left_join(HF.data,meanflo)
+HF.data$within_spec_cf <- HF.data$fopn.j -HF.data$meanflotime
+
+HF.data$meanflocent<-(HF.data$meanflotime-mean(HF.data$meanflotime,na.rm=TRUE))/(2*sd(HF.data$meanflotime,na.rm=TRUE))
+HF.data$varflocent<-(HF.data$within_spec_cf-mean(HF.data$within_spec_cf,na.rm=TRUE))/(2*sd(HF.data$within_spec_cf,na.rm=TRUE))
+##side bar what if we take the mean of flotime
+modelcont.funct.wspecies.ind.proper<-brm(funct.fls~ pol+meanflocent+within_spec_cf+precip_cent+precip_cent:meanflocent+precip_cent:pol+pol:meanflocent+within_spec_cf:pol+within_spec_cf:precip_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                  family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) ##ask nacho about this
+
+
+
+funct.cont<-extract_coefs4HF(modelcont.funct.wspecies.ind)
+funct.bin<-extract_coefs4HF(modelcont.funct.wspecies.ind.proper)
+
+cont<-funct.cont
+bin<-funct.bin
+cont$data_type<-"my way"
+bin$data_type<-"proper"
+
+
+bin<-dplyr::filter(bin,trait!="Intercept")
+bin$trait[which(bin$trait=="pol")]<-"pollination syndrome"
+bin$trait[which(bin$trait=="flo_cent")]<- "earlier flowering"
+bin$trait[which(bin$trait=="precip_cent")]  <- "water dynamics"
+bin$trait[which(bin$trait=="pol:precip_cent")]<- "pollination:water dynamics"
+bin$trait[which(bin$trait=="pol:flo_cent")]<-"pollination:earlier flowering"
+bin$trait[which(bin$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
+
+
+
+cont<-dplyr::filter(cont,trait!="Intercept")
+cont$trait[which(cont$trait=="pol")]<-"pollination syndrome"
+cont$trait[which(cont$trait=="flo_cent")]<- "earlier flowering"
+cont$trait[which(cont$trait=="precip_cent")]  <- "water dynamics"
+cont$trait[which(cont$trait=="pol:precip_cent")]<- "pollination:water dynamics"
+cont$trait[which(cont$trait=="pol:flo_cent")]<-"pollination:earlier flowering"
+cont$trait[which(cont$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
+
+summary(modelcont.funct.wspecies.ind)
+summary(modelcont.funct.wspecies.ind.proper)
+both<-rbind(cont,bin)
+
+pd=position_dodgev(height=0.4)
+both %>%
+  arrange(Estimate) %>%
+  mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>% ggplot(aes(Estimate,trait))+geom_point(aes(shape=data_type),position=pd,size=3,stroke=.5)+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=data_type),position=pd,height=0,linetype="dotted")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90,group=data_type),position=pd,height=0,linetype="solid")+
+  theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+scale_color_manual(values=c("firebrick4"))+scale_shape_discrete(name = "data type")
+
+@
+
+
+
+\end{document}

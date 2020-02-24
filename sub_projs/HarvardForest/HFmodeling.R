@@ -59,6 +59,19 @@ pp_check(modelcont.funct)
 modelcont.funct.wspecies.ind<-brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
                                 family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) 
 pp_check(modelcont.funct.wspecies.ind)
+
+meanflo<-HF.data %>% group_by(name) %>% summarise(meanflotime=mean(fopn.jd,na.rm=TRUE))
+HF.data<-left_join(HF.data,meanflo)
+HF.data$within_spec_cf <- HF.data$fopn.j -HF.data$meanflotime
+
+HF.data$meanflocent<-(HF.data$meanflotime-mean(HF.data$meanflotime,na.rm=TRUE))/(2*sd(HF.data$meanflotime,na.rm=TRUE))
+HF.data$varflocent<-(HF.data$within_spec_cf-mean(HF.data$within_spec_cf,na.rm=TRUE))/(2*sd(HF.data$within_spec_cf,na.rm=TRUE))
+##side bar what if we take the mean of flotime
+modelcont.funct.wspecies.ind.proper<-brm(funct.fls~ pol+meanflocent+within_spec_cf+precip_cent+precip_cent:meanflocent+precip_cent:pol+pol:meanflocent+within_spec_cf:pol+within_spec_cf:precip_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                  family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) ##ask nacho about this
+
+
+
 prior <- c(prior(student_t(3, 16, 45), class = Intercept),
            prior(student_t(3, 0, 45) , class = sd),
            prior(student_t(3, 0, 45) , class = sigma))

@@ -85,26 +85,41 @@ daters<-separate(daters,tree.id,c("Sp","tree.num"),sep="-")
 write.csv(daters,"GDH_diffs_HF.csv",row.names = FALSE)
 
 daters<-read.csv(file = "GDH_diffs_HF.csv",header=TRUE)
-daters.hyst<-filter(daters,GDH_diff>=0)
-ggplot(daters.hyst,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species,scales="free")
-?facet_wrap()
 
-daters.ser<-filter(daters,GDH_diff<=0)
+sps<-c("FRAM", "ACSA","POTR", "QUVE" ,"QURU" ,"BEPO", "BEPA", "BELE" ,"BEAL" ,"AMSP", "ACRU")
+sps<-c("ACPE","ACRU","ACSA","QURU","BELE")
+daters$GDD_diff<-daters$GDH_diff/24
+daters.hyst<-filter(daters,species %in% sps)
+ggplot(daters.hyst,aes(End_year,GDD_diff))+geom_point()+facet_grid(species~tree.num,scale="free")
+
+ggplot(daters.ser,aes(End_year,GDH_diff))+stat_summary(color="blue")+facet_wrap(~species,scale="free")
+
+
 ggplot(daters.ser,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species)
 
 ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_grid(tree.num~species)
 
 ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species))+facet_wrap(~species)
 
-model <-brm(GDH_diff ~ as.factor(End_year)+(1|tree.num/species),
+
+
+model <-brm(GDH_diff ~ as.factor(End_year)+(as.factor(End_year)|species),
              data=daters.hyst,iter=9000,warmup=8000, control = list(adapt_delta=0.99))
-
-
-
-
 
 summary(model)
 
+extract_coefs<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,0.25,0.75,0.975))),"year")
+}
+
+
+yrs<-extract_coefs(model)
+
+new.data<-data.frame(End_year=rep(unique(daters.hyst$End_year),12),species=rep(unique(daters.hyst$species),each=14))
+
+pred.day<-predict(model,newdata=new.data,probs = c(0.25,0.75))
+
+checkpred<-cbind(pred.day,new.data)
+ggplot(checkpred,aes(End_year,Estimate))+geom_point(aes(color=species))+geom_errorbar(aes(min=Q25,max=Q75,color=species))+facet_wrap(~species)
 
 unique(HF$species)
 Vc<-filter(HF,species=="VACO") ## select just vaccinium
