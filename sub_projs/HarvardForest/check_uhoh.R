@@ -55,7 +55,16 @@ rownames(A) <- rownames(inv.phylo$Ainv)
 meanflo<-HF.data %>% group_by(name) %>% summarise(meanflotime=mean(fopn.jd,na.rm=TRUE))
 HF.data<-left_join(HF.data,meanflo)
 
+meanFLS<-HF.data %>% group_by(name) %>% summarise(meanFLS=mean(funct.fls,na.rm=TRUE))
+HF.data<-left_join(HF.data,meanFLS)
+
 HF.data$meanflocent<-(HF.data$meanflotime-mean(HF.data$meanflotime,na.rm=TRUE))/(2*sd(HF.data$meanflotime,na.rm=TRUE))
+
+##no variationa t all model
+modelcont.phylo.means<-brm(meanFLS~ pol+meanflocent+precip_cent+(1|name), data = HF.data, 
+                         family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.99),iter=8000, warmup=7000) ### same
+
++precip_cent:meanflocent+precip_cent:pol+pol:meanflocent+
 
 ###models par A
 modelcont.nophylo.ind<-brm(funct.fls~ pol+meanflocent+precip_cent+precip_cent:meanflocent+precip_cent:pol+pol:meanflocent+(1|species), data = HF.data, 
@@ -74,8 +83,11 @@ modelcont.var.sp.phylo<-brm(funct.fls~ pol+meanflocent+varflo_cent+precip_cent+p
 modelcont.var.sp.phylo2<-brm(inter.fls~ pol+meanflocent+varflo_cent+precip_cent+precip_cent:meanflocent+precip_cent:pol+pol:meanflocent+(1|name)+(1|species), data = HF.data, 
                             family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.99),iter=8000, warmup=7000)
 
+modelphys.var.sp.phylo2<-brm(phys.fls~ pol+meanflocent+varflo_cent+precip_cent+precip_cent:meanflocent+precip_cent:pol+pol:meanflocent+(1|name)+(1|species), data = HF.data, 
+                             family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.99),iter=8000, warmup=7000)
 
-apc.funct<- ggeffects::ggpredict(modelcont.var.sp.phylo2,c("precip_cent","pol","varflo_cent","meanflocent"), ci.lvl=0.50)  #May the fourth
+
+apc.funct<- ggeffects::ggpredict(modelcont.var.sp.phylo,c("precip_cent","pol","varflo_cent[0]","meanflocent[-1.5,.5]"), ci.lvl=0.50)  #May the fourth
 apc.funct.plot<-plot(apc.funct)
 +scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,0.5,1,1.5),labels=c(6,13,19,26,33,40,47))+
   xlab("Min. precipitation across range (cm)")+ylab("Flowering to leaf expansion (days)")+scale_colour_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+scale_fill_manual(name="pollination syndrome",labels=c("biotic","wind"),values=c("coral4","royalblue2"))+
