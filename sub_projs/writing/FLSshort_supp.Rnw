@@ -1,43 +1,61 @@
-\documentclass{article}
-\usepackage[top=1.00in, bottom=1.0in, left=1.1in, right=1.1in]{geometry}
-\renewcommand{\baselinestretch}{1.1}
+\documentclass[12pt]{article}
+\renewcommand{\baselinestretch}{1.8}
+
+\usepackage[sort&compress]{natbib}
+\bibliographystyle{..//refs/styles/newphyto.bst}
+
+\usepackage{textcomp}
+\usepackage{fontenc}
 \usepackage{graphicx}
-\usepackage{natbib}
-\usepackage{amsmath}
-\bibliographystyle{..//refs/styles/besjournals.bst}
+\usepackage{caption} % for Fig. captions
+\usepackage{gensymb} % for \degree
+\usepackage{placeins} % for \images
+\usepackage[margin=1in]{geometry} % to set margins
+\usepackage{setspace}
+\usepackage{lineno}
+\usepackage{float}
+%\usepackage{cite}
+\usepackage{amssymb} % for math symbols
+\usepackage{amsmath} % for aligning equations
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
+\linenumbers
 \usepackage{xr-hyper}
 \externaldocument{shortest_reconciling}
 
 \def\labelitemi{--}
 \parindent=24pt
-\title{Supplement: Reconciling competing hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology}
-
+\title{\textit{New Phytologist} Supporting Information}
+\date{}
 \begin{document}
 \maketitle
+
+\noindent \textbf{Article title:} Reconciling competing hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology\\
+\noindent \textbf{Authors:} D.M. Buonaiuto, I. Morales Castilla, E.M. Wolkovich\\
+
+\noindent The following Supporting Information is available for this article:\\
 
 
 \section*{Figures}
 
-
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
  \includegraphics[width=\textwidth]{..//MTSV_USFS.jpeg} 
-    \caption{\textbf{Mean estimates of the effects of FLS predictors on the likelihood a species is hysteranthous vary across datasets and definitions of FLS.}  We used phylogenetic adjustments and standardized units to make a basic comparison of two datasets and classes (physiological= no overlap between flowering and leafing, functional= moderate overlap) of FLS. While there is some agreement across models (strong effects of flowering time, no consistent effect interactions between predictors), the effect of other predictors (pollination syndrome, water dynamics) were highly sensitive to how data were defined, biasing any inference from models and compromising the ability to validate the existing FLS hypotheses. Lines represent 95\% bootstrap intervals.}
+    \caption{\textbf{Mean estimates of the effects of FLS predictors on the likelihood a species is hysteranthous vary across datasets and definitions of FLS.}  We used phylogenetic adjustments and standardized units to make a basic comparison of two datasets (Michigan Trees, Michigan Shrubs and Vines (MTSV) \citep{Barnes2004,Barnes2016} and The United States Silvics Manual (USFS) \citep{Burns1990}) and classes (physiological= no overlap between flowering and leafing, functional= moderate overlap) of FLS. While there is some agreement across models (strong effects of flowering time, no consistent effect interactions between predictors), the effect of other predictors (pollination syndrome, water dynamics) were highly sensitive to how data were defined, biasing any inference from models and compromising the ability to validate the existing FLS hypotheses. Lines represent 95\% bootstrap intervals.}
     \label{fig:muplots.USMT}
 \end{figure}
 
-\begin{figure}[h!]
+
+\begin{figure}[H]
     \centering
  \includegraphics[width=\textwidth]{..//HarvardForest/HFmeans_expanded.jpeg} 
-    \caption{\textbf{Quantitative FLS patterns for woody plants at Harvard Forest in Pertersham, MA.} Because phenological sequences consist of several sub-stages if is difficult to unambiguously categorize many species into the currently FLS categories. }
+    \caption{\textbf{Quantitative FLS patterns for woody plants at Harvard Forest in Pertersham, MA.} Because phenological sequences consist of several sub-stages if is difficult to unambiguously categorize many species into the current FLS categories. }
     \label{fig:HFmeans}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
  \includegraphics[height=0.9\textheight]{..//phylosig.jpeg} 
-  \caption{\textbf{The phylogenetic signal for FLS varies between datasets, and is sensitive to how FLS patterns are categorized.} In a)-e),the black vertical line show the the Fritz's D statistic for binary classifications of FLS estimated from the data, with blue and red lines representing expected D values based on simulations under Brownian threshold model and random model respectively. Panel f) shows the the estimated $\lambda$ values of FLS from the the continuous modeling framework. The solid line indicates the mean estimate of $\lambda$ in the intercept only model and the dashed line indicates the mean estimate of $\lambda$ when all predictors were included in the model.  Higher values indicate stronger phylogenetic structure.}
+  \caption{\textbf{The phylogenetic signal for FLS varies between datasets, and is sensitive to how FLS patterns are categorized.} In a)-e),the black vertical line show the the Fritz's D statistic for binary classifications of FLS estimated from the data, with blue and red lines representing expected D values based on simulations under Brownian threshold model and random model respectively. Panel f) shows the the estimated $\lambda$ values of FLS from the the continuous modeling framework. The solid line indicates the mean estimate of $\lambda$ in the intercept only model and the dashed line indicates the mean estimate of $\lambda$ when all predictors were included in the model. Higher values indicate stronger phylogenetic structure.}
     \label{fig:Dstat}
     \end{figure}
 
@@ -97,13 +115,17 @@ ggpubr::ggarrange(p,q,ncol=2,legend="bottom",common.legend = TRUE)
 
 @
    
-  \caption{\textbf{Phylogenetic structure of FLS in MTSV and USFS varies significantly depending on how FLSs are defined.} Many species get re-assigned to either hysteranthy or seranthy depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed) (blue squares). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogentic signal for this trait.}
+  \caption{\textbf{Phylogenetic structure of FLS in MTSV and USFS varies significantly depending on how FLSs are defined.} Many species get re-assigned to either hysteranthy or seranthy depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed) (blue squares). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogenetic signal for this trait.}
     \label{fig:phylogeny}
     \end{figure}
 
-\subsection*{Methods}
+\pagebreak[4]
+
+
+\section*{\nameref{Methods S1}}\label{Methods S1}
+
 \subsubsection*{Climate Change and FLS:}
-To evaluate how FLS patterns have changed over time in association with climate change we obtained phenological data for four European woody plant species with long term phenology records of both flower (BBCH 60) and leafout phenology (BBCH 11) from the Pan European Phenological Database \citep{PEP725}. We restricted the data set to include only stations with more than 50 years worth of data. Following conventions for modeling effects of climate change, we modeled the number of days between flowering and leafing as a function of time for each species, using a hinge model with 1980 as a break point \citep{IPCC2013,Kharouba2018}. For each species, we display the pre-1980 mean and 95\% credible intervals of the time between flowering and leafing and the post-1980 change in mean time between phenophases that can be driven by climate change.
+To evaluate how FLS patterns have changed over time in association with climate change we obtained phenological data for four European woody plant species with long term phenology records of both flower (BBCH 60) and leafout phenology (BBCH 11) from the Pan European Phenological Database \citep{PEP725}. We restricted the data set to include only stations with more than 50 years worth of data. Following conventions for modeling effects of climate change, we modeled the number of days between flowering and leafing as a function of time for each species, using a hinge model with 1980 as a break point \citep{IPCC2013,Kharouba2018}. For each species, we display the pre-1980 mean and 95\% credible intervals of the time between flowering and leafing and the post-1980 change in mean time between phenophases that can be  attributed to climate change.
 
 \subsubsection*{Modeling FLS variation in MTSV and USFS data}
 For these two, categorical, species-level case-studies, we converted verbal descriptions of flower-leaf sequences into a binary response variable. For our more inclusive ``functional" definition of hysteranthy, which allows for some overlap between floral and vegetative phenophases, we included species entries with descriptions \textit{``flowers before the leaves"}, \textit{``flowers before or with leaves"} and \textit{``flowers with leaves"} as hysteranthous. Our more restrictive ``physiological" hysteranthy definition only included species described as \textit{``flowers before the leaves"} as hysteranthous.\\
@@ -116,7 +138,7 @@ For these two, categorical, species-level case-studies, we converted verbal desc
 
 
 \subsubsection*{Harvard Forest models}
-For each individual tree per year in the data, we calculated the time between flowers opening and leaves reaching 75\% of their final size. Positive FLS values indicate flowering-first and negative values leafing-first. To compare the inference between categorical and continuous measure of FLS, we re-coded the continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets (flowering time, pollination syndrome, minimum precipitation across species' range and all two way interactions between predictors), except that we estimated flowering time directly from the HF data for each individual/year. The Harvard Forest analysis included 23 species. While taxonomically limited compared to the MTSV and USFS data, this data set included repeated phenology observation per species over time, and within year variation between individuals per species. \\ 
+From the publicly available Harvard Forest phenology data \citep{Okeefe2015} we calculated the time between flowers opening and leaves reaching 75\% of their final size for each individual tree per year in the data. Positive FLS values indicate flowering-first and negative values leafing-first. To compare the inference between categorical and continuous measure of FLS, we re-coded the continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets (flowering time, pollination syndrome, minimum precipitation across species' range and all two way interactions between predictors), except that we estimated flowering time directly from the HF data for each individual/year. The Harvard Forest analysis included 23 species. While taxonomically limited compared to the MTSV and USFS data, this data set included repeated phenology observation per species over time, and within year variation between individuals per species. \\ 
 For both the categorical and continuous Harvard forest models we used a Bayesian phylogenetic mixed modeling framework (PMM) \citep{Garamszegi2014} using the R package ``brms" \citep{Burkner2018}. PMM's incorporate the phylogenetic relationship among species as a random effect, utilizing a variance-covariance matrix based on species relationships to account for the non-independence in the model residuals that can be explained by phylogeny. We also included species as an additional random effect to account for non-independence in the residuals than is not due to phylogeny, and included individual as a nested factor within this random intercept to account for the repeat observations over time. The categorical model was built on a Bernoulli likelihood distribution and the continuous model on a Gaussian distribution. For both models, we ran 4 chains with 4000 iterations and a warm-up of 3000 iterations each, resulting in 4000 total sampling iterations. All models used weakly informative priors on the intercept and error terms. Increasing priors three-fold did not impact the model estimates. As our primary goal was to directly compare the effects each predictor, we standardized these variables to allow for a reasonable comparison between them {\citep{Gelman2007}. \\
 
 %\noindent The three Harvard Forest models are detailed below:\\
@@ -148,12 +170,12 @@ For both the categorical and continuous Harvard forest models we used a Bayesian
 %\end{enumerate}
 \indent We calculated the marginal effects for the Harvard Forest continuous model using the R-package ``ggeffects" \citep{Ludecke2018}. Figure \ref{fig:apcs} shows the water dynamics effect of FLS given a flowering day of May 1 (close to the average flowering date for the whole community overtime). This same relationship between pollination syndrome and minimum precipitation remained evident across flowering dates from mid April-June. \\
 
-\noindent Though we make broad comparisons between the HF and MTSV/USFS case studies, differences in data structure between the datasets required us to use alternative modeling frameworks. The MTSV and USFS data provide one response variable for each species while the HF data contains intra-specific differences in FLS, providing several different response values per species. The current phylogenetic generalized linear model framework can only fit models with one response value per species, while the phylogenetic mixed model in brms may over-fit models with this kind of data structure (Paul Burkner, personal communication) and performs better on multi-response per species datasets like HF. We ran both model types on each case study and while they do yield different absolute estimates, the patterns we found were consistent across each framework, and we report results from the most accurate model for each dataset.\\
+\noindent Though we make broad comparisons between the HF and MTSV/USFS case studies, differences in data structure between the datasets required us to use alternative modeling frameworks. The MTSV and USFS data provide one response variable for each species while the HF data contains intra-specific differences in FLS, providing several different response values per species. The current phylogenetic generalized linear model framework can only fit models with one response value per species, while the phylogenetic mixed model in brms may over-fit models with this kind of data structure and performs better on multi-response per species datasets like HF \citep{BurknerPC}. We ran both model types on each case study and while they do yield different absolute estimates, the patterns we found were consistent across each framework, and we report results from the most accurate model for each dataset.\\
 
 \subsubsection*{Phylogenetic signals}
 For all categorical specifications of FLS (MTSV, USFS and HF), we assessed the phylogenetic structure of hysteranthous flowering in all  with Fritz's D-statistic \citep{FRITZ2010} using the ``Caper" package \citep{Orme2013} in R. Fritz's D calculates the sum of changes in estimated node values of a binary trait along edges in a phylogeny and compares this observed value to both a model of phylogenetic randomness and Brownian threshold model. The means of the two data simulations scale values of D to set points of 0 (as phylogenetically conserved) and 1 (random)  \citep{Orme2013}. We visualized the distribution of the traits across the tree for the MTSV and USFS datasets using the R package ``ggtree" \citep{Yu2017}.\\
 
-\noindent For the quantitative Harvard Forest model, we estimated the phylogenetic signal for FLS (lambda) directly from the PMM model. To estimate lambda, we fit an intercept-only model with the phylogeny covariance matrix as a random effect and obtained the intra-class correlation value which is the phylogenetic signal. We also estimated the phylogenetic signal from the full model which included all predictors, and in both cases the intra-class correlation in the residuals were high. Estimated phylogenetic signals from all case studies are reported below (Fig. \ref{fig:Dstat}).  % I can probabalby elaborate on this. 
+\noindent For the quantitative Harvard Forest model, we estimated the phylogenetic signal for FLS (lambda) directly from the PMM model. To estimate lambda, we fit an intercept-only model with the phylogeny covariance matrix as a random effect and obtained the intra-class correlation value which is the phylogenetic signal. We also estimated the phylogenetic signal from the full model which included all predictors, and in both cases the intra-class correlation in the residuals were high. Estimated phylogenetic signals from all case studies are reported in (Fig. \ref{fig:Dstat}).  % I can probabalby elaborate on this. 
   
   
 \clearpage

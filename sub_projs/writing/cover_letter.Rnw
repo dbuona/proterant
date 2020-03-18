@@ -1,5 +1,5 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[top=.75in, bottom=.1in, left=.75 in, right=.75in]{geometry}
+\documentclass[11.5 pt]{article}
+\usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{gensymb}
@@ -7,7 +7,7 @@
 %\address{1300 Centre Street \\ Boston, MA, 20131}
 %\end{footnotesize}
 \begin{document}
-\bibliographystyle{..//refs/styles/besjournals.bst}
+\bibliographystyle{..//refs/styles/newphyto.bst}
 \def\labelitemi{--}
 \parindent=24pt
 \includegraphics[width=0.2\textwidth]{/Users/danielbuonaiuto/Desktop/arb_logo.png}
@@ -23,7 +23,7 @@
 
 \noindent \emph{What hypotheses or questions does this work address?}\\
 % Nice opener!
-\noindent Research suggests FLSs are under strong selection and critical to fitness. FLS variation may be an adaptation for wind-pollination \citep{Rathcke_1985}, reducing water stress \citep{Gougherty2018,Reich1984}, or early season flowering \citep{Primack1987}, but these conflicting hypotheses remain unresolved. A novel approach focusing on intra-specific FLS variation and quantitative comparisons is necessary to accurately evaluate these hypotheses.\\
+\noindent Research suggests FLSs are under strong selection and critical to fitness. FLS variation may be an adaptation for wind-pollination \citep{Rathcke_1985}, reducing water stress \citep{Gougherty2018,Reich1984}, or early season flowering \citep{Primack1987} \ref{fig:conceptual}), but these conflicting hypotheses remain unresolved. A novel approach focusing on intra-specific FLS variation and quantitative comparisons is necessary to accurately evaluate these hypotheses.\\
 
 \noindent \emph{How does this work advance our current understanding of plant science?}\\
 \noindent We show: 1) The current framework fails to capture the inter- and intra- specific FLS variation in nature impeding robust hypothesis testing; 2) Variation provides novel insights about the function of FLSs, revealing complexities critical to advancing the hypotheses; 3) Leveraging intra-specific variation advances our understanding of FLSs.\\ % 'revealing consistencies and anomalies in support for the hypotheses' is a bit tricky to understand ... you could cut it, or replace with 'revealing complexities critical to advancing our understanding' or leave it.
@@ -31,19 +31,31 @@
 \noindent \emph{Why is this work important and timely?}\\
 \noindent We show that climate change is altering FLSs, but effects vary across species (0.8-4.7 days on average, Fig. \ref{fig:climchange}). Shifts could be beneficial or adverse, and predicting this outcome requires researchers to effectively evaluate the current hypotheses. Our framework is the first that can do this robustly, making it critical to fundamental and applied research.\\
 
-\noindent The main text of this manuscript is 3370 words in length, it contains (4)5 figures. It is co-authored by I. Morales-Castilla, and E.M. Wolkovich and is not under consideration elsewhere. We hope that you will find it suitable for publication in \textit{New Phytologist}, and look forward to hearing from you.
+\noindent The main text of this manuscript is 3464 words in length, it contains 5 figures. It is co-authored by I. Morales-Castilla, and E.M. Wolkovich and is not under consideration elsewhere. We hope that you will find it suitable for publication in \textit{New Phytologist}, and look forward to hearing from you.
 \\Sincerely,\\\\\\\\\\
 
 \noindent Daniel Buonaiuto\\
 \pagebreak
 \section*{Selected Figures:}
+
+\begin{figure}[h!]
+    \centering
+ %\includegraphics[width=\textwidth]{..//HarvardForest/concept_hystheranty_wide_text_overlaps.png} 
+    \caption{\textbf{Several hypotheses have been proposed to explain flower-leaf sequence (FLS) variation in temperate, deciduous woody plants.}  The wind pollination hypothesis \textbf{(a)} suggests that leafless flowering reduces barriers to pollen movement. The water dynamics hypothesis \textbf{(b)} suggests temporally separating flowering and leafing reduces hydraulic demand. The early flowering hypothesis \textbf{(c)} suggests FLS variation is a byproduct of selection for early flowering and has no inherent adaptive values itself. As depicted by the scale bars in the center of the figure, the biology behind each hypothesis predicts different degrees of functional overlap between flowering and leaf development. Transpiration intensifies as small leaf primorida expand, but the effect of leaf development only effects environmental structure once leaves are sufficiently large, therefore the water dynamics hypothesis accommodates little overlap between flower and leaves, while the wind pollination hypothesis encompasses some overlap. The early flowering hypothesis is concerned with absolute flowering time and predicts no fitness differences whether or not flowers and leaves overlap. Additionally, the patterns of FLS variation in the temperate zone may also be a product of phylogenetic conservatism or lability in this phenological trait \textbf{(d)}.}
+    \label{fig:conceptual}
+\end{figure}
+
    \begin{figure}[ht!]
    \centering
  \includegraphics[width=\textwidth]{..//PEP725/FLS_climate_change.jpeg}\\
 \caption{\textbf{FLSs across Europe for four tree species from 1960 to 2015 suggests climate change has generally increased the time between flowering and leafing}, but the direction and rate of change differs across species, which may exacerbate fitness differences within forest communities. To detect the effect of climate change on average FLS, we used models that allow for shifts in FLS after 1980. Lines represent the mean trend in FLS per species, and the highlighted regions indicate historic range of FLS variability (95\% credible intervals of the pre-1980 average) from the PEP725 database \citep{PEP725}.}
     \label{fig:climchange}
     \end{figure}
-\newpage
+    
+
+\clearpage
+
+
 \bibliography{..//refs/hyst_outline.bib}
 
 \end{document}
