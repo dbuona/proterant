@@ -12,9 +12,10 @@ library(lme4)
 library("lmerTest")
 library(RColorBrewer)
 library(ggstance)
-
+set.seed(613)
 HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
 #HF2<-read.csv("HarvardForest/hf003-06-mean-spp.csv",header=TRUE)
+load("fieldexamples")
 
 
 
@@ -30,10 +31,7 @@ weather$Month<-as.numeric(weather$Month)
 weather$Day<-as.numeric(weather$Day)
 
 unique(weather$Year)
-weather<-filter(weather,Year>=1989)
-
-#all_daylengths<-cbind(JDay=1:365,sapply(daylength(latitude=42.5,JDay=1:365),cbind)) ## calculate day length at HF on every day of year
-#ad<-as.data.frame(all_daylengths) ## data frame of day length
+weather<-filter(weather,Year>=1990)
 
 
 weather<-make_all_day_table(weather)
@@ -41,184 +39,288 @@ weather<-make_all_day_table(weather)
 hourtemps<-stack_hourly_temps(weather, latitude=42.5)$hourtemps ## make hourly
 hourtemps$DATE<-ISOdate(hourtemps$Year,hourtemps$Month,hourtemps$Day,hourtemps$Hour)
 
-
-HF.bb<-filter(HF,!is.na(bb.jd))
-indies<-unique(HF.bb$tree.id)
-df<-data.frame(Season=character(),End_year=numeric(),Season_days=numeric(),Data_days=numeric(), Perc_complete=numeric(),Chilling_Hours=numeric(),Utah_Model=numeric(),Chill_portions=numeric(), GDH=numeric(), tree.id=character(),species=character())
-
-
-for (i in seq_along(indies)){
-  dataoneplant<-filter(HF.bb,tree.id==indies[i])
-  burst<-dataoneplant$bb.jd
-for(k in c(1:length(burst))){ 
-  climatt<-as.data.frame(chilling(hourtemps,Start_JDay=1,End_JDay=burst[k]))
-  climatt$tree.id<-indies[i]
-  climatt$species<-unique(dataoneplant$species)}
-df<-rbind(climatt,df) }
-  
+979/1440
 
 
 
+  HF<-filter(HF,year<=2002)
+  HF$treeyear<-paste(HF$tree.id,HF$year)
+  HF$burst.flo<-ifelse(!is.na(HF$fopn.jd),HF$fopn.jd,365)
+  HF$burst.bb<-ifelse(!is.na(HF$bb.jd),HF$bb.jd,365)
 
-HF.flo<-filter(HF,!is.na(fopn.jd))
-indies2<-unique(HF.flo$tree.id)
-df2<-data.frame(Season=character(),End_year=numeric(),Season_days=numeric(),Data_days=numeric(), Perc_complete=numeric(),Chilling_Hours=numeric(),Utah_Model=numeric(),Chill_portions=numeric(), GDH=numeric(), tree.id=character(),species=character())
+yearios<-unique(HF$treeyear)
+df<-data.frame(year=numeric(),GDD.flo=numeric(),treeyear=character())
 
-for (i in seq_along(indies2)){
-  dataoneplant<-filter(HF.flo,tree.id==indies2[i])
-  burst<-dataoneplant$fopn.jd
-  for(k in c(1:length(burst))){ 
-    climatt<-as.data.frame(chilling(hourtemps,Start_JDay=1,End_JDay=burst[k]))
-    climatt$tree.id<-indies2[i]
-    climatt$species<-unique(dataoneplant$species)}
-  df2<-rbind(climatt,df2) }
+for(k in c(1:length(yearios))){
+gooby<-filter(HF,treeyear==yearios[k])  
+goo<-dplyr::filter(hourtemps,Year==gooby$year)  
+goo<-filter(goo,JDay<=gooby$burst.flo)
+y<-max(GDD(goo$Temp,summ=TRUE,Tbase=5))
+dfhere<-data.frame(year=gooby$year,GDD.flo=y,treeyear=gooby$treeyear)
+df<-rbind(df,dfhere)
+}
+HF.flo<-dplyr::select(HF,year,tree.id,burst.flo,treeyear)  
+df<-left_join(df,HF.flo)
 
-df<-select(df,Season,End_year,GDH,tree.id,species)
-df2<-select(df2,Season,End_year,GDH,tree.id,species)
+###now leaves
+df2<-data.frame(year=numeric(),GDD.bb=numeric(),treeyear=character())
 
-colnames(df)<-c("Season","End_year","GDH_bb","tree.id","species")
-colnames(df2)<-c("Season","End_year","GDH_fl","tree.id","species")
-daters<-left_join(df2,df)
+for(k in c(1:length(yearios))){
+  gooby<-filter(HF,treeyear==yearios[k])  
+  goo<-dplyr::filter(hourtemps,Year==gooby$year)  
+  goo<-filter(goo,JDay<=gooby$burst.bb)
+  y<-max(GDD(goo$Temp,summ=TRUE,Tbase=5))
+  dfhere2<-data.frame(year=gooby$year,GDD.bb=y,treeyear=gooby$treeyear)
+  df2<-rbind(df2,dfhere2)
 
-
-daters$GDH_diff<-daters$GDH_bb-daters$GDH_fl
-?separate()
-daters<-separate(daters,tree.id,c("Sp","tree.num"),sep="-")
-write.csv(daters,"GDH_diffs_HF.csv",row.names = FALSE)
-
-daters<-read.csv(file = "GDH_diffs_HF.csv",header=TRUE)
-
-sps<-c("FRAM", "ACSA","POTR", "QUVE" ,"QURU" ,"BEPO", "BEPA", "BELE" ,"BEAL" ,"AMSP", "ACRU")
-
-daters$GDD_diff<-daters$GDH_diff/24
-daters.hyst<-filter(daters,species %in% sps)
-ggplot(daters.hyst,aes(End_year,GDD_diff))+geom_point()+facet_grid(species~tree.num,scale="free")
-
-ggplot(daters.ser,aes(End_year,GDH_diff))+stat_summary(color="blue")+facet_wrap(~species,scale="free")
-
-
-ggplot(daters.ser,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_wrap(~species)
-
-ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species),position="dodge")+facet_grid(tree.num~species)
-
-ggplot(daters,aes(End_year,GDH_diff))+geom_bar(stat="identity",aes(fill=species))+facet_wrap(~species)
-
-fullrecords<-c("ACPE","ACRU","ACSA","QURU","BEAL","FAGR","FRAM")
-daters.fullrecords<-dplyr::filter(daters, species %in% c(fullrecords))
-
-get_prior(GDD_diff ~ as.factor(End_year)+(as.factor(End_year)|species),data=daters.fullrecords)
-
-daters.fullrecords$End_year<-as.factor(daters.fullrecords$End_year)
-mod.fullrec.gdd<-brm(GDH_diff ~ End_year+(End_year|species),
-             data=daters.fullrecords,iter=9000,warmup=8000, control = list(adapt_delta=0.99))
-
-modelhere<-mod.fullrec.gdd
-
-
-###try jsut one species
-betal<-filter(daters.fullrecords, species %in% c("BEAL"))
-mod.Betal<-brm(GDH_diff ~ End_year+(End_year|tree.num),
-                     data=betal,iter=9000,warmup=8000, control = list(adapt_delta=0.99))
-
-Acerub<-filter(daters.fullrecords, species %in% c("ACRU"))
-mod.Acru<-brm(GDH_diff ~ End_year,
-                     data=Acerub,iter=9000,warmup=8000, control = list(adapt_delta=0.99))
-
-Acepen<-filter(daters.fullrecords, species %in% c("ACPE"))
-mod.Acpe<-brm(GDH_diff ~ End_year+End_year:as.factor(tree.num),
-              data=Acepen,iter=9000,warmup=8000, control = list(adapt_delta=0.99))
-
-
-
-
-extract_coefs<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,0.25,0.75,0.975))),"year")
 }
 
+HF.bb<-dplyr::select(HF,year,tree.id,burst.bb,treeyear,species)  
+df2<-left_join(df2,HF.bb)
+
+dater<-left_join(df,df2)
+dater$GDD.diff<-dater$GDD.bb-dater$GDD.flo
+dater$FLS.diff<-dater$burst.bb-dater$burst.flo
+
+###remove the no flos
+dater<-filter(dater,burst.flo<365)
 
 
-beal<-extract_coefs(mod.Betal)
-acrb<-extract_coefs(mod.Acru)
+write.csv(dater,"GDH_diffs_HF.csv",row.names = FALSE)
 
-new.data.AR<-data.frame(End_year=rep(unique(Acerub$End_year)))#,tree.num=rep(unique(Acerub$tree.num),14))
-pred.day.AR<-predict(mod.Acru,newdata=new.data.AR,probs = c(0.1,0.9))
-checkpred.AR<-cbind(pred.day.AR,new.data.AR)
-
-pd<-position_dodge(width = 0.8)
-ggplot(checkpred.AR,aes(End_year,Estimate))+geom_point(position=pd,color="red")+geom_errorbar(aes(min=Q10,max=Q90),width=0,color="red",position=pd)
+#dater<-read.csv(file = "GDH_diffs_HF.csv",header=TRUE)
 
 
-tree1<-data.frame(year=1989:2002,FLSdiff=rnorm(14,20,8),GDD.diff=rnorm(14,130,5),tree.id="one")
-tree2<-data.frame(year=1989:2002,FLSdiff=rnorm(14,15,10),GDD.diff=rnorm(14,150,5),tree.id="two")
-tree3<-data.frame(year=1989:2002,FLSdiff=rnorm(14,15,4),GDD.diff=rnorm(14,160,5),tree.id="three")
 
-fake.trees<-rbind(tree1,tree2,tree3)
+####simlate field data- heat sums hypothesis
+
+Tb<-5
 
 
-scaleFactor <-max(fake.trees$FLSdiff)/ .max(fake.trees$GDD.diff)
+days<-1:150
 
-a<-ggplot()+stat_summary(aes(fake.trees$year,fake.trees$FLSdiff),color="darkgrey")+
-  stat_summary(aes(fake.trees$year,fake.trees$GDD.diff*scaleFactor),color="black")+
-  scale_y_continuous("Days between", sec.axis=sec_axis(~./scaleFactor, name="GDD between"))+
+rep<-1:20
+year<-1989:1999
+df<-data.frame(year=factor(),days=numeric(),GDD=numeric(),y=numeric(),tree.id=numeric())
+
+for (k in c(1:length(year))){
+  Temp<-rnorm(1,15,5)
+    thresh<-rnorm(1,100,3)
+    for (j in c(1:length(rep))){
+      threshhold<-rnorm(1,thresh,4)
+    for (i in c(1:length(days))){
+      y<-ifelse((Temp-Tb)*days[i]>=threshhold,days,NA)
+      dfhere<-data.frame(year=year[k],days=days[i],GDD=threshhold,y=y,tree.id=rep[j])
+      df<-rbind(df,dfhere)
+      df<-df[complete.cases(df),]
+      
+    }}}
+df<- df %>%group_by(tree.id,year,GDD) %>%dplyr::summarize(days=min(days))   
+
+
+scaleFactor <-0.1
+
+a<-ggplot()+geom_point(aes(df$year,df$days),color="#999999",size=.2)+
+  stat_summary(aes(df$year,df$days),color="#999999")+
+  geom_point(aes(df$year,df$GDD*scaleFactor),color="black",size=.2)+
+  stat_summary(aes(df$year,df$GDD*scaleFactor),color="black")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
   scale_x_discrete("year")+
-  theme_bw()+
+  ggthemes::theme_base()+
   theme(
-    axis.title.y.left=element_text(color="darkgrey"),
-    axis.text.y.left=element_text(color="darkgrey"),
+    axis.title.y.left=element_text(color="#999999"),
+    axis.text.y.left=element_text(color="#999999"),
     axis.title.y.right=element_text(color="black"),
     axis.text.y.right=element_text(color="black"))
-  
 
-tree1<-data.frame(year=1989:2002,FLSdiff=rnorm(14,20,8),GDD.diff=rnorm(14,130,89),tree.id="one")
-tree2<-data.frame(year=1989:2002,FLSdiff=rnorm(14,15,10),GDD.diff=rnorm(14,150,80),tree.id="two")
-tree3<-data.frame(year=1989:2002,FLSdiff=rnorm(14,15,4),GDD.diff=rnorm(14,160,100),tree.id="three")
 
-fake.trees2<-rbind(tree1,tree2,tree3)
+days<-1:200
 
-scaleFactor <-max(fake.trees2$FLSdiff)/max(fake.trees2$GDD.diff)
-b<-ggplot()+stat_summary(aes(fake.trees2$year,fake.trees2$FLSdiff),color="darkgrey")+
-  stat_summary(aes(fake.trees2$year,fake.trees2$GDD.diff*scaleFactor),color="black")+
-  scale_y_continuous("Days between", sec.axis=sec_axis(~./scaleFactor, name="GDD between"))+
+#####now when chilling changes the threshhold for gdd (chilling is latent )
+df2<-data.frame(year=factor(),days=numeric(),GDD=numeric(),y=numeric(),tree.id=numeric())
+
+for (k in c(1:length(year))){
+  Temp<-rnorm(1,15,5)
+  thresh<-rnorm(1,100,30)
+  for (j in c(1:length(rep))){
+    threshhold<-rnorm(1,thresh,4)
+    for (i in c(1:length(days))){
+      y<-ifelse((Temp-Tb)*days[i]>=threshhold,days,NA)
+      df2here<-data.frame(year=year[k],days=days[i],GDD=threshhold,y=y,tree.id=rep[j])
+      df2<-rbind(df2,df2here)
+      df2<-df2[complete.cases(df2),]
+      
+    }}}
+df2<- df2 %>%group_by(tree.id,year,GDD) %>%dplyr::summarize(days=min(days))   
+
+#scaleFactor <-mean(df2$days)/ mean(df2$GDD)
+
+b<-ggplot()+geom_point(aes(df2$year,df2$days),color="#999999",size=.2)+
+  stat_summary(aes(df2$year,df2$days),color="#999999")+
+  geom_point(aes(df2$year,df2$GDD*scaleFactor),color="black",size=.2)+
+  stat_summary(aes(df2$year,df2$GDD*scaleFactor),color="black")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
   scale_x_discrete("year")+
-  theme_bw()+
+  ggthemes::theme_base()+
   theme(
-    axis.title.y.left=element_text(color="darkgrey"),
-    axis.text.y.left=element_text(color="darkgrey"),
+    axis.title.y.left=element_text(color="#999999"),
+    axis.text.y.left=element_text(color="#999999"),
     axis.title.y.right=element_text(color="black"),
     axis.text.y.right=element_text(color="black"))
+
+
+
+
+
+
+
 
 
 concept<-ggpubr::ggarrange(a,b)
+setEPS()
+postscript("..//FLOBUDS/Plots/fieldexamples.eps", width=10, height=4)
+concept
+dev.off()
+
+
 
 ###real
-acerreal<-filter(HF,species=="ACRU")
-acerreal<-filter(acerreal,year<=2002)
-acerreal$FLS<-acerreal$bb.jd-acerreal$fopn.jd
+HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
+HF<-filter(HF,year<=2002)
+HF$FLS<-HF$bb.jd-HF$fopn.jd
+HF$year<-as.factor(HF$year)
+Acerub<-filter(dater,species=="ACRU")
 
-scaleFactor <-max(acerreal$FLS)/ max(Acerub$GDD_diff)
+scaleFactor <-.1
 
-c<-ggplot()+stat_summary(aes(as.factor(acerreal$year),acerreal$FLS),color="blue")+
-  stat_summary(aes(Acerub$End_year,Acerub$GDD_diff*scaleFactor),color="red")+
-  scale_y_continuous("Days between", sec.axis=sec_axis(~./scaleFactor, name="GDD between"))+
+c<-ggplot(Acerub)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),FLS.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
   scale_x_discrete("year")+
-  theme_bw()+
+  ggthemes::theme_base()+
   theme(
-    axis.title.y.left=element_text(color="blue"),
-    axis.text.y.left=element_text(color="blue"),
-    axis.title.y.right=element_text(color="red"),
-    axis.text.y.right=element_text(color="red"))
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))
 
-jpeg("..//FLOBUDS/Plots/hypothesis1_acerub.jpeg",height=6,width=6,units = "in",res=250)
-ggpubr::ggarrange(concept,c,nrow=2)
+
+
+jpeg("..//FLOBUDS/Plots/hypothesis1_acerub.jpeg",height=6,width=8,units = "in",res=250)
+ggpubr::ggarrange(concept,c,nrow=2,heights=c(.75,1))
 dev.off()  
 
-new.data.BA<-data.frame(End_year=rep(unique(betal$End_year)),tree.num=rep(unique(betal$tree.num),14))
-pred.day.BA<-predict(mod.Betal,newdata=new.data.BA,probs = c(0.1,0.9))
-checkpred.BA<-cbind(pred.day.BA,new.data.BA)
 
-ggplot(checkpred.BA,aes(End_year,Estimate))+geom_point(aes(),color="goldenrod1",position)+geom_errorbar(aes(min=Q10,max=Q90),width=0,color="goldenrod1")+facet_wrap(~as.factor(tree.num))
+####other species
+Acepen<-filter(dater,species=="ACPE")
 
-new.data.AP<-data.frame(End_year=rep(unique(Acepen$End_year)),tree.num=rep(unique(Acepen$tree.num),14))
-pred.day.AP<-predict(mod.Acpe,newdata=new.data.AP,probs = c(0.1,0.9))
-checkpred.AP<-cbind(pred.day.AP,new.data.AP)
 
-ggplot(checkpred.AP,aes(End_year,Estimate))+geom_point(aes(),color="darkgreen")+geom_errorbar(aes(min=Q10,max=Q90),width=0,color="darkgreen")
+
+acpe<-ggplot(Acepen)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),FLS.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
+  scale_x_discrete("year")+
+  ggthemes::theme_base()+
+  theme(
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))
+
+Qurub<-filter(dater,species=="QURU")
+
+
+quru<-ggplot(Qurub)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),FLS.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
+  scale_x_discrete("year")+
+  ggthemes::theme_base()+
+  theme(
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))
+
+
+Vaco<-filter(dater,species=="VACO")
+table(dater$species)
+
+vaco<-ggplot(Vaco)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),FLS.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
+  scale_x_discrete("year")+
+  ggthemes::theme_base()+
+  theme(
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))
+
+Bepo<-filter(dater,species=="BEPO")
+
+
+bepo<-ggplot(Bepo)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),FLS.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
+  scale_x_discrete("year")+
+  ggthemes::theme_base()+
+  theme(
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))
+
+
+Kala<-filter(dater,species=="KALA")
+
+
+kala<-ggplot(Kala)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),FLS.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
+  scale_x_discrete("year")+
+  ggthemes::theme_base()+
+  theme(
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))
+
+Sapu<-filter(dater,species=="SAPU")
+
+
+sapu<-ggplot(Sapu)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),FLS.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
+  scale_x_discrete("year")+
+  ggthemes::theme_base()+
+  theme(
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))
+
+setEPS()
+postscript("..//FLOBUDS/Plots/supp_field_sps.eps", width=10, height=11)
+
+
+
+
+ggpubr::ggarrange(acpe,quru,bepo,vaco,kala,sapu,nrow=3,ncol=2,labels = c("a","b","c","d","e","f"))
+dev.off()
+
+save.image("fieldexamples")
+

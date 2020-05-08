@@ -1,0 +1,317 @@
+﻿Species,Biomes,Growth form,Evergreen/Deciduous,πo (MPa),πtlp (MPa),ε (MPa),af,RWCtlp (%),total RWCtlp (%),LMA (g/m2),Reference
+Abies grandis,TemperateConifer,W,E,-2.11,-2.4,25.6,0.134,,,,Jackson & Spomer 1979
+Abronia maritima,Coastal,H,,-1.28,,,,,,,Whitfield 1932
+Acacia greggii,SemiDesert,W,E,-2.59,-4.25,,,74,,,Nilsen et al. 1984
+Acer campestre,Temperate,W,D,-1.5,-1.9,7.9,0.1,84,,95.2,Burghardt & Riederer 2003
+Acer rubrum,Temperate,W,D,-1.23,-1.45,6.4,,,87.8,38.7,Kubiske & Pregitzer 1997
+Adenostoma fasciculatum,Med/TempDry,W,E,-2.74,,,,,,231.7,Whitfield 1932
+Aegiphila lhotzkiana,TropicalDry,W,D,-1.05,-1.25,,,,,95.6,Hao et al. 2008
+Aegiphila sellowiana,TropicalDry,W,D,-1.08,-1.2,,,,,78.2,Hao et al. 2008
+Alberta magna,Temperate,W,E,-1.39,-1.97,8.08,0.45,,,,Scoffoni et al. 2008
+Alnus nepalensis,Temperate,W,D,-1.35,-1.62,7.58,,,83,,Shrestha et al. 2008
+Ambrosia psilostachya,Coastal,H,,-1.47,,,,,,,Whitfield 1932
+Amsinckia intermedia,Coastal,H,,-1.14,,,,,,,Whitfield 1932
+Anacardium nanum,TropicalDry,W,D,-1.36,-1.45,12.76,,,96.7,,Wenhui 1998
+Anadenanthera falcata,TropicalDry,W,D,-2.25,-2.6,26.1,,,89.9,,Wenhui 1998
+Andropogon glomeratus,Temperate,H,,-1.29,-1.52,,,,,,Bowman & Strain 1988
+Andropogon hallii,Coastal,H,,-1.18,-1.41,,,,,,Barnes 1985
+Annona coriacea,TropicalDry,W,E,-2.16,-2.35,23.71,,,92.5,149,Wenhui 1998
+Aporosa globifera,TropicalMoist,W,E,-1.15,-1.46,7.57,0.193,,,,Baltzer et al. 2008
+Aporosa microstachya,TropicalMoist,W,E,-1.49,-1.68,24.87,0.466,,,45.7,Baltzer et al. 2008
+Aporosa symplocoides,TropicalMoist,W,E,-1.15,-1.22,9.46,0.252,,,,Baltzer et al. 2008
+Arbutus unedo,Med/TempDry,W,E,-0.74,-0.98,7,,,92.3,159,Castell & Terradas 1995
+Arctostaphylos glauca,Med/TempDry,W,E,-2.74,,,,,,,Whitfield 1932
+Arctotheca populifolia,Coastal,W,E,-1.2,-1.31,,,,94.3,,Ripley & Pammenter 2004
+Artemisia californica,Coastal,W,E,-1.62,,,,,,95.5,Whitfield 1932
+Artemisia californica,Med/TempDry,W,E,-1.61,,,,,,95.5,Whitfield 1932
+Artemisia vulgaris,Coastal,H,,-1.33,,,,,,,Whitfield 1932
+Aspidosperma tomentosun,TropicalDry,W,E,-2.39,-2.88,20.94,,,88.2,141,Wenhui 1998
+Asplenium cuspidatum,TropicalMoist,F,E,-1.24,-1.37,35.3,,,94.1,,Hietz & Briones 1998
+Astronium graveolens,TropicalDry,W,D,-1.15,-2.07,,,,,58.9,Olivares & Medina 1992
+Atherosperma moschatum,Temperate,W,E,-1.34,-1.76,8.38,,,,137.2,Blackman et al. 2010
+Avicennia germinans,Mangrove,W,E,-2.62,-3.12,23.23,0.127,,,,"Suarez et al. 1998, Miller et al. 1975"
+Avicennia marina,Mangrove,W,,-4.17,,,,,,,Downton 1982
+Baccharis pilularis,Coastal,W,E,-1.58,,,,,,107.2,Whitfield 1932
+Bauhinia galpinii,Temperate,W,D,-1.15,-1.41,7.81,0.082,,,,"Bartlett et al. 2012, in revision"
+Bauhinia holophylla,TropicalDry,W,D,-1.52,-1.98,8.03,,,85.4,143,Wenhui 1998
+Bauhinia megalandra,TropicalDry,W,D,,,,,,,29.5,Olivares & Medina 1992
+Bauhinia variegata,TropicalDry,W,D,-1.54,-1.93,5.04,,,72,76.2,Shrestha et al. 2008
+Betula papyrifera,Temperate,W,D,-0.9,-1.33,3.64,,,72.9,68.6,Kubiske & Pregitzer 1997
+Bowdichia virgilioides,TropicalDry,W,E,-2.09,-2.5,18.25,,,82.5,168,Wenhui 1998
+Brassica campestris,Coastal,H,,-1.36,,,,,,,Whitfield 1932
+Bursaria spinosa,Med/TempDry,W,E,-2.24,-2.99,7.84,,,,132.1,Blackman et al. 2010
+Bursera simaruba,TropicalDry,W,D,-0.55,-0.69,,,,,65.3,Olivares & Medina 1992
+Byrsonima sericea,TropicalDry,W,E,-1.54,-2.03,9.45,,,,,Rosado & De Mattos 2010
+Camelia sasanqua,Temperate,W,E,-1.61,-2.12,7.71,0.232,,,,Scoffoni et al. 2011
+Campomanesia aromatica,TropicalDry,W,E,-2.31,-2.7,23.92,,,93.7,149,Wenhui 1998
+Campomanesia sp.,TropicalDry,W,,-2.63,-3,27.96,,,90,,Wenhui 1998
+Capparis aristiquetae,TropicalDry,W,E,-2.83,-3.28,15.95,0.13,,,144.9,Sobrado 1986
+Capparis flexuosa,TropicalDry,W,E,-2.28,-3.79,,,,,89.1,Olivares & Medina 1992
+Capparis verrucosa,TropicalDry,W,E,-2.97,-3.65,14.4,0.226,,,112.4,Sobrado 1986
+Caragana korshinskii,SemiDesert,W,E,-2.07,,,0.275,,,,Ma et al. 2008
+Caragana microphylla,SemiDesert,W,E,-1.15,,,0.207,,,,Ma et al. 2008
+Caragana roborovskyi,SemiDesert,W,E,-2.74,,,0.236,,,,Ma et al. 2008
+Caragana stenophylla,SemiDesert,W,E,-1.88,,,0.335,,,,Ma et al. 2008
+Caragana tibetica,SemiDesert,W,E,-2.41,,,0.259,,,,Ma et al. 2008
+Carmichaelia compacta,SemiDesert,W,E,-1,,6.79,,,,,Kissel et al. 1987
+Caryocar brasiliense,TropicalDry,W,E,-1.71,-2.2,11.34,,,84.8,118,Wenhui 1998
+Casearia sylvestris,TropicalDry,W,E,-2.46,-2.73,26.27,,,90.7,62.8,Wenhui 1998
+Ceanothus crassifolius,Med/TempDry,W,E,-2.73,,,,,,,Whitfield 1932
+Ceanothus spinosus,Med/TempDry,W,E,-2.28,,,,,,,Whitfield 1932
+Ceanothus spinosus,Med/TempDry,W,E,-1.47,,,,,,,Whitfield 1932
+Celtis australis,Med/TempDry,W,D,-1.58,-2.01,5.18,,,70,,Shrestha et al. 2008
+Ceratonia siliqua,Med/TempDry,W,E,-1.7,-1.82,29.61,0.253,,89.9,199.6,"Lo Gullo & Salleo 1988, Correia et al. 2001"
+Cerocarpus betuloides,Med/TempDry,W,E,-1.64,-2.59,10.96,0.59,,,137.4,Scoffoni et al. 2011
+Chilopsis linearis,SemiDesert,W,E,-1.78,-2.85,,,78,,234.4,Nilsen et al. 1984
+Cirsium californicum,Med/TempDry,H,,-0.89,,,,,,,Whitfield 1932
+Coccoloba uvifera,Mangrove,W,E,-1.6,-1,5.03,,,,,Rada et al. 1989
+Coffea arabica,TropicalMoist,W,,-1.48,-1.82,,,,,,Meinzer et al. 1990
+Comarostaphylis diversifolia,Med/TempDry,W,E,-2.24,-2.6,34.11,0.466,,,,Scoffoni et al. 2011
+Connarus suberosus,TropicalDry,W,E,-2.25,-2.63,18.01,,,91.7,149,Wenhui 1998
+Conocarpus erectus,Mangrove,W,E,-1.52,-1.94,6.83,,,,,Rada et al. 1989
+Convolvulus soldanella,Coastal,H,,-1.14,,,,,,,Whitfield 1932
+Coprosma nitida,Temperate,W,E,-1.48,-2.1,9.46,,,,174.7,Blackman et al. 2010
+Coprosma propinqua,SemiDesert,W,E,-1.92,,14.84,,,,,Kissel et al. 1987
+Cordia alliodora,TropicalMoist,W,D,-1.76,-1.97,13.05,,,91.3,,Choat et al. 2007
+Cordia collococca,TropicalMoist,W,D,-1.8,-2.09,9.01,,,86,,Choat et al. 2007
+Cordia cymosa,TropicalMoist,W,E,-1.34,-1.5,11.13,,,93,,Choat et al. 2007
+Cordia dentata,TropicalMoist,W,D,-1.88,-2.14,11.86,,,89,,Choat et al. 2007
+Cordia lasiocalyx,TropicalMoist,W,E,-1.48,-1.63,11.96,,,91,,Choat et al. 2007
+Cordia lucidula,TropicalMoist,W,E,-1.29,-1.4,10.46,,,92,,Choat et al. 2007
+Cordia panamensis,TropicalMoist,W,E,-1.79,-2,12.46,,,90,,Choat et al. 2007
+Cotoneaster bacillaris,Temperate,W,E,-2.34,-3.35,16.72,,,86,,Shrestha et al. 2008
+Crossopteryx febrifuga,TropicalDry,W,D,-1.44,-1.73,11.48,,,87,,Le Roux & Bariac 1998
+Cussonia barteria,TropicalDry,W,D,-1,-1.37,3.83,,,89.7,,Le Roux & Bariac 1998
+Cyathodes straminea,Temperate,W,E,-1.6,-2.02,6.62,,,,199.5,Blackman et al. 2010
+Cytisus scoparius,Temperate,W,D,-0.72,,5.92,,,,61.7,Kissel et al. 1987
+Dendrobium crumenatem,TropicalMoist,H,,-0.55,-0.64,16.2,0.19,85,,,Sinclair 1983
+Dendrobium tortile,TropicalMoist,H,,-0.69,-0.82,19.4,0.43,84.2,,,Sinclair 1983
+Dendromecon rigidum,Med/TempDry,W,E,-1.67,,,,,,,Whitfield 1932
+Didymopanax vinosum,TropicalDry,W,E,-1.95,-2.35,14.81,,,84,148,Wenhui 1998
+Diospyros sp.,TropicalDry,W,,-2.11,-2.45,14.65,,,91.4,,Wenhui 1998
+Dugetia furfuracea,TropicalDry,W,E,-2.89,-3.33,44.72,,,96.8,167,Wenhui 1998
+Echinocystis fabaceae,Med/TempDry,H,,-0.98,,,,,,,Whitfield 1932
+Elaphoglossum glaucum,TropicalMoist,F,E,-1.34,-1.41,49.9,,,95.6,,Hietz & Briones 1998
+Elaphoglossum petiolatum,TropicalMoist,F,E,-1.51,-1.58,48,,,94.9,,Hietz & Briones 1998
+Encelia farinosa,SemiDesert,W,E,-1.67,-2.63,13.5,,75,,,Nilsen et al. 1984 and Hunt & Nobel 1987 for the e value
+Eria velutina,TropicalMoist,H,,-0.35,-0.43,8.7,0.09,82.1,,,Sinclair 1983
+Erioteca gracilipes,TropicalDry,W,D,-2.1,-2.75,17.73,,,89.4,,Wenhui 1998
+Erythroxylon cumanensis,TropicalDry,W,D,-2.11,-3.02,,,,,,Olivares & Medina 1992
+Erythroxylon densum,TropicalDry,W,D,-2.07,-2.94,,,,,75.9,Olivares & Medina 1992
+Erythroxylon orinocense,TropicalDry,W,D,-1.08,-1.64,,,,,,Olivares & Medina 1992
+Erythroxylum ovalifolium,TropicalDry,W,E,-1.77,-2.31,8.98,,,,,Rosado & De Mattos 2010
+Erythroxylum sp.,TropicalDry,W,,-2.35,-2.85,21.93,,,88.4,,Wenhui 1998
+Erythroxylum suberosum,TropicalDry,W,D,-2.12,-2.6,20.07,,,87.6,,Wenhui 1998
+Eschscholtzia californica,Coastal,H,,-1.55,,,,,,,Whitfield 1932
+Eucaluptus argophloia,Temperate,W,E,-1.77,-2.23,18.71,0.516,,89.9,,Ngugi et al. 2003
+Eucalyptus calmaldulensis,Temperate,W,E,-1.69,-2.01,14.35,,,86.4,38.5,"Lemcoff et al. 2002, White et al. 2000, Merchant et al. 2007"
+Eucalyptus cladocalyx,Temperate,W,E,-1.51,-1.84,3.68,,,81.7,42.5,Merchant et al. 2007
+Eucalyptus cloeziana,Temperate,W,E,-1.61,-2.11,10.18,0.095,,73.8,,Ngugi et al. 2003
+Eucalyptus coccifera,Temperate,W,E,-1.92,-2.34,23.11,,,,253.4,Blackman et al. 2010
+Eucalyptus erythrocorys,Med/TempDry,W,E,-1.67,-2.24,21.5,0.632,,,,Scoffoni et al. 2008
+Eucalyptus globulus,Temperate,W,E,-1.39,-1.64,16.34,0.17,,,82.6,Guarnaschelli et al. 2006
+Eucalyptus leucoxylon,Temperate,W,E,-3.2,-3.81,23.6,,,82,,White et al. 2000
+Eucalyptus obliqua,Temperate,W,E,-1.19,-1.34,7.26,,,86.9,403,Merchant et al. 2007
+Eucalyptus platypus,Med/TempDry,W,E,-2.48,-3.07,21.2,,,87,,White et al. 2000
+Eucalyptus polyanthemos,Temperate,W,E,-1.39,-1.69,4.25,,,79.7,30.4,Merchant et al. 2007
+Eucalyptus pulchella,Med/TempDry,W,E,-2.04,-2.4,19.32,,,,217.8,Blackman et al. 2010
+Eucalyptus rubida,Temperate,W,E,-1,-1.13,7.08,,,83.9,54.2,Merchant et al. 2007
+Eucalyptus saligna,Temperate,W,E,-1.95,-2.45,17,,,85,,White et al. 2000
+Eucalyptus tricarpa,Temperate,W,E,-1.56,-1.98,4.62,,,81.1,30.5,Merchant et al. 2007
+Eugenia casearioides,TropicalDry,W,E,-2.87,-4,,,,,,Olivares & Medina 1992
+Eugenia umbelliflora,TropicalDry,W,E,-1.66,-2.01,10.65,,,,,Rosado & De Mattos 2010
+Fagus sylvatica,Temperate,W,D,-1.72,-2.17,11.89,0.25,86.6,,60.6,"Burghardt & Riederer 2003, Arand et al. 1996"
+Ferocactus acanthodes,SemiDesert,H but stem succulent: barrel cactus,,,,8.7,,,,,Hunt & Nobel 1987
+Ficus auriculata,TropicalMoist,W,D,,-0.86,,,,,67.4,Hao et al. 2010
+Ficus bejamina,TropicalMoist,W,D,,-1.65,,,,,99.2,Hao et al. 2010
+Ficus concinna,TropicalMoist,W,D,,-2.32,,,,,87.3,Hao et al. 2010
+Ficus curtipes,TropicalMoist,W,E,,-1.47,,,,,154.7,Hao et al. 2010
+Ficus esquiroliana,TropicalMoist,W,E,,-1.15,,,,,48.7,Hao et al. 2010
+Ficus hispida,TropicalMoist,W,E,,-1.23,,,,,93.6,Hao et al. 2010
+Ficus racemosa,TropicalMoist,W,E,,-1.44,,,,,50.2,Hao et al. 2010
+Ficus religosa,TropicalMoist,W,D,,-1.69,,,,,85.2,Hao et al. 2010
+Ficus semicordata,TropicalMoist,W,E,,-1.52,,,,,80.6,Hao et al. 2010
+Ficus tinctoria,TropicalMoist,W,D,,-1.82,,,,,83.1,Hao et al. 2010
+Fragaria sp. ,Crop,H,,-0.46,-1.27,3.91,,,,,Reekie et al. 2007
+Franseria bipinnatifida,Coastal,H,,-1.11,,,,,,,Whitfield 1932
+Fraxinus pennsylvanica,Temperate,W,D,-1.8,-2.36,7.98,,,82.2,52.7,Abrams et al. 1990
+Gaultheria hispida,Temperate,W,E,-1.68,-2.08,14.86,,,,172.3,Blackman et al. 2010
+Geranium hortorum,Med/TempDry,H,,-0.73,-1.05,3.74,,,86.7,,Sanchez Blanco et al. 2009
+Gutierrezia sarothrae,Med/TempDry,W,E,-1.99,-2.51,9.68,0.212,,,295,Wan et al. 1993
+Hakea lissosperma,Temperate,W,E,-2.32,-2.66,27.43,,,,772.4,Blackman et al. 2010
+Hakea microcarpa,Med/TempDry,W,E,-3.36,-3.72,17.97,,,,628.1,Blackman et al. 2010
+Hakea psilorrhyncha,Med/TempDry,W,E,-0.94,-1.18,11.8,,,87.2,243.1,Groom & Lamont 1997
+Haplopappus squarrosus,Coastal,W,D,-1.76,,,,,,,Whitfield 1932
+Hedera canariensis,Temperate,W,E,-1.49,-1.91,12.81,0.433,,,,Scoffoni et al. 2008
+Hedera helix,Temperate,W,E,-1.8,-2.3,14.8,0.38,88,,53,Burghardt & Riederer 2003
+Helianthus annuus,Crop,H,,-0.96,-0.93,6.6,0.275,,,,"Chiementi & Hall 1994, Maury et al. 2000"
+Heteromeles arbutifolia,Med/TempDry,W,E,-2.35,-2.53,16.4,0.278,,,209.5,Whitfield 1932
+Heterotheca grandiflora,Coastal,H,,-1.1,,,,,,,Whitfield 1932
+Hilaria rigida,SemiDesert,H,,,,3.7,,,,,Hunt & Nobel 1987
+Humboltiella arborea,TropicalDry,W,D,-1.97,-2.46,7.34,0.17,,,209.5,Sobrado 1986
+Hymenaea martiana,TropicalDry,W,E,-2.03,-2.32,,,,,103.6,Hao et al. 2008
+Hymenaea stignocarpa,TropicalDry,W,E,-2.35,-2.64,,,,,145.2,Hao et al. 2008
+Hymenosporum flavum,TropicalMoist,W,E,-1.38,-2.06,5.88,0.361,,,,Scoffoni et al. 2008
+Hyparrhenia diplandra,TropicalDry,H,,-1.11,-1.55,6.47,,,88.2,,Le Roux & Bariac 1998
+Hyptis emoryi,SemiDesert,W,E,-1.04,-1.6,,,82,,,Nilsen et al. 1984
+Ilex aquifolium,Temperate,W,E,-2.3,-2.7,20.7,0.4,90.9,,67,Burghardt & Riederer 2003
+Ipomoea pes-caprae,Coastal,W,E,-1.5,-1.65,,,,89.4,,Ripley & Pammenter 2004
+Irvingia malayana,TropicalMoist,W,E,-1.69,-1.83,38.38,0.476,,,,Baltzer et al. 2008
+Kunzea ericoides,SemiDesert,W,E,-1.42,,3.56,,,,,Kissel et al. 1987
+Lagerstroemia indica,Temperate,W,D,-1.37,-1.85,5.56,,,76,,Shrestha et al. 2008
+Laguncularia racemosa,Mangrove,W,E,-2.7,,,,,,,Miller et al 1975
+Lantana camara,TropicalDry,W,E,-1.1,-1.37,4.85,0.227,,,,Scoffoni et al. 2011
+Larix decidua,TemperateConifer,W,D,-2.02,-2.67,48.75,,,93.3,92.6,Badalotti et al. 2000
+Larrea tridentata,SemiDesert,W,E,-2.78,-4,,,71,,173.8,Nilsen et al. 1984
+Laurus azorica,Med/TempDry,W,E,-2,-2.9,20.33,,,80,128.9,Gonzalez-Rodriguez et al. 1999
+Laurus nobilis,Med/TempDry,W,E,-2.25,-2.78,15.54,0.176,88,,81.3,"Lo Gullo & Salleo 1988, Maatallah et al. 2010"
+Ligustrum confusum,TropicalMoist,W,E,-2.14,-2.56,15.14,,,86,,Shrestha et al. 2008
+Lomatia polymorpha,Temperate,W,E,-1.6,-1.79,9.05,,,,292.8,Blackman et al. 2010
+Lomatia tinctoria,Med/TempDry,W,E,-2.24,-2.5,14.73,,,,177.3,Blackman et al. 2010
+Lonchocarpus dipteroneurus,TropicalDry,W,D,-1.84,-2.32,9.54,0.17,,,41.7,Sobrado 1986
+Lotus creticus,Coastal,H,,-1.19,,13.6,0.438,,,,Sanchez-Blanco et al. 1998
+Lupinus albus,Crop,H,,-0.74,-0.9,5.87,0.137,,,,Rodrigues et al. 1995
+Lupinus arboreus,Coastal,W,E,-1.21,,4.81,,,,,Kissel et al. 1987
+Lupinus arizonicus,SemiDesert,H,,-0.96,-1.25,,,,,,Forseth & Ehleringer 1982
+Lupinus chamissonis,Coastal,W,D,-1.58,,,,,,,Whitfield 1932
+Lycopersicon esculentum,Crop,H,,-0.83,-1.01,,,,,,Torrecillas et al. 1994
+Lycopersicon pennellii,Crop,H,,-0.73,-1.06,,,,,,Torrecillas et al. 1994
+Magnolia grandiflora,Temperate,W,E,-1.43,-2.06,9.14,0.156,,,156.4,Scoffoni et al. 2011
+Malacothrix tenuifolia,Coastal,H,,-1.05,,,,,,,Whitfield 1932
+Mallotus penangensis,TropicalMoist,W,E,-1.02,-1.15,27.57,0.566,,,,Baltzer et al. 2008
+Malvastrum rotundifolium,SemiDesert,H,,-2.12,-2.72,,,,,69.2,Forseth & Ehleringer 1982
+Manilkara subsericea,TropicalDry,W,E,-1.91,-2.33,10.79,,,,,Rosado & De Mattos 2010
+Mansoa verrucifera,TropicalDry,W,D,-2.23,-2.51,9.94,0.177,,,57.1,Sobrado 1986
+Marrubium vulgare,Med/TempDry,H,,-1.3,,,,,,,Whitfield 1932
+Maytenus obtusifolia,TropicalDry,W,E,-2.6,-3.08,19.06,,,,,Rosado & De Mattos 2010
+Memora axillaris,TropicalDry,W,E,-2.96,-3.35,25.28,,,95.9,,Wenhui 1998
+Miconia albicans,TropicalDry,W,E,-1.77,-2.48,10.34,,,87,153,Wenhui 1998
+Miconia cuspidata,TropicalDry,W,E,-2.23,-2.66,,,,,96.6,Hao et al. 2008
+Miconia ligustroides,TropicalDry,W,E,-2.03,-2.1,17.2,,,88.1,131,Wenhui 1998
+Miconia pohliana,TropicalDry,W,E,-1.42,-1.75,,,,,184.2,Hao et al. 2008
+Millettia atropurpurea,TropicalMoist,W,E,-1.01,-1.12,19.59,0.478,,,,Baltzer et al. 2008
+Morisonia americana,TropicalDry,W,E,-3.28,-4.08,13.9,0.161,,,147.1,Sobrado 1986
+Myrsine ferruginea,TropicalDry,W,E,-1.63,-1.79,,,,,86.9,Hao et al. 2008
+Myrsine guianensis,TropicalDry,W,E,-1.53,-1.76,,,,,194.1,Hao et al. 2008
+Myrsine parvifolia,TropicalDry,W,E,-1.94,-2.33,15.32,,,,,Rosado & De Mattos 2010
+Neoscortechenia kingii,TropicalMoist,W,E,-1.5,-1.71,7.57,0.383,,,,Baltzer et al. 2008
+Nicotiana tabacum,Crop,H,,-1.42,-0.97,4.53,,,,,Nardini et al. 2008
+Nothofagus cunninghamii,Temperate,W,E,-1.52,-2.07,9.73,,,,186.7,Blackman et al. 2010
+Nothofagus gunnii,Temperate,W,D,-1.44,-1.77,7.03,,,,102,Blackman et al. 2010
+Ocotea motata,TropicalDry,W,E,-2.01,-2.09,14.79,,,,,Rosado & De Mattos 2010
+Oenothera contorta,Coastal,H,,-1.2,,,,,,,Whitfield 1932
+Olea oleaster,Med/TempDry,W,E,-2,-2.5,19.51,,77,,,Lo Gullo & Salleo 1988
+Olearia hookeri,Temperate,W,E,-1.9,-2.27,8.78,,,,227.9,Blackman et al. 2010
+Olearia pinifolia,Med/TempDry,W,E,-1.58,-2.07,7.3,,,,314.1,Blackman et al. 2010
+Olneya tesota,SemiDesert,W,E,-2.3,-3.21,,,72,,,Nilsen et al. 1984
+Orites diversifolia,Temperate,W,E,-1.38,-1.82,9.05,,,,380.9,Blackman et al. 2010
+Oryza sativa,Crop,H,,-1.19,-1.41,,,,89.2,,"Bakul et al. 2011, Henson 1984"
+Paeonia brownii,Med/TempDry,H,,-1.86,,,,,,,Whitfield 1932
+Palaquium sumatranum,TropicalMoist,W,D,-1.66,-1.88,24.88,0.383,,,,Baltzer et al. 2008
+Parashorea densiflora,TropicalMoist,W,E,-1.7,-1.83,37.03,0.179,,,,Baltzer et al. 2008
+Pelliciera rhizophorae,Mangrove,W,E,-2.97,-3.45,,,,86.7,,Herppich & von Willert 1995
+Phacelia ramosissima,Med/TempDry,H,,-1.26,,,,,,,Whitfield 1932
+Phlebodium areolatum,TropicalMoist,F,E,-1.54,-1.69,27.6,,,92.6,,Hietz & Briones 1998
+Picea mariana,TemperateConifer,W,E,-1.61,-2.17,5.86,,,74.6,338.7,"Hietz & Briones 1998, Blake & Li 2003, Major & Johnsen 1999"
+Pinus banksiana,TemperateConifer,W,E,-1.1,-1.8,5.8,0.543,,,243.9,Blake & Li 2003
+Pinus cembra,TemperateConifer,W,E,-1.74,-2.34,20,,,87.4,,Badalotti et al. 2000
+Pinus ponderosa,TemperateConifer,W,E,-2.11,-2.91,12.18,0.162,,,315,Jackson & Spomer 1979
+Pinus resinosa,TemperateConifer,W,E,-1.53,-1.94,9.43,,86,,,Parker & Colombo 1995
+Piptocarpha rotundifolia,TropicalDry,W,E,-1.4,-1.75,10.86,,,89.8,160,Wenhui 1998
+Pisum sativum,Crop,H,,0,-2.13,,,,,,Sanchez et al. 2004
+Pittosporum bicolor,Temperate,W,E,-2.22,-2.65,15.81,,,,251.5,Blackman et al. 2010
+Platanus racemosa,Med/TempDry,W,D,-1.24,,,,,,,Whitfield 1932
+Platanus racemosa,Temperate,W,D,-1.54,-2.03,8.81,0.36,,,,Scoffoni et al. 2011
+Pleopeltis mexicana,TropicalMoist,F,E,-1.23,-1.35,41.4,,,95.3,,Hietz & Briones 1998
+Polypodium plebeium,TropicalMoist,F,E,-1.66,-1.77,60.3,,,94.9,,Hietz & Briones 1998
+Polypodium puberulum,TropicalMoist,F,E,-1.46,-1.61,25.6,,,90.9,,Hietz & Briones 1998
+Prosopis glandulosa,SemiDesert,W,D,-2.09,-4,,,70,,134.9,Nilsen et al. 1984
+Protium icicariba,TropicalDry,W,E,-2.32,-2.47,14.98,,,,,Rosado & De Mattos 2010
+Prunus ilicifolia,Med/TempDry,W,E,-3.27,,,,,,151.4,Whitfield 1932
+Prunus serotina,Temperate,W,D,-1.14,-1.42,10.65,,,90,35.9,Abrams et al. 1992
+Psuedotsuga menziesii,TemperateConifer,W,E,-2.37,-2.97,20.46,0.196,,81.9,64.8,"Abrams et al. 1992, Jackson & Spomer 1979, Joly & Zaerr 1987, Kubiske & Abrams 1991"
+Pyrrosia adnascens,TropicalMoist,F,E,-0.57,-0.64,25.6,0.17,89.9,,,Sinclair 1983
+Pyrrosia angusiata,TropicalMoist,F,E,-0.49,-0.54,25,0.25,91.1,,,Sinclair 1983
+Qualea dichotoma,TropicalDry,W,D,-2.36,-2.7,22.45,,,91.7,143,Wenhui 1998
+Qualea grandifolia,TropicalDry,W,D,-1.91,-2.2,17.54,,,90.1,,Wenhui 1998
+Quercus agrifolia,Med/TempDry,W,E,-2.46,-2.98,24.96,0.249,,,187.7,"Coercuera et al. 2002, Whitfield 1932, Bartlett et al. 2011"
+Quercus alba,Temperate,W,D,-1.62,-2.05,15.36,0.22,83.2,,78,Coercuera et al. 2002
+Quercus cerris,Temperate,W,D,-2.65,-3.58,21.59,0.09,75.2,,100.6,Coercuera et al. 2002
+Quercus chrysolepys,Med/TempDry,W,E,-2.58,-3.24,23.12,0.28,81.7,,,Coercuera et al. 2002
+Quercus coccifera,Med/TempDry,W,E,-2.37,-2.95,17.23,0.24,83.6,,140.3,"Castro-Diez & Navarro 2007, Coercuera et al. 2002"
+Quercus crispula,Temperate,W,D,-1.81,-2.19,23.22,,,88,,Saito & Terashima 2004
+Quercus dumosa,Med/TempDry,W,E,-2.79,,,,,,,Whitfield 1932
+Quercus faginea,Med/TempDry,W,D,-2.14,-2.67,14.53,0.19,83.8,,129.4,"Castro-Diez & Navarro 2007, Coercuera et al. 2002"
+Quercus frainetto,Temperate,W,D,-2.55,-3.42,21.74,0.11,75.9,,,Coercuera et al. 2002
+Quercus ilex,Med/TempDry,W,E,-2.39,-2.84,19.26,0.17,84.1,,225.9,"Castro-Diez & Navarro 2007, Coercuera et al. 2002"
+Quercus lanata,Temperate,W,E,-2.05,-2.7,10.05,,,80,,Shrestha et al. 2008
+Quercus laurifolia,Temperate,W,D,-1.95,-2.46,19.78,0.16,82.8,,126.6,Coercuera et al. 2002
+Quercus nigra,Temperate,W,D,-2.1,-2.81,21.01,0.23,80.1,,128.9,Coercuera et al. 2002
+Quercus petraea,Temperate,W,D,-1.72,-2.24,11.29,0.235,88,,74,"Burghardt & Riederer 2003, Aranda et al. 1996, Coercuera et al. 2002, Pardos et al. 2004"
+Quercus pyrenaica,Temperate,W,D,-2.07,-2.68,12.33,0.1,83.2,,98,"Aranda et al. 1996, Coercuera et al. 2002, Pardos et al. 2004"
+Quercus robur,Temperate,W,D,-2.31,-2.63,20.65,0.17,87.2,,68.2,Coercuera et al. 2002
+Quercus rubra,Temperate,W,D,-2.12,-2.53,21.67,0.08,84.4,,81.5,Coercuera et al. 2002
+Quercus semiserrata,TropicalMoist,W,E,-1.18,-1.42,34.05,0.748,,,,Baltzer et al. 2008
+Quercus serrata,Temperate,W,D,-1.66,-1.97,17.3,,,92,,Saito & Terashima 2004
+Quercus suber,Med/TempDry,W,E,-2.47,-3.08,22.03,0.21,82.2,,168.6,Coercuera et al. 2002
+Quercus velutina,Temperate,W,D,-2.09,-2.75,14.78,0.24,80.7,,105.2,Coercuera et al. 2002
+Raphiolepis indica,Temperate,W,E,-1.37,-2.07,11.53,0.686,,,,"Bartlett et al. 2012, in revision"
+Rhizophora mangle,Mangrove,W,E,-2.32,-2.89,9.65,,,,,Rada et al. 1989
+Rhus laurina,Med/TempDry,W,E,-1.72,,,,,,,Whitfield 1932
+Rhus ovata,Med/TempDry,W,E,-2.57,,,,,,,Whitfield 1932
+Ribes malvaceum,Med/TempDry,W,D,-1.87,,,,,,74.1,Whitfield 1932
+Ribes speciosum,Med/TempDry,W,D,-1.82,,,,,,,Whitfield 1932
+Richea scoparia,Temperate,W,E,-1.02,-1.53,9.32,,,,201.2,Blackman et al. 2010
+Rinorea anguifera,TropicalMoist,W,E,-1.39,-1.74,17.84,0.372,,,,Baltzer et al. 2008
+Rosa californica,Med/TempDry,W,D,-1.54,,,,,,,Whitfield 1932
+Rosa rubiginosa,Temperate,W,D,-1.34,,4.85,,,,,Kissel et al. 1987
+Roupala sp.,TropicalDry,W,,-2.46,-2.78,20.51,,,96.3,,Wenhui 1998
+Sabal palmetto,Med/TempDry,W,E,-3.4,-3.81,73.4,0.2,,90,,Holbrook & Sinclair 1992
+Salix arctica,Tundra,W,D,-1.2,-1.45,3.8,,,81.9,81,Dawson & Bliss 1989
+Salix arctica,Tundra,W,D,-1.31,-1.5,5.88,,,81.6,81,Dawson & Bliss 1989
+Salix lasiolepis,Coastal,W,D,-1.96,,,,,,,Whitfield 1932
+Salvia apiana,Med/TempDry,W,E,-1.24,,,,,,,Whitfield 1932
+Salvia canariensis,Med/TempDry,W,E,-0.92,-1.18,5.49,0.22,,,60.4,Scoffoni et al. 2011
+Salvia mellifera,Med/TempDry,W,E,-1.39,,,,,,,Whitfield 1932
+Salvia spathacea,Med/TempDry,H,,-1.45,,,,,,,Whitfield 1932
+Sambucus velutina,Med/TempDry,W,D,-1.26,,,,,,,Whitfield 1932
+Sapindus saponaria,TropicalDry,W,D,-1.58,-2.14,,,,,51.3,Olivares & Medina 1992
+Scaevola plumieri,Coastal,W,E,-1.5,-1.61,,,,91.3,,Ripley & Pammenter 2004
+Scrophularia californica,Med/TempDry,H,,-1.21,,,,,,,Whitfield 1932
+Secale cereale,Crop,H,,-1.31,,,,,,,Morant-Manceau et al. 2004
+Shorea guiso,TropicalMoist,W,E,-1.21,-1.38,32.43,0.5,,,,Baltzer et al. 2008
+Shorea lepidota,TropicalMoist,W,E,-1.21,-1.34,23.78,0.51,,,,Baltzer et al. 2008
+Shorea macroptera,TropicalMoist,W,E,-0.78,-0.93,25.14,0.703,,,,Baltzer et al. 2008
+Shorea parvifolia,TropicalMoist,W,E,-0.99,-1.1,17.57,0.252,,,,Baltzer et al. 2008
+Simmondsia chinensis,SemiDesert,W,E,-2.42,-3.95,,,73,,195,Nilsen et al. 1984
+Solanum douglasii,Coastal,H,,-1.02,,,,,,,Whitfield 1932
+Solanum douglasii,Med/TempDry,H,,-1.28,,,,,,,Whitfield 1932
+Solanum lycocarpum,TropicalDry,W,E,-1.23,-1.98,14.4,,,87.4,,Wenhui 1998
+Stryphnodendron barbadetimao,TropicalDry,W,D,-2.2,-2.55,25.68,,,84.5,,Wenhui 1998
+Stryphnodendron obovatum,TropicalDry,W,D,-1.99,-2.5,14.44,,,84.6,,Wenhui 1998
+Styrax camporum,TropicalDry,W,E,-2.65,-2.9,29.47,,,94.3,210,Wenhui 1998
+Styrax ferrugineus,TropicalDry,W,E,-2.12,-2.49,19.66,,,,176.1,Hao et al. 2008
+Styrax pohlii,TropicalDry,W,D,-2.07,-2.46,,,,,122.2,Hao et al. 2008
+Sueda depressa,Coastal,H,,-2.25,,,,,,,Whitfield 1932
+Symplocos lanceolata,TropicalDry,W,E,-1.29,-1.45,,,,,145.2,Hao et al. 2008
+Symplocos mosenii,TropicalDry,W,E,-1.68,-1.95,,,,,122.9,Hao et al. 2008
+Tabebuia chrysantha,TropicalDry,W,D,-0.99,-1.49,,,,,44.7,Olivares & Medina 1992
+Tasmannia lanceolata,Temperate,W,E,-1.48,-1.79,11.62,,,,212,Blackman et al. 2010
+Telopea truncata,Temperate,W,E,-1.82,-2.46,12.7,,,,243.3,Blackman et al. 2010
+Ternstroemia brasiliensis,TropicalDry,W,E,-1.55,-1.88,9.27,,,,,Rosado & De Mattos 2010
+Thuja plicata,TemperateConifer,W,E,-1.48,-1.94,12.6,0.272,,,,Jackson & Spomer 1979
+Thymus vulgaris,Med/TempDry,W,E,-0.88,,6.75,,,,79.4,Kissel et al. 1987
+Tibouchina stenocarpa,TropicalDry,W,D,-1.32,-1.69,9.38,,,90,136,Wenhui 1998
+Tocoyena formosa,TropicalDry,W,D,-2.38,-2.8,20.83,,,88.8,158,Wenhui 1998
+Trichostema lanatum,Med/TempDry,W,E,-1.49,,,,,,,Whitfield 1932
+Triticum dicoccum,Crop,H,,-1.12,,,,,,,Morant-Manceau et al. 2004
+Umbellularia californica,Med/TempDry,W,E,-2.69,,,,,,131.8,Whitfield 1932
+Vatica bella,TropicalMoist,W,E,-1.03,-1.16,9.19,0.321,,,,Baltzer et al. 2008
+Vatica odorata,TropicalMoist,W,D,-1,-1.27,20.27,0.779,,,,Baltzer et al. 2008
+Venegasia carpesioides,Med/TempDry,H,,-0.99,,,,,,,Whitfield 1932
+Viburnum rigidum,Temperate,W,E,-1.86,-2.9,12.79,,76,,142.5,Gonzalez-Rodriguez et al. 1999
+Vitis vinifera,Crop,W,D,-1.29,-1.59,7.67,,,,63.1,Alsina et al. 2007
+Woodfordia fruticosa,TropicalDry,W,E,-1.7,-2.17,6.55,,,76,49.3,Shrestha et al. 2008
+Xanthophyllum affine,TropicalMoist,W,E,-1.59,-1.8,26.76,0.414,,,,Baltzer et al. 2008
+Zea mays,Crop,H,,-0.76,-1.13,4.4,,,,,Sobrado 1986
+Ziziphus mauritiana,TropicalDry,W,E,-1.52,,6.2,0.077,,,,Clifford et al 1998

@@ -65,12 +65,22 @@ hourtemps$DATE<-ISOdate(hourtemps$Year,hourtemps$Month,hourtemps$Day,hourtemps$H
 
 climatt<-as.data.frame(chilling(hourtemps,Start_JDay=365-31-30-15,End_JDay=31+28+31+15)) ##Oct 15-April 15
 
-envtoreal<-data.frame(UtahEst=c(mean(climatt$Utah_Model),chillref$Utah_Model,chillrefshort$Utah_Model),
-                      CpEst=c(mean(climatt$Chill_portions),chillref$Chill_portions,chillrefshort$Chill_portions),
+envtoreal<-data.frame(UtahEst=c(paste(mean(climatt$Utah_Model),((sd(climatt$Utah_Model))),sep=","),chillref$Utah_Model,chillrefshort$Utah_Model),
+                      CpEst=c(paste(mean(climatt$Chill_portions),sd(cllimate),chillref$Chill_portions,chillrefshort$Chill_portions),
                       ChEst=c(mean(climatt$Chilling_Hours),chillref$Chilling_Hours,chillrefshort$Chilling_Hours),
            treatment=c("HFaverage Oct 15-April 15","60 days chamber","30 days chamber"))
 
-a<-ggplot(envtoreal,aes(treatment,UtahEst))+geom_bar(stat="identity",fill="purple")+theme_minimal()
-b<-ggplot(envtoreal,aes(treatment,CpEst))+geom_bar(stat="identity",fill="darkgreen")+theme_minimal()
-c<-ggplot(envtoreal,aes(treatment,ChEst))+geom_bar(stat="identity",fill="royalblue")+theme_minimal()
-ggpubr::ggarrange(a,b,c)
+
+able<-data.frame(Estimate=c("Utah Model","Chill Hours", "Dynamic Model"),
+Havard_Forest=c(mean(climatt$Utah_Model),mean(climatt$Chilling_Hours),mean(climatt$Chill_portions)),
+sd=c(sd(climatt$Utah_Model),sd(climatt$Chilling_Hours),sd(climatt$Chill_portions)),
+Chamber_30_days=c(chillrefshort$Utah_Model,chillrefshort$Chilling_Hours,chillrefshort$Chill_portions),
+Chamber_60_days=c(chillref$Utah_Model,chillref$Chilling_Hours,chillref$Chill_portions))
+
+is.num <- sapply(able, is.numeric)
+able[is.num] <- lapply(able[is.num], round, 2)
+
+write.csv(able,"..//FLOBUDS/input/expfieldcomparisontable.csv",row.names = TRUE)
+
+           
+

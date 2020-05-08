@@ -22,7 +22,7 @@ library("phylolm")
 library(ggstance)
 library(tibble)
 library(dplyr)
-#load("MTSVUSFS.mods")
+load("MTSVUSFS.mods")
 
 mich.data<-read.csv("michdata_final.csv")
 mich.tre<-read.tree("michtre_final.tre")
@@ -134,13 +134,14 @@ comps$trait[which(comps$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowe
 comps$trait[which(comps$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 
 
-jpeg("MTSV.USFS.jpeg",width = 8, height = 4, units = 'in', res=200)
+#jpeg("MTSV.USFS.jpeg",width = 8, height = 4, units = 'in', res=300)
+tiff("MTSV.USFS.tiff",width = 8, height = 4, units = 'in', res=300)
 pd=position_dodgev(height=0.4)
 comps %>%
   arrange(estimate) %>%
   mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(estimate,trait))+geom_point(aes(shape=class,color=data),position=pd,size=3)+
-  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0,size=1)+
+  geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0,size=.5)+
  scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,9)+
   scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")
   

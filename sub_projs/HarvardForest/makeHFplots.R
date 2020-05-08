@@ -22,7 +22,7 @@ HF$name[HF$species=="ACSA"]<-"A. saccharrum"
 HF$name[HF$species=="AMSP"]<-"Amelanchier spp."
 HF$name[HF$species=="BEAL"]<-"B. allegheniensis"
 HF$name[HF$species=="BELE"]<-"B. lenta"
-HF$name[HF$species=="BEPA"]<-"*B. papyrifera"
+HF$name[HF$species=="BEPA"]<-"B. papyrifera"
 HF$name[HF$species=="BEPO"]<-"B. populifolia"
 HF$name[HF$species=="FAGR"]<-"F. grandifolia"
 HF$name[HF$species=="FRAM"]<-"F. americana"
@@ -34,7 +34,7 @@ HF$name[HF$species=="NYSY"]<-"N. sylvatica"
 HF$name[HF$species=="POTR"]<-"P. tremuloides"
 HF$name[HF$species=="PRSE"]<-"P. serotina"
 HF$name[HF$species=="QURU"]<-"Q. rubra"
-HF$name[HF$species=="QUVE"]<-"*Q. velutina"
+HF$name[HF$species=="QUVE"]<-"Q. velutina"
 HF$name[HF$species=="VACO"]<-"V. corymbosum"
 HF$name[HF$species=="SAPU"]<-"S. racemosa"
 HF$name[HF$species=="VICA"]<-"V. cassinoides"
@@ -52,13 +52,13 @@ HFshort<-dplyr::filter(HF2,name %in% c("A. rubrum","F. americana","Q. rubra","A.
 
 
 #jpeg("HarvardForest/HFmeans_expanded.jpeg",width = 8, height = 6, units = 'in', res=300)
-dater<-data_frame(name=rep(unique(HFshort$name),each=2),FLS=rep(c("first","second"),6),Phenophase=rep(c("flower","leaf"),6))
+#dater<-data_frame(name=rep(unique(HFshort$name),each=2),FLS=rep(c("first","second"),6),Phenophase=rep(c("flower","leaf"),6))
 
-#a<-ggplot()+ annotate("text", x = 5, y = 25, label = "Flowers before leaves",size=5,fontface=2)+
- # annotate("text", x = 5, y = 24.9, label = "A. rubrum",size=3,fontface=3 )+
-#  annotate("text", x = 5, y = 24.85, label = "F. americana",size=3,fontface=3 )+
-##  annotate("text", x = 5, y = 24.5, label = "Flowers with leaves",size=5,fontface=2)+
-#  annotate("text", x = 5, y = 24.4, label = "A. pensylvanicum",size=3,fontface=3 )+
+#ggplot()+ annotate("text", x = 5, y = 25, label = "Flowers before leaves",size=5,fontface=2)+
+ #annotate("text", x = 5, y = 24.9, label = "A. rubrum",size=3,fontface=3 )+
+ #annotate("text", x = 5, y = 24.85, label = "F. americana",size=3,fontface=3 )+
+#  annotate("text", x = 5, y = 24.5, label = "Flowers with leaves",size=5,fontface=2)+
+# annotate("text", x = 5, y = 24.4, label = "A. pensylvanicum",size=3,fontface=3 )+
 #  annotate("text", x = 5, y = 24.35, label = "Q. rubra",size=3,fontface=3 )+
 #  annotate("text", x = 5, y = 24, label = "Flowers after leaves",size=5,fontface=2)+
 #annotate("text", x = 5, y = 23.9, label = "N. sylvatica" ,size=3,fontface=3 )+
@@ -119,10 +119,14 @@ b<-ggplot(short,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,c
 
 ggpubr::ggarrange(a,b,ncol=2,widths=c(1.8,2))
 
-jpeg("HarvardForest/FLS_viz.jpeg",width = 6, height = 7, units = 'in',res=350)
+#jpeg("HarvardForest/FLS_viz.jpeg",width = 6, height = 7, units = 'in',res=350)
+tiff("HarvardForest/FLS_viz.tiff",width = 6, height = 7, units = 'in',res=350)
 ggpubr::ggarrange(a,b,nrow=2,heights=c(2.2,2))
 
 dev.off()
 
+tiff("HarvardForest/HFmeans_expanded.tiff",width = 8, height = 6, units = 'in', res=300)
+ggplot(HF2,(aes(name,DOY)))+stat_summary(aes(shape=Phenophase,color=Phenophase))+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_linedraw()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(face="italic",angle=300,hjust = 0.1))
+dev.off()
 
 #jpeg("HarvardForest/HF_Q_ru_interannual.jpeg",width = 8, height = 6, units = 'in', res=350)

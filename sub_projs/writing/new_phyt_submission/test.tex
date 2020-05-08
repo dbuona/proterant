@@ -1,0 +1,53 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%START PREAMBLE THAT IS THE SAME FOR ALL EXAMPLES
+\documentclass{article}
+
+%Required: You must have these
+\usepackage{Sweave}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{authblk}
+\usepackage{gensymb}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+%you'll want these for pretty captioning
+\usepackage[small]{caption}
+
+\setkeys{Gin}{width=0.8\textwidth} %make the figs 50 perc textwidth
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+% manual for caption http://www.dd.chalmers.se/latex/Docs/PDF/caption.pdf
+
+%Optional: I like to muck with my margins and spacing in ways that LaTeX frowns on
+%Here's how to do that
+ \topmargin -1.5cm 
+ \oddsidemargin -0.04cm 
+ \evensidemargin -0.04cm % same as oddsidemargin but for left-hand pages
+ \textwidth 16.59cm
+ \textheight 21.94cm 
+ %\pagestyle{empty} % Uncomment if don't want page numbers
+ \parskip 7.2pt  % sets spacing between paragraphs
+\renewcommand{\baselinestretch}{1.5} 	% Uncomment for 1.5 spacing between lines
+\parindent 0pt% sets leading space for paragraphs
+\usepackage{setspace}
+\usepackage{lineno}
+
+%cross referencing:
+\usepackage{xr}
+
+%\usepackage{zref-xr}
+%\zxrsetup{toltxlabel=true, tozreflabel=false}
+%\zexternaldocument*{budburst_supp}
+
+% line numbers for letter
+
+%3510 words
+\begin{document}
+\linenumbers
+l
+\noindent Long-term data also highlight high within-species variability in FLSs. Despite recent advances in understanding the physiology and evolution of FLSs, most research has not addressed this variability\linelabel{lne:foo1}---potentially slowing progress in predicting how FLS patterns will respond to climate change.\\
+\end{document}

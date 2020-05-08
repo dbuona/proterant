@@ -1,0 +1,454 @@
+\documentclass[11pt]{article}
+\renewcommand{\baselinestretch}{1.8}
+\usepackage{textcomp}
+\usepackage{fontenc}
+\usepackage{graphicx}
+\usepackage{caption} % for Fig. captions
+\usepackage{gensymb} % for \degree
+\usepackage{placeins} % for \images
+\usepackage[margin=1in]{geometry} % to set margins
+\usepackage{setspace}
+\usepackage{lineno}
+%\usepackage{cite}
+\usepackage{amssymb} % for math symbols
+\usepackage{amsmath} % for aligning equations
+\usepackage[sort&compress]{natbib}
+%\bibliographystyle{..//refs/styles/newphyto.bst}
+\usepackage{xr-hyper}
+\externaldocument{reconciling_FLS_SUPP_wbbl}
+
+
+% line numbers for letter
+% line numbers for letter
+
+
+\title{Reconciling competing hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology}
+\date{}
+\author{D.M. Buonaiuto $^{1,2,a}$, I. Morales-Castilla$^{3}$, E.M. Wolkovich$^{4}$}
+
+%3510 words
+\begin{document}
+\maketitle
+\linenumbers
+\noindent \emph{Author affiliations:}\\
+\noindent $^1$Arnold Arboretum of Harvard University, Boston, Massachusetts, USA\\
+$^2$Department of Organismic and Evolutionary Biology, Harvard University, Cambridge, Massachusetts, USA\\
+$^3$Global Change Ecology and Evolution (GloCEE), Department of Life Sciences, University of Alcal\`a  28805, Alcal\`a de Henares, Spain\\
+$^4$Forest \& Conservation Sciences, Faculty of Forestry, University of British Columbia, Vancouver, British Columbia, Canada\\
+$^a$Corresponding author: 617.823.0687; dbuonaiuto@g.harvard.edu
+
+\noindent \emph{Keywords:} deciduous forests, flower-leaf sequences, global change, hysteranthy, phenology, phylogeny \\ % 5-8  include title words
+\emph{Paper type:} Viewpoint\\
+\emph{Counts}: Words: Summary: 192; Main text: 3431; References: 39;  Figures: 5 (all color). Supporting Information: 4 supplemental figures and Methods.
+\newpage
+
+\section*{Summary}
+Phenology is a major component of an organism's fitness. While individual phenological events affect fitness, growing evidence suggests that the relationship between events may be equally or more important. This may explain why deciduous woody plants exhibit considerable variation in the order of reproductive and vegetative events, or flower-leaf sequences (FLSs). There is evidence to suggest that FLS may be adaptive\linelabel{small1.r2}, with several competing hypotheses to explain their function. Here, we advance the existing hypotheses with a new framework that accounts for quantitative FLS variation at multiple taxonomic scales using case studies from temperate forests. Our inquiry provides several major insights towards a better understanding of FLS variation. First, we show that concurrent support for multiple hypotheses reflects the complicated history of migration and community assembly in the temperate zone. Second, we demonstrate that support for FLS hypotheses is sensitive to how FLSs are defined, with quantitative definitions being the most useful for robust hypothesis testing. Finally, we highlight how adopting a quantitative, intra-specific approach generates new avenues for evaluating fitness consequences of FLS variation and provides cascading benefits to improving predictions of how climate change will alter FLSs and thereby re-shape plant communities and ecosystems.
+
+\section*{Introduction}
+Phenology, the timing of seasonal life cycle events allows organisms to synchronize life-history transitions with optimum environmental conditions \citep{Forrest2010}, and is a critical component of ecosystem structure and function \citep{Cleland2007,Piao2007}. Recent work in woody plant phenology has shown that it is not only individual phenological stages that affect these processes, but also their chronology\linelabel{small1.r1} \citep{Ettinger2018}.\\
+
+\noindent One phenological relationship that has long received scientific interest \citep[see][]{Robertson1895} and, recently, increased attention in the literature \citep{Savage2019, Gougherty2018} is the flower-leaf phenological sequence (FLS) of deciduous woody plants. In a typical model of plant life-history, vegetative growth precedes reproduction. However, for many species in the forests of Eastern North America (and other temperate regions of the Northern Hemisphere), it is not the green tips of new shoots that mark the commencement of the growing season, but the subtle colors of\linelabel{small2.r1} their flowers. This flowering-first FLS is common in these forests. For example orevious work found that 29.2\% of tree species of the Midwestern United States flower prior to leafout \citep{Gougherty2018}\linelabel{small3.r1}. The prevalence of this FLS may be surprising suggests that this FLS has adaptive significance \citep{Rathcke_1985}.\\  \linelabel{smallx.r2}.
+
+\noindent Understanding this phenological pattern is timely because anthropogenic climate change is altering FLSs. Long-term observations show the number of days between flowering and leafout is increasing as a result of climate change, but the rate of change differs up to five-fold among species (Fig. \ref{fig:climchange}).  If FLSs are indeed an important component of woody plant fitness, this inter-specific variation will exacerbate fitness differences between species, influencing which species will persist under altered climate conditions.\\ 
+
+\noindent Long-term dataset also demonstate high within-species variability in FLSs.\linelabel{small4.r1} Despite recent advances in understanding the physiology and evolution of FLSs \citep{Gougherty2018,Savage2019}, most analyses have not directly addressed this variability---potentially slowing progress in predicting how FLS patterns will respond to climate change \linelabel{small5.r1}. While the literature provides some general correlations between flowering and leafing phenology \citep{Lechowicz_1995, Ettinger2018}, there have been few, if any, analyses of higher-resolution patterns \citep{Gougherty2018}. \\
+
+We suggest that characterizing intra-specific variation in FLSs is critical to understanding this important phenological sequence. We propose a new conceptual framework for the study of FLSs built on continuous measures of both inter- and intra-specific FLS variation. This shift will improve our ability to predict how FLS patterns will change in the future, and  may reveal novel avenues to better understand the fundamental biology of this important phenological sequence.\\
+
+
+\noindent Here we 1) review the hypotheses of the origins of FLSs and their respective predictions, 2) compare the biological basis of the current, inter-specific categorical FLS framework to our proposed intra-specific, quantitative approach 3) test our framework with a detailed case study of long-term phenology records from Harvard Forest in Petersham, MA, and 4) identify avenues for future FLS research.
+
+\section*{Hypotheses for flower-leaf sequence variation}
+\noident Several evolutionary hypotheses have been proposed to explain FLS variation in temperate woody plants (Fig. \ref{fig:conceptual}). We discuss each one briefly below.
+\subsubsection*{ Wind pollination}
+\noindent The most prevalent FLS hypothesis suggests that flowering-first is an adaptation for wind-pollination, with leafless flowering allowing for more efficient pollen transfer \citep{Whitehead1969}. The primary evidence for this hypothesis comes from pollen diffusion studies \citep[e.g., particle movement through closed and open canopies,][]{Niklas1985, Milleron2012} and suggests canopy structure encumbers pollen movement. %This hypothesis predicts a strong association between FLS and pollination syndrome.
+\subsubsection*{Water dynamics}
+\noindent Another hypothesis suggests that flowering before leaf development is an adaptation to reduce water stress caused by concurrently maintaining floral hydration and leaf transpiration \citep{Franklin2016}. Observations of flowering in the dry tropics where this FLS pattern is also common confirm that the timing of flowering in these taxa is associated with a water status recovery due to leaf drop \citep{Borchert1983,Reich1984}, and recent analysis of temperate flora has also yielded support for this hypothesis despite that fact that temperate forests are rarely water-limited during the spring flushing season \citep{Gougherty2018}. %This hypothesis predicts a strong relationship between FLS and metrics of hydraulic demand.
+
+\subsubsection*{Early flowering}
+\noindent A third possibility is that the flowering-first FLS is a physiological byproduct of selection for early flowering \citep{Primack1987}. Here, there is no functional advantage to a species flowering before or after leafing; all that matters is its absolute flowering time. \citet{Primack1987} notes that flowering-first species tend to also have large seed mass and lack primary seed dormancy for germination, traits associated with early flowering in general. This raises the possibility that this FLS may simply be one component of a larger suite of early flowering traits. Recent work from \citet{Savage2019} demonstrated that spring flower phenology is less constrained by prior phenological events than leaf phenology, which would allow selection to drive flowering into the early season, producing the flowering-first FLS \linelabel{small6.r1}. %Given this hypothesis, we would expect a strong relationship between a flowering-first FLS and early flowering in general.
+
+\subsubsection*{Phylogenetics} 
+\noindent Finally, it is also possible that FLSs are highly conserved traits for which FLS variation reflects macro-evolutionary relationships among taxa. If this is the case, we would expect to see a strong phylogenetic signal for FLS variation as was reported in a recent analysis by \citet{Gougherty2018}. A strong phylogenetic pattern in FLS would not preclude any of the adaptive hypotheses presented above, as  many different evolutionary processes can yield comparable phylogenetic signals \citep{Revell2008}. \\
+
+\noindent While decades of inquiry have advanced each of these hypotheses independently, there is no clear consensus regarding their comparative merits. Most of the previous studies on FLSs have not compared hypotheses, and those that did have generally found support for multiple hypotheses \citep[see][]{Bolmgren2003,Gougherty2018}. There is no expectation that the FLS hypotheses must be mutually exclusive. Indeed, understanding the relative importance of each one and the relationships between them may provide the most useful path forward, if they can be robustly compared.\\
+
+
+\noindent We argue that a sensible reconciliation of these hypotheses is possible with a shift to a new conceptual framework for the study of FLSs. Under the current framework, FLSs are described qualitatively, and defined at the species level. We suggest that quantitative, intra-specific measures of FLS are more compatible with the biological processes underlying the FLS variation that research aims to understand. Below we present an overview of the current approach to describing FLSs and highlight some of the challenges that can arise when using it. \\
+
+\section*{The current flower-leaf sequence framework}
+\subsection*{Describing FLSs}
+\noindent  The current framework describes three main FLS categories: flowers before leaves (hysteranthy, proteranthy, precocious flowering); flowers with leaves (synanthy); and flowers after leaves (seranthy) \citep{Lamont2011, Heinig1899}. Some data sources \citep[e.g.][]{Burns1990,Barnes2004} include additional categories: ``flowers before/with leaves" and ``flowers with/after leaves", but it is unclear whether these categories describe intermediate FLS patterns or FLS variability in these species. While these categories are conceptually reasonable, applying them to real phenological sequences is not always straightforward.\\
+
+\noindent Both reproductive and vegetative phenological sequences consist of multiple sub-stages, and this introduces significant ambiguity into how we interpret qualitative FLS descriptions. Consider a species with the following FLS:\\
+
+\begin{center}
+\textbf{flower budburst}$\rightarrow$ \textbf{leaf budburst}$\rightarrow$ \textbf{first flowers open} $\rightarrow$ \textbf{leafout} $\rightarrow$ \textbf{peak flowering} $\rightarrow$ \textbf{end of leaf expansion} \\
+\end{center}
+
+\noindent Observers could justifiably classify this species as: 1) Hysteranthous because flower budburst precedes\linelabel{small7.r1} leaf budburst, 2) Synanthous because flowers open during the budburst-leafout inter-phase, 3) Seranthous because peak flowering occurs after leafout. This problem extends beyond this simple example to real datasets, \citep[e.g.][]{OKeefe2015} where the same ambiguities exist (Fig \ref{fig:HFmeans}). Not surprisingly then, different sources may classify the same species differently. We compared species-level FLS descriptions in two of the most comprehensive records of FLS, \underline{Michigan Trees} and its companion volume \underline{Michigan Shrubs and Vines} (MTSV) \citep{Barnes2004,Barnes2016} with \underline{The USFS Silvics Manual Volume II} \citep{Burns1990}. Of the 49 overlapping species, 30\% were classified differently. Such different classifications could reflect interesting temporal or geographic variability in FLSs, but---given current definitions---they could equally be the product of observer classification decisions.\\
+
+\noindent Categorization can often introduce biases in analyses \citep{Royston2006}. In the case of FLSs, the hypotheses themselves may suggest different boundaries than the ones prescribed by the traditional framework. The wind pollination hypothesis hinges on the fact that leaves create a substantial physical disruption to pollen transfer, a premise that would not necessarily be true for the early stages of leaf expansion when tiny leaf primordia would have little impact on environmental structure. Rather, trees that flower during the early stages of leaf expansion should gain similar advantage to those who complete their flowering before any leaf activity (Fig \ref{fig:conceptual}a). Alternatively, because transpiration intensifies as soon as leaves begin to expand \citep{%Breda1996,
+Wang2018}, the water dynamics hypothesis asserts there should be\linelabel{small2.r2} a cost to maintaining floral structures during any stage of leaf activity. Here, only species where flowering occurs before any leaf expansion should gain a hydraulic advantage (Fig \ref{fig:conceptual}b).\\ 
+
+\noindent Given the differences in biological processes underlying these hypotheses, statistical relationships between FLS and traits will fluctuate depending on where categorical boundaries are drawn. For the example presented above, we would expect to see the strongest signal of the wind-pollination hypothesis when the category of hysteranthy includes species that flower before and with early leaf development. The strongest signal for the water dynamics hypothesis should occur when the hysteranthous classification is restricted to only species that flower before any leaf activity. If these hypotheses require different categorization schemes to accurately capture the underlying biology, it becomes difficult to compare hypotheses in the same modeling framework.\\
+
+\noindent For both the MTSV and USFS data sets, we found that the strength of associations between FLSs and trait predictors as well as the phylogenetic signal are highly sensitive to how FLSs were defined (Supporting Information Fig: \ref{fig:muplots.USMT}, e.g. pollination syndrome, Supporting Information Fig: \ref{fig:Dstat}). For both datasets, we applied two alternative FLS categorizations; physiological hysteranthy, which allowed for no overlap between floral and leaf phenophases, and functional hysteranthy, which allowed for a degree of overlap (see Supporting Information \nameref{Methods S1}). These alternate categorization boundaries re-shuffled the species included in each classification, affecting both the trait distributions within each category and the phylogenetic patterning across the tree (Supporting Information Fig. \ref{fig:phylogeny}).\\ 
+
+\noindent These findings suggest that a new approach that relaxes the assumptions of the categorical framework could help to fairly evaluate FLS hypotheses. Given that these hypotheses all aim to explain FLS variation, the most useful definitions of FLS should follow from FLS variability in nature. Below we consider two major assumptions about FLS variation in the current framework and how they compare to the observed phenological patterns in natural systems.\\
+
+\subsection*{Inter- and intra- specific variation in the current framework}
+\noindent In the current framework species are classified based on sequence alone. The duration of and time between phases, however, also matters \citep{Inouye2019}. When considering measures of time, FLSs of species within each category can be quite different (Fig. \ref{fig:vizzy}a), suggesting much greater diversity in FLS patterns in a given forest community than provided by the three categories of the current framework. This substantial inter-specific variation could be the fingerprint of selection on FLSs.\\ 
+
+\noindent Under the current framework, FLS categories are assigned at the species level. However, the time between flowering and leaf activity can vary by as much as several weeks between individuals and years, and in some species the sequence itself can regularly switch across years (as seen in the long-term phenology records from  Harvard Forest \citep{OKeefe2015}, Fig. \ref{fig:vizzy}b). Intra-specific variation in FLSs is rarely quantified, yet the magnitude of variation at this level suggests that considering FLSs at finer taxonomic resolution--i.e. intra-specifically--could help clarify the mechanisms underlying inter-specific differences.\\
+
+\section*{A new framework for flower-leaf sequences} 
+
+\noindent Alternative approaches to estimating FLSs could increase the precision of FLS descriptions and capture biological variation neglected by common-use approaches. Such biological variation could then be leveraged to better understand this phenological syndrome. A shift from categorical, species-level descriptions of FLS to continuous individual-level quantification---i.e. reporting the number of days between specific phenophases---eliminates categorization bias, reduces the noise associated with unmeasured variation, and offers novel avenues for fine-tuning FLS hypotheses.\\ 
+
+\noindent  Quantitative measures of FLSs across multiple taxonomic scales should improve FLS-trait association models like the ones presented above by allowing researchers to explicitly incorporate the multiple levels of FLS variation into such models (i.e. through hierarchical modeling). Quantitative measures of phenology \citep[e.g. the BBCH scale,][]{Finn2007} also standardize data across time and space, observer, and analyst. Adopting these alternative measurements in the study of phenological sequences would facilitate comparing FLS patterns across larger temporal, geographic, and taxonomic scales, giving researchers more power to accurately address questions about FLS variation.\\
+
+\noindent Additionally, an intra-specific FLS framework augments the existing FLS hypotheses and generates new, testable predictions. When considering the FLS hypotheses at multiple taxonomic scales one might a) find a strong inter-specific signal but only noise in the variation within species b) find a strong intra-specific signal but not marked differences across species, or c) find congruence at the species and intra-species levels. Resulting patterns may thus be informative about the evolutionary processes behind FLS variation--e.g. phylogenetic or physiological constraints  vs. adaptation as a response to selection. For example, strong differences in FLSs across species and a noisy signal within species could indicate evolutionary inertia and physiological constraints for future FLS shifts. Alternatively, high levels variation across individuals of the same species could suggest that local adaptation and subtle differences in micro-climate, soil, light radiation, or topography contribute to FLS variation.\\ 
+
+\noindent Finally, it follows from the FLS hypotheses that variation in FLS should influence performance. This prediction may be difficult to evaluate at the species-level because species evolve a suite of traits for any function \citep{Davies2019}, and unmeasured traits may compensate for FLS variation. Leveraging intra-specific variation could provide a more tractable way for researchers to study FLS-performance relationships, allowing researchers to move beyond simple FLS-trait correlation analyses, and towards evaluating the consequences of FLS variation. Such studies could help anticipate the fitness effects of changing FLS patterns with climate change.\\
+
+\section*{Testing the new framework}
+
+To test our proposed framework, we modeled the associations between FLS and traits related to the FLS hypotheses using both the current categorical FLS framework and our proposed quantitative one, using long-term phenological records for woody species at Harvard Forest \citep{OKeefe2015}, (see Supporting Information \nameref{Methods S1}). With the categorical approach, we found support for the early flowering and wind pollination hypotheses and poor support for the water dynamics hypothesis, with no substantial interactions between predictors and a strong phylogenetic structure to FLS variation (Fig. \ref{fig:muplots.HF}, Supporting Information Fig.  \ref{fig:Dstat} panel f.). These results are qualitatively similar to models from two other large categorical FLS datasets (Supporting Information Fig. \ref{fig:muplots.USMT}). \\
+
+\noindent The quantitative version of the model paints a more complex picture of the function of FLSs, highlighting key biological insights obscured by categorization. As in the categorical model, we found strong effects of flowering time, pollination syndrome and phylogeny on FLS variation (Fig. \ref{fig:muplots.HF}, Fig. Supporting Information \ref{fig:Dstat}). However, in the quantitative model we also detected a signal for the water dynamics hypothesis. %not exactly sure how to explain this result
+Most significantly, in this model we identified strong interactions between predictors. While early flowering is associated with hysteranthy in all species, this effect was even more pronounced in wind-pollinated taxa. (Fig. \ref{fig:muplots.HF}). Further, we also found that water dynamics were associated with increased time between flowering and leafing in biotically-pollinated taxa but not wind-pollinated taxa (Fig. \ref{fig:apcs}). \\ 
+
+\noindent These systematic differences between pollination syndromes are informative. While a relationship between any species' hydraulic demand and their FLS in the temperate zone where water tends to be abundant in the spring \citep{Polgar2011} may seem surprising, many of the biotically-pollinated species of the temperature forests trace their bio-geographic origins to the same dry-deciduous tropical regions \citep{Daubenmire1972} in which the water dynamics hypothesis originated \citep{Janzen1967,Franklin2016}. In particular, many biotically-pollinated, hysteranthous species in the temperate zone are geographic outliers from largely tropical clades (e.g. \textit{Fabaceae}, \textit{Lauraceae}, \textit{Annonaceae}). Thus, these results lead to the hypothesis that, for these taxa, hysteranthy developed in a warmer, drier selection environment and has been maintained in the temperate zone because of high phylogenetic conservatism, or because it has been re-purposed for a different function. 
+This migration-conservatism hypothesis has been invoked to explain community phenology patterns in other forest systems \citep[i.e. general flowering in dipterocarps,][]{Kurten2018}. While this link is only speculative for the occurrence of biotically-pollinated hysteranthous species in the temperate zone, the bio-geography behind our findings suggests a more complex story of convergent evolution, migration history, and community assembly in hysteranthous flowering than can be encompassed by any single FLS hypothesis.\\
+
+\noindent Our findings suggest that the tendency for previous studies to find support for multiple hypotheses \citep{Bolmgren2003,Gougherty2018,Savage2019} is consistent with the biological processes that shape FLSs. Using available data, we have demonstrated potential advantages from a new conceptual framework for the study of FLSs based on quantitative measures of individual variation in FLS patterns. Using these methods, we found that, in accordance with previous work, flowering time and pollination syndrome are important drivers of hysteranthy \citep{Gougherty2018}. We also found support for the water dynamics hypothesis in the evolutionary history of biotically-pollinated taxa, and identified several new, testable hypotheses regarding the biological nuances of FLSs. Together, these results provide a more comprehensive picture of our understanding of this phenological trait currently, and pathways for further research. Below we highlight five characteristics of FLS that we suggest could be incorporated into future research that utilizes this new framework to improve our fundamental knowledge about this important life-history trait and better predict how altered FLSs will impact species in an era of global change.\\
+\section*{Future directions:}
+\subsubsection*{Multiple hypotheses explain FLSs}
+\noindent Our results underscore other lines of evidence that show multiple hypotheses should be the starting point for future FLS research. While there is certainly value to broad taxonomic studies, and future large-scale analyses should continue, the consistent support for multiple hypotheses shows there may be limits to the utility of these studies. We suggest future studies explore the evolutionary dynamics of hysteranthy with a more mechanistic approach, which may mean utilizing a more taxonomically-restricted focus. A better understanding about the mechanisms leading to FLS variation may result from pattern deconstruction \citep[i.e. grouping of species according to trait commonalities or their geographic or phylogenetic distributions,][]{Terribile2009} For example, as wind-pollination efficiency is not driving hysteranthous flowering among biotically-pollinated taxa, considering this group of species alone rules out one major FLS hypothesis and would allow for a better evaluation of alternative hypotheses.
+
+\subsubsection*{FLS, performance and fitness}
+Even with focused work on sub-groupings of species, inter-specific trait-association models may provide more limited advances than other approaches. As in most other areas of plant biology examining traits, research is hampered by the difficulty of knowing which are the ``right'' traits \citep{Violle2007}. For example, we used minimum precipitation across a species' range, one of the only available quantitative drought metrics at the scale of large inter-specific models, to represent the water dynamics hypothesis, but we have little data to evaluate if this is a good proxy for hydraulic demand or drought tolerance. \\
+
+% EMWJan7: Nice opening here.
+\noindent While trait associations point to past selection, fitness is the driver of trait evolution, and at the core of each FLS hypothesis is a fitness prediction. By utilizing intra-specific comparisons and continuous measurements of FLS, we can move beyond trait associations and test the performance consequences of FLS variation. As we discussed above, variability in hysteranthy should lead to variability in performance outcomes at the intra-specific level. For example, the wind pollination hypothesis predicts that years with increased time between flowering and leafing should correlate with more pollination success. The water dynamics hypothesis suggests hysteranthous populations with a consistently larger time between flowering and leafing should better tolerate drought. These predictions could be directly assessed through well-designed experiments and field studies, providing a new avenue to test the existing hypotheses and better understand how variability in performance may or may not ultimately translate into differential fitness as FLSs continue to shift due to climate change.
+
+\subsubsection*{FLS and physiology} 
+\noindent Decades of research shows that both floral and vegetative phenological events are cued by temperature and photoperiod \citep{Forrest2010}, suggesting they are under shared genetic and physiological control. But to yield the FLS variation seen in nature, there is likely systematic differences in reproductive and vegetative phenological responses to the environment. Researchers can use intra-specific variation in FLS to identify which cues dominate each phenological process and better understand the underlying genetic and physiological constraints that structure phenological sequences.
+
+\subsubsection*{Linking individual phenophases and sequences}
+\noindent While much of research on the evolution of plant phenology focuses on specific phenophases  \citep[e.g.][]{Savage2013,OLLERTON_1992}, in this paper, we examined the evolutionary drivers of a phenological sequence. With growing evidence that adaptation drives both the absolute timing of individual phenophases and the relative timing between them we must continue to develop analytical tools that improve our understanding of the drivers of phenological events as part of a phenological syndrome, rather than as discrete, separate events. 
+Our treatment of FLSs here is a small part of this work, but understanding how selection shapes phenology both throughout the whole growing season and across years remains a major frontier for the study of phenology \citep{Wolkovich2014b}. This is an essential step towards a more complete understanding of the fundamental biology of temperate woody plants, and for predicting the fate of these species as global climate continues to change.
+
+%\subsection*{Conclusion:} 
+%\noindent Our proposed framework provides a path to understanding the drivers of FLSs in woody plants. Through examining FLS variation in more targeted taxonomic assemblages and using quantitative data with mechanistic metrics, we can refine the existing FLS hypotheses and better comprehend the causes and consequences of FLS variation at multiple taxonomic scales. 
+
+\section*{Acknowledgements}
+\noindent We thank T.J. Davies and J.J. Grossman for their comments on this manuscript.
+
+\section*{Author contributions}
+DMB developed the concept for the paper; DMB and IMC performed the analysis, DMB and EMW wrote the manuscript.
+
+\section*{Data and code availability}
+Data for the FLS and climate change analysis is publicly available from PEP725 at http://www.pep725.eu/. The Harvard Forest phenology data is also publicly available in the Harvard Forest Data Archive https://harvardforest.fas.harvard.edu/harvard-forest-data-archive (dataset: HF003-05). The compiled data from the MTSV and USFS guidebooks will be available on KNB upon publication. All modeling code will be made available upon request. %Im also happy to just make it public. 
+
+
+%\bibliography{..//refs/hyst_outline.bib}
+\begin{thebibliography}{39}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Barnes \emph{et~al.}(2016)Barnes, Dick \& Gunn}]{Barnes2016}
+{\bf Barnes BV, Dick CW, Gunn ME}. 2016.
+\newblock \emph{Michgan Shrubs & Vines: A guide to species of the Great Lakes
+Region}.
+\newblock University of Michigan Press.
+
+\bibitem[{Barnes \& Wagner(1981,2004)}]{Barnes2004}
+{\bf Barnes BV, Wagner WHJ}. 1981,2004.
+\newblock \emph{Michigan Trees: A guide to the Trees of the Great Lakes
+Region}.
+\newblock University of Michigan Press.
+
+\bibitem[{Bolmgren \emph{et~al.}(2003)Bolmgren, Eriksson \&
+Linder}]{Bolmgren2003}
+{\bf Bolmgren K, Eriksson O, Linder HP}{\bf . 2003}.
+\newblock Contrasting flowering phenology and species richness in abiotically
+and biotically pollinated angiosperms.
+\newblock \emph{Evolution}, {\bf 57}: 2001--2011.
+
+\bibitem[{Borchert({1983})}]{Borchert1983}
+{\bf Borchert R}{\bf . {1983}}.
+\newblock {Phenology and control of flowering in tropical trees}.
+\newblock \emph{{Biotropica}}, {\bf {15}}: {81--89}.
+
+\bibitem[{Burns \& Honkala(1990)}]{Burns1990}
+{\bf Burns RM, Honkala BH}. 1990.
+\newblock Silvics of North America: Volume 2. hardwoods.
+\newblock Tech. rep., United States Department of Agriculture (USDA), Forest
+Service.
+
+\bibitem[{Cleland \emph{et~al.}(2007)Cleland, Chuine, Menzel, Mooney \&
+Schwartz}]{Cleland2007}
+{\bf Cleland EE, Chuine I, Menzel A, Mooney HA, Schwartz MD}{\bf . 2007}.
+\newblock Shifting plant phenology in response to global change.
+\newblock \emph{Trends in Ecology & Evolution}, {\bf 22}: 357 -- 365.
+
+\bibitem[{Daubenmire(1972)}]{Daubenmire1972}
+{\bf Daubenmire R}{\bf . 1972}.
+\newblock Phenology and other characteristics of tropical semi-deciduous forest
+in north-western Costa Rica.
+\newblock \emph{The Journal of Ecology}, {\bf 60}: 147.
+
+\bibitem[{Davies \emph{et~al.}(2019)Davies, Regetz, Wolkovich \&
+McGill}]{Davies2019}
+{\bf Davies TJ, Regetz J, Wolkovich EM, McGill BJ}{\bf . 2019}.
+\newblock Phylogenetically weighted regression: A method for modelling
+non-stationarity on evolutionary trees.
+\newblock \emph{Global Ecology and Biogeography}, {\bf 28}: 275--285.
+
+\bibitem[{Ettinger \emph{et~al.}(2018)Ettinger, Gee \&
+Wolkovich}]{Ettinger2018}
+{\bf Ettinger A, Gee S, Wolkovich EM}{\bf . 2018}.
+\newblock Phenological sequences: how early season events define those that
+follow.
+\newblock \emph{American Journal of Botany}, {\bf 105}.
+
+\bibitem[{Finn \emph{et~al.}(2007)Finn, Straszewski \& Peterson}]{Finn2007}
+{\bf Finn GA, Straszewski AE, Peterson V}{\bf . 2007}.
+\newblock A general growth stage key for describing trees and woody plants.
+\newblock \emph{Annals of Applied Biology}, {\bf 151}: 127--131.
+
+\bibitem[{Forrest \& Miller-Rushing(2010)}]{Forrest2010}
+{\bf Forrest J, Miller-Rushing AJ}{\bf . 2010}.
+\newblock Toward a synthetic understanding of the role of phenology in ecology
+and evolution.
+\newblock \emph{Philosophical Transactions of the Royal Society B: Biological
+Sciences}, {\bf 365}: 3101--3112.
+
+\bibitem[{Franklin(2016)}]{Franklin2016}
+{\bf Franklin DC}{\bf . 2016}.
+\newblock Flowering while leafless in the seasonal tropics need not be cued by
+leaf drop: evidence from the woody genus Brachychiton (Malvaceae).
+\newblock \emph{Plant Ecology and Evolution}, {\bf 149}: 272--279.
+
+\bibitem[{Gougherty \& Gougherty(2018)}]{Gougherty2018}
+{\bf Gougherty AV, Gougherty SW}{\bf . 2018}.
+\newblock Sequence of flower and leaf emergence in deciduous trees is linked to
+ecological traits, phylogenetics, and climate.
+\newblock \emph{New Phytologist}, {\bf 220}: 121--131.
+
+\bibitem[{Heinig(1899)}]{Heinig1899}
+{\bf Heinig R}. 1899.
+\newblock Glossary of the botanic terms used in describing flowering plants.
+\newblock Calcutta, India.
+
+\bibitem[{Inouye \emph{et~al.}(2019)Inouye, Ehrl{\'e}n \&
+Underwood}]{Inouye2019}
+{\bf Inouye BD, Ehrl{\'e}n J, Underwood N}{\bf . 2019}.
+\newblock Phenology as a process rather than an event: from individual reaction
+norms to community metrics.
+\newblock \emph{Ecological Monographs}, {\bf 89}: e01352.
+
+\bibitem[{Janzen(1967)}]{Janzen1967}
+{\bf Janzen DH}{\bf . 1967}.
+\newblock Synchronization of sexual reproduction of trees within the dry season
+in Central America.
+\newblock \emph{Evolution}, {\bf 21}: 620--637.
+
+\bibitem[{Kurten \emph{et~al.}(2018)Kurten, Bunyavejchewin \&
+Davies}]{Kurten2018}
+{\bf Kurten EL, Bunyavejchewin S, Davies SJ}{\bf . 2018}.
+\newblock Phenology of a dipterocarp forest with seasonal drought: Insights
+into the origin of general flowering.
+\newblock \emph{Journal of Ecology}, {\bf 106}: 126--136.
+
+\bibitem[{Lamont \& Downes(2011)}]{Lamont2011}
+{\bf Lamont BB, Downes KS}{\bf . 2011}.
+\newblock Fire-stimulated flowering among resprouters and geophytes in
+Australia and South Africa.
+\newblock \emph{Plant Ecology}, {\bf 212}: 2111--2125.
+
+\bibitem[{Lechowicz(1995)}]{Lechowicz_1995}
+{\bf Lechowicz MJ}{\bf . 1995}.
+\newblock Seasonality of flowering and fruiting in temperate forest trees.
+\newblock \emph{Canadian Journal of Botany}, {\bf 73}: 175--182.
+
+\bibitem[{Milleron \emph{et~al.}({2012})Milleron, Lopez~de Heredia, Lorenzo,
+Perea, Dounavi, Alonso, Gil \& Nanos}]{Milleron2012}
+{\bf Milleron M, Lopez~de Heredia U, Lorenzo Z, Perea R, Dounavi A, Alonso J,
+Gil L , Nanos N}{\bf . {2012}}.
+\newblock {Effect of canopy closure on pollen dispersal in a wind-pollinated
+species (\emph{Fagus sylvatica L.}).
+\newblock \emph{{Plant Ecology}}, {\bf {213}}: {1715--1728}.
+
+\bibitem[{Niklas(1985)}]{Niklas1985}
+{\bf Niklas KJ}{\bf . 1985}.
+\newblock The aerodynamics of wind pollination.
+\newblock {\bf 51}: 328--386.
+
+\bibitem[{O'Keefe(2015)}]{OKeefe2015}
+{\bf O'Keefe J}. 2015.
+  \newblock Phenology of woody species at Harvard Forest since 1990.
+  
+  \bibitem[{Ollerton \& Lack(1992)}]{OLLERTON_1992}
+  {\bf Ollerton J, Lack A}{\bf . 1992}.
+  \newblock Flowering phenology: An example of relaxation of natural selection?
+  \newblock \emph{Trends in Ecology \& Evolution}, {\bf 7}: 274 -- 276.
+  
+  \bibitem[{Piao \emph{et~al.}(2007)Piao, Friedlingstein, Ciais, Viovy \&
+  Demarty}]{Piao2007}
+  {\bf Piao S, Friedlingstein P, Ciais P, Viovy N, Demarty J}{\bf . 2007}.
+  \newblock Growing season extension and its impact on terrestrial carbon cycle
+  in the northern hemisphere over the past 2 decades.
+  \newblock \emph{Global Biogeochemical Cycles}, {\bf 21}.
+  
+  \bibitem[{Polgar \& Primack(2011)}]{Polgar2011}
+  {\bf Polgar C, Primack R}{\bf . 2011}.
+  \newblock Leaf-out phenology of temperate woody plants: From trees to
+  ecosystems.
+  \newblock \emph{New Phytologist}, {\bf 191}: 926--41.
+  
+  \bibitem[{Primack(1987)}]{Primack1987}
+  {\bf Primack RB}{\bf . 1987}.
+  \newblock Relationships among flowers, fruits, and seeds.
+  \newblock \emph{Annual Review of Ecology and Systematics}, {\bf 18}: 409--430.
+  
+  \bibitem[{Rathcke \& Lacey(1985)}]{Rathcke_1985}
+  {\bf Rathcke B, Lacey EP}{\bf . 1985}.
+  \newblock Phenological patterns of terrestrial plants.
+  \newblock \emph{Annual Review of Ecology and Systematics}, {\bf 16}: 179--214.
+  
+  \bibitem[{Reich \& Borchert({1984})}]{Reich1984}
+  {\bf Reich P, Borchert R}{\bf . {1984}}.
+  \newblock Water-stress and tree phenology in a tropical dry forest in the
+  lowlands of Costa-Rica.
+  \newblock \emph{{Journal of Ecology}}, {\bf {72}}: {61--74}.
+  
+  \bibitem[{Revell \emph{et~al.}(2008)Revell, Harmon \& Collar}]{Revell2008}
+  {\bf Revell LJ, Harmon LJ, Collar DC}{\bf . 2008}.
+  \newblock Phylogenetic signal, evolutionary process, and rate.
+  \newblock \emph{Systematic Biology}, {\bf 57}: 591--601.
+  
+  \bibitem[{Robertson(1895)}]{Robertson1895}
+  {\bf Robertson C}{\bf . 1895}.
+  \newblock The philosophy of flower seasons, and the phaenological relations of
+  the entomophilous flora and the anthophilous insect fauna.
+  \newblock {\bf 29}: 97--117.
+  
+  \bibitem[{Royston \emph{et~al.}(2006)Royston, Altman \&
+  Sauerbrei}]{Royston2006}
+  {\bf Royston P, Altman DG, Sauerbrei W}{\bf . 2006}.
+  \newblock Dichotomizing continuous predictors in multiple regression: a bad
+  idea.
+  \newblock \emph{Statistics in Medicine}, {\bf 25}: 127--141.
+  
+  \bibitem[{Savage({2019})}]{Savage2019}
+  {\bf Savage JA}{\bf . {2019}}.
+  \newblock {A temporal shift in resource allocation facilitates flowering before
+  leaf out and spring vessel maturation in precocious species}.
+  \newblock \emph{{American Journal of Botany}}, {\bf {106}}: {113--122}.
+  
+  \bibitem[{Savage \& Cavender-Bares(2013)}]{Savage2013}
+  {\bf Savage JA, Cavender-Bares J}{\bf . 2013}.
+  \newblock Phenological cues drive an apparent trade-off between freezing
+  tolerance and growth in the family Salicaceae.
+  \newblock {\bf 94}: 1708--1717.
+  
+  \bibitem[{Templ \emph{et~al.}(2018)Templ, Koch, K.Bolmgren, Ungersb{\"o}ck,
+  Paul, Scheifinger \& et~al.}]{PEP725}
+  {\bf Templ B, Koch E, K.Bolmgren, Ungersb{\"o}ck M, Paul A, Scheifinger H,
+  et~al.}{\bf . 2018}.
+  \newblock Pan European phenological database (pep725): a single point of access
+  for European data.
+  \newblock \emph{Int. J. Biometeorology}.
+  
+  \bibitem[{Terribile \emph{et~al.}(2009)Terribile, Diniz-Filho, Rodr{\'\i}guez
+  \& Rangel}]{Terribile2009}
+  {\bf Terribile LC, Diniz-Filho JF, Rodr{\'\i}guez M{\'A}, Rangel TFLVB}{\bf .
+  2009}.
+  \newblock Richness patterns, species distributions and the principle of extreme
+  deconstruction.
+  \newblock \emph{Global Ecology and Biogeography}, {\bf 18}: 123--136.
+  
+  \bibitem[{Violle \emph{et~al.}(2007)Violle, Navas, Vile, Kazakou, Fortunel,
+  Hummel \& Garnier}]{Violle2007}
+  {\bf Violle C, Navas ML, Vile D, Kazakou E, Fortunel C, Hummel I, Garnier
+  E}{\bf . 2007}.
+  \newblock Let the concept of trait be functional!
+  \newblock \emph{Oikos}, {\bf 116}: 882--892.
+  
+  \bibitem[{Wang \emph{et~al.}({2018})Wang, Li, Di, Clothier, Duan, Li, Jia, Xi
+  \& Ma}]{Wang2018}
+  {\bf Wang Y, Li G, Di N, Clothier B, Duan J, Li D, Jia L, Xi B, Ma F}{\bf .
+  {2018}}.
+  \newblock {Leaf phenology variation within the canopy and its relationship with
+  the transpiration of \emph{Populus tomentosa} under plantation conditions.
+  \newblock \emph{{Forests}}, {\bf {9}}.
+  
+  \bibitem[{Whitehead(1969)}]{Whitehead1969}
+  {\bf Whitehead DR}{\bf . 1969}.
+  \newblock Wind pollination in the angiosperms: Evolutionary and environmental
+  considerations.
+  \newblock \emph{Evolution}, {\bf 23}: 28--35.
+  
+  \bibitem[{Wolkovich \& Ettinger(2014)}]{Wolkovich2014b}
+  {\bf Wolkovich EM, Ettinger AK}{\bf . 2014}.
+  \newblock Back to the future for plant phenology research.
+  \newblock \emph{New Phytologist}, {\bf 203}: 1021--1024.
+  
+  \end{thebibliography}
+  
+  \newpage
+  \section*{Supplemental Information}
+  \textbf{Fig. S1:} Effect-size summary plots of FLS predictors for the MTSV and USFS case studies. \\
+  \textbf{Fig. S2:} Flower-leaf sequences of species at Harvard Forest 1990-2005.\\
+  \textbf{Fig. S3:} Phylogenetic signals for FLS variation.\\
+  \textbf{Fig. S4:} Visualization of FLS patterning across the phylogeny for the MTSV and USFS case studies.\\
+  \textbf{Methods S1:} Methods for: FLS and climate change modeling, modeling FLS variation in MTSV and USFS data, modeling FLS variation in the HF data, and calculating the phylogenetic signals in FLS variation.
+  \newpage
+  \section*{Figures}
+  
+  
+  \begin{figure}[h!]
+  \centering
+  % \includegraphics[width=\textwidth]{..//PEP725/Fig1.tiff} 
+  \caption{\textbf{Flower-leaf sequences (FLSs) across Europe for four tree species from 1960 to 2015 suggests climate change has generally increased the time between flowering and leafing}, but the direction and rate of change differs across species, which may exacerbate fitness differences within forest communities. To detect the effect of climate change on average FLS, we used models that allow for shifts in FLS after 1980. Lines represent the mean trend in FLS per species, and the shaded regions indicate historic range of FLS variability (95\% credible intervals of the pre-1980 average) from the PEP725 database \citep{PEP725}.}
+  \label{fig:climchange}
+  \end{figure}
+  
+  \begin{figure}[h!]
+  \centering
+  %\includegraphics[width=\textwidth]{..//HarvardForest/Fig2.tiff} 
+  \caption{\textbf{Several hypotheses have been proposed to explain flower-leaf sequence (FLS) variation in temperate, deciduous woody plants.}  The wind pollination hypothesis \textbf{(a)} suggests that leafless flowering reduces barriers to pollen movement. The water dynamics hypothesis \textbf{(b)} suggests the temporal separation between flowering and leafing reduces hydraulic demand. The early flowering hypothesis \textbf{(c)} suggests FLS variation is a byproduct of selection for early flowering the relative timing of flowers and leaves is inconsequential compared to the absolute time of flowering. As depicted by the scale bars in the center of the figure, the biology behind each hypothesis predicts different degrees of overlap between flowering and leaf development. Transpiration intensifies as small leaf primordia expand, but leaf development only affects environmental structure once leaves are sufficiently large, therefore the water dynamics hypothesis accommodates little overlap between flower and leaves, while the wind pollination hypothesis encompasses some overlap. The early flowering hypothesis predicts no fitness differences whether or not flowers and leaves overlap. Additionally, inter-specific patterns of FLS variation may also be a product of phylogenetic conservatism or lability. \textbf{(d)}.}
+  \label{fig:conceptual}
+  \end{figure}
+  
+  \begin{figure}[h!]
+  \centering
+  %  \includegraphics[width=\textwidth]{..//HarvardForest/Fig3.tiff}
+  \caption{\textbf{The shift from categorical/inter-specific descriptions to quantitative/intra-specific measures of flower-leaf sequences (FLSs) reveals substantial variation.} Under the current framework, species are assigned to FLS categories by the order of phenophases alone. However, observations from Harvard Forest in Petersham, MA demonstrate that measuring the time between phenophases reveals substantial differences among species within each category \textbf{(a)}. These records also show that below the species level \textbf{(b)}, the time between flowering and leaf activity can vary by as much as several weeks for an individual across years and, in some species, an individual's sequence itself regularly switches across time. This inter- and intra- specific variation is key understanding the function of FLS variation in deciduous, woody plants.}
+\label{fig:vizzy}
+\end{figure}
+
+\pagebreak  
+
+\begin{figure}[h!]
+\centering
+%       \includegraphics[width=\textwidth]{..//Fig4.tiff}
+\caption{\textbf{Mean estimates of the effects of flower-leaf sequence (FLS) predictors on the timing between flowering and leaf expansion for individual woody plants at Harvard Forest between 1990-2015 reveal important differences between categorical and quantitative frameworks of FLS.}  With the categorical approach, there is a strong effect of flowering time and pollination syndrome on FLS variability, with no detectable effect of water dynamics or interactions between the predictors. However, with quantitative measures of FLS, we find increased support for the water dynamics hypothesis, and strong interactions between pollination syndrome and both flowering time and water dynamics. This interactions suggest multiple drivers of FLS variability in the temperate zone.  Both models use a Bayesian, phylogenetic mixed modeling approach with standardized predictors to allow for comparisons between them. Symbols represent mean estimated effect of each predictor, with solid and dotted lines representing 50 and 95\% credible intervals respectively.}  
+\label{fig:muplots.HF}
+\end{figure}    
+
+
+
+\begin{figure}[h!] 
+\centering
+%  \includegraphics[width=\textwidth]{..//HarvardForest/Fig5.tiff}
+\caption{\textbf{The quantitative flower-leaf sequence (FLS) model suggests that water dynamics may be a driver of hysteranthy in biotically-pollinated but not in wind-pollinated taxa.} Here we show model-predicted differences in FLS as a function the minimum precipitation a across a species' range for a two generic species with contrasting pollination syndromes. These model projections are conditioned on long term phenological data from Harvard Forest in Petersham, MA \citep{OKeefe2015} and reflect a fixed flowering time in early May (approximately the overall long-term average in the community) for both functional types. These systematic differences in drivers of FLSs could reflect greater differences in the bio-geographic histories of the wind and biotically-pollinated taxa of temperate forest communities.}
+        \label{fig:apcs}
+    \end{figure}
+
+
+    
+\end{document}

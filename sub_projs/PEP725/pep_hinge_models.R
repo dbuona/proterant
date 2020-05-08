@@ -41,7 +41,8 @@ fit.frax50.brms<-brm(FLS~YEAR.hin+(YEAR.hin|peporder),data=frax50)
 fit.aesc50.brms<-brm(FLS~YEAR.hin+(YEAR.hin|peporder),data=aesc50)
 
 fixef(fit.frax50.brms)[1,2]
-jpeg("FLS_climate_change.jpeg",width = 6, height = 5, units = 'in', res = 300)
+#jpeg("FLS_climate_change.jpeg",width = 6, height = 5, units = 'in', res = 300)
+tiff("FLS_climate_change.tiff",width = 6, height = 5, units = 'in', res = 300)
 plot(c(1960,2015), c(-20,30), type = "n", xlab = "Year", ylab = "Days between flowering and leafing", bty='l')
 segments(x0=1960,y0=fixef(fit.aln50.brms)[1], x1=1980, y1=fixef(fit.aln50.brms)[1],col="red",lwd=3)
 segments(x0=1980,y0=fixef(fit.aln50.brms)[1], x1=2015,y1=fixef(fit.aln50.brms)[1]+fixef(fit.aln50.brms)[2]*35,col="red",lwd=3)

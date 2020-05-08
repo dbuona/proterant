@@ -21,3 +21,59 @@
 %\noindent Given the the emergence of support for the water dynamics hypothesis under the modified FLS framework, we also tested one of the major intra-specific predictions of the water dynamics hypothesis. The hypothesis predicts that drier years should be associated with a increased time between phenophases. As predicted, we found a negative association between FLS variation and annual precipitation at Harvard Forest. The estimated effect of precipitation, however, was quite small (change of approximately 100 centimeters in annual precipitation required to produce a day difference in FLS), suggesting annual precipitation is not a major contributor to the observed inter-annual FLS variation.
 
 %\noindent These result suggest that even if water dynamics shaped FLS in some temperate taxa on the evolutionary time-scale, it does not appear to be a major driver of FLS variation on an ecological one. Given this, \\
+
+
+%<<Code_chunk_Minimal_example3, results='asis',Fig=FALSE, echo=FALSE,message=FALSE,warning=FALSE,out.width='6.5in'>>=
+%rm(list=ls()) 
+%options(stringsAsFactors = FALSE)
+%#setwd("~/Documents/git/proterant/sub_proj")%
+
+
+%library(ggtree,quietly=TRUE)
+%library(gridExtra,quietly=TRUE)
+
+%mich.data<-read.csv("..//MTSV_USFS/michdata_final.csv")
+%mich.tre<-read.tree("..//MTSV_USFS/michtre_final.tre")
+
+%silv.data<-read.csv("..//MTSV_USFS/silvdata_final.csv")
+%silv.tre<-read.tree("..//MTSV_USFS/silvtre_final.tre")
+
+
+%mich.data$synth<-mich.data$pro2+mich.data$pro3
+%mich.data$synth2[which(mich.data$synth==0)] <- "always seranthous"
+%mich.data$synth2[which(mich.data$synth==1)] <- "transitional"
+%mich.data$synth2[which(mich.data$synth==2)] <- "always hysteranthous"
+
+tr <-mich.tre
+
+par(mar=c(2,0.5,2,0))
+
+dd <- data.frame(taxa  = mich.data$name, hysteranthy = mich.data$synth2 )
+
+p<-ggtree(tr,layout="circular")
+p <- p %<+% dd +geom_tippoint(aes(color=hysteranthy,shape=hysteranthy),size=2)
+p<-p+theme(legend.position = "none")
+
+
+
+silv.data$synth<-silv.data$pro2+silv.data$pro3
+silv.data$synth2[which(silv.data$synth==0)] <- "always seranthous"
+silv.data$synth2[which(silv.data$synth==1)] <- "transitional"
+silv.data$synth2[which(silv.data$synth==2)] <- "always hysteranthous"
+
+#### make a tree for svics
+
+tr1 <-silv.tre
+
+dd1 <- data.frame(taxa  = silv.data$name, hysteranthy = silv.data$synth2 )
+
+
+q<-ggtree(tr1,layout="circular")
+q <- q %<+% dd1 +geom_tippoint(aes(color=hysteranthy,shape=hysteranthy),size=2)
+
+q<-q+theme(legend.position="bottom")
+
+
+ggpubr::ggarrange(p,q,ncol=2,legend="bottom",common.legend = TRUE,labels = c("a)","b)"), vjust = 10)
+
+@

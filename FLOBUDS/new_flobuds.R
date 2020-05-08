@@ -123,7 +123,7 @@ figpath <- "Plots"
 cols <- adjustcolor("indianred3", alpha.f = 0.3) 
 my.pal <- rep(brewer.pal(n = 10, name = "Paired"), 8)
 # display.brewer.all()
-alphahere = 0.4
+alphahere = 1
 
 xlab <- "Model estimate of change in phenophase day"
 
@@ -131,12 +131,16 @@ spp <- unique(dat$GEN.SPA)
 
 modelhere <-mod.bb.int
 modelhere2<-mod.flo.int
+leg.txt <- c("reproductive","vegetative")
 source("exp_muplot_brms.R")
 source("prep4plot.R")
 
 
-dev.new()
-muplotfx(modelhere,modelhere2, "budburst vs. flowering", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
+
+muplotfx(modelhere,modelhere2, "budburst vs. flowering", 8, 8, c(0,8), c(-40, 30) , 40, 3.5,40,4.5)
+dev.off()
+
+muplotfx(modelhere,modelhere2, "Intecept-budburst vs. flowering", 8, 8, c(6,8), c(30, 130) , 40, 3.5,40,4.5)
 dev.off()
 
 modelhere <-mod.lo.int
@@ -175,70 +179,11 @@ mod.FLS2.small<-brm(FLS2 ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light
                    warmup = 6000)
 
 
-###prediction plots
-HFreal<-read.csv(file = "..//Data/hf003-05-mean-ind.csv")
-HFreal$FLS<-HFreal$bb.jd-HFreal$fopn.jd
-HFrealmeans<-HFreal %>% group_by(species) %>% dplyr::summarize(Estimate=mean(FLS,na.rm = TRUE),Q94.5=max(FLS,na.rm = TRUE),Q5.5=min(FLS,na.rm = TRUE))
-HFrealmeans<-filter(HFrealmeans,species %in% c('ACPE',"ACRU","NEMU","ILVE","VACO"))
-HFrealmeans$GEN.SPA<-NA
 
-HFrealmeans$GEN.SPA[which(HFrealmeans$species=="ACPE")]<-"ACE.PEN"
-HFrealmeans$GEN.SPA[which(HFrealmeans$species=="ACRU")]<-"ACE.RUB"
-HFrealmeans$GEN.SPA[which(HFrealmeans$species=="NEMU")]<-"ILE.MUC"
-HFrealmeans$GEN.SPA[which(HFrealmeans$species=="ILVE")]<-"ILE.VER"
-HFrealmeans$GEN.SPA[which(HFrealmeans$species=="VACO")]<-"VAC.COR"
-HFrealmeans$scenario<-"field"
-HFrealmeans<-dplyr::select(HFrealmeans,-species)
-coef(mod.FLS.small)
-new.data<-data.frame(GEN.SPA=rep(unique(small$GEN.SPA),9),
+new.data<-data.frame(GEN.SPA=rep(unique(dat$GEN.SPA),9),
                      Force=rep(c(0,1),each=45),
-                     Chill=rep(c(.6,1,0),30),
+                     Chill=rep(c(.67,1,0),30),
                      Light=rep(c(1),90))
-
-
-
-prediction<-predict(mod.FLS.small,newdata=new.data,probs = c(.055,.945))
-predy<-cbind(new.data,prediction)
-
-
-predy$scenario<-NA
-predy$scenario[which(predy$Force==0 & predy$Chill==.6)]<-"historic"
-predy$scenario[which(predy$Force==1 & predy$Chill==.6)]<-"warm 5"
-predy$scenario[which(predy$Force==1 & predy$Chill== 1)]<-"5+chill"
-predy$scenario[which(predy$Force==1 & predy$Chill== 0)]<-"5-chill"
-unique(predy$scenario)
-predy <- na.omit(predy) 
-predy<-dplyr::select(predy,GEN.SPA,Estimate,Q5.5,Q94.5,scenario)
-
-predy<-rbind(predy,HFrealmeans)
-
-predy$grouper<-NA
-predy$grouper[which(predy$scenario %in% c("field"))]<-"historic-observed"
-predy$grouper[which(predy$scenario %in% c("historic"))]<-"historic-predicted"
-predy$grouper[which(predy$scenario %in% c("warm 5", "warm 10"))]<-"warm only"
-predy$grouper[which(predy$scenario %in% c("5-chill", "10-chill"))]<-"warm,reduce chill"
-predy$grouper[which(predy$scenario %in% c("5+chill", "10+chill"))]<-"warm,increase chill"
-
-predy<-filter(predy,GEN.SPA %in% c("ACE.PEN","ACE.RUB","ILE.MUC","ILE.VER","VAC.COR"))
-predy %>%
-  arrange(Estimate) %>%
-  mutate(scenario = factor(scenario, levels=c("field","historic","warm 5","warm 10", "5-chill","10-chill", "5+chill","10+chill"))) %>%
-ggplot(aes(scenario,Estimate))+geom_point(aes(color=grouper))+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=grouper))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
-
-prey<-filter(predy,scenario %in% c("field","historic"))
-prey$scenario[which(prey$scenario %in% c("field"))]<-"observed"
-prey$scenario[which(prey$scenario %in% c("historic"))]<-"predicted"
-
-jpeg("Plots/fieldmodcomparisions_freescale.jpeg",width = 5, height = 6, units = 'in', res=300)
-ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA,scales="free_y")+theme_bw()+geom_hline(yintercept=0)
-dev.off()
-jpeg("Plots/fieldmodcomparisions.jpeg",width = 5, height = 6, units = 'in', res=300)
-ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
-dev.off()
-
-
-
-
 
 
 
@@ -246,8 +191,8 @@ dev.off()
 predictionflo<-predict(mod.flo.int,newdata=new.data,probs = c(.055,.945,.25,.75))
 predy<-cbind(new.data,predictionflo)
 predy$scenario<-NA
-predy$scenario[which(predy$Force==0 & predy$Chill==.6)]<-"historic"
-predy$scenario[which(predy$Force==1 & predy$Chill==.6)]<-"warm 5"
+predy$scenario[which(predy$Force==0 & predy$Chill==.67)]<-"historic"
+predy$scenario[which(predy$Force==1 & predy$Chill==.67)]<-"warm 5"
 predy$scenario[which(predy$Force==1 & predy$Chill== 1)]<-"5+chill"
 predy$scenario[which(predy$Force==1 & predy$Chill== 0)]<-"5-chill"
 
@@ -263,8 +208,8 @@ predy %>%
 predictionbb<-predict(mod.bb.int,newdata=new.data,probs = c(.055,.945,.25,.75))
 predy2<-cbind(new.data,predictionbb)
 predy2$scenario<-NA
-predy2$scenario[which(predy2$Force==0 & predy2$Chill==.6)]<-"historic"
-predy2$scenario[which(predy2$Force==1 & predy2$Chill==.6)]<-"warm 5"
+predy2$scenario[which(predy2$Force==0 & predy2$Chill==.67)]<-"historic"
+predy2$scenario[which(predy2$Force==1 & predy2$Chill==.67)]<-"warm 5"
 predy2$scenario[which(predy2$Force==1 & predy2$Chill== 1)]<-"5+chill"
 predy2$scenario[which(predy2$Force==1 & predy2$Chill== 0)]<-"5-chill"
 
@@ -275,13 +220,24 @@ predy$phase<-"flower"
 predy2$phase<-"budburst"
 predybig<-rbind(predy,predy2)
 
-jpeg("Plots/climpredictions.jpeg",width = 6, height = 10, units = 'in', res=300)
+
+
+setEPS()
+postscript("Plots/climpredictions.eps",width = 12, height = 8)
 predybig %>%
   arrange(Estimate) %>%
   mutate(scenario = factor(scenario, levels=c("historic","warm 5","warm 10", "5-chill","10-chill", "5+chill","10+chill"))) %>%
-  ggplot(aes(scenario,Estimate))+geom_point(aes(color=phase,shape=phase),size=2.5)+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=phase),linetype="solid",alpha=0.8)+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=phase),linetype="dotted",alpha=0.8)+facet_wrap(~GEN.SPA,scale="free",ncol=2)+
-  theme_bw()+scale_color_manual(values=c("darkgreen","hotpink"))
+  ggplot(aes(scenario,Estimate))+geom_point(aes(color=phase,shape=phase),size=2.5)+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=phase),linetype="solid")+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=phase),linetype="dotted")+facet_wrap(~GEN.SPA,scale="free",ncol=5)+
+  ggthemes::theme_base(base_size = 10)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))
 dev.off()
+
+goo<-filter(predybig,GEN.SPA=="COR.COR")
+goo%>%
+arrange(Estimate) %>%
+  mutate(scenario = factor(scenario, levels=c("historic","warm 5","warm 10", "5-chill","10-chill", "5+chill","10+chill"))) %>%
+  ggplot(aes(scenario,Estimate))+geom_point(aes(color=phase,shape=phase),size=2.5)+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=phase),linetype="solid",alpha=0.8)+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=phase),linetype="dotted",alpha=0.8)+
+  ggthemes::theme_base(base_size = 10)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))
+
 
 jpeg("Plots/climpredictions_fixedscale.jpeg",width = 6, height = 10, units = 'in', res=300)
 predybig %>%
@@ -341,4 +297,63 @@ dev.off()
 
 
 save.image("new_flobud.mods.Rda")
+###prediction plots
+HFreal<-read.csv(file = "..//Data/hf003-05-mean-ind.csv")
+HFreal$FLS<-HFreal$bb.jd-HFreal$fopn.jd
+HFrealmeans<-HFreal %>% group_by(species) %>% dplyr::summarize(Estimate=mean(FLS,na.rm = TRUE),Q94.5=max(FLS,na.rm = TRUE),Q5.5=min(FLS,na.rm = TRUE))
+HFrealmeans<-filter(HFrealmeans,species %in% c('ACPE',"ACRU","NEMU","ILVE","VACO"))
+HFrealmeans$GEN.SPA<-NA
 
+HFrealmeans$GEN.SPA[which(HFrealmeans$species=="ACPE")]<-"ACE.PEN"
+HFrealmeans$GEN.SPA[which(HFrealmeans$species=="ACRU")]<-"ACE.RUB"
+HFrealmeans$GEN.SPA[which(HFrealmeans$species=="NEMU")]<-"ILE.MUC"
+HFrealmeans$GEN.SPA[which(HFrealmeans$species=="ILVE")]<-"ILE.VER"
+HFrealmeans$GEN.SPA[which(HFrealmeans$species=="VACO")]<-"VAC.COR"
+HFrealmeans$scenario<-"field"
+HFrealmeans<-dplyr::select(HFrealmeans,-species)
+coef(mod.FLS.small)
+new.data<-data.frame(GEN.SPA=rep(unique(small$GEN.SPA),9),
+                     Force=rep(c(0,1),each=45),
+                     Chill=rep(c(.67,1,0),30),
+                     Light=rep(c(1),90))
+
+
+
+prediction<-predict(mod.FLS.small,newdata=new.data,probs = c(.055,.945))
+predy<-cbind(new.data,prediction)
+
+
+predy$scenario<-NA
+predy$scenario[which(predy$Force==0 & predy$Chill==.67)]<-"historic"
+predy$scenario[which(predy$Force==1 & predy$Chill==.67)]<-"warm 5"
+predy$scenario[which(predy$Force==1 & predy$Chill== 1)]<-"5+chill"
+predy$scenario[which(predy$Force==1 & predy$Chill== 0)]<-"5-chill"
+unique(predy$scenario)
+predy <- na.omit(predy) 
+predy<-dplyr::select(predy,GEN.SPA,Estimate,Q5.5,Q94.5,scenario)
+
+predy<-rbind(predy,HFrealmeans)
+
+predy$grouper<-NA
+predy$grouper[which(predy$scenario %in% c("field"))]<-"historic-observed"
+predy$grouper[which(predy$scenario %in% c("historic"))]<-"historic-predicted"
+predy$grouper[which(predy$scenario %in% c("warm 5", "warm 10"))]<-"warm only"
+predy$grouper[which(predy$scenario %in% c("5-chill", "10-chill"))]<-"warm,reduce chill"
+predy$grouper[which(predy$scenario %in% c("5+chill", "10+chill"))]<-"warm,increase chill"
+
+predy<-filter(predy,GEN.SPA %in% c("ACE.PEN","ACE.RUB","ILE.MUC","ILE.VER","VAC.COR"))
+predy %>%
+  arrange(Estimate) %>%
+  mutate(scenario = factor(scenario, levels=c("field","historic","warm 5","warm 10", "5-chill","10-chill", "5+chill","10+chill"))) %>%
+  ggplot(aes(scenario,Estimate))+geom_point(aes(color=grouper))+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=grouper))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
+
+prey<-filter(predy,scenario %in% c("field","historic"))
+prey$scenario[which(prey$scenario %in% c("field"))]<-"observed"
+prey$scenario[which(prey$scenario %in% c("historic"))]<-"predicted"
+
+jpeg("Plots/fieldmodcomparisions_freescale.jpeg",width = 5, height = 6, units = 'in', res=300)
+ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA,scales="free_y")+theme_bw()+geom_hline(yintercept=0)
+dev.off()
+jpeg("Plots/fieldmodcomparisions.jpeg",width = 5, height = 6, units = 'in', res=300)
+ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
+dev.off()

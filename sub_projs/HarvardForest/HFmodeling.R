@@ -173,7 +173,8 @@ cont$trait[which(cont$trait=="flo_cent:precip_cent")]<-"earlier flowering:water 
 
 
 both<-rbind(cont,bin)
-jpeg("HF.jpeg",width = 6, height = 4, units = 'in', res=350)
+#jpeg("HF.jpeg",width = 6, height = 4, units = 'in', res=350)
+tiff("HF.tiff",width = 6, height = 4, units = 'in', res=350)
 pd=position_dodgev(height=0.4)
 both %>%
   arrange(Estimate) %>%
@@ -244,7 +245,8 @@ apc.funct.plot2<-plot(apc.funct2)+scale_x_continuous(breaks =c(-1.5,-1.0,-0.5,0,
 
 
 
-jpeg("HarvardForest/apcs.jpeg",width = 8.6, height = 4, units = 'in', res=200)
+#jpeg("HarvardForest/apcs.jpeg",width = 8.6, height = 4, units = 'in', res=200)
+tiff("HarvardForest/apcs.tiff",width = 6, height = 4, units = 'in', res=300)
 apc.funct.plot
 dev.off()
 

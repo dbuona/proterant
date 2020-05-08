@@ -86,7 +86,9 @@ lambda.FLS2 <- hypothesis(modelcont.funct.wspecies.ind, hyp, class = NULL)
 
 d2 <- density(lambda.FLS$samples[,1])
 d3<- density(lambda.FLS2$samples[,1])
-jpeg("phylosig.jpeg",width = 4, height = 8, units = 'in', res=200)
+
+#jpeg("phylosig.jpeg",width = 4, height = 8, units = 'in', res=200)
+tiff("phylosig.tiff",width = 6, height = 8, units = 'in', res=300)
 par(mfrow=c(3,2))
 plot(Phylo.Pro.phys,main="a) MTSV-physiological")
 plot(PhyloPro.funct,main="b) MTSV-functional")

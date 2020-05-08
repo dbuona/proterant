@@ -12,11 +12,14 @@ library(raster)
 library(lme4)
 
 frax20<-read.csv("input/frax20year.csv")
+frax50<-read.csv("input/frax50year.csv")
 aesc20<-read.csv("input/aesc20year.csv")
 alnu20<-read.csv("input/alnu20year.csv")
+alnu50<-read.csv("input/alnu50year.csv")
 fagu20<-read.csv("input/fagu20year.csv")
 tili20<-read.csv("input/tili20year.csv")
 betu20<-read.csv("input/betu20year.csv")
+
 
 frax20$taxa<-"FRA.EXC"
 aesc20$taxa<-"AES.HIP"
@@ -75,6 +78,38 @@ df.intra.tili<-filter(intra.df,taxa=="TIL.HET")
 
 frax.ind<-lmer(FLS~soil.cent+(soil.cent|year),data=df.intra.alnus)
 summary(frax.ind)
+library("sf")
+library("rnaturalearth")
+library("rnaturalearthdata")
+library("rgeos")
+library("ggrepel")
+world <- ne_countries(scale = "medium", returnclass = "sf")
+class(world)
+
+alnumans<- frax50 %>% group_by(s_id,lat,lon) %>% summarise(meanFLS=mean(FLS),sdFLS=sd(FLS)) 
+alnumans$meanFLS<-(floor(alnumans$meanFLS))
+alnumans$sdFLS<-(floor(alnumans$sdFLS))
+alnumans$hyst<-ifelse(alnumans$meanFLS>0,"hyst","ser")
+alnumans$sdFLS <- paste0("(",alnumans$sdFLS , ")")
+alnumans$FLS <- paste0(alnumans$meanFLS,alnumans$sdFLS)
+randomRows <- function(df,n){
+  return(df[sample(nrow(df),n),])
+}
+shortal<-randomRows(alnumans,20)
+
+
+ggplot(data = world) + geom_sf()+
+  geom_point(data = shortal, aes(x = lon, y = lat, fill=hyst), size = 1, 
+             shape = 23) +
+  coord_sf(xlim = c(5.5, 16), ylim = c(46, 55.5), expand = FALSE)
+
+setEPS()
+postscript("fraxmaps.eps",width = 7, height = 8)
+ggplot(data = world) + geom_sf()+geom_text_repel(data = shortal, aes(x = lon, y = lat, label = FLS),size=4, 
+                   nudge_x = c(.5, -.5, 1, 2, -1), nudge_y = c(0.25, -0.25, 0.5, 0.5, -0.5)) +
+  geom_point(data = alnumans, aes(x = lon, y = lat), size = .5)+
+  coord_sf(xlim = c(5.5, 16), ylim = c(47, 55), expand = TRUE)
+dev.off()
 frax.site<-lmer(FLS~soil.cent+flo.cent+(1|s_id),data=df.intra.frax)
 summary(frax.site)
 
