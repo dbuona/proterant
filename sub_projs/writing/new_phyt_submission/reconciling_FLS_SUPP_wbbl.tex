@@ -52,7 +52,7 @@
 \renewcommand{\baselinestretch}{1.8}
 
 \usepackage[sort&compress]{natbib}
-%\bibliographystyle{..//refs/styles/newphyto.bst}
+\bibliographystyle{..//refs/styles/newphyto.bst}
 
 \usepackage{textcomp}
 \usepackage{fontenc}
@@ -86,6 +86,166 @@
 
 \noindent The following Supporting Information is available for this article:\\
 
+\section*{Tables}
+Model results for alternative flowering time models
+
+\subsection*{MTSV}
+\begin{table}[H]
+\centering
+\begin{tabular}{rlrrr}
+  \hline
+ & trait & x\$coefficients & 2.5\% & 97.5\% \\ 
+  \hline
+1 & (Intercept) & -2.442 & -3.179 & -0.341 \\ 
+  2 & pol\_cent & 0.488 & -1.196 & 2.087 \\ 
+  3 & flo\_cent & -4.233 & -6.126 & -2.001 \\ 
+  4 & precip\_cent & 0.272 & -1.235 & 1.600 \\ 
+  5 & flo\_cent:precip\_cent & 2.341 & -1.108 & 5.958 \\ 
+  6 & pol\_cent:precip\_cent & 0.117 & -2.250 & 2.076 \\ 
+  7 & pol\_cent:flo\_cent & -0.976 & -4.806 & 2.636 \\ 
+   \hline
+\end{tabular}
+\caption{Model results for MTSV model} 
+\label{main_mtsv_physilogical}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{rlrrr}
+  \hline
+ & trait & x\$coefficients & 2.5\% & 97.5\% \\ 
+  \hline
+1 & (Intercept) & -1.555 & -2.600 & -0.131 \\ 
+  2 & pol\_cent & 0.288 & -1.254 & 1.193 \\ 
+  3 & flo\_cent & -3.934 & -5.619 & -2.155 \\ 
+  4 & dummy\_cent & 0.360 & -0.666 & 1.325 \\ 
+  5 & flo\_cent:dummy\_cent & 1.920 & -0.637 & 4.506 \\ 
+  6 & pol\_cent:dummy\_cent & 1.457 & -0.162 & 3.677 \\ 
+  7 & pol\_cent:flo\_cent & -0.501 & -3.404 & 1.533 \\ 
+   \hline
+\end{tabular}
+\caption{MTSV model with moisture use representing the water dynamics hypothesis} 
+\label{moist_mtsv_physilogical}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{rlrrr}
+  \hline
+ & trait & x\$coefficients & 2.5\% & 97.5\% \\ 
+  \hline
+1 & (Intercept) & -1.409 & -2.311 & 0.034 \\ 
+  2 & pol\_cent & 1.855 & 0.000 & 2.879 \\ 
+  3 & disperse\_cent & -2.584 & -4.996 & 0.000 \\ 
+  4 & precip\_cent & -0.042 & -0.855 & 0.925 \\ 
+  5 & disperse\_cent:precip\_cent & 3.004 & -0.035 & 6.208 \\ 
+  6 & pol\_cent:precip\_cent & -0.190 & -1.895 & 1.668 \\ 
+  7 & pol\_cent:disperse\_cent & -1.940 & -5.876 & 0.520 \\ 
+   \hline
+\end{tabular}
+\caption{MTSV model with dispersal time representing the early flowering hypothesis} 
+\label{disperse_mtsv_physilogical}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{rlrrr}
+  \hline
+ & trait & x\$coefficients & 2.5\% & 97.5\% \\ 
+  \hline
+1 & (Intercept) & -1.097 & -1.607 & 0.000 \\ 
+  2 & pol\_cent & 0.845 & -0.000 & 1.773 \\ 
+  3 & seed\_cent & 0.478 & -0.591 & 1.593 \\ 
+  4 & precip\_cent & -0.953 & -1.715 & -0.026 \\ 
+  5 & seed\_cent:precip\_cent & -4.220 & -5.010 & -2.216 \\ 
+  6 & pol\_cent:precip\_cent & 1.022 & -0.629 & 2.623 \\ 
+  7 & pol\_cent:seed\_cent & -6.021 & -6.902 & -3.613 \\ 
+   \hline
+\end{tabular}
+\caption{MTSV model with seedmass representing the early flowering hypothesis} 
+\label{seed_mtsv_physilogical}
+\end{table}
+
+\subsection*{HF}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{rlrrrrrr}
+  \hline
+ & trait & Estimate & Est.Error & Q2.5 & Q10 & Q90 & Q97.5  \\ 
+  \hline
+1 & Intercept & -12.231 & 4.150 & -20.371 & -17.563 & -6.969 & -4.339  \\ 
+  2 & pol & 12.300 & 4.779 & 2.757 & 6.318 & 18.331 & 21.887 \\ 
+  3 & flo\_cent & -27.421 & 2.358 & -32.022 & -30.444 & -24.362 & -22.777  \\ 
+  4 & precip\_cent & -4.525 & 7.039 & -18.247 & -13.564 & 4.365 & 9.270  \\ 
+  5 & flo\_cent:precip\_cent & 4.758 & 2.863 & -0.834 & 1.030 & 8.424 & 10.202 \\ 
+  6 & pol:precip\_cent & 6.861 & 7.424 & -7.690 & -2.709 & 16.565 & 21.666  \\ 
+  7 & pol:flo\_cent & 5.823 & 2.992 & -0.090 & 2.000 & 9.558 & 11.723  \\ 
+   \hline
+\end{tabular}
+\caption{Model results for main text hierarchical model} 
+\label{HF_phys_main}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlrrrrrr}
+  \hline
+ & trait & Estimate & Est.Error & Q2.5 & Q10 & Q90 & Q97.5 \\ 
+  \hline
+1 & Intercept & -12.864 & 3.869 & -20.614 & -17.769 & -8.152 & -5.463 \\ 
+  2 & pol & 13.313 & 4.982 & 3.490 & 7.040 & 19.518 & 23.443 \\ 
+  3 & flo\_cent & -27.479 & 2.418 & -32.167 & -30.510 & -24.384 & -22.820 \\ 
+  4 & dummy\_cent & -4.120 & 4.950 & -14.080 & -10.391 & 1.978 & 5.530 \\ 
+  5 & flo\_cent:dummy\_cent & -6.024 & 2.748 & -11.262 & -9.430 & -2.530 & -0.635 \\ 
+  6 & pol:dummy\_cent & 4.295 & 5.356 & -6.273 & -2.321 & 10.991 & 15.142 \\ 
+  7 & pol:flo\_cent & 6.725 & 3.180 & 0.599 & 2.605 & 10.822 & 12.962 \\ 
+   \hline
+\end{tabular}
+\caption{Model results for alternative hierarchical model with moisture use as a proxy for the water limitation hypothesis} 
+\label{HF_phys_moisture}
+\end{table}
+
+begin{table}[ht]
+\centering
+\begin{tabular}{rlrrrrrr}
+  \hline
+ & trait & Estimate & Est.Error & Q2.5 & Q10 & Q90 & Q97.5 \\ 
+  \hline
+1 & Intercept & -12.668 & 3.897 & -20.541 & -17.614 & -7.865 & -4.766 \\ 
+  2 & pol & 12.937 & 4.413 & 4.075 & 7.449 & 18.436 & 21.840 \\ 
+  3 & flo\_cent & -27.437 & 2.340 & -31.998 & -30.409 & -24.382 & -22.741 \\ 
+  4 & cold\_cent & -4.535 & 6.444 & -17.408 & -12.416 & 3.437 & 8.099 \\ 
+  5 & flo\_cent:cold\_cent & 6.245 & 3.009 & 0.188 & 2.445 & 10.028 & 12.117 \\ 
+  6 & pol:cold\_cent & 7.970 & 6.974 & -5.564 & -0.816 & 16.789 & 22.225 \\ 
+  7 & pol:flo\_cent & 6.422 & 3.102 & 0.274 & 2.398 & 10.435 & 12.440 \\ 
+   \hline
+\end{tabular}
+\caption{Cold tolerance instead of water limitation} 
+\label{HF.coldtol}
+\end{table}
+
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+  HF phenophase & verbal description & apporximated BBCH  \\ 
+  \hline
+  fbb & flower buds first broke with petals visible & 55 \\
+  fopn &  50\% of the flower buds were open & 65 \\
+ bb &  50\% of the buds were open with visible leaves & 11 \\
+ l75 & 50\% of the leaves were developed to 75\% of their final size &  15 \\
+
+
+   \hline
+\end{tabular}
+\caption{Approximation of phenophases observed in \citep{OKeefe2015} the BBCH scale \citep{Finn2007}} 
+\label{BBCH2HF}
+\end{table}
+
+
+\pagebreak[4]
 
 \section*{Figures}
 
@@ -137,7 +297,7 @@ For these two, categorical, species-level case-studies, we converted verbal desc
 
 
 \subsubsection*{Harvard Forest models}
-From the publicly available Harvard Forest phenology data \citep{Okeefe2015} we calculated the time between flowers opening and leaves reaching 75\% of their final size for each individual tree per year in the data. Positive FLS values indicate flowering-first and negative values leafing-first. To compare the inference between categorical and continuous measure of FLS, we re-coded the continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets (flowering time, pollination syndrome, minimum precipitation across species' range and all two way interactions between predictors), except that we estimated flowering time directly from the HF data for each individual/year. The Harvard Forest analysis included 23 species. While taxonomically limited compared to the MTSV and USFS data, this data set included repeated phenology observation per species over time, and within year variation between individuals per species. \\ 
+From the publicly available Harvard Forest phenology data \citep{OKeefe2015} we calculated the time between flowers opening and leaves reaching 75\% of their final size for each individual tree per year in the data. Positive FLS values indicate flowering-first and negative values leafing-first. To compare the inference between categorical and continuous measure of FLS, we re-coded the continuous FLS measures as binary responses with positive values coded as hysteranthous and negative values as seranthous. These models used the same predictors as the MTSV and USFS datasets (flowering time, pollination syndrome, minimum precipitation across species' range and all two way interactions between predictors), except that we estimated flowering time directly from the HF data for each individual/year. The Harvard Forest analysis included 23 species. While taxonomically limited compared to the MTSV and USFS data, this data set included repeated phenology observation per species over time, and within year variation between individuals per species. \\ 
 For both the categorical and continuous Harvard forest models we used a Bayesian phylogenetic mixed modeling framework (PMM) \citep{Garamszegi2014} using the R package ``brms" \citep{Burkner2018}. PMM's incorporate the phylogenetic relationship among species as a random effect, utilizing a variance-covariance matrix based on species relationships to account for the non-independence in the model residuals that can be explained by phylogeny. We also included species as an additional random effect to account for non-independence in the residuals than is not due to phylogeny, and included individual as a nested factor within this random intercept to account for the repeat observations over time. The categorical model was built on a Bernoulli likelihood distribution and the continuous model on a Gaussian distribution. For both models, we ran 4 chains with 4000 iterations and a warm-up of 3000 iterations each, resulting in 4000 total sampling iterations. All models used weakly informative priors on the intercept and error terms. Increasing priors three-fold did not impact the model estimates. As our primary goal was to directly compare the effects each predictor, we standardized these variables to allow for a reasonable comparison between them {\citep{Gelman2007}. Model results can be found in Fig. \ref{fig:muplots.HF}.\\
 
 %\noindent The three Harvard Forest models are detailed below:\\
@@ -179,135 +339,7 @@ For all categorical specifications of FLS (MTSV, USFS and HF), we assessed the p
   
 \clearpage
 
-%\bibliography{..//refs/hyst_outline.bib}
-\begin{thebibliography}{20}
-\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
-
-\bibitem[{Barnes \emph{et~al.}(2016)Barnes, Dick \& Gunn}]{Barnes2016}
-{\bf Barnes BV, Dick CW, Gunn ME}. 2016.
-\newblock \emph{Michgan Shrubs & Vines: A guide to species of the Great Lakes
-  Region}.
-\newblock University of Michigan Press.
-
-\bibitem[{Barnes \& Wagner(1981,2004)}]{Barnes2004}
-{\bf Barnes BV, Wagner WHJ}. 1981,2004.
-\newblock \emph{Michigan Trees: A guide to the Trees of the Great Lakes
-  Region}.
-\newblock University of Michigan Press.
-
-\bibitem[{B{\"u}rkner(2017)}]{BurknerPC}
-{\bf B{\"u}rkner PC}. 2017.
-\newblock brms-users group.
-\newblock personal communication.
-
-\bibitem[{B{\"u}rkner(2018)}]{Burkner2018}
-{\bf B{\"u}rkner PC}{\bf . 2018}.
-\newblock Advanced bayesian multilevel modeling with the r package brms.
-\newblock \emph{R Journal}, {\bf 10}: 395--411.
-
-\bibitem[{Burns \& Honkala(1990)}]{Burns1990}
-{\bf Burns RM, Honkala BH}. 1990.
-\newblock Silvics of North America: Volume 2. hardwoods.
-\newblock Tech. rep., United States Department of Agriculture (USDA), Forest
-  Service.
-
-\bibitem[{{Daniel L{\"u}decke}(2018)}]{Ludecke2018}
-{\bf {Daniel L{\"u}decke}}{\bf . 2018}.
-\newblock ggeffects: Tidy data frames of marginal effects from regression
-  models.
-\newblock \emph{{Journal of Open Source Software}}, {\bf 3}: 772.
-
-\bibitem[{Fritz \& Purvis(2010)}]{FRITZ2010}
-{\bf Fritz SA, Purvis A}{\bf . 2010}.
-\newblock Selectivity in mammalian extinction risk and threat types: a new
-  measure of phylogenetic signal strength in binary traits.
-\newblock {\bf 24}: 1042--1051.
-
-\bibitem[{Gellman \& Hill(2997)}]{Gelman2007}
-{\bf Gellman A, Hill J}. 2997.
-\newblock \emph{Data analysis using regression and multilevel/hierarchical
-  models}.
-\newblock Cambridge University Press.
-
-\bibitem[{Ho \& Ane(2014)}]{Ho2014}
-{\bf Ho LST, Ane C}{\bf . 2014}.
-\newblock A linear-time algorithm for gaussian and non-gaussian trait evolution
-  models.
-\newblock \emph{Systematic Biology}, {\bf 63}: 397--408.
-
-\bibitem[{Ives \& Garland(2010)}]{Ives2010}
-{\bf Ives AR, Garland Jr. T}{\bf . 2010}.
-\newblock Phylogenetic logistic regression for binary dependent variables.
-\newblock \emph{Systematic Biology}, {\bf 59}: 9--26.
-
-\bibitem[{Kharouba \emph{et~al.}(2018)Kharouba, Ehrl{\'e}n, Gelman, Bolmgren,
-  Allen, Travers \& Wolkovich}]{Kharouba2018}
-{\bf Kharouba HM, Ehrl{\'e}n J, Gelman A, Bolmgren K, Allen JM, Travers SE,
-  Wolkovich EM}{\bf . 2018}.
-\newblock Global shifts in the phenological synchrony of species interactions
-  over recent decades.
-\newblock \emph{Proceedings of the National Academy of Sciences}, {\bf 115}:
-  5211.
-
-\bibitem[{O'Keefe(2015)}]{Okeefe2015}
-{\bf O'Keefe J}. 2015.
-\newblock Phenology of woody species at Harvard Forest since 1990.
-
-\bibitem[{Orme \emph{et~al.}(2013)Orme, Freckleton, Thomas, Petzoldt, Fritz,
-  Isaac \& Pearse}]{Orme2013}
-{\bf Orme D, Freckleton R, Thomas G, Petzoldt T, Fritz S, Isaac N, Pearse W}.
-  2013.
-\newblock \emph{caper: Comparative Analyses of Phylogenetics and Evolution in
-  R}.
-
-\bibitem[{Stocker \emph{et~al.}(2013)Stocker, Qin, Plattner, Tignor, Allen,
-  Boschung, Nauels, Xia, Bex \& Midgley}]{IPCC2013}
-{\bf Stocker T, Qin D, Plattner GK, Tignor M, Allen S, Boschung J, Nauels A,
-  Xia Y, Bex V, Midgley P}. 2013.
-\newblock \emph{Climate Change 2013: The Physical Science Basis. Contribution
-  of Working Group I to the Fifth Assessment Report of the Intergovernmental
-  Panel on Climate Change}.
-\newblock IPCC, Cambridge, United Kingdom and New York, NY.
-
-\bibitem[{Templ \emph{et~al.}(2018)Templ, Koch, K.Bolmgren, Ungersb{\"o}ck,
-  Paul, Scheifinger \& et~al.}]{PEP725}
-{\bf Templ B, Koch E, K.Bolmgren, Ungersb{\"o}ck M, Paul A, Scheifinger H,
-  et~al.}{\bf . 2018}.
-\newblock Pan European phenological database (pep725): a single point of access
-  for European data.
-\newblock \emph{Int. J. Biometeorology}.
-
-\bibitem[{USDA/NRCS(2020)}]{usdancrs}
-{\bf USDA/NRCS}. 2020.
-\newblock Conservation plants characteristics.
-
-\bibitem[{de~Villemeruil P. &~Nakagawa(2014)}]{Garamszegi2014}
-{\bf de~Villemeruil P. &~Nakagawa S}. 2014.
-\newblock \emph{Modern phylogenetic comparative methods and their application
-  in evolutionary biology}, Springer, New York, chap. General quantitative
-  genetic methods for comparative biology, pp. pp. 287--303.
-
-\bibitem[{Wilcox(2010)}]{Wilcox2010}
-{\bf Wilcox RR}. 2010.
-\newblock \emph{Fundamentals of modern statistical methods: Substantially
-  improving power and accuracy.}
-\newblock Springer.
-
-\bibitem[{Yu \emph{et~al.}(2017)Yu, Smith, Zhu, Guan \& Lam}]{Yu2017}
-{\bf Yu G, Smith D, Zhu H, Guan Y, Lam T}{\bf . 2017}.
-\newblock ggtree: an r package for visualization and annotation of phylogenetic
-  trees with their covariates and other associated data.
-\newblock \emph{Methods in Ecology and Evolution}, {\bf 8}: 28--36.
-
-\bibitem[{Zanne \emph{et~al.}(2013)Zanne, Tank, Cornwell, Eastman, Smith,
-  FitzJohn, McGlinn, O'Meara, Moles, Reich \& et~al.}]{Zanne2013}
-{\bf Zanne AE, Tank DC, Cornwell WK, Eastman JM, Smith SA, FitzJohn RG, McGlinn
-  DJ, O'Meara BC, Moles AT, Reich PB \emph{et~al}}{\bf . 2013}.
-\newblock Three keys to the radiation of angiosperms into freezing
-  environments.
-\newblock \emph{Nature}, {\bf 506}: 89--92.
-
-\end{thebibliography}
+\bibliography{..//..//refs/hyst_outline.bib}
 
 
 

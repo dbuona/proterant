@@ -176,20 +176,32 @@ a<-binary.main %>%
   mutate(trait = factor(trait, levels=c("early flowering:water dynamics","pollination:early flowering","pollination:water dynamics","early flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(estimate,trait))+geom_point(aes(),position=pd,size=2,color="firebrick1")+
   geom_errorbarh(aes(xmin=low,xmax=high),position=pd,height=0,size=.5,color="firebrick1")+
-  xlim(-1.5,2)+ theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  xlim(-1.5,2)+ theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
  guides(size = "legend", linetype= "none")+theme(axis.title.x=element_blank(),
-                                                                plot.margin = margin(l=5,r = 1,t=20,b=10))
-
+                                                                plot.margin = margin(l=5,r = 1,t=20,b=10))+
+  annotate("text",x=-1.3,y=6, label="biotic",fontface =2, size=3)+
+  #annotate("text",x=1.8,y=6, label="wind",fontface =2, size=3)+
+  annotate("text",x=-1.3,y=5, label="drier",fontface =2, size=3)+
+  #annotate("text",x=1.8,y=5, label="wetter",fontface =2, size=3)+
+  annotate("text",x=-1.3,y=4, label="earlier",fontface =2, size=3)
+  #annotate("text",x=1.8,y=4, label="later",fontface =2, size=3)
+  
 
 b<-quant.main %>%
   arrange(estimate) %>%
   mutate(trait = factor(trait, levels=c("early flowering:water dynamics","pollination:early flowering","pollination:water dynamics","early flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(estimate,trait))+geom_point(aes(),position=pd,size=2,color="goldenrod3")+
   geom_errorbarh(aes(xmin=low,xmax=high),position=pd,height=0,size=.5,color="goldenrod3")+
-  xlim(-35,50)+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  xlim(-40,50)+theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
  guides(size = "legend", linetype= "none")+theme(axis.title.y=element_blank(),
                                                                 axis.text.y=element_blank(),axis.ticks.y=element_blank(),axis.title.x=element_blank(),
-                                                                plot.margin = margin(r = 1.5, l = 1.5,t=20,b=10))
+                                                                plot.margin = margin(r = 1.5, l = 1.5,t=20,b=10))#+
+  annotate("text",x=-36,y=6, label="biotic",fontface =2, size=3)+
+  annotate("text",x=47,y=6, label="wind",fontface =2, size=3)+
+  annotate("text",x=-36,y=5, label="drier",fontface =2, size=3)+
+  annotate("text",x=47,y=5, label="wetter",fontface =2, size=3)+
+  annotate("text",x=-36,y=4, label="earlier",fontface =2, size=3)+
+  annotate("text",x=47,y=4, label="later",fontface =2, size=3)
                                                                 
 
 cont.phys<-filter(cont,class=="fbb-lbb")
@@ -199,20 +211,30 @@ c<-cont.phys %>%
   ggplot(aes(Estimate,trait))+geom_point(aes(),position=pd,size=2,stroke=.5,color="darkorchid3")+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=class),position=pd,height=0,linetype="dotted",color="darkorchid3")+
   geom_errorbarh(aes(xmin=Q10,xmax=Q90,group=class),position=pd,height=0,linetype="solid",color="darkorchid3")+
-  theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  xlim(-35,50)+theme(axis.title.y=element_blank(),
+  theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  xlim(-40,50)+theme(axis.title.y=element_blank(),
                                     axis.text.y=element_blank(),
                                     axis.title.x=element_blank(),
                      axis.ticks.y=element_blank(),
-                                    plot.margin = margin(l = 1,r=5,t=20,b=10) )
+                                    plot.margin = margin(l = 1,r=5,t=20,b=10) )+
+ # annotate("text",x=-36,y=6, label="biotic",fontface =2, size=3)+
+  annotate("text",x=46,y=6, label="wind",fontface =2, size=3)+
+  #annotate("text",x=-36,y=5, label="drier",fontface =2, size=3)+
+  annotate("text",x=46,y=5, label="wetter",fontface =2, size=3)+
+  #annotate("text",x=-36,y=4, label="earlier",fontface =2, size=3)+
+  annotate("text",x=46,y=4, label="later",fontface =2, size=3)
+  
 
 
 
+setEPS()
+postscript("HFmodelplots.eps",width = 8, height = 4)
 ggpubr::ggarrange(a,b,c,nrow=1,ncol=3,widths=c(2,1,1),labels=c("a)","b)","c)"),hjust=c(-11.2,-.5,-.5))
-?ggarrange()
+dev.off()
 
-
-
+tiff("HFmodplots.tiff",width = 8, height = 4,units = "in",res= 200)
+ggpubr::ggarrange(a,b,c,nrow=1,ncol=3,widths=c(2,1,1),labels=c("a)","b)","c)"),hjust=c(-11.2,-.5,-.5))
+dev.off()
 ######Suppliment
 
 bin.comps<-filter(comps,model=="categorical")
@@ -250,8 +272,11 @@ supc<-cont %>%
                      axis.ticks.y=element_blank(),
                      plot.margin = margin(l = 1,r=5,t=20,b=10) )
 
+setEPS()
+postscript("HFmodelplots4SUPP.eps",width = 8, height = 4)
 ggpubr::ggarrange(supa,supb,supc,nrow=1,ncol=3,widths=c(2,1,1),labels=c("a)","b)","c)"),hjust=c(-11.2,-.5,-.5),common.legend = TRUE,legend = "right")
 
+dev.off()
 data.frame(phenophase=c("leaf budburst","flower budburst","flowers open", "75% of leaves full size"),HF=c("lbb","fbb","fopn","l75"),BBCH=c("09","55","60","17"))
 
 ##### alternative models
@@ -260,17 +285,101 @@ colnames(HF.data)
 
 modelcont.phys.wspecies.ind<-brm(phys.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
                                  family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
-save.image("HFfinalmanuscriptmods")
 
 ###### alternative models:
+
+
+
 HF.data$dummydrought=NA
-HF.data$dummydrought[which(HF.data$drought_tol=="H")]<-1
-HF.data$dummydrought[which(HF.data$drought_tol=="M")]<-.5
-HF.data$dummydrought[which(HF.data$drought_tol=="L")]<-0
+HF.data$dummydrought[which(HF.data$moisture_use=="H")]<-1
+HF.data$dummydrought[which(HF.data$moisture_use=="M")]<-.5
+HF.data$dummydrought[which(HF.data$moisture_use=="L")]<-0
 HF.data$dummy_cent<-(HF.data$dummydrought-mean(HF.data$dummydrought,na.rm=TRUE))/(2*sd(HF.data$dummydrought,na.rm=TRUE))
 
 
-modelcont.phys.dummydrought<-brm(phys.fls~ pol+flo_cent+dummy_cent+dummy_cent:flo_cent+dummy_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+modelcont.phys.moist<-brm(phys.fls~ pol+flo_cent+dummy_cent+dummy_cent:flo_cent+dummy_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
                                  family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
 
+moist.cont<-extract_coefs4HF(modelcont.phys.moist)
+
+xtable(phys.cont,digits=3,label = "HF_phys_main",caption = "Model results for main text hierarchical model")
+xtable(moist.cont,digits=3,label = "HF_phys_moisture",caption = "Model results for alternative hierarchical model with moisture use as a proxy for the water limitation hypothesis")
+
+  ggplot(moist.cont,aes(Estimate,trait))+geom_point(aes(),position=pd,size=2,stroke=.5,color="darkorchid3")+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5),position=pd,height=0,linetype="dotted",color="darkorchid3")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90),position=pd,height=0,linetype="solid",color="darkorchid3")+
+  theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  xlim(-35,50)
+
+  cor(HF.data$dummydrought,HF.data$min_precip,use = "pairwise.complete.obs")
+?cor()
+  
+mtsv<-read.csv("MTSV_USFS/michdata_final.csv")  
+fruiting<-data.frame(name=mtsv$name,fruiting=mtsv$fruiting)
+HF.data=left_join(HF.data,fruiting)
+HF.data$disperse_cent<-(HF.data$fruiting-mean(HF.data$fruiting,na.rm=TRUE))/(2*sd(HF.data$fruiting,na.rm=TRUE))
+modelcont.phys.disperse.moist<-brm(phys.fls~ pol+disperse_cent+precip_cent+precip_cent:disperse_cent+precip_cent:pol+pol:disperse_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.99),iter=8000, warmup=6000)
+
+#summary(modelcont.phys.disperse.moist)
+
+#moist.disp.cont<-extract_coefs4HF(modelcont.phys.disperse.moist)
+
+#xtable(moist.disp.cont,digits=3,label = "HF_phys_moist_disp",caption = "Model results for alternative hierarchical model with moisture use as a proxy for the water limitation and dispersal time as a proxy for the early flowering hypothesis")
+
 save.image("finalmanuscriptmodels") 
+
+###checkk PETP
+climate<-read.csv("PETP.HF.csv")
+HF.data<-left_join(HF.data,climate)
+HF.data$aridindex_cent<-(HF.data$aridindex-mean(HF.data$aridindex,na.rm=TRUE))/(2*sd(HF.data$aridindex,na.rm=TRUE))
+HF.data$PETP_cent<-(HF.data$PTEP-mean(HF.data$PTEP,na.rm=TRUE))/(2*sd(HF.data$PTEP,na.rm=TRUE))
+
+PETP.mod<-brm(phys.fls~PETP_cent*flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                  family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
+
+summary(PETP.mod)
+arid.mod<-brm(phys.fls~aridindex_cent*flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+              family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
+
+full.petep<-brm(phys.fls~PETP_cent+flo_cent+PETP_cent:pol_cent+pol_cent:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
+
+summary(full.petep)
+cor(HF.data$flo_cent,HF.data$PETP_cent,use = "pairwise.complete.obs" )
+
+
+
+just.PETP.mod<-brm(phys.fls~PTEP+(1|name)+(1|tree.id/species), data = HF.data, 
+              family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
+extract_coefs4HF(just.PETP.mod)
+
+syn.PETP.mod<-brm(phys.fls~PTEP+PTEP:pol+(1|name)+(1|tree.id/species), data = HF.data, 
+                   family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
+
+
+extract_coefs4HF(full.petep)
+
+summary(just.PETP.mod)
+just.arid.mod<-brm(phys.fls~aridindex+(1|name)+(1|tree.id/species), data = HF.data, 
+              family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) 
+
+
+PETP<-extract_coefs4HF(full.petep)
+xtable(PETP,digits=3,label = "HF.PETP",caption = "Model results from Bayesian hierarchical regresssion analysis 
+       show that annual variation in water balance (P-ETP) does not significantly influence FLS variation at Harvard Forest")
+
+
+### alternative models with cold tolerance
+
+cor(HF.data$min_precip,HF.data$min_temp,use = "pairwise.complete.obs")
+cor(HF.data$dummydrought,HF.data$min_temp,use = "pairwise.complete.obs")
+cor(HF.data$dummydrought,HF.data$min_precip,use = "pairwise.complete.obs")
+
+HF.data$cold_cent<-(HF.data$min_temp-mean(HF.data$min_temp))/(2*sd(HF.data$min_temp))
+
+modelcont.phys.wcols.ind<-brm(phys.fls~ pol+flo_cent+cold_cent+cold_cent:flo_cent+cold_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                 family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
+
+coldy<-extract_coefs4HF(modelcont.phys.wcols.ind)
+xtable(coldy,digits=3,label = "HF.coldtol",caption = "Cold tolerance instead of water limitation")

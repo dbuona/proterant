@@ -149,3 +149,48 @@ dev.off()
 
   save.image("MTSVUSFS.mods")  
   
+  
+#### alternative models flowering time
+mich.data$disperse_cent<-(mich.data$fruiting-mean(mich.data$fruiting))/(2*sd(mich.data$fruiting))
+  ##MTSV
+z.funct.MTSV.devtime<-phyloglm(pro2~pol_cent+disperse_cent+precip_cent+precip_cent:disperse_cent+precip_cent:pol_cent+pol_cent:disperse_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                         start.beta=NULL, start.alpha=NULL,
+                         boot=599,full.matrix = TRUE)
+  
+  
+z.phys.MTSV.dev.time<-phyloglm(pro3~pol_cent+disperse_cent+precip_cent+precip_cent:disperse_cent+precip_cent:pol_cent+pol_cent:disperse_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                        start.beta=NULL, start.alpha=NULL,
+                        boot=599,full.matrix = TRUE) 
+
+main.model.mtsv<-full_join(extract_coefs(z.phys.MTSV),extract_CIs(z.phys.MTSV),by="trait")
+xtable(main.model.mtsv,digits = 3,label =  "main_mtsv_physilogical",caption = "Model results for MTSV model")  
+
+disperse.model.mtsv<-full_join(extract_coefs(z.phys.MTSV.dev.time),extract_CIs(z.phys.MTSV.dev.time),by="trait")
+xtable(disperse.model.mtsv,digits = 3,label =  "disperse_mtsv_physilogical",caption = "MTSV model with dispersal time representing the early flowering hypothesis")  
+
+###seedmass
+addmich<-read.csv("..//mich_tree_additions.csv")
+mich.data<-cbind(mich.data,addmich)
+mich.data$seed_mass<-ifelse(is.na(mich.data$seed_mass),mean(mich.data$seed_mass,na.rm=TRUE),mich.data$seed_mass)
+mich.data$seed_cent<-(mich.data$seed_mass-mean(mich.data$seed_mass))/(2*sd(mich.data$seed_mass))
+mich.data$moist_use[which(mich.data$moist_use=="N")]<-"M"
+mich.data$dummydrought=NA
+mich.data$dummydrought[which(mich.data$moist_use=="H")]<-1
+mich.data$dummydrought[which(mich.data$moist_use=="M")]<-.5
+mich.data$dummydrought[which(mich.data$moist_use=="L")]<-0
+mich.data$dummy_cent<-(mich.data$dummydrought-mean(mich.data$dummydrought,na.rm=TRUE))/(2*sd(mich.data$dummydrought,na.rm=TRUE))
+
+
+
+z.phys.MTSV.seedmass<-phyloglm(pro3~pol_cent+seed_cent+precip_cent+precip_cent:seed_cent+precip_cent:pol_cent+pol_cent:seed_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                               start.beta=NULL, start.alpha=NULL,
+                               boot=599,full.matrix = TRUE) 
+
+seed.model.mtsv<-full_join(extract_coefs(z.phys.MTSV.seedmass),extract_CIs(z.phys.MTSV.seedmass),by="trait")
+xtable(seed.model.mtsv,digits = 3,label =  "seed_mtsv_physilogical",caption = "MTSV model with seedmass representing the early flowering hypothesis")  
+
+z.phys.MTSV.moist<-phyloglm(pro3~pol_cent+flo_cent+dummy_cent+dummy_cent:flo_cent+dummy_cent:pol_cent+pol_cent:flo_cent,mich.data, mich.tre, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                      start.beta=NULL, start.alpha=NULL,
+                      boot=599,full.matrix = TRUE)
+mtsv.moist<-full_join(extract_coefs(z.phys.MTSV.moist),extract_CIs(z.phys.MTSV.moist),by="trait")
+xtable(mtsv.moist,digits = 3,label =  "moist_mtsv_physilogical",caption = "MTSV model with moisture use representing the water dynamics hypothesis")  

@@ -78,7 +78,7 @@ HF=c(length(unique(HF.data$name)),
           length(intersect(HF.data$name,try$name)))
 )
 
-
+xtable(droughtmetrics)
 
 ###but do they correlate?
 colnames(freez1)
@@ -97,22 +97,31 @@ freezish$ψψ50.safety.margin<-as.numeric(freezish$ψ50.safety.margin)
 ##############now correlations between flowering time and other predictors
 addmich<-read.csv("mich_tree_additions.csv")
 addmich$flo_loc_num<-ifelse(addmich$flower_local=="lateral",1,0)
-MTSV<-left_join(MTSV,addmich)
+MTSV<-left_join(MTSV,addmich,by="name")
 
 fruiting<-data.frame(name=MTSV$name,fruiting=MTSV$fruiting)
-HF.data<-left_join(HF.data,fruiting)
-HF.data<-left_join(HF.data,addmich)
+HF.data<-left_join(HF.data,fruiting,by= "name")
+HF.data<-left_join(HF.data,addmich, by="name")
 
 library(xtable)
 ?xtable()
 floweringcors<-data.frame(data=c("MTSV","HF"),fruit.development=c(cor(MTSV$flo_time,MTSV$fruiting,use="pairwise.complete.obs"),cor(HF.data$fopn.jd,HF.data$fruiting,use="pairwise.complete.obs")),
  seed.mass=c(cor(MTSV$flo_time,MTSV$seed_mass,use="pairwise.complete.obs"),cor(HF.data$fopn.jd,HF.data$seed_mass,use="pairwise.complete.obs")),
  xylem_anatomy=c(cor(MTSV$flo_time,MTSV$xylem_anatomy,use="pairwise.complete.obs"),cor(HF.data$fopn.jd,HF.data$xylem_anatomy,use="pairwise.complete.obs")),
-  cold.tol=c(cor(MTSV$flo_time,MTSV$min_temp,use="pairwise.complete.obs"),cor(HF.data$fopn.jd,HF.data$min_temp,use="pairwise.complete.obs")),
+  cold.tol=c(cor(MTSV$flo_time,MTSV$min_temp,use="pairwise.complete.obs"),cor(HF.data$fopn.jd,HF.data$min_temp,use="pairwise.complete.obs")))
+#,
              growing.season=c(cor(MTSV$flo_time,MTSV$frost_free,use="pairwise.complete.obs"),cor(HF.data$fopn.jd,HF.data$frost_free,use="pairwise.complete.obs")),
            bud.type=c(cor(MTSV$flo_time,MTSV$flo_loc_num,use="pairwise.complete.obs"),cor(HF.data$fopn.jd,HF.data$flo_loc_num,use="pairwise.complete.obs")))
 
 xtable(floweringcors,digits=3)
+
+data.frame(predictor=c("seed mass","xylem anatomy","cold tolerance"),
+corelations=c(cor(MTSV$flo_time,MTSV$seed_mass,use="pairwise.complete.obs"),
+                          cor(MTSV$flo_time,MTSV$xylem_anatomy,use="pairwise.complete.obs"),
+                          cor(MTSV$flo_time,MTSV$min_temp,use="pairwise.complete.obs")))
+
+
+cor(HF.data$fopn.jd,HF.data$min_temp,use="pairwise.complete.obs")
 
 
 MTSV.drought<-left_join(MTSV,freezish)

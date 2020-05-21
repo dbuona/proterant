@@ -79,10 +79,13 @@ HFshort$FLS = factor(HFshort$FLS, levels=c("hysteranthous","synanthous","seranth
 
 a<-HFshort%>%
   mutate(name = factor(name, levels=c("A. rubrum","F. americana", "A. pensylvanicum","Q. rubra","N. sylvatica","P. serotina"))) %>%
-ggplot((aes(name,DOY)))+stat_summary(aes(shape=Phenophase,color=Phenophase))+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+theme_linedraw()+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(face="italic",angle=300,hjust = 0.1))+
-  labs(title = "Quantitative phenology in the field",tag="a)")+facet_wrap(~FLS,scale="free_x",strip.position  ="top")
+ggplot((aes(name,DOY)))+stat_summary(aes(shape=Phenophase,color=Phenophase))+scale_color_manual(values=c("darkgray","darkgray","black","black"))+scale_shape_manual(values=c(2,1,17,16))+ggthemes::theme_base(base_size = 11)+ylab("Day of Year")+xlab(NULL)+theme(axis.text.x = element_text(face="italic",angle=300,hjust = 0.1))+
+  labs(tag="a)")+facet_wrap(~FLS,scale="free_x",strip.position  ="top")
 
-
+setEPS()
+postscript("speciesdiffs.eps",width = 5, height = 3)
+a
+dev.off()
 
 # theme(legend.position = "bottom",legend.box = "vertical")+
 
