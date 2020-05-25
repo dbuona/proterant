@@ -45,47 +45,59 @@ HF.data$flo_cent<-(HF.data$fopn.jd-mean(HF.data$fopn.jd,na.rm=TRUE))/(2*sd(HF.da
 HF.data$flo_cent.neg<--(HF.data$flo_cent)
 HF.data$precip_cent.neg<--(HF.data$precip_cent)
 
+
+####begin the model
 HFtree<-read.tree("HarvardForest/HFtree4modeling.tre" )
 
-####mean only model
+#### prune the tree to the same species
 HF.tree<-drop.tip(HF.tree,tip = "Viburnum_lantanoides")
 HF.tree$tip.label
 
+
+###calculate the mean values for FLS and flowering tiem (flowers open for each species)
 HF.means<-HF.data %>% group_by(name)%>% summarise(meanFLS.func=mean(funct.fls,na.rm=TRUE),meanFLS.phys=mean(phys.fls,na.rm=TRUE),meanFLS.inter=mean(inter.fls,na.rm=TRUE),meanflo=mean(flo_cent,na.rm=TRUE),meandrought=mean(precip_cent),meanpol=mean(pol_cent))
 HF.means$name
 
+####make them cateforical
 HF.means$hyster.fuct<-ifelse(HF.means$meanFLS.func>1,1,0)
 HF.means$hyster.phys<-ifelse(HF.means$meanFLS.phys>1,1,0)
 HF.means$hyster.inter<-ifelse(HF.means$meanFLS.inter>1,1,0)
 HF.means<-  HF.means %>% remove_rownames %>% column_to_rownames(var="name")
 
-z.phys.HFmean<-phylolm(meanFLS.phys~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
-summary(z.funct.HFmean)
+
+######categorical models
+
 
 z.phys.HFbin<-phylolm(hyster.phys~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                       start.beta=NULL, start.alpha=NULL,
-                      boot=599,full.matrix = TRUE)
+                      boot=599,full.matrix = TRUE) ###fbb-lbb
 
-z.funct.HFmean<-phylolm(meanFLS.func~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
-summary(z.funct.HFmean)
 
 z.funct.HFbin<-phylolm(hyster.fuct~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                        start.beta=NULL, start.alpha=NULL,
-                       boot=599,full.matrix = TRUE)
+                       boot=599,full.matrix = TRUE) ###fopn-l75
+
+##### quantitative means ()
+
+z.funct.HFmean<-phylolm(meanFLS.func~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
+summary(z.funct.HFmean) ###fbb-lbb
+
+z.phys.HFmean<-phylolm(meanFLS.phys~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
+summary(z.funct.HFmean) ###fopn-l75
 
 
-z.inter.HFmean<-phylolm(meanFLS.inter~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
-summary(z.inter.HFmean)
+#z.inter.HFmean<-phylolm(meanFLS.inter~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
+#summary(z.inter.HFmean)
 
-z.inter.HFbin<-phylolm(hyster.inter~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
-                       start.beta=NULL, start.alpha=NULL,
-                       boot=599,full.matrix = TRUE)
+#z.inter.HFbin<-phylolm(hyster.inter~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+ #                      start.beta=NULL, start.alpha=NULL,
+  #boot=599,full.matrix = TRUE)
 
+
+###Hierarchical models
 inv.phylo <- MCMCglmm::inverseA(HF.tree, nodes = "TIPS", scale = TRUE)
 A <- solve(inv.phylo$Ainv)
 rownames(A) <- rownames(inv.phylo$Ainv)
-
-
 
 
 modelcont.funct.wspecies.ind<-brm(funct.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
@@ -94,10 +106,11 @@ modelcont.funct.wspecies.ind<-brm(funct.fls~ pol+flo_cent+precip_cent+precip_cen
 modelcont.phys.wspecies.ind<-brm(phys.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
                                  family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
 
-modelcont.inter.wspecies.ind<-brm(inter.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
-                                 family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
+#modelcont.inter.wspecies.ind<-brm(inter.fls~ pol+flo_cent+precip_cent+precip_cent:flo_cent+precip_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+ #                                family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000)
 
 
+##plotting  functions ########
 summary(z.funct.HFbin)
 extract_coefs<-function(x){
   rownames_to_column(as.data.frame(x$coefficients),"trait") ##This function extracts coefficients from phylolm model
@@ -107,7 +120,9 @@ extract_CIs<-function(x){
 }
 extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,0.1,0.9,0.975))),"trait")
 }
-
+#####################
+#Plotting prep
+#####################
 phys.cont<-extract_coefs4HF(modelcont.phys.wspecies.ind)
 funct.cont<-extract_coefs4HF(modelcont.funct.wspecies.ind)
 
@@ -170,6 +185,7 @@ comps<-rbind(physcomps,functscomps)
 
 binary.main<-filter(physcomps,model=="categorical")
 quant.main<-filter(physcomps,model!="categorical")
+#########################################################
 
 a<-binary.main %>%
   arrange(estimate) %>%
@@ -184,7 +200,7 @@ a<-binary.main %>%
   annotate("text",x=-1.3,y=5, label="drier",fontface =2, size=3)+
   #annotate("text",x=1.8,y=5, label="wetter",fontface =2, size=3)+
   annotate("text",x=-1.3,y=4, label="earlier",fontface =2, size=3)
-  #annotate("text",x=1.8,y=4, label="later",fontface =2, size=3)
+  #annotate("text",x=1.8,y=4, label="later",fontface =2, size=3) #This is the binary plots for fbb-lbb
   
 
 b<-quant.main %>%
@@ -245,16 +261,23 @@ supa<-bin.comps %>%
   mutate(trait = factor(trait, levels=c("early flowering:water dynamics","pollination:early flowering","pollination:water dynamics","early flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(estimate,trait))+geom_point(aes(shape=class),position=pd,size=2,color="firebrick1")+
   geom_errorbarh(aes(xmin=low,xmax=high,group=class),position=pd,height=0,size=.5,color="firebrick1")+
-  xlim(-1.5,2)+ theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  xlim(-1.5,2)+ ggthemes::theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
   guides(size = "legend", linetype= "none")+theme(axis.title.x=element_blank(),
-                                                  plot.margin = margin(l=5,r = 1,t=20,b=10))
+                                                  plot.margin = margin(l=5,r = 1,t=20,b=10))+
+  annotate("text",x=-1.3,y=6, label="biotic",fontface =3, size=2.5)+
+  #annotate("text",x=1.8,y=6, label="wind",fontface =2, size=3)+
+  annotate("text",x=-1.3,y=5, label="drier",fontface =3, size=2.5)+
+  #annotate("text",x=1.8,y=5, label="wetter",fontface =2, size=3)+
+  annotate("text",x=-1.3,y=4, label="earlier",fontface =3, size=2.5)
+#annotate("text",x=1.8,y=4, label="later",fontface =2, size=3) #This is the binary plots for fbb-lbb
+
 
 supb<-quant.comps %>%
   arrange(estimate) %>%
   mutate(trait = factor(trait, levels=c("early flowering:water dynamics","pollination:early flowering","pollination:water dynamics","early flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(estimate,trait))+geom_point(aes(shape=class),position=pd,size=2,color="goldenrod3")+
   geom_errorbarh(aes(xmin=low,xmax=high,group=class),position=pd,height=0,size=.5,color="goldenrod3")+
-  xlim(-45,50)+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  xlim(-45,50)+ggthemes::theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
   guides(size = "legend", linetype= "none")+theme(axis.title.y=element_blank(),
                                                   axis.text.y=element_blank(),axis.ticks.y=element_blank(),axis.title.x=element_blank(),
                                                   plot.margin = margin(r = 1.5, l = 1.5,t=20,b=10))
@@ -265,12 +288,18 @@ supc<-cont %>%
   ggplot(aes(Estimate,trait))+geom_point(aes(shape=class),position=pd,size=2,stroke=.5,color="darkorchid3")+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=class),position=pd,height=0,linetype="dotted",color="darkorchid3")+
   geom_errorbarh(aes(xmin=Q10,xmax=Q90,group=class),position=pd,height=0,linetype="solid",color="darkorchid3")+
-  theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  ggthemes::theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
   xlim(-45,50)+theme(axis.title.y=element_blank(),
                      axis.text.y=element_blank(),
                      axis.title.x=element_blank(),
                      axis.ticks.y=element_blank(),
-                     plot.margin = margin(l = 1,r=5,t=20,b=10) )
+                     plot.margin = margin(l = 1,r=5,t=20,b=10) )+
+  # annotate("text",x=-36,y=6, label="biotic",fontface =2, size=3)+
+  annotate("text",x=46,y=6, label="wind",fontface =3, size=2.5)+
+  #annotate("text",x=-36,y=5, label="drier",fontface =3, size=3)+
+  annotate("text",x=46,y=5, label="wetter",fontface =3, size=2.5)+
+  #annotate("text",x=-36,y=4, label="earlier",fontface =2, size=3)+
+  annotate("text",x=46,y=4, label="later",fontface =3, size=2.5)
 
 setEPS()
 postscript("HFmodelplots4SUPP.eps",width = 8, height = 4)
@@ -320,6 +349,19 @@ HF.data=left_join(HF.data,fruiting)
 HF.data$disperse_cent<-(HF.data$fruiting-mean(HF.data$fruiting,na.rm=TRUE))/(2*sd(HF.data$fruiting,na.rm=TRUE))
 modelcont.phys.disperse.moist<-brm(phys.fls~ pol+disperse_cent+precip_cent+precip_cent:disperse_cent+precip_cent:pol+pol:disperse_cent+(1|name)+(1|tree.id/species), data = HF.data, 
                                 family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.99),iter=8000, warmup=6000)
+
+###seed mass HF
+addins<-read.csv("mich_tree_additions.csv")
+HF.data<-dplyr::left_join(HF.data,addins,by="name")
+table(HF.data$seed_mass)
+table(HF.data$seed_pound)
+HF.data$seedmass_cent<-(HF.data$seed_pound-mean(HF.data$seed_pound,na.rm=TRUE))/(2*sd(HF.data$seed_pound,na.rm=TRUE))
+
+modelcont.phys.seedmass<-brm(phys.fls~ pol+seedmass_cent+precip_cent+precip_cent:seedmass_cent+precip_cent:pol+pol:seedmass_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                   family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.99,max_treedepth=12),iter=6000, warmup=5000)
+
+
+
 
 #summary(modelcont.phys.disperse.moist)
 
@@ -383,3 +425,79 @@ modelcont.phys.wcols.ind<-brm(phys.fls~ pol+flo_cent+cold_cent+cold_cent:flo_cen
 
 coldy<-extract_coefs4HF(modelcont.phys.wcols.ind)
 xtable(coldy,digits=3,label = "HF.coldtol",caption = "Cold tolerance instead of water limitation")
+
+###plots for alternative models
+coldy$model<-"min. T"
+moist.cont$model<-"moisture use"
+cont.phys$model<-"min. P"
+cont.phys<-dplyr::select(cont.phys,-class)
+
+alternateuniverse<-rbind(coldy,moist.cont,cont.phys)
+alternateuniverse<-dplyr::filter(alternateuniverse,trait!="(Intercept)")
+alternateuniverse<-dplyr::filter(alternateuniverse,trait!="Intercept")
+#comps<-dplyr::filter(comps,trait!="sigma2")
+unique(alternateuniverse$trait)
+alternateuniverse$trait[which(alternateuniverse$trait=="pol")]<-"pollination syndrome"
+alternateuniverse$trait[which(alternateuniverse$trait=="flo_cent")]<- "early flowering"
+alternateuniverse$trait[which(alternateuniverse$trait=="cold_cent")]  <- "water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="dummy_cent")]  <- "water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="water dynamics")]  <- "water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="pol:flo_cent")]<-"pollination:early flowering"
+
+alternateuniverse$trait[which(alternateuniverse$trait=="flo_cent:dummy_cent")]<-"early flowering:water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="flo_cent:cold_cent")]<-"early flowering:water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="earlier flowering:water dynamics")]<-"early flowering:water limitation"
+
+alternateuniverse$trait[which(alternateuniverse$trait=="earlier flowering")]<- "early flowering"
+
+alternateuniverse$trait[which(alternateuniverse$trait=="pol:dummy_cent")]<-"pollination:water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="pol:cold_cent")]<-"pollination:water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="pollination:water dynamics")]<-"pollination:water limitation"
+alternateuniverse$trait[which(alternateuniverse$trait=="pollination:earlier flowering")]<-"pollination:early flowering"
+
+pd=position_dodgev(height=0.4)
+
+alternateuniverse %>%
+  arrange(Estimate) %>%
+  mutate(trait = factor(trait, levels=c("early flowering:water limitation","pollination:early flowering","pollination:water limitation","early flowering","water limitation","pollination syndrome"))) %>%
+  ggplot(aes(Estimate,trait))+geom_point(aes(color=model),position=pd,size=2,stroke=.5)+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=model),position=pd,height=0,linetype="dotted")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=model),position=pd,height=0,linetype="solid")+
+  theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  xlim(-45,50)
+
+#####
+disp.cont<-extract_coefs4HF(modelcont.phys.disperse.moist)
+disp.cont$model<-"dispersal time"
+alternateflo<-rbind(disp.cont,cont.phys)
+alternateflo<-dplyr::filter(alternateflo,trait!="Intercept")
+#comps<-dplyr::filter(comps,trait!="sigma2")
+unique(alternateflo$trait)
+alternateflo$trait[which(alternateflo$trait=="pol")]<-"pollination syndrome"
+alternateflo$trait[which(alternateflo$trait=="flo_cent")]<- "early flowering"
+alternateflo$trait[which(alternateflo$trait=="disperse_cent")]<- "early flowering"
+alternateflo$trait[which(alternateflo$trait=="earlier flowering")]<- "early flowering"
+alternateflo$trait[which(alternateflo$trait=="water dynamics")]  <- "water limitation"
+alternateflo$trait[which(alternateflo$trait=="precip_cent")]  <- "water limitation"
+alternateflo$trait[which(alternateflo$trait=="pol:disperse_cent")]<-"pollination:early flowering"
+
+alternateflo$trait[which(alternateflo$trait=="earlier flowering:water dynamics")]<-"early flowering:water limitation"
+alternateflo$trait[which(alternateflo$trait=="pollination:water dynamics")]<-"pollination:water limitation"
+alternateflo$trait[which(alternateflo$trait=="pollination:earlier flowering")]<-"pollination:early flowering"
+
+alternateflo$trait[which(alternateflo$trait=="pol:precip_cent")]<-"pollination:water limitation"
+alternateflo$trait[which(alternateflo$trait=="disperse_cent:precip_cent")]<-"early flowering:water limitation"
+alternateflo$trait[which(alternateflo$trait=="pol:disperse_cent")]<-"pollination:early flowering"
+alternateflo$model[which(alternateflo$model=="min. P")]<-"flowering time"
+
+alternateflo %>%
+  arrange(Estimate) %>%
+  mutate(trait = factor(trait, levels=c("early flowering:water limitation","pollination:early flowering","pollination:water limitation","early flowering","water limitation","pollination syndrome"))) %>%
+  ggplot(aes(Estimate,trait))+geom_point(aes(color=model),position=pd,size=2,stroke=.5)+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=model),position=pd,height=0,linetype="dotted")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=model),position=pd,height=0,linetype="solid")+
+  theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")
+
+
+
+
