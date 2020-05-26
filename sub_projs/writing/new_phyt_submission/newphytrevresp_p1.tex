@@ -1,0 +1,71 @@
+
+% Straight up stealing preamble from Eli Holmes 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%START PREAMBLE THAT IS THE SAME FOR ALL EXAMPLES
+\documentclass{article}[11pt]
+%Required: You must have these
+\usepackage{Sweave}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{gensymb}
+\usepackage{longtable}
+\usepackage{xr}
+\usepackage{pdflscape}
+\usepackage{amsmath}
+% manual for caption  http://www.dd.chalmers.se/latex/Docs/PDF/caption.pd
+%Optional: I like to muck with my margins and spacing in ways that LaTeX frowns on
+%Here's how to do that
+ \topmargin -1.5cm        
+ \oddsidemargin -0.04cm   
+ \evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+ \textwidth 16.59cm
+ \textheight 21.94cm 
+ %\pagestyle{empty}       % Uncomment if don't want page numbers
+ \parskip 7.2pt           % sets spacing between paragraphs
+ %\renewcommand{\baselinestretch}{1.5} 	% Uncomment for 1.5 spacing between lines
+\parindent 0pt% sets leading space for paragraphs
+\usepackage{setspace}
+%\doublespacing
+\usepackage{xr-hyper}
+
+%Optional: I like fancy headers
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead[LO]{How do climate change experiments actually change climate}
+%\fancyhead[RO]{2016}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%END PREAMBLE THAT IS THE SAME FOR ALL EXAMPLES
+
+\externaldocument{reconcilingFLS_main_wbbl}
+\externaldocument{reconcilingFLS_SUPP_wbbl}
+
+\renewcommand{\thetable}{L\arabic{table}}
+\renewcommand{\thefigure}{L\arabic{figure}}
+
+% line numbers for letter
+%\usepackage{lineno}
+
+
+%Start of the document
+\begin{document}
+Dear Editor,
+
+\noindent Please consider our revised manuscript ``Reconciling competing hypotheses regarding flower-leaf sequences in temperate forests for fundamental and global change biology" as a Viewpoint article in \emph{New Phytologist}.\\
+
+\noindent Deciduous woody plants of the temperate zone exhibit considerable variation in the order of reproductive and vegetative events, or flower-leaf sequences (FLSs). There are several, long-standing hypotheses suggests FLSs are under strong selection and critical to fitness, yet sustained research efforts have yet to yield a consistant, well-supported explanation for this variation. Advances in this area may have stalled because FLSs are typically classfied into categorical descriptors that do not reflect the underlying biology of the FLS hypotheses. We present a new conceptual framework for the study of  FLSs built on 1) quantitative measures of FLSs and 2) observations of FLSs below the species level. We then test both elements of our new framework using phenological case studies from temperate forests. Our treatment of this topics charts a path forward to better understand both the evolutionary origins of FLS variatin and the consequences of observed FLS shifts associated with climate change.\\
+
+\noindent Comments from the reviewers prompted us to completely revise the structure of the manscript to highlight that the two components of our framework, quantitative FLS measurements and intra-specific observations, offer complementary but different contributions to the study of FLSs. The need to make this stronger distinct was identified by all three reviewers, so in addition to more clearly articulating the details of each element of our framework independently, we have also provided additional analyses that demonstrate these differences in Figures 4 and SZ.\\
+
+\noindent Reviewers also raised important questions about the sensitivity of our analyses to the use of different flower and leaf phenophases (Reviwer 1) and functional traits representing the FLS hypotheses (Reviewer 2) in our models. To address these concerns, we now provide additional analyses using two different measurements of FLS (the time between leaf and flower budburst and the time between flowering opening and 75\% leaf expansion) in the Supporting information and four alternative funcitonal traits to represent the FLS hypotheses in the Supporting Information (Fig. SX and Fig. SY respectively) which find our models to be robust to alternative specifications.\\
+
+We feel that the reviewers' input has helped shape a new submission that is much improved, and we detail our specific changes in the following pages with reviewer comments in \emph{italics} and our responses in regular text.\\
+
+As suggested by Reviewer 2, our manuscript is now more concise with approximately 3,100 words with a 190 word summary, and four figures. It is
+not under consideration anywhere else. We hope that you will find it suitable for publication in \emph{New Phytologist}, and look forward to hearing from you.
+
+
+
+
+\end{document}

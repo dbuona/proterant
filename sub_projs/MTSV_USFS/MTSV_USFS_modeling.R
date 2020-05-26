@@ -134,7 +134,7 @@ comps$trait[which(comps$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowe
 comps$trait[which(comps$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 
 
-#jpeg("MTSV.USFS.jpeg",width = 8, height = 4, units = 'in', res=300)
+#jpeg("MTSV_USFS.jpeg",width = 8, height = 4, units = 'in', res=300)
 tiff("MTSV.USFS.tiff",width = 8, height = 4, units = 'in', res=300)
 pd=position_dodgev(height=0.4)
 comps %>%
@@ -142,8 +142,15 @@ comps %>%
   mutate(trait = factor(trait, levels=c("earlier flowering:water dynamics","pollination:earlier flowering","pollination:water dynamics","earlier flowering","water dynamics","pollination syndrome"))) %>%
   ggplot(aes(estimate,trait))+geom_point(aes(shape=class,color=data),position=pd,size=3)+
   geom_errorbarh(aes(xmin=low,xmax=high,linetype=class,color=data),position=pd,height=0,size=.5)+
- scale_linetype_manual(values=c("solid","solid"))+theme_linedraw(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,9)+
-  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")
+ scale_linetype_manual(values=c("solid","solid"))+ggthemes::theme_base(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+xlim(-8,9)+
+  scale_color_manual(values=c("orchid4","springgreen4"))+guides(size = "legend", linetype= "none")+
+  
+  annotate("text",x=-7,y=6, label="biotic",fontface =3, size=2.5)+
+  annotate("text",x=7,y=6, label="wind",fontface =3, size=2.5)+
+  annotate("text",x=-7,y=5, label="drier",fontface =3, size=2.5)+
+  annotate("text",x=7,y=5, label="wetter",fontface =3, size=2.5)+
+  annotate("text",x=-7,y=4, label="earlier",fontface =3, size=2.5)+
+  annotate("text",x=7,y=4, label="later",fontface =3, size=2.5)
   
 dev.off()
 

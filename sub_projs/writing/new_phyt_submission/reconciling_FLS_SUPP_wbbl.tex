@@ -11,18 +11,6 @@
 }
 \makeatother
 
-\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
-\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
-\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
-\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
-\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
-\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
-\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
-\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
-\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
-\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
-\let\hlipl\hlkwb
-
 \usepackage{framed}
 \makeatletter
 \newenvironment{kframe}{%
@@ -100,33 +88,25 @@
 
 \begin{figure}[H]
     \centering
- \includegraphics[width=\textwidth]{figure/FigS2.tiff} 
+ \includegraphics[width=\textwidth]{..//..//MTSV_USFS/MTSV_USFS.jpeg} 
     \caption{\textbf{Mean estimates of the effects of FLS predictors on the likelihood a species is hysteranthous vary across datasets and definitions of FLS.}  We used phylogenetic adjustments and standardized units to make a basic comparison of two datasets (Michigan Trees, Michigan Shrubs and Vines (MTSV) \citep{Barnes2004,Barnes2016} and The United States Silvics Manual (USFS) \citep{Burns1990}) and classes (physiological= no overlap between flowering and leafing, functional= moderate overlap) of FLS. While there is some agreement across models (strong effects of flowering time, no consistent effect interactions between predictors), the effect of other predictors (pollination syndrome, minimum precipitation across species' range) were highly sensitive to how data were defined, potentially biasing any inference from models and compromising the ability to validate the existing FLS hypotheses. Lines represent 95\% bootstrap intervals.}
     \label{fig:muplots.USMT}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=0.9\textheight]{figure/FigS3.tiff} 
+\includegraphics[height=0.8\textheight]{..//..//phylosig.jpeg} 
   \caption{\textbf{The phylogenetic signal for FLS varies between datasets, and is sensitive to how FLS patterns are categorized.} In a)-e),the black vertical line show the the Fritz's D statistic for binary classifications of FLS estimated from the data, with blue and red lines representing expected D values based on simulations under Brownian threshold model and random model respectively. Panel f) shows the the estimated $\lambda$ values of FLS from the the continuous modeling framework. The solid line indicates the mean estimate of $\lambda$ in the intercept only model and the dashed line indicates the mean estimate of $\lambda$ when all predictors were included in the model. Higher values indicate stronger phylogenetic structure.}
     \label{fig:Dstat}
     \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=\textheight]{} 
-  \caption{\textbf{}}. 
-    \label{fig:altwaterlim}
+\includegraphics[width=\textwidth]{..//..//alternatepredictors.jpg} 
+  \caption{\textbf{Model estimates based on categorical (a) and quantitative (b) FLS data of associations between FLSs and functional traits are stable when alternate traits are used to represent the FLS hypotheses.} In addition to our main model which used minimum precipitation across a species' range to represent the water limitation hypothesis and flowering time to represent the early flowering hypothesis, we ran alternative models with cold tolerance and moisture use representing the water limitation hypothesis, and dispersal time and seed mass representing the early flowering hypothesis. Especially for the quantitative model \textbf{(b)}, the exact estimates and uncertainty varied depending on which model we used, but the relative strength amoung predictors representing each hypothesis remained consistant suggesting the drivers of FLS variation are faily consistant for the suite of traits that may comprise them. Lines represent 95\% boostrap intervals.} 
+    \label{fig:altpreds}
     \end{figure}
     
-    \begin{figure}[H]
-\centering
-\includegraphics[height=0.9\textheight]{} 
-  \caption{\textbf{}}. 
-    \label{fig:altflotime}
-    \end{figure}
-
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{..//..//HFmodelplots4SUPP-01.jpg} 
@@ -134,20 +114,25 @@
     \label{fig:sensitivity}
     \end{figure}
 
-
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=0.9\textheight]{figure/FigS4.tiff} 
-  \caption{\textbf{Phylogenetic structure of FLS in MTSV \textbf{a)} and USFS \textbf{b)} varies significantly depending on how FLSs are defined.} Many species are re-assigned to either hysteranthy or seranthy depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed) (blue squares). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogenetic signal for this trait.}
-    \label{fig:phylogeny}
+ \begin{figure}[H] 
+       \centering
+          \includegraphics[height=0.4\textheight]{..//..//apcs.jpeg}
+          \caption{\textbf{Results from a qunatitative-hierarchical model accounting for individual variaiton in FLSs suggests that water limitation may be a driver of hysteranthy in biotically-pollinated but not in wind-pollinated taxa (a)  and that while wind pollinanted species tend to always have a longer FLS interphase, the FLSs of bioticly pollinated species are are more sensitive to absolute flowering time (b).} Here we show model-predicted differences in FLS as a function the minimum precipitation a across a species' range and flowering time for a two generic species with contrasting pollination syndromes. Model projections are conditioned on long term phenological data from Harvard Forest in Petersham, MA \citep{OKeefe2015}. Trends in \textbf{a)} are based on the mean flowering date (May 8) in the community for both functional types and trends in \textbf{(b)} are based on mean minimum precipitation values for the species included in the analysis (26 cm). Lines and shaded regions indicate mean estimates and 50\% credible intervals respectively. These systematic differences in drivers of FLSs could reflect differences in function of FLS for wind and biotically-pollinated taxa of temperate forest communities.}
+       \label{fig:apcs}
     \end{figure}
 
 \pagebreak[4]
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{..//..//cicletrees.jpg} 
+  \caption{\textbf{Phylogenetic structure of FLS in MTSV \textbf{a)} and USFS \textbf{b)} varies significantly depending on how FLSs are defined.} Many species are re-assigned to either hysteranthy or seranthy depending on whether FLS is defined functionally (partial overlap between flowering and leafing allowed) or physiologically (no overlap between flowering and leafing allowed) (blue squares). This modeling choice dramatically alters FLS patterning across the tree, resulting in an unstable phylogenetic signal for this trait.}
+    \label{fig:phylogeny}
+    \end{figure}
+
 \section*{Tables}
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \begin{tabular}{rrr}
   \hline
@@ -306,5 +291,7 @@ For all categorical specifications of FLS (MTSV, USFS and HF), we assessed the p
 \caption{MTSV model with seed mass representing the early flowering hypothesis} 
 \label{seed_mtsv_physilogical}
 \end{table}
+
+
 
 
