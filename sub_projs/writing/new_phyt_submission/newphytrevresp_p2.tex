@@ -11,7 +11,7 @@
 \usepackage{array}
 \usepackage{gensymb}
 \usepackage{longtable}
-\usepackage{xr}
+%\usepackage{xr}
 \usepackage{pdflscape}
 \usepackage{amsmath}
 % manual for caption  http://www.dd.chalmers.se/latex/Docs/PDF/caption.pd
@@ -28,7 +28,6 @@
 \parindent 0pt% sets leading space for paragraphs
 \usepackage{setspace}
 %\doublespacing
-\usepackage{xr-hyper}
 
 %Optional: I like fancy headers
 %\usepackage{fancyhdr}
@@ -37,9 +36,10 @@
 %\fancyhead[RO]{2016}
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%END PREAMBLE THAT IS THE SAME FOR ALL EXAMPLES
-
+\bibliographystyle{..//..//refs/styles/newphyto.bst}
+\usepackage{xr-hyper}
 \externaldocument{reconcilingFLS_main_wbbl}
-\externaldocument{reconcilingFLS_SUPP_wbbl}
+\externaldocument{reconciling_FLS_SUPP_wbbl}
 
 \renewcommand{\thetable}{L\arabic{table}}
 \renewcommand{\thefigure}{L\arabic{figure}}
@@ -65,11 +65,13 @@
 
 \emph{In this article, Buonaiuto and colleagues proposed and tested a new framework that quantifies the impact of various hypotheses that may explain the variability in flower-leaf sequences (FLS) among species. The subject is timely and of the interest of the readership of New Phytologist by bringing new insights on the phenology and forest trees, and especially on the chronology between flowering and leaf budburst. The proposed framework is novel, and the statistical approach and data used to test such framework is appropriate. However, I do have several concerns that should be considered.}\\
 
-We thank the reviewer for their interest in the topic and find their concerns and suggestions helpful towards drafting an improved manuscript. To address the reviewer's concerns we have re-worked the main text and added new analyses to the main manuscript and Supporting Information. We provide more details regarding the changes below.
+We thank the reviewer for their interest in the topic and find their concerns and suggestions helpful towards drafting an improved manuscript. To address the reviewer's concerns we have re-worked the main text and added new analyses to the main manuscript and Supporting Information. We provide more details regarding the changes below.\\
 
 \emph{First, I do not think that using the minimum precipitation across the species range is appropriate. The authors mentioned this limit in L311-314, but I think that using other indicators to test the ``water limitation" won't be time-consuming and would provide much more reliable results. For instance, this variable doesn't differentiate cold-dry and warm-dry climates while we know that high temperatures exacerbate drought through increasing evapotranspiration. There are plenty of drought indices that are available (e.g., Speich 2019), but the authors could simply use P-ETP, that can be calculated annually. Another option would be to use species functional traits that may better reflect their drought tolerance, like the PLC50, the water potential causing 50\% of the xylem embolism, or the hydraulic safety margin (Martin St-Paul et al. 2017). Such functional traits are now widely available for a large number of species, e.g., through the TRY database. Also, I would not use the term of ``water dynamics' as there is a notion of temporal change in ``dynamics", but rather ``water limitation:}\\
 
-\noindent We thank the reviewer for this important point, and we agree that minimum precipitation across a range is an imperfect funcitonal trait to represent the water limitation hypothesis for the reasons the reviwers discussed. For this analysis, we tried to balance using functional traits in our analyses that both covered the broadest taxonomic range while choosing traits that best encompassed the hypotheses.  We explored the possibility of using other functional traits, many of the theme suggested by the reviewer including $\psi$ 50, and $\psi$ 50 safety margins, from the TRY database and two large datasets from \citet{Bartlett2012} \citet{Choat2012}. Even with these large databases, the species coverage that would have been possible were dramatically reduced as can be seeing in the table below, which we are also happy to include in the suppliment if the editor would like.\\
+\noindent We thank the reviewer for this important point, and we agree that minimum precipitation across a range is an imperfect funcitonal trait to represent the water limitation hypothesis for the reasons the reviwers discussed. For this analysis, we tried to balance using functional traits in our analyses that both covered the broadest taxonomic range while choosing traits that best encompassed the hypotheses. We explored several alternative measures and performed four additional anyalses to address the reviwer's concerns.\\
+
+\noindent First, we explored the possibility of using other functional traits, many of the theme suggested by the reviewer including $\psi$ 50, and $\psi$ 50 safety margins, from the TRY database and two large datasets from \citet{Bartlett2012} \citet{Choat2012}. Even with these large databases, the species coverage that would have been possible were dramatically reduced as can be seeing in the table below, which we are also happy to include in the suppliment if requested.\\
 
 \begin{table}[ht]
 \centering
@@ -85,45 +87,26 @@ We thank the reviewer for their interest in the topic and find their concerns an
 \end{tabular}
 \end{table}
 
-\noindent Despite limited available data, we agree with reviewer's comments and have included results from an alternative model with a different drought-related functionial trait, species' moisture use for our main model (see \ref{moist_mtsv_physilogical},\ref{HF_phys_moisture}). Moisture use and minimum precipitation were the two functional traits used from the NCS database to represent the ``water dynamics" hypothesis in \citet{Gougherty2018}. We have plotted these results alongside the main text models in the Supporting Information ( \ref{main_mtsv_physilogical},\ref{HF_phys_main}). As can be seen the alternative predictor did not change the results of our analyses substantially. Since ``moisture use" is a categorical trait we have decided in keeping with our focus on quantitative measurements to keep minimum precipitation as the predictor we use in the main text models.  \\
+\noindent Despite limited available data, we agree with reviewer's comments and have included results from an alternative model with two different drought-related functionial traits, species' moisture use and because of the high correlation between drought and cold tolerance \citep{Zanne2013}, minimum temperature acorss a species range. It should also be noted that moisture use and minimum precipitation were the two functional traits used from the NCS database to represent the ``water dynamics" hypothesis in \citet{Gougherty2018}, that were found to be signicant drivers of FLS varation. We have plotted these results alongside the main text models in the Supporting Information ( Fig. \ref{fig:altpreds}). As can be seen the alternative predictor did not change the results of our analyses substantially. Since ``moisture use" is a categorical trait we have decided in keeping with our focus on quantitative measurements to keep minimum precipitation as the predictor we use in the main text models.  \\
 
-\noindent We also appreciated the reviewers suggestion to explore common-use drought indices in our analyses. Since these indices are usually determined at the landscape scale, given our available data, their use is most appropriate for exploring their role in inter-annual variation in FLS. We performed additional anaylses investigated the relationship between annual P-ETP and FLS variation for at Harvard Forest and as can bee seen in the table below, we found the relationship to be extremely weak (80\% credible intervals overlapping zero) and as such chose not to add these anayses to the manuscript but would be happy to do so if requested by the editor.\\
+\noindent We also appreciated the reviewers suggestion to explore common-use drought indices in our analyses. Since these indices are usually determined at the landscape scale, given our available data, their use is most appropriate for exploring their role in inter-annual variation in FLS. We performed an additional anaylsis investigating the relationship between annual P-ETP and FLS variation calculated from flux tower data. While we found no significance to this relationship, even this result is a useful metric for evaluating the relevannce of water limitation hypothesis in the temperatze zone  and we have added this analysis to an additional section ``The water limitation hypothesis in wet temperate forests" in the Supporting Methods.
 
-\textbf{Q for Lizzie:There is currently no mention of drought indices, p50 in the manuscript or their accosciated references. Is this okay?}\\
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{lrrrrrr}
-  \hline
-  trait & Estimate & Est.Error & Q2.5 & Q10 & Q90 & Q97.5 \\ 
-  \hline
- Intercept & 1.420 & 5.539 & -9.485 & -5.409 & 8.062 & 12.875 \\ 
-   PETP\_cent & 0.868 & 1.063 & -1.204 & -0.478 & 2.245 & 2.909 \\ 
-   flo\_cent & -8.858 & 3.693 & -16.184 & -13.632 & -4.243 & -1.661 \\ 
-   PETP\_cent:pol\_cent & 0.146 & 2.346 & -4.458 & -2.888 & 3.189 & 4.734 \\ 
-   flo\_cent:pol\_cent & -17.355 & 8.279 & -33.251 & -28.022 & -6.671 & -0.612 \\ 
-   \hline
-\end{tabular}
-\caption{Model results from Bayesian hierarchical regresssion analysis 
-       show that annual variation in water balance (P-ETP) does not significantly influence FLS variation at Harvard Forest} 
-\label{HF.PETP}
-\end{table}
-
-
-\noindent We agree that there are more precise ways to describe the ``water dynamics hypothesis". We used this term because it has been used in previous publications \citep{Gougherty2018}. As per the reviewer's suggestion changed the hypothesis to the ``water limitation hypothesis" througout the manuscript.\\
+\noindent Finally, we agree that there are more precise ways to describe the ``water dynamics hypothesis". We used this term because it has been used in previous publications \citep{Gougherty2018}. As per the reviewer's suggestion changed the hypothesis to the ``water limitation hypothesis" througout the manuscript.\\
 
 \emph{Second, one key aspect in the analysis of FLSs relies in the choice of the criteria which determines when the flowering and leaf-out start (as shown in Figure S1 for instance). However, the authors used different criteria for their analyses. (1) With the PEP725 database they used the BBCH60 and BBCH11 for flower and leaf phenology, respectively (L14; methods S1). (2) With the Harvard forest data, they used the time between flowers opening and leaves reaching 75\% of their final size. I'm wondering is the authors could test the sensitivity of their models to the BBCH classes used (with the PEP725 and/or Harvard forest database). Such additional information would strengthen the manuscript without complicating its reading.}
 
-\noindent The reviewer makes an excellent point here. We used different phenophases in each analysis based on data availability. As the reviewer noted, the Harvard Forest dataset uses alternative phenophases descrptions that do not perfectly correspond to established BBCH statges. For clarity, we have provided a table with our best approximations for the relationship between Harvard Forest phenophases the BBCH scale based on the publically available meta-data for this dataset (see Fig. \ref{BBCH2HF]}).\\
+\noindent The reviewer makes an excellent point here. For our analysis using PEP725 data, we chose the flowering and leafing subphases that had the most available data and as the reviewer noted, the Harvard Forest dataset uses alternative phenophases descrptions that do not perfectly correspond to established BBCH stages. To clarify how our Harvard Forest analyses should be considered in relation to the BBCH scale, we have provided a table with our best approximations for the relationship between Harvard Forest phenophases the BBCH scale based on the publically available meta-data for this dataset (see Tab. \ref{tab:BBCH2HF}).\\
 
-\noindent Additionally, for our main analysis of the Harvard Forest data we now present models with the more recongizeable phenophases ``leaf budburst" and ``flower budburst" in the main text (see \ref{fig:muplots.HF}, and provided a senstivitiy analysis comparing these results to model with the use of ''flowers open" to ``leaves 75\% final size". (see\ref{fig:sensitivity.HF}) and added a discussion of this topic explicitly in the main text of the manuscript in line \lineref{sens1}-\lineref{sens2}.\\  
+\noindent Additionally, for our main analysis of the Harvard Forest data we now present models with the more recongizeable phenophases ``leaf budburst" and ``flower budburst" in the main text (see \ref{fig:muplots.HF}), and provided a senstivitiy analysis comparing these results to model with the use of ``flowers open" to ``leaves 75\% final size". (see\ref{fig:sensitivity}). Interestingly, we found that our intra-specific hierarchical model was the most robust to these changes and have added a discussion of this topic explicitly in the main text of the manuscript in line \lineref{sens1}-\lineref{sens2}.\\  
 
 
 \emph{Third, the authors highlight the interests of adopting an intra-specific approach (L30-31; L210-121 ...), a viewpoint that I share. As shown in Figure 3, omitting the inter-annual variation oversimplifies the analysis of FLS, and hinders a deeper analysis of its climatic drivers. I agree that ``high levels variation across individuals of the same species could suggest that local adaptation and subtle differences in micro-climate, soil, light radiation, or topography contribute to FLS variation" (L231-233). However, (1) I don't see how the intra-specific variability is considered in the proposed framework, especially in the models developed. All the explanatory variables are compiled at the species level. (2) There are multiple sources of variation within a species: among populations (e.g., along an elevational gradient; Vitasse et al. 2009), among individuals from a same population (e.g., Denechere et al. 2019), among years, and among individuals and years (individuals can show a different sensitivity to climate). This additional ``population" level should be better considered in the framework.}\\
 
-\noindent We agree with the reviewer that ``intra-specific analyses" is an ambiguous descriptor and that in the main text, it wasn't clear enough how these levels of organization were incorperated in our modeling framework. For our analyses of the Harvard Forest data. we used hierarchical models to account for variation amoung indiviuals, and within individuals over time. First, we have improved the methods section in our suppliment to clarify this points. Second, we also now provide analyses in which we compared a quantitative model with the mean trait values for all species to hierarchical models accounting for inter-individual and inter-annual variation in FLS and certain the predictors for which data was avaiable at these levels (see Fig.  \ref{fig:muplots.HF}).\\
+\noindent We agree with the reviewer that ``intra-specific analyses" is an ambiguous descriptor and that in the main text, it wasn't clear enough how these levels of organization were incorperated in our modeling framework. For our analyses of the Harvard Forest data, we used hierarchical models to account for variation amoung indiviuals, and within individuals over time. First, we have improved the methods section in our Supporting Information to clarify our methods.\\ 
 
-\indent We also appreciate the reviewer's observation that the multiple sources of intra-specific varaition within a species could be more clearly addressed in our manuscript. Using the availble data, we have modified Fig. \ref{fig:vizzy} to depict FLS variation amoung and within populations and individual and more explicitly discussed the implication of variation at each of these levels in line \lineref{pop1}-\lineref{pop2}  We also agree that population level variation in particular is an interesting application that could be well tested with this framework. While such a test is beyond the scope of our short work, we have made sure to include a more explicity treatment of this level of variation in the aforementioned lines.\\
+\noindent Second, we also now provide analyses in which we compared a quantitative model with the mean trait values for all species to hierarchical models accounting for inter-individual and inter-annual variation in FLS and certain the predictors for which data was avaiable at these levels (see Fig.  \ref{fig:muplots.HF}).\\
+
+\indent We also appreciate the reviewer's observation that the multiple sources of intra-specific varaition within a species could be more clearly addressed in our manuscript. We have changed our main text to more explicitly discussed the implication of variation at the individual and population level in line \lineref{pop1}-\lineref{pop2}.  We also agree that population level variation in particular is an interesting application that could be well tested with this framework. Our main source of data came from a singla population, so a detailed analysis of population level variation is beyond the scope our short work. Yet we have made sure to include a more explicity treatment of this level of variation in the aforementioned lines, and created a map dipicting differences in the mean and variation of FLS's from one species in the PEP725 databased to provide an example of the kind of population level data that may be leveraged in future analyses.\\
 
 \emph{L39: ``their chronology" instead of ``the relationships between them"}\\
 
@@ -135,11 +118,11 @@ Fixed in line \lineref{small2.r1}\\
 
 \emph{L47: how much common is this flowering-first FLS? If this has never been quantified, I would suggest the authors to calculate the percentage of tree species that show hysteranthy.}\\
 
-\noindent We agree that a quantitatve assessment would be helpful. We have added estimates from previous work on FLS \citep{Gougerthy2018} in line \lineref{small3.r1}.\\
+\noindent We agree that a quantitatve assessment would be helpful. We have added estimates from previous work on FLS \citep{Gougherty2018} in line \lineref{small3.r1}.\\
 
 \emph{L52: ``the rate of change differs up to five-fold among species" This is not obvious from the figure 1. I would show these rates in an additional panel (e.g., with boxplots that would also show the with uncertainty in the calculation of this rate)}
 
-\noindent We appricate this suggestion and have added boxplots to the figure.
+\noindent We appricate this suggestion and have added boxplots to the figure.\\
 
 \emph{L57-59: ``Long-term data also highlight high within-species variability in FLSs” and “most research has not addressed this variability". Looks like a contradiction. Please rephrase}\\
 
@@ -163,7 +146,7 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{L324: please give an example of such possible experiment}\\
 
-\noindent We have modified this section in the current manuscript, but have provided a conceptual example of an experiment in line \lineref{exp1}.
+\noindent We no provide a conceptual example of an experiment in line \lineref{exp1}.
 
 \emph{L325-326: the difference between performance and fitness here is not clear to me}\\
 
@@ -171,7 +154,7 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{L332: ``differences in reproductive and vegetative phenological responses to the environment'. Could you give an example with an appropriate reference?}\\
 
-\noindent The revised version of our manuscript no longer contains section. Instead we have simplified our discussion of environment, physiology and FLS in line \lineref{pop2}, stating simply that:\\
+\noindent . We have simplified our discussion of environment, physiology and FLS in line \lineref{pop2}, stating simply that:\\
 \indent ``Variation amoung and within individual provides insights regarding  micro-climate effects, heritability, selection and plasticity for FLSs".\\
 
 \emph{Figure 1: to support the use of 1980 as breakpoint, cite Kharouba's paper here, and also Methods S1}\\
@@ -184,7 +167,7 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{Figure 4 and Figure S2: the interpretation of such figures is not straightforward for the pollination syndrome. What do positive estimates mean in that case? Wind-pollinated species show more positive FLSs than biotic-pollinated ones?}\\
 
-\noindent We thank the reviewer for pointing this out. Though their interpretation is correct, for general clarity, we have annotated these figures (figures \ref{fig:muplots.HF}, \ref{} and \ref) to indicate which factor of a given predictor is associated with increasing time between flowering and leafing.\\
+\noindent We thank the reviewer for pointing this out. Though their interpretation is correct, for general clarity, we have annotated these figures (figures \ref{fig:muplots.HF}, \ref{fig:muplots.USMT} and \ref{fig:sensitivity}) to indicate which factor of a given predictor is associated with increasing time between flowering and leafing.\\
 
 \emph{{\bf Reviewer \#2 (Comments to the Author)}}\\
 
@@ -196,7 +179,7 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{While well written, I do think that the manuscript can be made a lot more succinct and shortened considerably. This manuscript seems a lot lengthier than other viewpoints I have read in New Phytologist.}
 
-\noindent We thank the reviewer for this feedback. While our original submission was still well below the 6,500 word maximum for Viewpoint articles, we have made efforts to condense and streamline our revised manuscript even further. We have shortened the main text from the 3431 words of the the original submission to 2980 something and reduced the figures in the main text to 4. We are happy to work on condensing our paper even more if desired by the editor.\\
+\noindent We thank the reviewer for this feedback. While our original submission was still well below the 6,500 word maximum for Viewpoint articles, we have made efforts to condense and streamline our revised manuscript even further. We have shortened the main text from apporximately 3500 words of the the original submission to approximately 3,100 and reduced the figures in the main text to 4. We are happy to work on condensing our paper even more if requested.\\
 
 \emph{I find that there are a few other points that need to be considered to make the hypotheses that have been summarized to explain FLS more complete:}\\
 
@@ -204,7 +187,7 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{1) The authors need to explicitly consider relationships between flowering and fruiting. (see Primack 1987, Li et al. 2016, Ettinger et al. 2018). For e.g., flowering timing may be driven by selection on fruit dispersal timing and fruit development times. Therefore, large-fruited species that require longer durations for fruit development, will flower early in the spring to have sufficient time for fruit maturation (Munguía‐Rosas et al. 2011). In contrast, small fruited species may flower at anytime.}\\
 
-\noindent We agree with the reviewer and the citations provided that fruiting charcteristics are a well established proximate cause for selection on early flowering. We did not orignally include these factors in our discussion as they are considered to be drivers of early flowering but not mechansitically related to FLS variation. Yet we agree with the reviewer that a more detailed treatment of these proximate drivers of early flower would enrich our discussion of this hypothesis. We have added explict references to these drivers in lines \lineref{fruit}-\lineref{fruit2}, as well as incorperated them into alternative models using dispersal time or seed mass as a predictor instead of flowering time and included them in the Supporting Information(see \ref{disperse_mtsv_physilogical} and \ref{seed_mtsv_physilogical}).\\
+\noindent We agree with the reviewer and the citations provided that fruiting charcteristics are a well established proximate cause for selection on early flowering. We did not orignally include these factors in our discussion as they are considered to be drivers of early flowering but not mechansitically related to FLS variation. Yet we agree with the reviewer that a more detailed treatment of these proximate drivers of early flower would enrich our discussion of this hypothesis. We have added explict references to these drivers in lines \lineref{fruit}-\lineref{fruit2}, as well as incorperated them into alternative models using dispersal time or seed mass as a predictor instead of flowering time and included them in the Supporting Information (see Fig. \ref{fig:altpreds}). We found that using these predictors did not strongly affect our model inference but increased the uncertainy around the model estimates.
 
 \emph{2) Based on a hypothesis of energetic efficiency, one may expect leaf flushing to be related to flowering and fruiting (Van schaik and Pfanne 2005, Primack 1987). Both flowering and fruiting are energetically expensive. Flowering and fruiting at times when leaves are newly matured and at maximum photosynthetic efficiency is energetically optimal as opposed to relying on stored reserves. Flowering before leafing would require the use of stored non-structural carbohydrates (NSC) from the previous growing season.}\\
 
@@ -216,7 +199,7 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{4) It is unclear why authors did not include all of the five hypotheses outlined in the recent paper by Gougherty & Gougherty 2018? Specifically, they left out the hypotheses related to cold tolerance, seed mass and xylem anatomy.}
 
-\noindent Like fruit characteristics, these three hypotheses tend to appear in the literature as proximate drivers of early flowering rather than FLS variation per say therefore should be related closely to flowering time. As seen in the table below, correlations between this predictors were variable and generally low, so, as mentioned above, we included additional analyses for seed characteristics (fruit development and seed mass) and colder tolerance in the suppliment.  \citet{Gougherty2018} found little support for the xylem anatomy hypotheses, but we felt that this hypothesis should be considered a ``phyiscal constraint" and have added it to that section in line \lineref{constraint3}.\\
+\noindent Like fruit characteristics, these three hypotheses tend to appear in the literature as proximate drivers of early flowering rather than FLS variation per say therefore should be related closely to flowering time. As seen in the table below, correlations between this predictors were variable and generally low, so, as mentioned above, we included additional analyses for seed characteristics (fruit development and seed mass) and cold tolerance in the suppliment.  \citet{Gougherty2018} found little support for the xylem anatomy hypotheses, but we felt that this hypothesis should be considered a ``phyiscal constraint" and have added it to that section in line \lineref{constraint3}.\\
 
 \begin{table}[ht]
 \centering
@@ -236,7 +219,9 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{Related to the point made above, the hypothesis related to water dynamics seems relevant for seasonally dry tropical forests where leaf flushing and flowering often peak during the dry season when water is limiting. It is unclear how this is relevant for temperate forests. One line of exploration that may be worthwhile to examine relationships between freezing tolerance, wood anatomy, and water dynamics. Water dynamics are related to xylem anatomy , which is related to freezing tolerance (cold tolerance) (Zanne et al. 2014). Relationships with water use may be driven by correlations with xylem anatomy and/or cold tolerance?}\\
 
-\noindent We fully agree with the reviewer that water limitation is an unlikely driver of FLS in the temperate zone. However, this hypothesis found support in \citet{Gougherty2018}, which is one of the most detailed analyses of FLS to date, suggesting that it merrits being grappled with. We think the suggestion that there may be a relationship between FLS and water limitation in the dry-tropic and FLS and cold tolerance in the temperate zone is a good one. We found there to a high correlation between our main metric for water limitation (minimum precipitation across range) and metrics of cold tolerance (minimum temperature across range). We have included an aditional model substituting cold tolerance for water limitation in the Supporting Information, and discussed this connect explicitly in \linelabel{freeze}.\\
+\noindent We fully agree with the reviewer that water limitation is an unlikely driver of FLS in the temperate zone. However, this hypothesis found support in \citet{Gougherty2018}, which is one of the most detailed analyses of FLS to date, suggesting that it merrits being grappled with. We have added text to emphysize that this hypothesis may need further development to be applied to temperate species in line \lineref{highlat} and a more detail treatment of this development in the Supporting Information lines \lineref{wat1} - \lineref{wat2}.\\
+
+\noident We think the suggestion that there may be a relationship between FLS and water limitation in the dry-tropic and FLS and cold tolerance in the temperate zone is a good one. We found there to a high correlation between our main metric for water limitation (minimum precipitation across range) and metrics of cold tolerance (minimum temperature across range). We have included an aditional model substituting cold tolerance for water limitation in the Supporting Information (Fig. \ref{fig:altreds), and discussed this connect explicitly in lines \lineref{watemp3}- \lineref{wat2}.\\
 
 \emph{Line 23: ``FLSs are adaptive" - I am not convinced that there is unequivocal demonstration of this. There is some evidence to suggest that FLS might be adaptive.}\\
 
@@ -244,7 +229,8 @@ Done line (\lineref{small7.r1}.\\
 
 \emph{Line 27: "..concurrent support for multiple hypotheses reflects the complicated history of migration and community assembly".  This is speculative, and the inferences of complicated history of migration and community assembly (line 263 onward) are very speculative.}\\
 
-\noindent We have removed this entire parapgraph in the current version of the manuscript.\\
+\noindent We have adjusted these lines to limit our speculation into what is no doubt a much more complicated bio-geographic pattern that we original portrayed. This line (line \lineref{spec} now reads simply:\\
+``Together, these systematic differences suggest that flowering-first FLSs in these functional groups may have evolved under radically different environments and converged in temperate forests."\\
 
 \emph{Line 77: Should be "Fig.2".}
 
@@ -256,7 +242,7 @@ Line 161: "...there should be a cost..".
 
 \emph{Line 189: "Under the current framework, FLS categories are assigned at the species level". What authors are trying to point out is that FLS is determined from species mean leafing and flowering times. Note that one can determine (or quantify) FLS for individuals and still assign a species level estimate.}\\
 
-\noindent The subsection that contained this line no longer appears in the current version on the manuscript. As the reviewer points out, we agree it was a vague description of how FLS patterns are generally described. To their point, we have provide an example of this method (to ``determine (or quantify) FLS for individuals and still assign a species level estimate") that can be found in Fig. \ref{fig:muplots.HF  b).\\
+\noindent As the reviewer points out, we agree it was a vague description of how FLS patterns are generally described. To their point, we have provide an example of this method (to ``determine (or quantify) FLS for individuals and still assign a species level estimate") that can be found in Fig. \ref{fig:muplots.HF}b).\\
 
 
 \emph{Paragraph beginning line 189: There are two separate points that are mixed up here. One, that measures of FLS should be done at the level of the individual. Note that one can still average these measures made at the level of individuals to get representative species estimates of FLS. Two, there is a need to understand intra-specific variation in FLS. Note that it is possible to do one and not the other.}
@@ -265,15 +251,15 @@ Line 161: "...there should be a cost..".
 
 \emph{It is important to point out that the current estimates/categorization of FLS from species mean leafing and flowering times can give very different results from estimates/categorization done at the level of individuals and averaged to species level values/categorization, especially for species that are asynchronous and have short duration of activity. In contrast species that are synchronous in flowering and leafing, and with relatively long durations of flowering/leafing species and individual level estimates may be similar. Additionally, in considering hypothesis that explain FLS, individual level estimates are more appropriate - selection is going to act at the level of individuals.}
 
-\noindent We thank the reviewer for stressing this point and agree with their assessment. This is the reason we have added analyeses to our main text comparing a quantitiative FLS model based on species means to a hierarchical model accounting for individual variation in FLS in Fig.  \ref{fig:mu_plots.HF) b) and c).\\
+\noindent We thank the reviewer for stressing this point and agree with their assessment. This is the reason we have added analyeses to our main text comparing a quantitiative FLS model based on species means to a hierarchical model accounting for individual variation in FLS in Fig.  \ref{fig:muplots.HF}) b) and c).\\
 
 \emph{Line 214: Authors combine two separate points here - estimates of FLS at multiple scales and quantitative estimation of FLS. I think these are both kept separate. E.g. one can do hierarchical modeling with  multi scale categorical estimates of FLS.}\\
 
-\noindent This paragraph is no longer part of the revised manuscript, but we have taken the reviewers comment to heart and drawn stronger distinctions beween the utility of quantitative measures of FLS and multi-scale FLS observations throughout the manuscript.\\ 
+\noindent We have taken the reviewers comment to heart and drawn stronger distinctions beween the utility of quantitative measures of FLS and multi-scale FLS observations throughout the manuscript.\\ 
 
 \emph{Paragraph beginning line 263: This entire paragraph is very speculative. This can be shortened considerabley.}\\
 
-\noindent We appreciate the reviewer's suggest to refrain from straying toward speculation. We have removed this entire paragraph from the revised manuscript.\\
+\noindent We appreciate the reviewer's suggest to refrain from straying toward speculation. As mentioned above we have limited our speculation on this topic in line \lineref{spec}. \\
 
 \emph{Some of the references in the bibliography are incomplete: Niklas 1985, O'Keefe 2015,  Robertson 1985.}\\
  
@@ -285,15 +271,15 @@ I really enjoyed reading this paper. The ideas introduced are new and well-illus
 
 \noindent We thank the reviwer for their positive comments about our manuscript and are glad they found it enjoyable to read.\\
 
-\emph{I only have one general comment about the new framework for FLSs proposed by the authors. I found that the strongest point presented is the shift from categorical measurements to quantitative one, by recording the dates of phenological events and number of days between phenophases. And, to my opinion, the idea of ''individual-level quantification" can be dissociated from this first point. For instance, phenological observations can monitor the ‘average’ BBCH score of several individuals within a plot to get 'population-level' quantification, and this description of FLS would still be more informative than a categorial one (for the reasons explained l. 141-151). I agree with the authors that ‘continuous individual-level quantification’ of FLS would be the best data one could analyse, but there is generally a trade-off in the amount of data we can get at the individual versus species levels. I also agree that the intra-specific FLS framework is an exciting new avenue for future FLS research. However, I question its usefulness to clarify the mechanisms underlying inter-specific variation in FLSs (as stated l. 223-233). I think the biological processes driving the intra- and inter-specific variation can highly diverge (it is at least the case for the microevolutionary and macroevolutionary processes). I like the way the ideas are presented in the abstract, and I think the authors should keep this presentation in the main text too (i.e. presenting the ‘continuous individual-level quantification’ as an interesting prospect to address other questions).}
+\emph{I only have one general comment about the new framework for FLSs proposed by the authors. I found that the strongest point presented is the shift from categorical measurements to quantitative one, by recording the dates of phenological events and number of days between phenophases. And, to my opinion, the idea of ``individual-level quantification" can be dissociated from this first point. For instance, phenological observations can monitor the ``average" BBCH score of several individuals within a plot to get 'population-level' quantification, and this description of FLS would still be more informative than a categorial one (for the reasons explained l. 141-151). I agree with the authors that ‘continuous individual-level quantification’ of FLS would be the best data one could analyse, but there is generally a trade-off in the amount of data we can get at the individual versus species levels. I also agree that the intra-specific FLS framework is an exciting new avenue for future FLS research. However, I question its usefulness to clarify the mechanisms underlying inter-specific variation in FLSs (as stated l. 223-233). I think the biological processes driving the intra- and inter-specific variation can highly diverge (it is at least the case for the microevolutionary and macroevolutionary processes). I like the way the ideas are presented in the abstract, and I think the authors should keep this presentation in the main text too (i.e. presenting the ‘continuous individual-level quantification’ as an interesting prospect to address other questions).}
 
-\noident We appreciate this feedback from the reviewer, and as we mention above, we agree that that continous measures of FLS, and measures below the the species level are two seperate components of our framework that provide different benefits on their own. We have taken the reviwers general suggestion for a closer adherance to the structure of the abstract for the main text by breaking our presentation of our framework into two subsections; first discussing the benefits of quantitative measures and second how observations below the species level allows for novel research avenues regarding FLS. As the reviwer also pointed out, we agree that inter- and intra- specific may offer unique insights towards a more complete understanding of FLS variation, but may not relate to the evolutionary mechanisms drving FLS variation at different scale. In the version of the manuscript, we have removed the suggestion that intra-specific observations could clarify inter-specific mechanisms (formerly line 223-233), and rather discuss these scales seperately throughout the manuscript.\\
+\noident We appreciate this feedback from the reviewer, and as we mention above, we agree that that continous measures of FLS, and measures below the the species level are two seperate components of our framework that provide different benefits on their own. We have taken the reviwers general suggestion for a closer adherance to the structure of the abstract for the main text by breaking our presentation of our framework into two subsections; first discussing the benefits of quantitative measures and second how observations below the species level allows for novel research avenues regarding FLS. As the reviwer also pointed out, we agree that inter- and intra- specific may offer unique insights towards a more complete understanding of FLS variation, but may not relate to the evolutionary mechanisms drving FLS variation at different scale. In the version of the manuscript, no longer suggest that intra-specific observations can serve to clarify inter-specific mechanisms (formerly line 223-233), and rather discuss these scales seperately throughout the manuscript.\\
 
 
 
-\emph{l. 37-39: the fact that relationship between individual phenological stages affect fitness is the base idea of many plant life-history models, which link individual developmental threshold models across life-stages. In trees, empirical studies have also investigated how leafout and leaf senescence events and their relationship constrain the length of the growing season in trees (Vitasse <i>et al. Func. Ecol.</i> 2010, Firmat <i>et al. J. Evol. Bio</i>. 2017). So, this sentence probably needs to be nuanced.}\\
+\emph{l. 37-39: the fact that relationship between individual phenological stages affect fitness is the base idea of many plant life-history models, which link individual developmental threshold models across life-stages. In trees, empirical studies have also investigated how leafout and leaf senescence events and their relationship constrain the length of the growing season in trees (Vitasse et al. Func. Ecol. 2010, Firmat et al. J. Evol. Bio 2017). So, this sentence probably needs to be nuanced.}\\
 
-\noindent We appreciate the reviwer highlighting that the importance of phenological sequences has been aknowledged for a longer time that our language suggested. We have removed the temporal quailify from this statement in line \lineref{small1.r1} and added the citations suggested by the reviewer. It now reads: ``It is not only individual phenological stages that affect these processes, but also their chronology."\\
+\noindent We appreciate the reviwer highlighting that the importance of phenological sequences has been acknowledged for a longer time that our language suggested. We have removed the temporal quailify from this statement in line \lineref{small1.r1} and added the citations suggested by the reviewer. It now reads: ``It is not only individual phenological stages that affect these processes, but also their chronology."\\
 
 \emph{l. 51-52: Fig. 1 shows that this change is only visible (significant) for the ‘flower-first’ species, maybe this should be highlighted here.}\\
 
@@ -301,15 +287,19 @@ I really enjoyed reading this paper. The ideas introduced are new and well-illus
 
 \emph{l. 210: Following my general comment, I wonder if the authors should advocate here for a ‘continuous individual-level quantification’ if such quantitative measures of FLSs are needed across multiple taxonomic scales. I agree that it would be the perfect data to analyse in order to model the different levels of variation and their associated noise. However, how many studies would be able to get this amount of information? From database, we can generally obtain the occurrence date of phenological events at the scale of populations. If the authors want their new framework to be use it would be more careful to present the different degrees of precision toward which FLS measurements can evolve: 1- categorical → continuous; 2- species-level → population-level; 3- population-level → individual-level. The points 1- and 2- may already provide more robust test of the hypotheses for FLS variation.}\\
 
-\noindent While this line has been removed from the revised manuscript, as mentioned before we have take the reviewer's suggestion to seperate our arguements about the merits of quantitative measures of FLS and the values of intra-specific data.\\
+\noindent As mentioned before we have take the reviewer's suggestion to seperate our arguements about the merits of quantitative measures of FLS and the values of intra-specific data.\\
 
 
 \emph{l. 223-233: I am very confused by this entire paragraph. From my point of view, it would be most interesting to understanding whether the same/different biological processes explaining FLS variation at inter- and intra-specific levels. But I do not think that the comparison of the inter- and intra-specific variation in FLSs could inform about the FLS hypotheses researchers may want to test. Only the intra-specific variation in FLSs can inform about future FLS shifts (+ other parameters like the degree of gene flow among sub-species, hybridisation events etc). Please clarify your ideas about what an intra-specific FLS framework brings.}\\
 
-\noindent The reviewer's point is well taken here. This paragraph no longer exists in the revised manuscript but we have attempted to highlight the value of intra-specific observations more clearly by devoted a subsection of the paper to this topic from lines \lineref{intrasoup}-\lineref{intrasoup2}.\\
+\noindent The reviewer's point is well taken here. We have attempted to highlight the value of intra-specific observations more clearly by devoted a subsection of the paper to this topic beginning in line \lineref{intrasoup}.\\
 
 \emph{Check Fig. S3 caption: ‘the’ repeated several times in a few sentences.}\\
 
 \noindent We have fixed these typos and checked for repeated words throughout the manuscript.\\
+
+\clearpage
+
+\bibliography{..//..//refs/hyst_outline.bib}
 
 \end{document}

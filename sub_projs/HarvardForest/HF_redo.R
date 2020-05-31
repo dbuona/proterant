@@ -579,9 +579,10 @@ just.arid.mod<-brm(phys.fls~aridindex+(1|name)+(1|tree.id/species), data = HF.da
               family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.95),iter=4000, warmup=3000) 
 
 
-PETP<-extract_coefs4HF(full.petep)
+PETP<-extract_coefs4HF(just.PETP.mod)
 xtable(PETP,digits=3,label = "HF.PETP",caption = "Model results from Bayesian hierarchical regresssion analysis 
        show that annual variation in water balance (P-ETP) does not significantly influence FLS variation at Harvard Forest")
+
 
 
 ### alternative models with cold tolerance

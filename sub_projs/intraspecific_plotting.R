@@ -42,7 +42,7 @@ world <- ne_countries(scale = "medium", returnclass = "sf")
 a<-ggplot(data = world) + geom_sf(fill="white",color="gray")+geom_text_repel(data = shortal, aes(x = lon, y = lat, label = FLS),size=3, 
                                                  nudge_x = c(.5, -.5, 1, 2, -1), nudge_y = c(0.25, -0.25, 0.5, 0.5, -0.5)) +
   geom_point(data = alnumans, aes(x = lon, y = lat), size = .5)+
-  coord_sf(xlim = c(5.5, 14.5), ylim = c(47, 55), expand = TRUE)+ggthemes::theme_base()+labs(tag="b)")
+  coord_sf(xlim = c(5.5, 14.5), ylim = c(47, 55), expand = TRUE)+ggthemes::theme_base()
 
 
 
@@ -112,7 +112,6 @@ b<-HFshort%>%
   labs(tag="a)")+facet_wrap(~FLS,scale="free_x",strip.position  ="top")
 
 
-ggpubr:::ggarrange(a,c)
 
 Arub<-filter(HFshort,name=="A. rubrum")
 colnames(Arub)[5]<-"phys"
@@ -121,7 +120,8 @@ colnames(Arub)[7]<-"inter"
 c<-ggplot(data=Arub,aes(x=tree.id,phys))+geom_boxplot()+ggthemes::theme_base(base_size = 10)+labs(tag="c)")+scale_x_discrete(name="Indiviudals",label=c(1,2,3,4,5))
 ?scale_x_discrete()
 
-shorty<-filter(HF,tree.id %in% c("FRAM-04"))
+shorty<-filter(HF,tree.id %in% c("QURU-04","QURU-03","QURU-01"))
+table(shorty$tree.id)
 #shorty<-filter(shorty,year<2002)
 colnames(shorty)
 shorty$FLS<-ifelse(shorty$"physiological offset"<0,"seranthous","hysteranthous")
@@ -134,25 +134,28 @@ shorty<-drop_na(shorty)
 
 colnames(shorty)[6]<-"flower.budburst"
 colnames(shorty)[4]<-"leaf.budburst"
-pd2<-position_dodge2(0.6)
+pd2<-position_dodge2(0.8)
 colourCount = length(unique(shorty$tree.id))
 
 
 
 
 
-d<-ggplot(shorty,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,group = row.names(shorty),shape="flower.budburst") ,position=pd2,size=2)+
-  geom_point(aes(year,leaf.budburst,group = row.names(shorty),shape="leaf.budburst"),position=pd2,size=2)+
-  geom_linerange(aes(x=year,ymin=flower.budburst,ymax=leaf.budburst, linetype=FLS,group = row.names(shorty)),position=pd2)+
-  ggthemes::theme_base(base_size = 10)+labs(y = "Day of year",color= "Tree I.D.")+guides(color = FALSE)+scale_color_brewer(palette = "Set1",type="div")+
+d<-ggplot(shorty,aes(year,flower.budburst))+geom_point(aes(year,flower.budburst,color=tree.id,group = row.names(shorty),shape="flower.budburst") ,position=pd2,size=2)+
+  geom_point(aes(year,leaf.budburst,color=tree.id,group = row.names(shorty),shape="leaf.budburst"),position=pd2,size=2)+
+  geom_linerange(aes(x=year,ymin=flower.budburst,ymax=leaf.budburst,color=tree.id, linetype=FLS,group = row.names(shorty)),position=pd2)+
+  ggthemes::theme_base(base_size = 10)+labs(y = "Day of year",color= "Tree I.D.")+guides(color = FALSE)+scale_color_brewer(palette = "Set1",type="quan")+
   scale_shape_manual(name="Phenophase",values=c(2,17), label=c("flower budburst","leaf budburst"))+
-  labs(tag="d)")+theme(strip.text.x = element_text(face="italic"))#+
+  labs(tag="b)")+theme(strip.text.x = element_text(face="italic"))#+
   theme(axis.text.x = element_text(angle=300,hjust = 0.1))
 
   setEPS()
-  postscript("intraspecificplots.eps",width = 12, height = 10)
-ggpubr::ggarrange(b,a,c,d,nrow=2,ncol=2,widths=c(1,1))
+  postscript("intraspecificplots.eps",width = 8, height = 10)
+ggpubr::ggarrange(b,d,nrow=2,ncol=1,widths=c(1,1))
 dev.off()
 ggpubr::ggarrange(goo,d,nrow=2,heights = c(1,1))
 
-
+setEPS()
+postscript("popmap.eps",width = 8, height = 10)
+a
+dev.off()
