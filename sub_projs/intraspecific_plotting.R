@@ -27,7 +27,7 @@ alnumans<- frax50 %>% group_by(s_id,lat,lon) %>% summarise(meanFLS=mean(FLS),sdF
 alnumans$meanFLS<-(floor(alnumans$meanFLS))
 alnumans$sdFLS<-(floor(alnumans$sdFLS))
 alnumans$hyst<-ifelse(alnumans$meanFLS>0,"hyst","ser")
-alnumans$sdFLS <- paste0("(",alnumans$sdFLS , ")")
+#alnumans$sdFLS <- paste0("(",alnumans$sdFLS , ")")
 alnumans$FLS <- paste0(alnumans$meanFLS,alnumans$sdFLS)
 randomRows <- function(df,n){
   return(df[sample(nrow(df),n),])
@@ -43,6 +43,15 @@ a<-ggplot(data = world) + geom_sf(fill="white",color="gray")+geom_text_repel(dat
                                                  nudge_x = c(.5, -.5, 1, 2, -1), nudge_y = c(0.25, -0.25, 0.5, 0.5, -0.5)) +
   geom_point(data = alnumans, aes(x = lon, y = lat), size = .5)+
   coord_sf(xlim = c(5.5, 14.5), ylim = c(47, 55), expand = TRUE)+ggthemes::theme_base()
+
+setEPS()
+postscript("fraxmeans.eps",width = 6, height = 4)
+ggplot(alnumans,aes(meanFLS))+geom_histogram(binwidth = 1,color="black",fill="lightgray")+ggthemes::theme_base(base_size = 11)
+dev.off()
+setEPS()
+postscript("fraxSD.eps",width = 6, height = 4)
+ggplot(alnumans,aes(sdFLS))+geom_histogram(binwidth = 1,color="black",fill="lightgray")+ggthemes::theme_base(base_size = 11)
+dev.off()
 
 
 
@@ -91,8 +100,6 @@ colnames(HF)<-c("year" , "tree.id", "species","leaf budburst","leaf expansion","
 HF2<-tidyr::gather(HF, Phenophase,DOY,4:7)
 HF2<-filter(HF2,!is.na(name))
 HFshort<-dplyr::filter(HF2,name %in% c("A. rubrum","F. americana","Q. rubra","A. pensylvanicum","P. serotina","N. sylvatica"))
-
-
 
 
 hyst<-c("A. rubrum", "F. americana")

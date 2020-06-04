@@ -133,9 +133,8 @@ comps$trait[which(comps$trait=="pol_cent:precip_cent")]<- "pollination:water dyn
 comps$trait[which(comps$trait=="pol_cent:flo_cent")]<-"pollination:earlier flowering"
 comps$trait[which(comps$trait=="flo_cent:precip_cent")]<-"earlier flowering:water dynamics"
 
-
-#jpeg("MTSV_USFS.jpeg",width = 8, height = 4, units = 'in', res=300)
-tiff("MTSV.USFS.tiff",width = 8, height = 4, units = 'in', res=300)
+setEPS()
+postscript("MTSV_USFS.eps",width = 8, height = 4)
 pd=position_dodgev(height=0.4)
 comps %>%
   arrange(estimate) %>%
