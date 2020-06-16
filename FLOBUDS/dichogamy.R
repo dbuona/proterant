@@ -19,8 +19,9 @@ d<-read.csv("dicogamy.csv",header=TRUE)
 plot.raw.dat<-gather(d,sex,DOY,5:6)
 
 pd=position_dodge2(width=.8,preserve="total")
-ggplot(plot.raw.dat,aes(Force,DOY))+geom_point(aes(shape=Light,color=sex),size=0.8)+stat_summary(aes(shape=Light,color=sex),position=pd)+facet_grid(Chill~GEN.SPA)+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Forcing")+ggthemes::theme_base()
-
+ggplot(plot.raw.dat,aes(Force,DOY))+geom_point(aes(shape=Light,color=sex),size=1)+stat_summary(aes(shape=Light,color=sex),position=pd)+facet_grid(Chill~GEN.SPA)+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Forcing")+ggthemes::theme_base()
+goo<-filter(plot.raw.dat, Light=="L")
+ggplot(goo,aes(Force,DOY))+geom_point(aes(shape=Light,color=sex),size=0.8)+stat_summary(aes(shape=Light,color=sex),position=pd)+facet_grid(Chill~GEN.SPA,scales = "free_y")+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Forcing")+ggthemes::theme_base()
 
 
 d<-unite(d,treatment,Force,Light,Chill,sep="",remove=FALSE)
@@ -72,10 +73,17 @@ pd2=position_dodgev(height=0.3)
 ggplot(bothy,aes(Estimate,Predictor))+geom_point(aes(color=phase,shape=phase),position=pd2, size=4)+geom_errorbarh(aes(xmin=Q25,xmax=Q75,color=phase),linetype="solid",position=pd2,width=0,size=0.7)+geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),linetype="dotted",position=pd2,width=0,size=0.7)+geom_vline(aes(xintercept=0),color="black")
 dev.off()
 
-lady.fect<-brm(flo_dayF~Force+Chill+Light+Force:Chill+Force:Light+Chill:Light,data=cor)
+
+cor(d$flo_dayF, d$flo_dayM,use="na.or.complete")
+?cor()
+
+lady.fect<-brm(flo_dayF~Force*GEN.SPA+Chill*GEN.SPA+Light*GEN.SPA,data=d)
 summary(lady.fect)
-bro.fect<-brm(flo_dayM~Force+Chill+Light+Force:Chill+Force:Light+Chill:Light,data=cor)
+pp_check(lady.fect)
+bro.fect<-brm(flo_dayM~Force+Chill+Light,data=d)
 summary(bro.fect)
+
+
 
 lady<-extract_coefs(lady.fect)
 bro<-extract_coefs(bro.fect)
