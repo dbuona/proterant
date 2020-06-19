@@ -13,13 +13,13 @@ muplotfx <- function(modelhere,modelhere2, nameforfig, width, height, ylim, xlim
   par(xpd=FALSE)
   par(mar=c(5,7,3,10))
   plot(x=NULL,y=NULL, xlim=xlim, yaxt='n', ylim=ylim,
-       xlab=xlab, ylab="", main=nameforfig)
-  axis(2, at=1:7, labels=rev(c("Intercept","Chill", "Light", "Force","Chill:Light","Chill:Force","Light:Force")), las=1) ### Need to change
+       xlab=xlab, ylab="", main="")
+  axis(2, at=1:6, labels=rev(c("Chill", "Light", "Force","Chill:Light","Chill:Force","Light:Force")), las=1) ### Need to change
   abline(v=0, lty=2, col="darkgrey")
-  rownameshere <- c("b_Intercept","b_Chill", "b_Light", "b_Force","b_Chill:Light","b_Chill:Force","b_Light:Force") ### Need to change
-  ppeffects <- c("b_Intercept","b_Chill", "b_Light", "b_Force","b_Chill:Light","b_Chill:Force","b_Light:Force") ### Need to change
-  for(i in 1:7){#i=1 ## need to change
-    pos.y<-(7:1)[i] ### need to change
+  rownameshere <- c("b_Chill", "b_Light", "b_Force","b_Chill:Light","b_Chill:Force","b_Light:Force") ### Need to change
+  ppeffects <- c("b_Chill", "b_Light", "b_Force","b_Chill:Light","b_Chill:Force","b_Light:Force") ### Need to change
+  for(i in 1:6){#i=1 ## need to change
+    pos.y<-(6:1)[i] ### need to change
     pos.x<-modoutput1[(modoutput1$term==rownameshere[i]),"estimate"]
     lines(modoutput1[(modoutput1$term==rownameshere[i]),c("lower","upper")],rep(pos.y,2),col="darkgrey")
     pos.x2<-modoutput2[(modoutput2$term==rownameshere[i]),"estimate"]

@@ -3,6 +3,8 @@ options(stringsAsFactors = FALSE)
 library(brms)
 library(dplyr)
 library(broom)
+
+setwd("~/Documents/git/proterant/FLOBUDS")
 Temp<-25
 Tb<-5
 threshes<-c(300)
@@ -184,6 +186,8 @@ df.leaf.dif$phase<-"leafing"
 
 full1<-rbind(df.leaf.dif,df.flo.dif)
 
+
+
 #################  
 #full is same resposne to chilling
 ### full1 is differential respnse
@@ -195,11 +199,47 @@ leaf.mod.nodif<-brm(days~temp+chill,data=df.leaf)
 flo.mod.dif<-brm(days~temp+chill,data=df.flo.dif)
 leaf.mod.dif<-brm(days~temp+chill,data=df.leaf.dif)
 
+extract_coefs4HF<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.025,0.1,0.9,0.975))),"trait")
+}
+
+flodiff<-extract_coefs4HF(flo.mod.dif)
+flodiff$phase<-"first"
+leafdif<-extract_coefs4HF(leaf.mod.dif)
+leafdif$phase<-"second"
+diff<-rbind(flodiff,leafdif)
+
+
+flonodiff<-extract_coefs4HF(flo.mod.nodif)
+flonodiff$phase<-"first"
+leafnodif<-extract_coefs4HF(leaf.mod.nodif)
+leafnodif$phase<-"second"
+nodiff<-rbind(flonodiff,leafnodif)
+diff$model<-"DS"
+nodiff$model<-"PH"
+
+simplots<-rbind(nodiff,diff)
+
+
+simplots<-filter(simplots,trait!="Intercept")
+
+
+####plot with ggplot
+pd=position_dodgev(height=0.4)
+
+
+  ggplot(simplots,aes(Estimate,trait))+geom_point(aes(Estimate,trait,color=phase),position=pd,size=2)+
+  geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,color=phase),position=pd,height=0,linetype="dotted")+
+  geom_errorbarh(aes(xmin=Q10,xmax=Q90,color=phase),position=pd,height=0,linetype="solid")+
+  ggthemes::theme_base(base_size = 10)+geom_vline(aes(xintercept=0),color="black")+facet_wrap(~model)+scale_color_brewer(type = "qual",palette = 7)
+
 #flo.mod.nodif.gdd<-brm(GDD~temp+chill,data=df.flo) #effect on gdd conserved for both phases and cues
 #leaf.mod.nodif.gdd<-brm(GDD~temp+chill,data=df.leaf)  
 
 #flo.mod.dif.gdd<-brm(GDD~temp+chill,data=df.flo.dif)
 #leaf.mod.dif.gdd-brm(GDD~temp+chill,data=df.leaf.dif)
+
+
+####plot with plotr:
 
 figpath <- "Plots"
 
@@ -219,8 +259,8 @@ modoutput1 <- tidy(modelhere, prob=c(0.5))
 modoutput2 <- tidy(modelhere2, prob=c(0.5))
 
 #dev.new()
-muplotfx(modelhere,modelhere2, "ordered heat sums", 8, 8, c(0,4), c(-10, 0))
-leg.txt <- c("reproductive","vegetative")
+muplotfx(modelhere,modelhere2, "Precocity hierarchy hypothesis", 8, 4, c(.5,2.5), c(-10, 0))
+leg.txt <- c("first phase","second phase")
 par(xpd=TRUE) # so I can plot legend outside
 legend(1,1,legend=leg.txt,pch=c(19,17),cex=1, bty="n", text.font=3)
 
@@ -236,8 +276,8 @@ modelhere2<-leaf.mod.dif
 modoutput1 <- tidy(modelhere, prob=c(0.5))
 modoutput2 <- tidy(modelhere2, prob=c(0.5))
 
-muplotfx(modelhere,modelhere2, "differential sensitivity", 8, 8, c(0,4), c(-20, 0))
-leg.txt <- c("reproductive","vegetative")
+muplotfx(modelhere,modelhere2, "differential sensitivity hypothesis", 8, 4, c(0.5,2.5), c(-20, 0))
+leg.txt <- c("first phase","second phase")
 par(xpd=TRUE) # so I can plot legend outside
 legend(2,1,legend=leg.txt,pch=c(19,17),cex=1, bty="n", text.font=3)
 

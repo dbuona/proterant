@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\renewcommand{\baselinestretch}{1.8}
+\usepackage{textcomp}
+\usepackage{fontenc}
+\usepackage{graphicx}
+\usepackage{caption} % for Fig. captions
+\usepackage{gensymb} % for \degree
+\usepackage{placeins} % for \images
+\usepackage[margin=1in]{geometry} % to set margins
+\usepackage{setspace}
+\usepackage{lineno}
+%\usepackage{cite}
+\usepackage{amssymb} % for math symbols
+\usepackage{amsmath} % for aligning equations
+\usepackage[sort&amp;compress]{natbib}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\usepackage{xr-hyper}
+\externaldocument{diff_sensitivity}
+
+\bibliographystyle{..//..//sub_projs/refs/styles/newphyto.bst}
+
+\linenumbers
+\title{Supporting Information: Differences in flower and leaf bud responses to the environment drive shifts in spring phenological sequences of temperate woody plants}
+
+\date{}
+\author{D.M. Buonaiuto $^{1,2,a}$, E.M. Wolkovich$^{3}$}
+
+\begin{document}
+\maketitle
+
+\section*{Tables}
+\begin{table}[ht]
+\centering
+\begin{tabular}{lll}
+  \hline
+  Species & Family  & flower-leaf sequence classification  \\ 
+  \hline
+  \textit{Acer pensylvanicum}& Sapindaceae & flowers after leaves\\
+  \textit{Acer rubrum}& Sapindaceae & flowers before leaves\\
+  \textit{Corylus cornuta}& Betulaceae & flowers before leaves\\
+  \textit{Comptonia peregrina}& Myrtaceae & flowers before leaves\\
+  \textit{Ilex mucronata} & Aquifoliaceae & flowers with leaves\\
+   \textit{Ilex verticillata} & Aquifoliaceae & flowers after leaves\\
+   \textit{Prunus pensylvanica} & Rosaceae & flowers with leaves\\
+   \textit{Prunus virginiana} & Rosaceae & flowers with/after leaves\\
+   \textit{Vaccinium corymbosum} & Ericaceae & flowers after leaves\\
+   \textit{Viburnum acerifolium} & Adoxaceae & flowers after leaves\\
+   \hline
+\end{tabular}
+\caption{\textbf{Flower and leaf phenological sensitivity to environmental cues was investigated in 10 species.} Flower-leaf sequences classifications are based on \citet{Barnes2004} and \citet{Barnes2016}. We also sampled cutting from \textit{Acer saccharum} and \textit{Betula alleghaniensis}but did not include them in this this analyses because they failed to flower under any treatment conditions.}
+\label{tab:splist}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{cccc}
+  \hline
+ Chilling\_model & Harvard Forest Mean (sd) & Chamber: 30 days & Chamber: 60 days \\ 
+  \hline
+ Utah Model & 979.64  (248.34) & 720.00 & 1440.00 \\ 
+Chill Hours & 1170.71 (273.07) & 720.00 & 1440.00 \\ 
+ Dynamic Model & 86.56 ( 16.64) & 21.25 & 43.50 \\ 
+   \hline
+\end{tabular}
+\caption{\textbf{Comparisons between chilling treatments applied in our experiment to the average chilling at our sampling site (Harvard Forest in Petersham, MA)  are sensitive to the way chilling is calculated.} We used daily temperature data from Harvard Forest \citep{} to calculate average field chilling from October 15-April 15 over a 20 year period using three different chilling models. The Utah and Chilling hours models suggest the average chilling at our sampling site is between our two experimental chilling treatments, while the dynamic models suggests that field chilling is generally higher than either of our experiment treatments. Should add a sentence about why.}
+\label{tab:chillcomps}
+\end{table}
+
+\section*{Figures}
+    \begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//Plots/rawdataplots.jpg}
+    \caption{\textbf{Observed day of leaf budburst and flowers open for 10 temperate woody species under eight environmental treatment combinations.} The larger shapes and lines show the mean and standard error for each phenophase/species/treatment with the smaller lighter shape showing individual level data for every individual in the experiment. FLS variation among treatments was high and varied considerably by species.}
+    \label{fig:raw}
+\end{figure}
+
+  \begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//Plots/fieldmodcomparisions.jpeg}
+    \caption{\textbf{Model predictions of flower-leaf sequence interphases (days between phenophase) under artificial conditions designed to approximate ``average" field conditions reflect FLS interphases observed at Harvard Forest in Pertersham MA.}. This comparison suggest that the baseline environmental treatments  applied in our experiment appropriately capture natural conditions. Dot represent means FLS interphase in both datasets, and lines represent the 89\% credible intervals and the full range of observations for our model predictions and Harvard Forest data respectively.  Harvard Forest phenological records are from \citet{Okeefe2015}.}
+    \label{fig:validate}
+\end{figure}
+
+\end{document}

@@ -19,6 +19,7 @@ library("Hmisc")
 library(brms)
 library(broom)
 library(RColorBrewer)
+
 #options(device = "quartz")
 setwd("~/Documents/git/proterant/FLOBUDS")
 load("new_flobud.mods.Rda")
@@ -29,50 +30,24 @@ dat$Force<-ifelse(dat$Force=="C",0,1)
 
 dat<-filter(dat, !GEN.SPA %in% c("AME.SPP","BET.SPP", "BET.ALL","ACE.SAC"))
 
-###plot raw dat. nor sure these plot are so helpful. maybe better to do predictions
-#plot.raw.dat<-gather(dat,phase,DOY,2:4)
-#plot.raw.dat<-unite(plot.raw.dat,Treatcode,5:7,remove=FALSE)
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_1_0"]<-"WL28"
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_1_1"]<-"WL56"
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_1_0"]<-"CL28"
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_0_0"]<-"CS28"
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_0_1"]<-"CS56"
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="0_1_1"]<-"CL56"
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_0_1"]<-"WS56"
-#plot.raw.dat$Treatcode[plot.raw.dat$Treatcode=="1_0_0"]<-"WS28"
-#plot.raw.dat$phase[plot.raw.dat$phase=="budburst.9."]<-"budburst"
-#plot.raw.dat$phase[plot.raw.dat$phase=="leaf_day.15."]<-"expansion"
-#plot.raw.dat$phase[plot.raw.dat$phase=="flo_day"]<-"flower"
+rawplot<-gather(dat,phase,DOY,3:4)
+rawplot$Forcing<-ifelse(rawplot$Force==1,"high forcing","low forcing")
+rawplot$Photoperiod<-ifelse(rawplot$Light==1,"long photoperiod","short photoperiod")
+rawplot$Chilling<-ifelse(rawplot$Chill==1,"long chilling","short chilling")
+rawplot$phenophase<-ifelse(rawplot$phase=="budburst.9.","budburst","flowering")
 
-#plot.raw.dat.lo<-filter(plot.raw.dat,phase!="budburst")
-#plot.raw.dat.bb<-filter(plot.raw.dat,phase!="expansion")
-#goodsp<-c("ACE.PEN","COM.PER","COR.COR","ILE.MUC","PRU.PEN","VAC.COR")
-#plot.raw.dat.lo<-filter(plot.raw.dat.lo,GEN.SPA %in% c(goodsp) )
-#plot.raw.dat.bb<-filter(plot.raw.dat.bb,GEN.SPA %in% c(goodsp) )
-##clean up variables
+#setEPS()
+#postscript("Plots/rawdataplots.eps",width = 10, height = 10)
+jpeg("Plots/rawdataplots.jpg",width = 10, height = 10,units='in',res=200)
+ggplot(rawplot,aes(GEN.SPA,DOY))+stat_summary(aes(color=phenophase,shape=phenophase))+geom_point(aes(color=phenophase,shape=phenophase),size=1,alpha=0.6)+facet_grid(Forcing~Photoperiod~Chilling,scales = "free_y")+
+  scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))+  
+  theme_bw(base_size = 11,base_line_size = .2)+ylab("Day of Experiment")+theme(axis.text.x = element_text(angle = 30,hjust = 0.9))+xlab("")
+dev.off()
 
-#plot.raw.dat$taxa<-NA
-#plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="ACE.PEN"]<-"A. pensylvanicum"
-#plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="COM.PER"]<-"C. peregrina"
-#plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="COR.COR"]<-"C. cornuta"
-#plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="ILE.MUC"]<-"I. mucronata"
-#plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="PRU.PEN"]<-"P. pensylvanica"
-#plot.raw.dat$taxa[plot.raw.dat$GEN.SPA=="VAC.COR"]<-"V corymbosum"
-
-#goodspfull<-filter(plot.raw.dat,GEN.SPA %in% c(goodsp)) 
-#goodspfull$force<-ifelse(goodspfull$Force==1,"High","Low")
-#goodspfull$photo<-ifelse(goodspfull$Light==1,"Long day","Short day")
-#goodspfull$chill<-ifelse(goodspfull$Chill==1,"High chill","Low chill")
-
-#ggplot(goodspfull,aes(taxa,DOY))+geom_point(aes(color=phase,shape=force),size=0.8)+stat_summary(aes(color=phase,shape=force))+facet_grid(chill~photo)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
-
-#pdf("Plots/flo_buds_figures/goodsps_rawplots2.pdf",width=11, height=6)
-#ggplot(goodspfull,aes(Treatcode,DOY))+geom_point(aes(color=phase,shape=phase),size=.8)+stat_summary(aes(color=phase,shape=phase))+facet_wrap(~taxa)+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Treatment combination")+theme_base(base_size = 7)
-#pd=position_dodge2(width=.3,preserve="single")
-#?position_dodge2()
-#ggplot(goodspfull,aes(force,DOY))+geom_point(aes(shape=photo,color=phase),size=0.8)+stat_summary(aes(shape=photo,color=phase),position=pd)+facet_grid(chill~taxa)+theme_base()+theme(axis.text.x = element_text(angle=-45,size=8))+ylab("Day of experiment")+xlab("Forcing")+theme_base(base_size = 12)
-#dev.off()
-
+vacplot<-filter(rawplot,GEN.SPA=="VAC.COR")
+ggplot(vacplot,aes(Chilling,DOY))+stat_summary(aes(color=phenophase,shape=phenophase),size=.6)+geom_point(aes(color=phenophase,shape=phenophase),size=1,alpha=0.6)+facet_grid(Photoperiod~Forcing)+
+  theme_bw(base_size = 10,base_line_size = .2)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))+
+  ylab("Day of Experiment")+xlab("V.corymbosum")+theme(axis.title.x = element_text(face = "italic"))
 
 #####plasticity models for 3 bbch stages 
 bb.int<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
@@ -137,7 +112,7 @@ source("prep4plot.R")
 
 
 
-muplotfx(modelhere,modelhere2, "budburst vs. flowering", 8, 8, c(0,8), c(-40, 30) , 40, 3.5,40,4.5)
+muplotfx(modelhere,modelhere2, "budburstvsflowering", 8, 8, c(0,6), c(-50, 30) , 40, 3.5,40,4.5)
 dev.off()
 
 muplotfx(modelhere,modelhere2, "Intecept-budburst vs. flowering", 8, 8, c(6,8), c(30, 130) , 40, 3.5,40,4.5)
@@ -220,14 +195,23 @@ predy$phase<-"flower"
 predy2$phase<-"budburst"
 predybig<-rbind(predy,predy2)
 
+#####quick and dirty ilex
+ilexflo<-filter(predy,GEN.SPA %in% c("ILE.MUC", "ILE.VER"))
+ilexflo<-dplyr::select(ilexflo,GEN.SPA,Estimate,scenario)
+colnames(ilexflo)[2]<-"Est.flo"
 
+ilexbb<-filter(predy2,GEN.SPA %in% c("ILE.MUC", "ILE.VER"))
+ilexbb<-dplyr::select(ilexbb,GEN.SPA,Estimate,scenario)
+colnames(ilexbb)[2]<-"Est.bb"
+ilex<-left_join(ilexflo,ilexbb)  
+ilex$FLS<-ilex$Est.flo-ilex$Est.bb
 
 setEPS()
 postscript("Plots/climpredictions.eps",width = 12, height = 8)
 predybig %>%
   arrange(Estimate) %>%
   mutate(scenario = factor(scenario, levels=c("historic","warm 5","warm 10", "5-chill","10-chill", "5+chill","10+chill"))) %>%
-  ggplot(aes(scenario,Estimate))+geom_point(aes(color=phase,shape=phase),size=2.5)+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=phase),linetype="solid")+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=phase),linetype="dotted")+facet_wrap(~GEN.SPA,scale="free",ncol=5)+
+  ggplot(aes(scenario,Estimate))+geom_point(aes(color=phase,shape=phase),size=2.5)+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=phase),linetype="solid")+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=phase),linetype="dotted")+facet_wrap(~GEN.SPA,scale="free",ncol=3)+
   ggthemes::theme_base(base_size = 10)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))
 dev.off()
 
