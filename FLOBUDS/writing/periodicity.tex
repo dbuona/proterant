@@ -44,7 +44,26 @@ subsubsection*{Decoupled photo- and thermo-periodicity:}
 \noindent While each design has a tradeoff we expect that a coupled photo-and thermo- period design will remain the most popular choice for phenological experiments in artificial environments. In the following section, we will use a public dataset to demonstrate how mathematical principles can be applied to tease apart the artifact introduced by this inherently imperfect experimental design and make more meaningful inferences about the cue interactions. 
 
 \section*{Theoretical evidence}   
-\noindent The following analysis is based on results from a large scale growth chamber experiment by \citet{Flynn2018}, in which in addition to chilling and provenance, fully factorial light and temperature manipulations were applied to twig cuttings from 28 woody species. The authors coupled theromo-photo periodicty in the experimental setup and estimated a mean budburst sensitive to forcing of -9.5 units?, and  a mean sensitivity to photo-period of -4.5 units? with a weak, negative interaction between the two cues. We set out to calculate how much of the reported photo-period response could in actuality be driven by the unaknowledged differences in thermo-period between the long and short photo-period treatments. \\
+\noindent The following analysis is based on results from a large scale growth chamber experiment by \citet{Flynn2018}, in which in addition to chilling and provenance, fully factorial light and temperature manipulations were applied to twig cuttings from 28 woody species. 
+The authors applied two photoperiods (12 and 8 hours) crossed with 2 dirunally fluctuating temperature treamtments (20/10\degree and 15/5\degree) in which the thermo-periodicity was coupled with the photo-periodicity.\\ 
+
+The authors estimated a budburst sensitive to forcing of -9  a mean sensitivity to photo-period of -4.5 with a weak interaction between the two cues. We can treat the interaction term as 0, and then using fact the the photoperiod and forcing model estimates are additive, we can convert the temperature treatments into growing degree hours and calculate the estimated effects of the treatment combinations.
+
+$short photoperiod* warm temperatures =(20\degree)*(8 hrs) + 10\degree*(16 hrs)= 320 GDH$\\ 
+$estimate effect size = 0_{photoperiod} + 9+{forcing} = 9\\
+$short photoperiod* cool temperatures =(15\degree)*(8 hrs) + 5\degree*(16  hrs)= 200 GDH$ \\
+$long photoperiod* warm temperatures =(20\degree)*(12 hrs) + 10\degree*(12 hrs)= 360 GDH$\\ 
+$estimate effect size = 0_{photoperiod} + 9+{forcing} = 9\\
+$long photoperiod* cool temperatures =(15\degree)*(12 hrs) + 5\degree*(12  hrs)= 240 GDH$ \\
+
+From these conversions we can estimate a plane ax+by+cz+d=0\\
+Our goal is to estimate d but Im not sure what that is.\\
+ With the following system of equations we can solve for d in each case and use the fourth to check.
+
+
+
+
+We set out to calculate how much of the reported photo-period response could in actuality be driven by the unaknowledged differences in thermo-period between the long and short photo-period treatments. \\
 
 \noident Our analysis rests on several assumtions. First, we assume that following the phenology literature forcing is a more dominate cue than photoperiod \citep{}. This suggests that if anything, they photoperiod cue will be over-estimated due to the differences in thermo-period as opposed to the other way around. Second because the authors only report a weak interactions between these two cues, we treat these reponses as additive. Third, we assume we assume these cues are linear.\\
 
