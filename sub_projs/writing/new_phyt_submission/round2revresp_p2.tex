@@ -1,0 +1,103 @@
+
+% Straight up stealing preamble from Eli Holmes 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%START PREAMBLE THAT IS THE SAME FOR ALL EXAMPLES
+\documentclass{article}[11pt]
+%Required: You must have these
+\usepackage{Sweave}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{gensymb}
+\usepackage{longtable}
+%\usepackage{xr}
+\usepackage{pdflscape}
+\usepackage{amsmath}
+% manual for caption  http://www.dd.chalmers.se/latex/Docs/PDF/caption.pd
+%Optional: I like to muck with my margins and spacing in ways that LaTeX frowns on
+%Here's how to do that
+ \topmargin -1.5cm        
+ \oddsidemargin -0.04cm   
+ \evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+ \textwidth 16.59cm
+ \textheight 21.94cm 
+ %\pagestyle{empty}       % Uncomment if don't want page numbers
+ \parskip 7.2pt           % sets spacing between paragraphs
+ %\renewcommand{\baselinestretch}{1.5} 	% Uncomment for 1.5 spacing between lines
+\parindent 0pt% sets leading space for paragraphs
+\usepackage{setspace}
+%\doublespacing
+
+%Optional: I like fancy headers
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead[LO]{How do climate change experiments actually change climate}
+%\fancyhead[RO]{2016}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%END PREAMBLE THAT IS THE SAME FOR ALL EXAMPLES
+\bibliographystyle{..//..//refs/styles/newphyto.bst}
+\usepackage{xr-hyper}
+\externaldocument{reconcilingFLS_main_wbbl}
+\externaldocument{reconciling_FLS_SUPP_wbbl}
+
+\renewcommand{\thetable}{L\arabic{table}}
+\renewcommand{\thefigure}{L\arabic{figure}}
+
+% line numbers for letter
+\usepackage{lineno}
+
+
+%Start of the document
+\begin{document}
+
+
+\pagenumbering{gobble}
+\setlength\parindent{0pt}
+
+\textit{I appreciate the authors have considered all comments from the 3 reviewers, which definitely improves the strength and robustness of the analyses and of the manuscript itself. I only have a few minor questions/ suggestions:}\\
+
+We thank the reviewer for recognizing the improvements we made to our manuscript, and appreciate their continued input. We found their comments and suggestions informative and helpful, and have done our best to incorporate them into an updated version of the manuscript. Our specific responses to their questions and suggestions can be found below.\\
+
+\textit{I like the new Figure S7, but do not entirely agree with the authors regarding its interpretation. In my view, it seems that the choice of the leaf and flower phenophases does modify the relationship between the FLS and the pollination syndrome. Would that be possible to add a word on this in the main text and discuss this result in Supp mat?}\\
+
+We thank the reviewer for calling our attention to the need to clarify our description of this figure and we agree with their interpretation. In our previous submission we highlighted the sensitivity of our analyses to the specific phenophases used to define FLS (line \linelabel{senssecond}):\\
+
+``We found the estimated effect of traits (representing different hypotheses) varied when FLSs were defined based on different sub-phases of flowering and leafing; for example, days between flower budburst and leaf budburst vs. days between peak flowering and leaf expansion (Fig. \ref{fig:sensitivity})."\\ 
+
+We have modified this text as the reviewer suggested to specifically reference the differences in the pollination syndrome estimates:\\
+
+"We found the estimated effect of traits (representing different hypotheses) varied when FLSs were defined based on different sub-phases of flowering and leafing; for example, using days between flower budburst and leaf budburst vs. days between peak flowering and leaf expansion modify the strength of the pollination syndrome effect estimates (Fig. \ref{fig:sensitivity})." \\
+
+
+Additionally, our revised manuscript now discusses this sensitivity more explicitly in the Supporting Information as suggested by the reviewer (line ).\\
+
+
+\textit{I appreciate that the authors tried to explain the relationship between annual P-ETP and the inter-annual FLS variation; but I still do not understand why they did not include such variable in their multi-species hierarchical model instead of mean precipitation (L249-251). P-ETP can be calculated at stand-scale and not only at landscape scale. Also, what does ``species moisture's use" mean?}
+
+We appreciate the reviewer's continued thoughts on the issue of incorporating drought sensitivity into our models. Climatic water balance (Precipitation-potential evapotranspiration, P-PET or P-EPT) is one among several aridity indices that accounts for both water supply and evaporative demand to characterize aridity. As noted in \citet{Speich:2019aa} potential evapo-transpiration is an ambiguous metric and there are several formulations to calculate it. We converted our estimates of evapotranspiration from measurements of latent energy flux \citep{Knauer2018} from an eddy covarience tower close to the site where the phenological data we used in our analysis were collected.\\
+
+We agree with the reviewer that ETP can be calculated at the stand level. For us to do so on a scale that would relevant for our analyses would require significant additional field work over multiple seasons including extensisve soil water and atmospheric measurements and additional analyses \citep{GARNIER:1952aa,Allan:1998aa}.\\ 
+
+We have also tried to find established estimates of the range of P-ETP values that our species of interest tolerate in their home ranges from the literature in order to characterize differences among them. This effort has not been successful, but if we have missed any relevant data that we can be directed to we'd be happy to use them in a model.\\ 
+
+In our search for established species-level metrics of aridity tolerance, we identified a data source that estimates each species aridity tolerance across their native range using a similar aridity index: the actual evapotranspiration/potential evapotranspiration ratio (AET/PET) \citep{Thomspson2012}. Similar to climatic water balance, actual evapotranspiration/potential evapotranspiration (AET/PET) is considered to be a more realistic depiction of the moisture conditions experienced by plants in comparison to seasonal or annual precipitation \citep{Thomspson2012}. In fact, AET/PET can be very similar to soil based measures like  P-ETP \citep{Speich:2019aa}.\\
+
+We have updated our analyses to included this additional predictor for the water limitation hypothesis. We ran our models using the lowest 10\% quantile of AET/PET across a species' range as a proxy for the water limitation hypothesis and it did not impact the inferences of our models (see fig. \ref{fig:sensitivity} ``aridity index"). We also note that for the species in our analyses, the lower 10\% (as well as the 0\% and 25\%) quantile of the AET/PET across a species range is highly correlated with the predictor we used in our main model minimum precipitation across a species' range (correlation coefficient of.82).\\
+
+We feel that the use of the AET/PET ratio in our analyses captures water limitation in way that is comprable to P-ETP. We hope that this additional anaysis is satisfactory, but, if critical, we could attempt to calculate P-ETP over the range of each species in our study using grided climate data and flux tower measurements though we would appreciate guidance on how best to estimate it and several additional weeks to pull the climate data and write the code to construct the variable. Because we now provide three alternative predictors  (four total) for the water limitation hypothesis, we feel that constructing this additional metric would  more appropriate to a research paper focused on moisture limitation or metrics of moisture limitation, but can work to pursue it if critical.\\
+
+Additionally, ``species moisture use'', one of our other alternative predictors for the water limitation hypothesis, is a metric used by the USDA and defined as "Ability to use (i.e., remove) available soil moisture relative to other species in the same (or similar) soil moisture availability region" \citep{usdancrs}. We have added this definition to our methods in the Support Information (line ).\\
+
+\textit{L45: change ``are most depleted" to ``their lowest level". Plants rarely deplete their NSC reserves. see Martinez-Vilalta, J., et al. (2016). Dynamics of non-structural carbohydrates in terrestrial plants: a global synthesis. Ecological Monographs, 86(4), 495-516.}\\
+
+We agree with the reviewer's point here and have made this change in the manuscript.\\
+
+
+\textit{L81: Not correct, Change ``more resistance to drought' to ``more sensitive to drought-induced xylem embolism"}\\
+
+We have also made this change.
+
+\bibliography{..//..//refs/hyst_outline.bib}
+
+\end{document}

@@ -15,7 +15,7 @@ library(ggstance)
 set.seed(613)
 HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
 #HF2<-read.csv("HarvardForest/hf003-06-mean-spp.csv",header=TRUE)
-load("fieldexamples")
+#load("fieldexamples")
 
 
 
@@ -47,7 +47,7 @@ hourtemps$DATE<-ISOdate(hourtemps$Year,hourtemps$Month,hourtemps$Day,hourtemps$H
   HF$treeyear<-paste(HF$tree.id,HF$year)
   HF$burst.flo<-ifelse(!is.na(HF$fopn.jd),HF$fopn.jd,365)
   HF$burst.bb<-ifelse(!is.na(HF$bb.jd),HF$bb.jd,365)
-
+  HF$burst.l75<-ifelse(!is.na(HF$l75.jd),HF$l75.jd,365)
 yearios<-unique(HF$treeyear)
 df<-data.frame(year=numeric(),GDD.flo=numeric(),treeyear=character())
 
@@ -78,9 +78,29 @@ for(k in c(1:length(yearios))){
 HF.bb<-dplyr::select(HF,year,tree.id,burst.bb,treeyear,species)  
 df2<-left_join(df2,HF.bb)
 
+df3<-data.frame(year=numeric(),GDD.l75=numeric(),treeyear=character())
+
+for(k in c(1:length(yearios))){
+  gooby<-filter(HF,treeyear==yearios[k])  
+  goo<-dplyr::filter(hourtemps,Year==gooby$year)  
+  goo<-filter(goo,JDay<=gooby$burst.l75)
+  y<-max(GDD(goo$Temp,summ=TRUE,Tbase=5))
+  dfhere3<-data.frame(year=gooby$year,GDD.l75=y,treeyear=gooby$treeyear)
+  df3<-rbind(df3,dfhere3)
+  
+}
+
+HF.l75<-dplyr::select(HF,year,tree.id,burst.l75,treeyear,species)  
+df3<-left_join(df3,HF.l75)
+
+
+
 dater<-left_join(df,df2)
+dater<-left_join(dater,df3)
 dater$GDD.diff<-dater$GDD.bb-dater$GDD.flo
 dater$FLS.diff<-dater$burst.bb-dater$burst.flo
+dater$GDD.diff.leaves<-dater$GDD.l75-dater$GDD.bb
+dater$leaves.day.diff<-dater$burst.l75-dater$burst.bb
 
 ###remove the no flos
 dater<-filter(dater,burst.flo<365)
@@ -185,11 +205,12 @@ dev.off()
 
 
 ###real
-HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
-HF<-filter(HF,year<=2002)
-HF$FLS<-HF$bb.jd-HF$fopn.jd
-HF$year<-as.factor(HF$year)
+#HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
+#HF<-filter(HF,year<=2002)
+#HF$FLS<-HF$bb.jd-HF$fopn.jd
+#HF$year<-as.factor(HF$year)
 Acerub<-filter(dater,species=="ACRU")
+
 
 scaleFactor <-.1
 
@@ -204,9 +225,22 @@ c<-ggplot(Acerub)+geom_point(aes(as.factor(year),FLS.diff),color="#D55E00",size=
     axis.title.y.left=element_text(color="#D55E00"),
     axis.text.y.left=element_text(color="#D55E00"),
     axis.title.y.right=element_text(color="#009E73"),
-    axis.text.y.right=element_text(color="#009E73"))
+    axis.text.y.right=element_text(color="#009E73"))+facet_wrap(~tree.id)
 
+d<-ggplot(Acerub)+geom_point(aes(as.factor(year),leaves.day.diff),color="#D55E00",size=1)+
+  stat_summary(aes(as.factor(year),leaves.day.diff),color="#D55E00")+
+  geom_point(aes(as.factor(year),GDD.diff.leaves*scaleFactor),color="#009E73",size=1)+
+  stat_summary(aes(as.factor(year),GDD.diff.leaves*scaleFactor),color="#009E73")+
+  scale_y_continuous("Days between phases", sec.axis=sec_axis(~./scaleFactor, name="GDDs between phases"))+
+  scale_x_discrete("year")+
+  ggthemes::theme_base()+
+  theme(
+    axis.title.y.left=element_text(color="#D55E00"),
+    axis.text.y.left=element_text(color="#D55E00"),
+    axis.title.y.right=element_text(color="#009E73"),
+    axis.text.y.right=element_text(color="#009E73"))+facet_wrap(~tree.id)
 
+ggpubr::ggarrange(c,d)
 
 jpeg("..//FLOBUDS/Plots/hypothesis1_acerub.jpeg",height=6,width=8,units = "in",res=250)
 ggpubr::ggarrange(concept,c,nrow=2,heights=c(.75,1))

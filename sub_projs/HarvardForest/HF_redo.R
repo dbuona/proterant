@@ -15,8 +15,8 @@ library("dplyr")
 library("jpeg")
 library("phylolm")
 library(ggstance)
-load("finalmanuscriptmodels")
-#("altpredicctors") 
+#load("finalmanuscriptmodels")
+load("altpredictors") 
 
 ##read in the data
 HF<-read.csv("HarvardForest/hf003-05-mean-ind.csv",header=TRUE)
@@ -54,6 +54,18 @@ HFtree<-read.tree("HarvardForest/HFtree4modeling.tre" )
 HF.tree<-drop.tip(HF.tree,tip = "Viburnum_lantanoides")
 HF.tree$tip.label
 
+###add aridity index:
+arid<-read.csv("..//Data/arid_indexranges.csv")
+arid$Taxon.name<-sub(" ", "_",arid$Taxon.name , fixed=TRUE)
+colnames(arid)[1]<-"name"
+arid$name<-sub(" ", "", arid$name)
+
+intersect(unique(HF.data$name),arid$name)
+##impute missing data
+addos<-data.frame(name=setdiff(unique(HF.data$name),arid$name),X25.=rnorm(6,mean(arid$X25.,na.rm=TRUE),sd(arid$X25.,na.rm=TRUE)),X10.=rnorm(6,mean(arid$X10.,na.rm=TRUE),sd(arid$X10.,na.rm=TRUE)))
+arid<-dplyr::select(arid,name,X25.,X10.)
+arid<-rbind(arid,addos)
+HF.data<-left_join(HF.data,arid)
 
 ###calculate the mean values for FLS and flowering tiem (flowers open for each species)
 HF.means<-HF.data %>% group_by(name)%>% summarise(meanFLS.func=mean(funct.fls,na.rm=TRUE),meanFLS.phys=mean(phys.fls,na.rm=TRUE),meanFLS.inter=mean(inter.fls,na.rm=TRUE),meanflo=mean(flo_cent,na.rm=TRUE),meandrought=mean(precip_cent),meanpol=mean(pol_cent))
@@ -88,6 +100,9 @@ HF.means<-left_join(HF.means,fruiting) ### add mean
 HF.means$fruiting<-ifelse(is.na(HF.means$fruiting),mean(HF.means$fruiting,na.rm=TRUE),HF.means$fruiting)
 HF.means$disperse_cent<-(HF.means$fruiting-mean(HF.means$fruiting,na.rm=TRUE))/(2*sd(HF.means$fruiting,na.rm=TRUE))
 
+HF.means<-left_join(HF.means,arid)
+HF.means$arid10_cent<-(HF.means$X10.-mean(HF.means$X10.,na.rm=TRUE))/(2*sd(HF.means$X10.,na.rm=TRUE))
+
 ######categorical models
 
 HF.means<-  HF.means %>% remove_rownames %>% column_to_rownames(var="name")
@@ -117,6 +132,12 @@ z.phys.HFbin.disperse<-phylolm(hyster.phys~disperse_cent+meandrought+meanpol+dis
 z.phys.HFbin.seedmass<-phylolm(hyster.phys~seed_cent+meandrought+meanpol+seed_cent:meandrought+seed_cent:meanpol+meanpol:meandrought,HF.means,HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
                                start.beta=NULL, start.alpha=NULL,
                                boot=599,full.matrix = TRUE) ###fbb-lbb
+
+
+z.phys.HFbin.arid10<-phylolm(hyster.phys~meanflo+arid10_cent+meanpol+meanflo:arid10_cent+meanflo:meanpol+meanpol:arid10_cent,HF.means,HF.tree, method = "logistic_MPLE", btol = 100, log.alpha.bound = 10,
+                      start.beta=NULL, start.alpha=NULL,
+                      boot=599,full.matrix = TRUE) ###fbb-lbb
+
 ##### quantitative means ()
 
 z.funct.HFmean<-phylolm(meanFLS.func~meanflo+meandrought+meanpol+meanflo:meandrought+meanflo:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
@@ -138,6 +159,10 @@ z.phys.HFmean.moist<-phylolm(meanFLS.phys~meanflo+mosit_cent+meanpol+meanflo:mos
 
 z.phys.HFmean.seedmass<-phylolm(meanFLS.phys~seed_cent+meandrought+meanpol+seed_cent:meandrought+seed_cent:meanpol+meanpol:meandrought,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
 summary(z.phys.HFmean.seedmass) ###fopn-l75
+
+z.phys.HFmean.arid10<-phylolm(meanFLS.phys~meanflo+arid10_cent+meanpol+meanflo:arid10_cent+meanflo:meanpol+meanpol:arid10_cent,HF.means,HF.tree,model="BM", boot=599,full.matrix = TRUE)
+ ###fopn-l75
+
 AIC(z.phys.HFmean)
 AIC(z.phys.HFmean.cold)
 AIC(z.phys.HFmean.moist)
@@ -211,6 +236,7 @@ coldbin<-full_join(extract_coefs(z.phys.HFbin.cold),extract_CIs(z.phys.HFbin.col
 moistbin<-full_join(extract_coefs(z.phys.HFbin.moist),extract_CIs(z.phys.HFbin.moist),by="trait")
 dispbin<-full_join(extract_coefs(z.phys.HFbin.disperse),extract_CIs(z.phys.HFbin.disperse),by="trait")
 seedbin<-full_join(extract_coefs(z.phys.HFbin.seedmass),extract_CIs(z.phys.HFbin.seedmass),by="trait")
+arid10<-full_join(extract_coefs(z.phys.HFbin.arid10),extract_CIs(z.phys.HFbin.arid10),by="trait")
 AIC(z.phys.HFbin)
 AIC(z.phys.HFbin.cold)
 AIC(z.phys.HFbin.moist)
@@ -220,7 +246,8 @@ coldbin$model<-"cold tolerance"
 moistbin$model<-"moisture use"
 dispbin$model<-"dispersal time"
 seedbin$model<-"seed mass"
-altdrought.bin<-rbind(main.bin,coldbin,moistbin,dispbin,seedbin)
+arid10$model<-"aridity index"
+altdrought.bin<-rbind(main.bin,coldbin,moistbin,dispbin,seedbin,arid10)
 colnames(altdrought.bin)<-c("trait","estimate","low","high","model")
 
 
@@ -229,12 +256,15 @@ col<-full_join(extract_coefs(z.phys.HFmean.cold),extract_CIs(z.phys.HFmean.cold)
 mois<-full_join(extract_coefs(z.phys.HFmean.moist),extract_CIs(z.phys.HFmean.moist),by="trait")
 dispe<-full_join(extract_coefs(z.phys.HFmean.disperse),extract_CIs(z.phys.HFmean.disperse),by="trait")
 seedy<-full_join(extract_coefs(z.phys.HFmean.seedmass),extract_CIs(z.phys.HFmean.seedmass),by="trait")
+aridy<-full_join(extract_coefs(z.phys.HFmean.arid10),extract_CIs(z.phys.HFmean.arid10),by="trait")
+
 prec$model<-"main model"
 col$model<-"cold tolerance"
 mois$model<-"moisture use"
 dispe$model<-"dispersal time"
 seedy$model<-"seed mass"
-altdrought<-rbind(prec,col,mois,dispe,seedy)
+aridy$model<-"aridity index"
+altdrought<-rbind(prec,col,mois,dispe,seedy,aridy)
 colnames(altdrought)<-c("trait","estimate","low","high","model")
 
 altdrought<-dplyr::filter(altdrought,trait!="(Intercept)")
@@ -248,10 +278,12 @@ altdrought$trait[which(altdrought$trait=="seed_cent")]<- "early flowering"
 altdrought$trait[which(altdrought$trait=="meandrought")]  <- "water dynamics"
 altdrought$trait[which(altdrought$trait=="cold_cent")]  <- "water dynamics"
 altdrought$trait[which(altdrought$trait=="mosit_cent")]  <- "water dynamics"
+altdrought$trait[which(altdrought$trait=="arid10_cent")]  <- "water dynamics"
 
 altdrought$trait[which(altdrought$trait=="meandrought:meanpol")]<- "pollination:water dynamics"
 altdrought$trait[which(altdrought$trait=="cold_cent:meanpol")]<- "pollination:water dynamics"
 altdrought$trait[which(altdrought$trait=="mosit_cent:meanpol")]<- "pollination:water dynamics"
+altdrought$trait[which(altdrought$trait=="arid10_cent:meanpol")]<- "pollination:water dynamics"
 
 altdrought$trait[which(altdrought$trait=="meanflo:meanpol")]<-"pollination:early flowering"
 altdrought$trait[which(altdrought$trait=="disperse_cent:meanpol")]<-"pollination:early flowering"
@@ -261,6 +293,7 @@ altdrought$trait[which(altdrought$trait=="seed_cent:meanpol")]<-"pollination:ear
 altdrought$trait[which(altdrought$trait=="meanflo:meandrought")]<-"early flowering:water dynamics"
 altdrought$trait[which(altdrought$trait=="meanflo:cold_cent")]<-"early flowering:water dynamics"
 altdrought$trait[which(altdrought$trait=="meanflo:mosit_cent")]<-"early flowering:water dynamics"
+altdrought$trait[which(altdrought$trait=="meanflo:arid10_cent")]<-"early flowering:water dynamics"
 altdrought$trait[which(altdrought$trait=="disperse_cent:meandrought")]<-"early flowering:water dynamics"
 altdrought$trait[which(altdrought$trait=="seed_cent:meandrought")]<-"early flowering:water dynamics"
 pd=position_dodgev(height=0.4)
@@ -288,10 +321,12 @@ altdrought.bin$trait[which(altdrought.bin$trait=="seed_cent")]<- "early flowerin
 altdrought.bin$trait[which(altdrought.bin$trait=="meandrought")]  <- "water dynamics"
 altdrought.bin$trait[which(altdrought.bin$trait=="cold_cent")]  <- "water dynamics"
 altdrought.bin$trait[which(altdrought.bin$trait=="mosit_cent")]  <- "water dynamics"
+altdrought.bin$trait[which(altdrought.bin$trait=="arid10_cent")]  <- "water dynamics"
 
 altdrought.bin$trait[which(altdrought.bin$trait=="meandrought:meanpol")]<- "pollination:water dynamics"
 altdrought.bin$trait[which(altdrought.bin$trait=="cold_cent:meanpol")]<- "pollination:water dynamics"
 altdrought.bin$trait[which(altdrought.bin$trait=="mosit_cent:meanpol")]<- "pollination:water dynamics"
+altdrought.bin$trait[which(altdrought.bin$trait=="arid10_cent:meanpol")]<- "pollination:water dynamics"
 
 altdrought.bin$trait[which(altdrought.bin$trait=="meanflo:meanpol")]<-"pollination:early flowering"
 altdrought.bin$trait[which(altdrought.bin$trait=="disperse_cent:meanpol")]<-"pollination:early flowering"
@@ -301,6 +336,8 @@ altdrought.bin$trait[which(altdrought.bin$trait=="seed_cent:meanpol")]<-"pollina
 altdrought.bin$trait[which(altdrought.bin$trait=="meanflo:meandrought")]<-"early flowering:water dynamics"
 altdrought.bin$trait[which(altdrought.bin$trait=="meanflo:cold_cent")]<-"early flowering:water dynamics"
 altdrought.bin$trait[which(altdrought.bin$trait=="meanflo:mosit_cent")]<-"early flowering:water dynamics"
+altdrought.bin$trait[which(altdrought.bin$trait=="meanflo:arid10_cent")]<-"early flowering:water dynamics"
+
 altdrought.bin$trait[which(altdrought.bin$trait=="disperse_cent:meandrought")]<-"early flowering:water dynamics"
 altdrought.bin$trait[which(altdrought.bin$trait=="seed_cent:meandrought")]<-"early flowering:water dynamics"
 pd=position_dodgev(height=0.4)
@@ -541,6 +578,16 @@ modelcont.phys.seedmass<-brm(phys.fls~ pol+seedmass_cent+precip_cent+precip_cent
 
 #xtable(moist.disp.cont,digits=3,label = "HF_phys_moist_disp",caption = "Model results for alternative hierarchical model with moisture use as a proxy for the water limitation and dispersal time as a proxy for the early flowering hypothesis")
 
+
+
+HF.data$arid.25.cent<-(HF.data$X25.-mean(HF.data$X25.,na.rm=TRUE))/(2*sd(HF.data$X25.,na.rm=TRUE))
+HF.data$arid.10.cent<-(HF.data$X10.-mean(HF.data$X10.,na.rm=TRUE))/(2*sd(HF.data$X10.,na.rm=TRUE))
+
+modelcont.phys.wspecies.aridity<-brm(phys.fls~ pol+flo_cent+arid.10.cent+arid.10.cent:flo_cent+arid.10.cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
+                                     family = gaussian(), cov_ranef = list(name= A),control=list(adapt_delta=0.99,max_treedepth=20),iter=6500, warmup=5000)
+
+
+
 save.image("finalmanuscriptmodels") 
 
 ###checkk PETP
@@ -591,6 +638,8 @@ cor(HF.data$min_precip,HF.data$min_temp,use = "pairwise.complete.obs")
 cor(HF.data$dummydrought,HF.data$min_temp,use = "pairwise.complete.obs")
 cor(HF.data$dummydrought,HF.data$min_precip,use = "pairwise.complete.obs")
 
+cor(HF.means$X50.,HF.means$meandrought,use = "pairwise.complete.obs")
+
 HF.data$cold_cent<-(HF.data$min_temp-mean(HF.data$min_temp))/(2*sd(HF.data$min_temp))
 
 modelcont.phys.wcols.ind<-brm(phys.fls~ pol+flo_cent+cold_cent+cold_cent:flo_cent+cold_cent:pol+pol:flo_cent+(1|name)+(1|tree.id/species), data = HF.data, 
@@ -630,7 +679,7 @@ alternateuniverse$trait[which(alternateuniverse$trait=="pollination:earlier flow
 
 pd=position_dodgev(height=0.4)
 
-alta<-alternateuniverse %>%
+#alta<alternateuniverse %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("early flowering:water limitation","pollination:early flowering","pollination:water limitation","early flowering","water limitation","pollination syndrome"))) %>%
   ggplot(aes(Estimate,trait))+geom_point(aes(color=model),position=pd,size=2,stroke=.5)+
@@ -719,4 +768,5 @@ dev.off()
 
 apc.funct.plot
 dev.off()
+
 
