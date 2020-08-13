@@ -161,7 +161,6 @@ new.data<-data.frame(GEN.SPA=rep(unique(dat$GEN.SPA),9),
                      Light=rep(c(1),90))
 
 
-
 #####now do flowering a leafing seperately
 predictionflo<-predict(mod.flo.int,newdata=new.data,probs = c(.055,.945,.25,.75))
 predy<-cbind(new.data,predictionflo)
@@ -214,6 +213,9 @@ predybig %>%
   ggplot(aes(scenario,Estimate))+geom_point(aes(color=phase,shape=phase),size=2.5)+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=phase),linetype="solid")+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=phase),linetype="dotted")+facet_wrap(~GEN.SPA,scale="free",ncol=3)+
   ggthemes::theme_base(base_size = 10)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))
 dev.off()
+
+
+PHH<-data.frame[]
 
 goo<-filter(predybig,GEN.SPA=="COR.COR")
 goo%>%
