@@ -92,6 +92,16 @@ mod.lo.int<-brm(leaf_day.15. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:L
 
 dev.new()
 pp_check(mod.bb.int)
+library(xtable)
+xtable(fixef(mod.bb.int,probs = c(.25,.75)))
+xtable(fixef(mod.flo.int,probs = c(.25,.75)),caption = "goo",label ="goo" )
+
+xtable(modoutput1)
+xtable(modoutput2)
+ ##sp effect
+library(broom)
+
+
 ##########
 figpath <- "Plots"
 
