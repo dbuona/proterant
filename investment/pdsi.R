@@ -4,73 +4,86 @@ graphics.off()
 setwd("~/Documents/git/proterant/investment")
 library("housingData")
 library(stringr)
-  sp<-read.csv("herbaria_prunus_rec.csv")
-
-
-head(geoCounty)
-head(sp$county)
-geoCounty$rMapState<-str_to_title(geoCounty$rMapState)
-colnames(geoCounty)[6]<-"stateProvince"
-
-goo<-dplyr::left_join(sp,geoCounty,by=c("county","stateProvince"))
-
 library("ncdf4")
 library(raster)
 
-nc_data<-nc_open("lbda-v2_kddm_pmdi_2017.nc")
-print(nc_data)
+sp<-read.csv("herbaria_prunus_rec.csv") ## all the prunus records
 
-lon <- ncvar_get(nc_data, "lon")
-lat <- ncvar_get(nc_data, "lat", verbose = F)
-t <- ncvar_get(nc_data, "time")
 
-pdsi.array <- ncvar_get(nc_data, "PDSI")
+geoCounty$rMapState<-str_to_title(geoCounty$rMapState) ### centriod coordinates for all US counties
+colnames(geoCounty)[6]<-"stateProvince" ## make column names compatible
 
-dim(pdsi.array)
-fillvalue <- ncatt_get(nc_data, "PDSI", "_FillValue")
-fillvalue
-pdsi.array[pdsi.array == fillvalue$value] <- NA
-pdsi.slice <- pdsi.array[, , 1] 
-r <- raster(t(pdsi.slice), xmn=min(lon), xmx=max(lon), ymn=min(lat), ymx=max(lat), crs=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+ towgs84=0,0,0"))            
-plot(pdsi.array)
+prunus.data<-dplyr::left_join(sp,geoCounty,by=c("county","stateProvince")) ## This assigns each country coordinates
 
-palmer.b <- brick("lbda-v2_kddm_pmdi_2017.nc")  
 
-lonpoints<-goo$lon
-latpoints<-goo$lat
-extract.pts <- cbind(lonpoints,latpoints)
-ext <- extract(palmer.b,extract.pts,method="simple")
+palmer.b <- brick("lbda-v2_kddm_pmdi_2017.nc")  ## read in balmer drought index data 
 
-??extract()
-plot(palmer.b)
-points(lonpoints,latpoints,pch=4,col="red")
+lonpoints<-prunus.data$lon # make vector of prunus coordinates
+latpoints<-prunus.data$lat #
+extract.pts <- cbind(lonpoints,latpoints) #make coordinates to extract
+ext <- extract(palmer.b,extract.pts,method="simple") ###extract drought info from each coordinate of prunus colllect
 
-mean.goo <- calc(palmer.b, fun = mean,na.rm=TRUE)
-ext <- extract(mean.goo,extract.pts,method="simple")
 
-goo$pdsi<-ext
 
-hyster<-read.csv("..//Data/rosaceae.csv")
-head(hyster)
-hyster<-dplyr::filter(hyster,genus=="Prunus")
+mean.prunus <- calc(palmer.b, fun = mean,na.rm=TRUE) #average palmer drought index acrosss time
+ext <- extract(mean.prunus,extract.pts,method="simple")
+
+prunus.data$pdsi<-ext ##3 noiw your data has a pdsi estimate for each county of collect
+
+hyster<-read.csv("..//Data/rosaceae.csv") ## read in flower size, phenology and fruiot size data
+
+hyster<-dplyr::filter(hyster,genus=="Prunus") ## subset to jsut prunus
 colnames(hyster)[3]<-"specificEpithet"
-goo2<-dplyr::left_join(goo,hyster,by="specificEpithet")
-unique(goo$specificEpithet)
-unique(hyster$specificEpithet)
+hyster$mean_size<-(hyster$flower_size_high+hyster$flos_per_low)/2
+hyster$mean_num<-(hyster$flos_per_high+hyster$flos_per_low)/2
+hyster$display<-hyster$mean_num*hyster$mean_size
 
-goo2<-dplyr::filter(goo2,!is.na(hysteranthy))
+
+prunus.data.2<-dplyr::left_join(prunus.data,hyster,by="specificEpithet")
+
+
+d<-dplyr::filter(prunus.data.2,!is.na(hysteranthy)) ### 7668 rows have county coordiates
+
+
+
+
+## hypothesis1: hysteranthy relates to flower size
+
+ggplot(hyster,aes(mean_size))+geom_histogram(bins=20)+facet_wrap(~as.factor(hysteranthy))+geom_vline(aes(xintercept=mean(mean_size),color="red"))+geom_vline(aes(xintercept=median(mean_size),color="blue"))
+ggplot(hyster,aes(mean_num))+geom_histogram(bins=20)+facet_wrap(~as.factor(hysteranthy))+geom_vline(aes(xintercept=mean(mean_num),color="red"))+geom_vline(aes(xintercept=median(mean_num),color="blue"))
+
+
+ggplot(hyster,aes(as.factor(hysteranthy),mean_size))+geom_boxplot()+stat_summary(color="red")
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flower size (mm)")+
+  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
+
+ggplot(hyster,aes(as.factor(hysteranthy),mean_num))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flowers/inflorescence")+
+  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
+
+ggplot(hyster,aes(as.factor(hysteranthy),display))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("display volume (fl. size*fl. number")+
+  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
+
+
+car::Anova(lm(mean_size~as.factor(hysteranthy),data=hyster),type="III")
+car::Anova(lm(mean_num~as.factor(hysteranthy),data=hyster),type="III")
+car::Anova(lm(display~as.factor(hysteranthy),data=hyster),type="III")
+
 
 png("pdsiboxes.png",width = 10,height=10,units = "in",res = 300)
-ggplot(goo2,aes(as.factor(hysteranthy),pdsi))+geom_boxplot(outlier.shape = NA)+theme_minimal()+coord_cartesian(ylim = c(-.6, .6))
+ggplot(d,aes(as.factor(hysteranthy),pdsi))+geom_boxplot()+theme_minimal()+  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
 dev.off()
-range(goo2$pdsi,na.rm = TRUE)
-?stat_summary
-car::Anova(lm(pdsi~as.factor(hysteranthy),data=goo2),type="III")
+
+car::Anova(lm(pdsi~as.factor(hysteranthy),data=d),type="III")
 
 ?geom_boxplot()
 png("pdsimaps.png",width = 10,height=10,units = "in",res = 300)
-plot(mean.goo)
+plot(mean.prunus)
 points(lonpoints,latpoints, col=c("royal blue","black"),pch=c(8,5),cex=0.7)
 legend(-80,20,c("hysteranthous","seranthous"),pch=c(8,5),col=c("royal blue","black"))
-printa
 dev.off()
+
+ggplot(d,aes(mean_num,pdsi))+geom_point()+geom_smooth(method="lm",se = TRUE)
+ggplot(d,aes(mean_size,pdsi))+geom_point(aes(color=as.factor(hysteranthy)))+geom_smooth(method="lm",se = TRUE)
+ggplot(d,aes(display,pdsi))+geom_point()+geom_smooth(method="lm",se = TRUE)
