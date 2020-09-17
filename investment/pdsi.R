@@ -6,6 +6,8 @@ library("housingData")
 library(stringr)
 library("ncdf4")
 library(raster)
+library(ggplot2)
+install.packages("brms")
 
 sp<-read.csv("herbaria_prunus_rec.csv") ## all the prunus records
 
@@ -53,7 +55,7 @@ ggplot(hyster,aes(mean_size))+geom_histogram(bins=20)+facet_wrap(~as.factor(hyst
 ggplot(hyster,aes(mean_num))+geom_histogram(bins=20)+facet_wrap(~as.factor(hysteranthy))+geom_vline(aes(xintercept=mean(mean_num),color="red"))+geom_vline(aes(xintercept=median(mean_num),color="blue"))
 
 
-ggplot(hyster,aes(as.factor(hysteranthy),mean_size))+geom_boxplot()+stat_summary(color="red")
+ggplot(hyster,aes(as.factor(hysteranthy),mean_size))+geom_boxplot()+stat_summary(color="red")+
   ggthemes::theme_base()+xlab("FLS")+ylab("mean flower size (mm)")+
   scale_x_discrete(labels=c("seranthous", "hysteranthous"))
 
@@ -67,6 +69,8 @@ ggplot(hyster,aes(as.factor(hysteranthy),display))+geom_boxplot()+stat_summary(c
 
 
 car::Anova(lm(mean_size~as.factor(hysteranthy),data=hyster),type="III")
+mod1<-brms::brm(mean_size~hysteranthy,data=hyster)
+
 car::Anova(lm(mean_num~as.factor(hysteranthy),data=hyster),type="III")
 car::Anova(lm(display~as.factor(hysteranthy),data=hyster),type="III")
 
