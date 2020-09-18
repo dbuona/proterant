@@ -7,7 +7,7 @@ library(stringr)
 library("ncdf4")
 library(raster)
 library(ggplot2)
-install.packages("brms")
+library("brms")
 
 sp<-read.csv("herbaria_prunus_rec.csv") ## all the prunus records
 
@@ -32,54 +32,92 @@ ext <- extract(mean.prunus,extract.pts,method="simple")
 
 prunus.data$pdsi<-ext ##3 noiw your data has a pdsi estimate for each county of collect
 
-hyster<-read.csv("..//Data/rosaceae.csv") ## read in flower size, phenology and fruiot size data
 
-hyster<-dplyr::filter(hyster,genus=="Prunus") ## subset to jsut prunus
-colnames(hyster)[3]<-"specificEpithet"
-hyster$mean_size<-(hyster$flower_size_high+hyster$flos_per_low)/2
-hyster$mean_num<-(hyster$flos_per_high+hyster$flos_per_low)/2
+###hysteranthy
+hyster<-read.csv("cherry_data.csv") ## read in flower size, phenology and fruiot size data
+
+
+colnames(hyster)[1]<-"specificEpithet"
+hyster$mean_size<-(hyster$petal_high+hyster$petal_low)/2
+hyster$mean_num<-(hyster$inflor_high+hyster$inflor_low)/2
+hyster$mean_fruit<-(hyster$fruit_high+hyster$fruit_low)/2
+hyster$mean_axis<-(hyster$midrib_high+hyster$midrib_low)/2
+hyster$mean_ped<-(hyster$pedicel_high+hyster$pedicel_low)/2
 hyster$display<-hyster$mean_num*hyster$mean_size
+hyster$hyst<-ifelse(hyster$FLS %in%c("before","before/with"),"hys","ser")
+hyster$hyst2<-ifelse(hyster$FLS %in%c("before"),"hys","ser")
 
-
+table(hyster$FLS)
+table(hyster$hyst)
+table(hyster$hyst2)
 prunus.data.2<-dplyr::left_join(prunus.data,hyster,by="specificEpithet")
 
 
-d<-dplyr::filter(prunus.data.2,!is.na(hysteranthy)) ### 7668 rows have county coordiates
+d<-dplyr::filter(prunus.data.2,!is.na(FLS)) ### 7668 rows have county coordiates
+
+
 
 
 
 
 ## hypothesis1: hysteranthy relates to flower size
 
-ggplot(hyster,aes(mean_size))+geom_histogram(bins=20)+facet_wrap(~as.factor(hysteranthy))+geom_vline(aes(xintercept=mean(mean_size),color="red"))+geom_vline(aes(xintercept=median(mean_size),color="blue"))
-ggplot(hyster,aes(mean_num))+geom_histogram(bins=20)+facet_wrap(~as.factor(hysteranthy))+geom_vline(aes(xintercept=mean(mean_num),color="red"))+geom_vline(aes(xintercept=median(mean_num),color="blue"))
+ggplot(hyster,aes(inflor_type))+geom_bar(position="dodge",aes(fill=hyst))
 
 
-ggplot(hyster,aes(as.factor(hysteranthy),mean_size))+geom_boxplot()+stat_summary(color="red")+
-  ggthemes::theme_base()+xlab("FLS")+ylab("mean flower size (mm)")+
-  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
+a<-ggplot(hyster,aes(FLS,mean_size))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flower size (mm)")
 
-ggplot(hyster,aes(as.factor(hysteranthy),mean_num))+geom_boxplot()+stat_summary(color="red")+
-  ggthemes::theme_base()+xlab("FLS")+ylab("mean flowers/inflorescence")+
-  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
-
-ggplot(hyster,aes(as.factor(hysteranthy),display))+geom_boxplot()+stat_summary(color="red")+
-  ggthemes::theme_base()+xlab("FLS")+ylab("display volume (fl. size*fl. number")+
-  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
+aa<-ggplot(hyster,aes(hyst,mean_size))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flower size (mm)")
 
 
-car::Anova(lm(mean_size~as.factor(hysteranthy),data=hyster),type="III")
-mod1<-brms::brm(mean_size~hysteranthy,data=hyster)
+b<-ggplot(hyster,aes(FLS,mean_num))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flowers/inflorescence")
+bb<-ggplot(hyster,aes(hyst,mean_num))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flowers/inflorescence")
 
-car::Anova(lm(mean_num~as.factor(hysteranthy),data=hyster),type="III")
-car::Anova(lm(display~as.factor(hysteranthy),data=hyster),type="III")
+
+c<-ggplot(hyster,aes(FLS,display))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("display volume (fl. size*fl. number")
+cc<-ggplot(hyster,aes(hyst,display))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("display volume (fl. size*fl. number)")
+
+
+e<-ggplot(hyster,aes(FLS,mean_fruit))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean fruit siam (mm)")
+ee<-ggplot(hyster,aes(hyst,mean_fruit))+geom_boxplot()+stat_summary(color="red")+
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean fruit size (mm)")
+
+
+
+ggpubr::ggarrange(a,b,c,e)
+ggpubr::ggarrange(aa,bb,cc,ee)
+
+
+
+
+mod1<-brms::brm(mean_fruit~hyst,data=hyster)
+
+
+0car::Anova(lm(mean_size~FLS,data=hyster),type="III")
+
+
+car::Anova(lm(mean_num~FLS,data=hyster),type="III")
+car::Anova(lm(mean_num~hyst,data=hyster),type="III")
+
+
+car::Anova(lm(display~FLS,data=hyster),type="III")
+car::Anova(lm(display~hyst,data=hyster),type="III")
+
+car::Anova(lm(mean_fruit~FLS,data=hyster),type="III")
+car::Anova(lm(mean_fruit~hyst,data=hyster),type="III")
 
 
 png("pdsiboxes.png",width = 10,height=10,units = "in",res = 300)
-ggplot(d,aes(as.factor(hysteranthy),pdsi))+geom_boxplot()+theme_minimal()+  scale_x_discrete(labels=c("seranthous", "hysteranthous"))
-dev.off()
+ggplot(d,aes(hyst,pdsi))+geom_boxplot()+theme_minimal()
 
-car::Anova(lm(pdsi~as.factor(hysteranthy),data=d),type="III")
+car::Anova(lm(pdsi~hyst,data=d),type="III")
 
 ?geom_boxplot()
 png("pdsimaps.png",width = 10,height=10,units = "in",res = 300)
@@ -88,6 +126,6 @@ points(lonpoints,latpoints, col=c("royal blue","black"),pch=c(8,5),cex=0.7)
 legend(-80,20,c("hysteranthous","seranthous"),pch=c(8,5),col=c("royal blue","black"))
 dev.off()
 
-ggplot(d,aes(mean_num,pdsi))+geom_point()+geom_smooth(method="lm",se = TRUE)
-ggplot(d,aes(mean_size,pdsi))+geom_point(aes(color=as.factor(hysteranthy)))+geom_smooth(method="lm",se = TRUE)
-ggplot(d,aes(display,pdsi))+geom_point()+geom_smooth(method="lm",se = TRUE)
+ggplot(d,aes(mean_num,pdsi))+geom_point(aes(color=FLS))+geom_smooth(method="lm",se = TRUE)
+ggplot(d,aes(mean_size,pdsi))+geom_point(aes(color=hyst))+geom_smooth(method="lm",se = TRUE)
+ggplot(d,aes(display,pdsi))+geom_point(aes(color=hyst))+geom_smooth(method="lm",se = TRUE)

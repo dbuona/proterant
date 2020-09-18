@@ -28,26 +28,9 @@ dat<-read.csv("flobudsdata.use.csv",header = TRUE)
 dat$Light<-ifelse(dat$Light=="S",0,1)
 dat$Force<-ifelse(dat$Force=="C",0,1)
 
-dat<-filter(dat, !GEN.SPA %in% c("AME.SPP","BET.SPP", "BET.ALL","ACE.SAC"))
+dat<-filter(dat, !GEN.SPA %in% c("AME.SPP","BET.SPP", "BET.ALL","ACE.SAC")) ## remove species with no flowering
 
-rawplot<-gather(dat,phase,DOY,3:4)
-rawplot$Forcing<-ifelse(rawplot$Force==1,"high forcing","low forcing")
-rawplot$Photoperiod<-ifelse(rawplot$Light==1,"long photoperiod","short photoperiod")
-rawplot$Chilling<-ifelse(rawplot$Chill==1,"long chilling","short chilling")
-rawplot$phenophase<-ifelse(rawplot$phase=="budburst.9.","budburst","flowering")
 
-#setEPS()
-#postscript("Plots/rawdataplots.eps",width = 10, height = 10)
-jpeg("Plots/rawdataplots.jpg",width = 10, height = 10,units='in',res=200)
-ggplot(rawplot,aes(GEN.SPA,DOY))+stat_summary(aes(color=phenophase,shape=phenophase))+geom_point(aes(color=phenophase,shape=phenophase),size=1,alpha=0.6)+facet_grid(Forcing~Photoperiod~Chilling,scales = "free_y")+
-  scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))+  
-  theme_bw(base_size = 11,base_line_size = .2)+ylab("Day of Experiment")+theme(axis.text.x = element_text(angle = 30,hjust = 0.9))+xlab("")
-dev.off()
-
-vacplot<-filter(rawplot,GEN.SPA=="VAC.COR")
-ggplot(vacplot,aes(Chilling,DOY))+stat_summary(aes(color=phenophase,shape=phenophase),size=.6)+geom_point(aes(color=phenophase,shape=phenophase),size=1,alpha=0.6)+facet_grid(Photoperiod~Forcing)+
-  theme_bw(base_size = 10,base_line_size = .2)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))+
-  ylab("Day of Experiment")+xlab("V.corymbosum")+theme(axis.title.x = element_text(face = "italic"))
 
 #####plasticity models for 3 bbch stages 
 bb.int<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
@@ -66,32 +49,7 @@ mod.flo.int<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+
                 warmup = 3000)   
 
 
-###check again only complete cases
-small<-filter(dat,!is.na(flo_day))
-small<-filter(small,!is.na(budburst.9.))
-bb.small<-get_prior(budburst.9.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
-
-mod.bb.small<-brm(budburst.9. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
-                data = small, family = gaussian(),control = list(adapt_delta = 0.95),
-                iter= 7000,
-                warmup = 6000)
-
-fo.small<-get_prior(flo_day~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
-mod.fo.small<-brm(flo_day ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
-                  data = small, family = gaussian(),control = list(adapt_delta = 0.95),
-                  iter= 7000,
-                  warmup = 6000)
-
-summary(mod.bb.small)
-
-lo.int<-get_prior(leaf_day.15.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
-mod.lo.int<-brm(leaf_day.15. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
-                data = dat, family = gaussian(),
-                iter= 4000,
-                warmup = 3000)   
-
-dev.new()
-pp_check(mod.bb.int)
+###summarize main effects of these models
 library(xtable)
 xtable(fixef(mod.bb.int,probs = c(.25,.75)))
 xtable(fixef(mod.flo.int,probs = c(.25,.75)),caption = "goo",label ="goo" )
@@ -99,10 +57,10 @@ xtable(fixef(mod.flo.int,probs = c(.25,.75)),caption = "goo",label ="goo" )
 xtable(modoutput1)
 xtable(modoutput2)
  ##sp effect
-library(broom)
 
 
-##########
+
+########## THis make a plot#################
 figpath <- "Plots"
 
 cols <- adjustcolor("indianred3", alpha.f = 0.3) 
@@ -124,47 +82,26 @@ source("prep4plot.R")
 
 muplotfx(modelhere,modelhere2, "budburstvsflowering", 8, 8, c(0,6), c(-50, 30) , 40, 3.5,40,4.5)
 dev.off()
+####################################
 
-muplotfx(modelhere,modelhere2, "Intecept-budburst vs. flowering", 8, 8, c(6,8), c(30, 130) , 40, 3.5,40,4.5)
-dev.off()
 
-modelhere <-mod.lo.int
-source("prep4plot.R")
-source("exp_muplot_brms.R")
 
-muplotfx(modelhere,modelhere2, "leafout vs. flowering", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
-dev.off()
-
-modelhere <-mod.bb.int
-modelhere2<-mod.bb.small
-source("prep4plot.R")
-source("exp_muplot_brms.R")
-muplotfx(modelhere,modelhere2, "budburst pool vs. complete cases", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
-dev.off()
-
-modelhere <-mod.flo.int
-modelhere2<-mod.fo.small
-source("prep4plot.R")
-source("exp_muplot_brms.R")
-muplotfx(modelhere,modelhere2, "flowering pool vs. complete cases", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
-dev.off()
+###now plots for comparing file observation to mine
+small<-filter(dat,!is.na(flo_day))
+small<-filter(small,!is.na(budburst.9.))
 
 small$FLS<-small$budburst.9.-small$flo_day
-small$FLS2<-small$leaf_day.15.-small$flo_day
+
 small.fls<-get_prior(FLS~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
 mod.FLS.small<-brm(FLS ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
                   data = small, family = gaussian(),control = list(adapt_delta = 0.95),
                   iter= 7000,
                   warmup = 6000)
 
-small.fls2<-get_prior(FLS2~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = small, family = gaussian())
-mod.FLS2.small<-brm(FLS2 ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
-                   data = small, family = gaussian(),control = list(adapt_delta = 0.95),
-                   iter= 7000,
-                   warmup = 6000)
 
 
-
+####climate change projections
+### new data for predicting climat change
 new.data<-data.frame(GEN.SPA=rep(unique(dat$GEN.SPA),9),
                      Force=rep(c(0,1),each=45),
                      Chill=rep(c(.67,1,0),30),
@@ -204,16 +141,7 @@ predy$phase<-"flower"
 predy2$phase<-"budburst"
 predybig<-rbind(predy,predy2)
 
-#####quick and dirty ilex
-ilexflo<-filter(predy,GEN.SPA %in% c("ILE.MUC", "ILE.VER"))
-ilexflo<-dplyr::select(ilexflo,GEN.SPA,Estimate,scenario)
-colnames(ilexflo)[2]<-"Est.flo"
 
-ilexbb<-filter(predy2,GEN.SPA %in% c("ILE.MUC", "ILE.VER"))
-ilexbb<-dplyr::select(ilexbb,GEN.SPA,Estimate,scenario)
-colnames(ilexbb)[2]<-"Est.bb"
-ilex<-left_join(ilexflo,ilexbb)  
-ilex$FLS<-ilex$Est.flo-ilex$Est.bb
 
 setEPS()
 postscript("Plots/climpredictions.eps",width = 12, height = 8)
@@ -224,17 +152,6 @@ predybig %>%
   ggthemes::theme_base(base_size = 10)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))
 dev.off()
 
-
-PHH<-data.frame[]
-
-goo<-filter(predybig,GEN.SPA=="COR.COR")
-goo%>%
-arrange(Estimate) %>%
-  mutate(scenario = factor(scenario, levels=c("historic","warm 5","warm 10", "5-chill","10-chill", "5+chill","10+chill"))) %>%
-  ggplot(aes(scenario,Estimate))+geom_point(aes(color=phase,shape=phase),size=2.5)+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=phase),linetype="solid",alpha=0.8)+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=phase),linetype="dotted",alpha=0.8)+
-  ggthemes::theme_base(base_size = 10)+scale_color_manual(values=c("darkgreen","darkorchid3"))+scale_shape_manual(values=c(17,19))
-
-
 jpeg("Plots/climpredictions_fixedscale.jpeg",width = 6, height = 10, units = 'in', res=300)
 predybig %>%
   arrange(Estimate) %>%
@@ -243,56 +160,7 @@ predybig %>%
 dev.off()
 
 
-HFchecker<-filter(HFreal, species %in%c('ACPE',"ACRU"))
-ggplot(HFchecker)+geom_smooth(method="lm",aes(year,bb.jd),color="darkgreen",fill="darkgreen")+geom_smooth(method="lm",aes(year,fopn.jd),color="hotpink",fill="hotpink")+facet_wrap(~species)
 
-
-modelhere <-mod.FLS.small
-modelhere2<-mod.FLS.small
-source("prep4plot.R")
-source("exp_muplot_brms.R")
-muplotfx(modelhere,modelhere2, "FLS change", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
-dev.off()
-
-
-### Vacccor is the only species that leafed and flower in every treatent
-
-
-#### 
-unique(dat$GEN.SPA)
-hysters<-c("COM.PER","COR.COR","ACE.RUB")
-hyst.dat<-filter(dat, GEN.SPA %in% hysters)
-
-mod.hyst.flo<-brm(flo_day ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
-                   data = hyst.dat, family = gaussian(),control = list(adapt_delta = 0.99),
-                   iter= 7000,
-                   warmup = 6000)
-
-
-ser.dat<-filter(dat, !GEN.SPA %in% hysters)
-mod.ser.flo<-brm(flo_day ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
-                    data = ser.dat, family = gaussian(),control = list(adapt_delta = 0.99),
-                    iter= 7000,
-                    warmup = 6000)
-
-spp <- unique(hyst.dat$GEN.SPA)
-modelhere <-mod.hyst.flo
-modelhere2<-mod.hyst.flo
-source("prep4plot.R")
-source("exp_muplot_brms.R")
-muplotfx(modelhere,modelhere2, "Flo_hyst", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
-dev.off()
-
-spp <- unique(ser.dat$GEN.SPA)
-modelhere <-mod.ser.flo
-modelhere2<-mod.ser.flo
-source("prep4plot.R")
-source("exp_muplot_brms.R")
-muplotfx(modelhere,modelhere2, "Flo_ser", 8, 8, c(0,7), c(-50, 120) , 130, 3.5)
-dev.off()
-
-
-save.image("new_flobud.mods.Rda")
 ###prediction plots
 HFreal<-read.csv(file = "..//Data/hf003-05-mean-ind.csv")
 HFreal$FLS<-HFreal$bb.jd-HFreal$fopn.jd
@@ -353,3 +221,5 @@ dev.off()
 jpeg("Plots/fieldmodcomparisions.jpeg",width = 5, height = 6, units = 'in', res=300)
 ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
 dev.off()
+
+save.image("new_flobud.mods.Rda")

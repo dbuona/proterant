@@ -62,8 +62,17 @@ leaf$phase<-"vegetative"
 goo<-rbind(flo,leaf)
 colnames(goo)
 
+goo$order<-NA
+
+goo$order[which(goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase=="reproductive")]<-"first"
+goo$order[which(goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase!="reproductive")]<-"second"
+
+goo$order[which(!goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase=="reproductive")]<-"second"
+
+goo$order[which(!goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase!="reproductive")]<-"first"
+?scale_color_brewer()
 png("Plots/Flobuds_manuscript_figs/phh_plot.png",width = 5,height = 5,units = "in",res=300)
-ggplot(goo,aes(GEN.SPA.Estimate.Force,GEN.SPA))+geom_point(aes(shape=phase))+
-geom_errorbarh(aes(xmin=GEN.SPA.Q25.Force,xmax=GEN.SPA.Q75.Force,group=phase),height=0)+  
-geom_vline(xintercept = 0,linetype="dashed")+ggthemes::theme_base(base_size = 11)
+ggplot(goo,aes(GEN.SPA.Estimate.Force,GEN.SPA))+geom_point(aes(shape=phase,color=order),size=2)+
+geom_errorbarh(aes(xmin=GEN.SPA.Q25.Force,xmax=GEN.SPA.Q75.Force,group=phase,color=order),height=0)+scale_color_brewer(type="qual",palette = 2)+  
+geom_vline(xintercept = 0,linetype="dashed")+ggthemes::theme_base(base_size = 11)+ylab("Species")+xlab("Sensitivity to forcing")
 dev.off()
