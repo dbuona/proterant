@@ -36,9 +36,12 @@ hyster<-read.csv("..//Data/rosaceae.csv") ## read in flower size, phenology and 
 hyster<-filter(hyster,genus=="Rhododendron")
 
 colnames(hyster)[3]<-"specificEpithet"
+par(mar=c(0,0,0,0))
+png("rhodymaps.png",width = 12,height=10,units = "in",res = 300)
 plot(mean.rhody)
 points(lonpoints,latpoints, col=c("royal blue","black"),pch=c(8,5),cex=0.7)
-legend(-80,20,c("hysteranthous","seranthous"),pch=c(8,5),col=c("royal blue","black"))
+dev.off()
+#legend(-120,20,c("hysteranthous","seranthous"),pch=c(8,5),col=c("royal blue","black"))
 
 rhody.data.2<-dplyr::left_join(rhody.data,hyster,by="specificEpithet")
 
