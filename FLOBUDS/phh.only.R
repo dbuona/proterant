@@ -49,30 +49,37 @@ mod.flo.int<-brm(flo_day~Force+(Force|GEN.SPA),
                  data = dat.chillmet, family = gaussian(),
                  iter= 4000,
                  warmup = 3000) 
+
+
 coef(mod.flo.int)
 coef(mod.bb.int.phh)
 
-extract_coefs<-function(x){rownames_to_column(as.data.frame(coef(x, summary=TRUE,probs=c(0.025,0.1,0.25,0.75,0.9,0.975))),"GEN.SPA")
+extract_coefs<-function(x){rownames_to_column(as.data.frame(coef(x, summary=TRUE,probs=c(0.25,0.75))),"GEN.SPA")
 }
+
 
 flo<-extract_coefs(mod.flo.int)
 flo$phase<-"reproductive"
 leaf<-extract_coefs(mod.bb.int.phh)
 leaf$phase<-"vegetative"
-goo<-rbind(flo,leaf)
-colnames(goo)
+phh<-rbind(flo,leaf)
+colnames(phh)
 
-goo$order<-NA
+phh$order<-NA
 
-goo$order[which(goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase=="reproductive")]<-"first"
-goo$order[which(goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase!="reproductive")]<-"second"
+phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="reproductive")]<-"first"
+phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="reproductive")]<-"second"
 
-goo$order[which(!goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase=="reproductive")]<-"second"
+phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="reproductive")]<-"second"
 
-goo$order[which(!goo$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & goo$phase!="reproductive")]<-"first"
-?scale_color_brewer()
+phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="reproductive")]<-"first"
+phh2<-dplyr::select(phh,GEN.SPA,GEN.SPA.Estimate.Force,GEN.SPA.Est.Error.Force,GEN.SPA.Q25.Force,GEN.SPA.Q75.Force,phase,order)
+colnames(phh2)<-c("Species","Estimate","error","Q25","Q75","phase","sequence")
+phh2<-phh2 %>%arrange(Species,sequence)
+
+save.image("phh.mod.output.Rda")
 png("Plots/Flobuds_manuscript_figs/phh_plot.png",width = 5,height = 5,units = "in",res=300)
-ggplot(goo,aes(GEN.SPA.Estimate.Force,GEN.SPA))+geom_point(aes(shape=phase,color=order),size=2)+
+ggplot(phh,aes(GEN.SPA.Estimate.Force,GEN.SPA))+geom_point(aes(shape=phase,color=order),size=2)+
 geom_errorbarh(aes(xmin=GEN.SPA.Q25.Force,xmax=GEN.SPA.Q75.Force,group=phase,color=order),height=0)+scale_color_brewer(type="qual",palette = 2)+  
 geom_vline(xintercept = 0,linetype="dashed")+ggthemes::theme_base(base_size = 11)+ylab("Species")+xlab("Sensitivity to forcing")
 dev.off()

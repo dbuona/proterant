@@ -53,48 +53,62 @@ table(hyster$hyst2)
 prunus.data.2<-dplyr::left_join(prunus.data,hyster,by="specificEpithet")
 
 
-d<-dplyr::filter(prunus.data.2,!is.na(FLS)) ### 7668 rows have county coordiates
+#d<-dplyr::filter(prunus.data.2,!is.na(FLS)) ### 7668 rows have county coordiates
 
 
 
+### What are the species
+spec.rep<-d %>%filter(chin_class=="solitary") %>% group_by(specificEpithet,hyst,hyst2,FLS) %>%summarise(n=n())
+sp2<-sp %>%dplyr::group_by(specificEpithet) %>%summarise(n=n())
+ggpubr::ggbarplot(sp2,x ='specificEpithet',y='n',lab.size = .2,sort.val = c("desc" ))+
+  ggpubr::rotate_x_text(angle = -65, hjust = -.1, vjust = NULL)+
+  ggpubr::font("xy.text",size=6)
 
+spec.rep2<-d %>%filter(chin_class=="racemose") %>% group_by(specificEpithet,hyst,hyst2,FLS) %>%summarise(n=n())
+ggpubr::ggbarplot(spec.rep2,x ='specificEpithet',y='n',lab.size = .2,sort.val = c("desc" ),fill='FLS')+
+  ggpubr::rotate_x_text(angle = -65, hjust = -.1, vjust = NULL)+
+  ggpubr::font("xy.text",size=8)
 
+spec.rep3<-d %>%filter(chin_class=="corymbose") %>% group_by(specificEpithet,hyst,hyst2,FLS) %>%summarise(n=n())
+ggpubr::ggbarplot(spec.rep3,x ='specificEpithet',y='n',lab.size = .2,sort.val = c("desc" ),fill='FLS')+
+  ggpubr::rotate_x_text(angle = -65, hjust = -.1, vjust = NULL)+
+  ggpubr::font("xy.text",size=8)
 
 ## hypothesis1: hysteranthy relates to flower size
 
-ggplot(hyster,aes(chin_class))+geom_bar(position="dodge",aes(fill=hyst))
+ggplot(hyster,aes(chin_class))+geom_bar(position="dodge",aes(fill=hyst)))
 
 
 a<-ggplot(hyster,aes(FLS,mean_size))+geom_boxplot()+stat_summary(color="red")+
   ggthemes::theme_base()+xlab("FLS")+ylab("mean flower size (mm)")+facet_wrap(~chin_class)
 
 aa<-ggplot(hyster,aes(hyst,mean_size))+geom_boxplot()+stat_summary(color="red")+
-  ggthemes::theme_base(base_size = 11)+xlab("FLS")+ylab("mean flower size (mm)")
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flower size (mm)")
 
 
 b<-ggplot(hyster,aes(FLS,mean_num))+geom_boxplot()+stat_summary(color="red")+
   ggthemes::theme_base()+xlab("FLS")+ylab("mean flowers/inflorescence")
 bb<-ggplot(hyster,aes(hyst,mean_num))+geom_boxplot()+stat_summary(color="red")+
-  ggthemes::theme_base(base_size = 11)+xlab("FLS")+ylab("mean flowers/inflorescence")
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean flowers/inflorescence")
+
 
 c<-ggplot(hyster,aes(FLS,display))+geom_boxplot()+stat_summary(color="red")+
   ggthemes::theme_base()+xlab("FLS")+ylab("display volume (fl. size*fl. number")
 cc<-ggplot(hyster,aes(hyst,display))+geom_boxplot()+stat_summary(color="red")+
-  ggthemes::theme_base(base_size = 11)+xlab("FLS")+ylab("display volume (fl. size*fl. number)")
+  ggthemes::theme_base()+xlab("FLS")+ylab("display volume (fl. size*fl. number)")
 
 
 e<-ggplot(hyster,aes(FLS,mean_fruit))+geom_boxplot()+stat_summary(color="red")+
   ggthemes::theme_base()+xlab("FLS")+ylab("mean fruit siam (mm)")
 ee<-ggplot(hyster,aes(hyst,mean_fruit))+geom_boxplot()+stat_summary(color="red")+
-  ggthemes::theme_base(base_size = 11)+xlab("FLS")+ylab("mean fruit size (mm)")
+  ggthemes::theme_base()+xlab("FLS")+ylab("mean fruit size (mm)")
 
 
 
 ggpubr::ggarrange(a,b,c,e)
-png(filename = "prunusplots.png", width=12, height= 10, units = "in",res = 300)
 ggpubr::ggarrange(aa,bb,cc,ee)
 
-dev.off()
+
 
 
 mod1<-brms::brm(mean_fruit~hyst,data=hyster)
@@ -113,10 +127,10 @@ car::Anova(lm(display~hyst,data=hyster),type="III")
 car::Anova(lm(mean_fruit~FLS,data=hyster),type="III")
 car::Anova(lm(mean_fruit~hyst,data=hyster),type="III")
 
+d.solo<-filter(d, chin_class=="solitary")
+png("pdsiboxes.png",width = 10,height=10,units = "in",res = 300)
+ggplot(d.solo,aes(FLS,pdsi))+geom_boxplot()+theme_minimal()
 
-png("pdsiboxes.png",width = 12,height=10,units = "in",res = 300)
-ggplot(d,aes(hyst,pdsi))+geom_boxplot()+stat_summary(color="red")+ggthemes::theme_base(base_size = 12)
-dev.off()
 car::Anova(lm(pdsi~hyst,data=d),type="III")
 
 ?geom_boxplot()
