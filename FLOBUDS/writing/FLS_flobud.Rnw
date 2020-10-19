@@ -2,7 +2,6 @@
 %Required: You must have these
 \usepackage{graphicx}
 \usepackage{tabularx}
-%\usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{pdflscape}
 \usepackage{array}
@@ -30,6 +29,7 @@
 
 \bibliographystyle{..//..//sub_projs/refs/styles/besjournals.bst}
 \usepackage{xr-hyper}
+\usepackage{hyperref}
 \externaldocument{diffsens_SUPP}
 
 \linenumbers
@@ -39,10 +39,10 @@
 \author{D.M. Buonaiuto $^{1,2,a}$, E.M. Wolkovich$^{3}$}
 \begin{document}
 
-<<label=numbers, echo=FALSE, results='asis'>>=
+<<label=numbers, echo=FALSE, results='hide', message=FALSE>>=
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
-library(brms,quietly = TRUE)
+require(brms,quietly = TRUE)
 load("flobud.main.mods.Rda")
 flo.eff<-fixef(mod.flo.int)
 bb.eff<-fixef(mod.bb.int)
@@ -65,16 +65,17 @@ chillforcecomp<-round(bbchillXforce/flochillXforce,digits=1)
 chilllightcomp<-round(bbchillXlight/flochillXlight,digits=1)
 lightforcecomp<-round(bblightXforce/flolightXforce,digits=1)
 @
-
+\maketitle
 \section*{Abstract} 
 The relative timing of growth and reproduction is an important driver of plant fitness. Deciduous woody species of temperate regions generally produce both leaves and flowers in the early spring but display significant variation in the order and duration of these phenological events among species, populations and individuals.   These flower-leaf sequences (FLSs) appear to be shifting with climate change which is likely to impact the reproduction, recruitment and survival of indivudals and reshape forest communities. Predicting the effects FLS shifts require improved understanding of how the enviroment dictates FLS patterns. We compared the phenological responses of flower and leaf buds to varying levels temperature and light for a suite of temperate woody species to test two competing hypotheses regarding underlying physiology of FLS variation. We found that flower and leaf buds respond with differential sensitivity environmental cues, with differences in their response to chilling being the dominent driver of FLS variation. Because climate change drives variability in chilling across time and space, these findings suggest that FLS shifts may be large, but are likely to vary substantially among populations and species. Our study indicates that wind-pollinated species that flower before leafing appear to be highly sensitive to negative fitness consequences of FLS shifts, and future FLS research should consider focusing on these taxa.  %213 words  
 
 \section*{Introduction}
+\noindent One of the most widely documented biological effects of anthropogenic climate change are shifts in phenology, the timing of life cycle events, in plants \citep{Parmesan2003,Menzel2006,Cleland2007}. While phenology is generally advancing with climate change, the strength of these phenological shifts can vary substantially among specific phenological phases \citep{Augspurger:2020aa}. These differences alter the timing of phases relative to each other, changing the duration of inter-phase periods that make up phenological sequences \citep{Ettinger2018}. As a major driver of plant fitness that impacts plant life history, resource allocation, demography and ecosystem processes \citep{Post:2008aa}, shifting phenological sequences with climate change will likely impact many of these processes. However the effects these shifts depend both on the direction (whether distinct phases are shifting closer together or farther apart) and magnitude (how much they are shifting relative to each other).\\ 
 \noindent Among deciduous woody plants, the relative timing of flower and leaf phenology, or flower-leaf sequences (FLSs), may be particularly consequential to fitness in temperate regions where flowering prior to leaf development is common \citep{Rathcke_1985,Gougherty2018}. Flowering before leaf development may be a critical adaptation for pollination efficiency in wind-pollinated taxa by eliminating pollen interception by the forest canopy \citep{Whitehead1969}. In insect-pollinated taxa, flowering-first may increase the visibility of flowers to pollinators \citep{Janzen1967,Savage2019} or alleviate hydraulic demand in dry conditions \citep{Gougherty2018, Franklin2016}.\\
 
 \noindent Long-term phenological observations over the last several decades indicate that, like other phenological sequences, FLSs are shifting due to anthropogenic climate change \citep{Buonaiuto2020}. For several species, the time between flowering and leafing appears to be increasing, but the strength of this trend varies among species and the direction of FLS shifts are not consistent across populations \citep{Buonaiuto2020}. These changes could affect the important functions of FLSs, potentially putting some species at greater risk for fitness declines while benefiting others.\\
 
-\noindent Wind-pollinated species with decreasing FLS interphases with climate change may see a reduction in pollination success as more pollen is intercepted by vegetative structures and flowers are obscured by developing leaves. Conversely, pollination efficiency could improve for species with lengthening FLS interphases (direction). A change in the FLS interphase of just a few days would likely have little impact on these processes, but if shifts were on the order of weeks, the impact on the pollination biology of a species could be highly significant (magnitude). Studies modeling particle movement through forests show that canopy structure influences the speed and direction of air flow\citep{Niklas1985, Jackson:1999aa}. Because wind is the vector of gene flow in these species, shifting FLSs on the community scale could impact pollen dispersal distances and ultimately population structures across a landscape.\\
+\noindent Wind-pollinated species with decreasing FLS interphases with climate change may see a reduction in pollination success as more pollen is intercepted by vegetative structures and flowers are obscured by developing leaves. Conversely, pollination efficiency could improve for species with lengthening FLS interphases (direction). A change in the FLS interphase of just a few days would likely have little impact on these processes, but if shifts were on the order of weeks, the impact on the pollination biology of a species could be highly significant (magnitude). Canopy structure influences the speed and direction of air flow\citep{Niklas1985, Jackson:1999aa} and shifting FLSs could impact pollen dispersal distances \citep{Milleron2012} and ultimately gene flow population structure across a landscape.\\
 
 \noindent Predicting the direction and magnitude of any FLS shifts requires identifying the underlying proximate mechanisms that drive responses to climate change among phenophases.Decades of research suggests that for woody plants in temperate regions, cool winter temperatures (chilling), warm spring temperatures (forcing) and day-length (photoperiod) are the primary drivers of both reproductive and vegetative phenology \citep{Forrest2010,Flynn2018}. However, observed FLS shifts indicate that there must be differences in how these cues influence phenological activity in floral and leaf buds \citep{Buonaiuto2020}.  Identifying these differences is a necessary step for predicting the direction, magnitude and---ultimately---fitness impacts of FLS shifts with climate change.\\ 
 
@@ -149,8 +150,9 @@ $\alpha_{x_{sp}} $or $\beta_{x_{sp}} \sim N(\mu_x,\sigma^2_x)$\\
 \noindent While there was significant variation among species in their strength of their response to forcing between bud types, no species displayed the characteristic sensitivity pattern of the PHH in which the sensitivity to forcing of the second phase twice as strong as the sensitivity of the first phase (Fig. \ref{fig:model}), see Fig. \ref{fig:simulations},a.,b.). Rather, the differences in the strength of the responses of each bud type to each environmental cue combination is signature of the DSH. However, when re-ran our models on the subset of data which included phenological observations at only high levels of chilling and photoperiod, we found the the sensitivity to forcing for most species followed with predicted pattern of the PHH, with the second phase of the FLS showing approximately double the sensitivity to forcing than the first phases (Fig. \ref{fig:phh}).\\
 
 \subsection*{Climate change predictions}
-%EMWOct2 -- reads well, just weave in a little more referencing of figures/tables
-\noindent Our model predict that both flower and leaf phenology will advance in most of our generalized scenarios for most species, but shifts in FLS depended strongly on how forcing levels change relative to chilling duration (Fig. \ref{fig:preddy},c.,d.). Following the significant differences in sensitivity to chilling between flowering and leafing phenology we found in our models, FLS interphases were more strongly influenced by changes in chilling exposure than increased forcing alone. The direction and magnitude of shifts in FLS interphases depended on species and the specifics of FLS phase order, with flowering-first and flowering-concurrently species tending to show more profound alterations to FLS patterns than leafing-first taxa. Under some warming scenarios, our model predicted that  FLS interphases for some species may effectively disappear or the order of phenophases in the FLS may switch (Fig. \ref{fig:preddy}, e.g. decreased chilingl for concurent species and increased chilling for flowering-first).
+\noindent Our model predict that both flower and leaf phenology will advance in most of our generalized scenarios for most species, but shifts in FLS depended strongly on how forcing levels change relative to chilling duration (Fig. \ref{fig:preddy}). Following the significant differences in sensitivity to chilling between flowering and leafing phenology we found in our models, FLS interphases were more strongly influenced by changes in chilling exposure than increased forcing alone.\\
+
+\noindent The direction and magnitude of shifts in FLS interphases depended on species and the specifics of FLS phase order. Under some warming scenarios, our model predicted that  FLS interphases for some species may effectively disappear or the order of phenophases in the FLS may switch (Fig. \ref{fig:preddy}). Several species, \textit{Acer rubrum} ,\textit{Ilex verticillata}, \textit{Prunus pensylvanicum}, \textit{Prunus virginiana}, and \textit{Viburnum acerifolium}, had FLSs that were relatively robust to changing environments. For other species, \textit{Acer pensylvanicum}, \textit{Vaccinium corymbosum} and \textit{Ilex mucronata}, which typically begin to produce leaves shortly before flowers open, the magnitudes of projected FLS shifts were moderate. The two species with the most significant FLS shifts in both direction and magnitude across treatment combinations and climate change projections were \textit{Comptonia peregrina} and \textit{Corylus cornuta} (Fig. \ref{fig:preddy}). In all of our climate change scenarios, the FLS interphase was dramatically reduced in these taxa.\\
 
 \section*{Discussion}
 %EMWOct2 --  I can help edit if you want on a next draft, just remind me. 
@@ -161,27 +163,61 @@ Yet, under the high chilling and photoperiod treatments, we found that FLSs for 
 
 \noindent The strong differential sensitivity to chilling between flower and leaf buds we found in our study reveals a possible mechanistic link between the DSH and PHH, and offers insight into why these hypotheses have been difficult to differentiate in the past. Our data show that the PHH can be considered to be a special case of the DSH-- when the chilling requirement for both flower and leaf buds is met, an an individual appear to follow the predicted pattern of PHH, with temperature during the FLS interphase dictating the inter-annual variability in FLSs. Long term studies suggest that under historic climate conditions, chilling requirements were generally met \citep{}, which may explain why support for the PHH most often associated with observational studies \citep[e.g.][]{COSMULESCU:2020aa,Guo2014}. This is consistent with findings in other phenological studies that suggest simple growing degree models (which underlie the PHH) accurately predict phenology under current climate, but under-perform under climate change scenarios when shifts in chilling accumulation become more pronounced \citep{Linkosalo2008}.\\ 
 
-\noindent By contrast, experimental studies which manipulate chilling levels beyond which was historically observed in the field tend to support the DSH \citep[e.g.][]{Aslani2009,Gariglio2006}. The results of our study in wild species are consistent with experimental manipulations of tree-crop phenology which also found a higher sensitivity to chilling for leaf buds \citep{Gariglio2006,Citadin2001}. Our findings suggest that as climate continues to change, differential sensitivity to the environment between flower and leaf phenology should become more apparent in field observations, and that individual FLS variation is likely to extend beyond historically observed reaction norms.
+\noindent By contrast, experimental studies which manipulate chilling levels beyond which was historically observed in the field tend to support the DSH \citep[e.g.][]{Aslani2009,Gariglio2006}. The results of our study in wild species are consistent with experimental manipulations of tree-crop phenology which also found a higher sensitivity to chilling for leaf buds \citep{Gariglio2006,Citadin2001}. Our findings suggest that as climate continues to change, differential sensitivity to the environment between flower and leaf phenology should become more apparent in field observations, and that individual FLS variation is likely to extend beyond historically observed reaction norms.\\
 
+\subsection*{Population-level implications of the DSH with climate change}
+\noindent The strong differential sensitivity to chilling the between flower and leaf buds we found in our study suggests complex FLS dynamics with climate change. Predicted shifts in chilling are highly variable across both time and space-- because chilling only accumulates at intermediately low temperatures warming may increase chilling at some locations while decreasing it in others \citep{Man2017,Zhang:2007aa}. This suggests that the direction and magnitude of FLS shifts is likely to vary substantially among populations based on the specific cue combinations at a given locality \citep{Chmielewski:2012aa}. Long-term phenology records show there was already substantial intra-specific variation in FLSs at the population level \citep{Buonaiuto2020} and our findings suggest that these populations level differences may be further amplified by climate change. In this way, all the three generic FLS climate change scenarios depicted in Fig. \ref{fig:preddy} should not be considered alternatives to each other, but rather, could occur contemporaneously across a species' range. \\ 
 
+\noindent Population level heterogeneity has potential to influence patterns of pollen dispersal across the landscape \citep{Borycka2017,Pace:2018aa}. For example, advancing canopy closure relative to flowering can impedes long-distance pollen transport \citep{Mileron2012}, which may in turn alter patterns of gene flow across a landscape. Our finding regarding FLS shifts should be integrated with projections of pollinator movement or prevailing wind directions \citep{Kling:2020aa} to better understand how FLS variation may conribute to population structure in the long term. \\
+
+\noindent The implications of our study's observed differential sensitivity to photoperiod to FLS shifts with climate change are more difficult to characterize.  Climate change does not directly impact photoperiod, but warming does shift the time of year when plants become phenologically active, changing the photoperiod they experience.  However, depending on the latitude, phenology would have to shifts by at minimum several weeks before the experience photoperiod would change substantially \citep{}(Us, in prep-ish). For this reason we modeled climate change scenarios with a constant photoperiod in our FLS projections with climate change, but at high latitudes where photoperiod changes more rapidly over the season, the experienced photoperiod may mute or amplify the FLS shifts captured in our projections. This may be particularly important as species shift shift their distribution pole ward with climate change and begin to encounter novel photoperiod regimes \citep{WAY:2015aa}.\\
+
+\subsection*{Species-level implications of the DSH with climate change}
+\noindent  Our study highlights that the direction and magnitude of FLS shifts with climate change are species-specific. Not only is it likely that the function of FLS variation differs among species \citep{Buonaiuto2020}, but we found that FLSs of some species were very sensitive to changing climate conditions while other remain fairly resilient (Fig. \ref{fig:preddy}).\\
+
+\noident These differences suggest that some FLS shifts will impact some species more than others, and researchers should focus their efforts towards species or populations that are likely to be most vulnerable. However, identify vulnerable species is challenging. At present, observational studies cannot capture the magnitude of FLS shifts with climate, and using artificial environments to manipulate FLSs for all species of interest is unfeasible. Therefore, there is a strong need for generalizing principles to aid in identify species with potential for consequential FLS shifts with climate change. While one study cannot begin to represent the taxonomic diversity of a temperate forest, we identified several patterns in the FLS responses of our multi-species experiment that may serve as starting point for further inquiry.\\
+
+\noindent It is likely that these three difference response patterns we observed correlate to broader anatomical, physiological and phenological differences among species. The species that maintained FLS structure across climate change scenarios generally shared a strongly leafing-first FLS, with a fairly long FLS interphase. These species tended to have mixed buds so there may be strong physical constraints on their FLSs. By contrast, the species that were most sensitive to FLS shifts were monoecious, flowering-first, wind-pollinated shrubs. This result may reflect other evidence that wind-pollinated species appear to be more sensitive to climate change than biotically pollinated taxa \citep{Ziello:2012aa}. Given the hypothesized function of FLS in wind-pollinated species, the direction and magnitude of FLS shifts we observed could suggest that these species, and flowering-first, wind-pollinated taxa in general, may face particular risk for reproductive performance reductions.\\
+
+\noindent While much of the conversation around phenology and pollination in the context of global change has centered around trophic mismatches between pollinator and floral phenology \citep{Memmott2007}, which is of little relevance to abiotically pollinated taxa, our study identified the possibility that the effect of FLS shifts with climate change may be particularly important for wind-pollinated woody plants. The direction and magnitude of FLS shifts we observed in these taxa, coupled with the hypothesized function of a flowering-first FLS in wind-pollinated species, suggests that FLS variation in this functional group should be explored in greater detail in the future. More research is needed to identify species' traits that may correlate with the potential for FLS shifts, but flowering-first, wind-pollinated species may be particular sensitive to FLS shifts, and species in this functional group should be considered a research priority for the study of spring phenological sequences in deciduous, woody plants.\\ 
 
 
 \bibliography{..//..//sub_projs/refs/hyst_outline.bib} 
+%\begin{figure}[h!]
+ %   \centering
+ %\includegraphics[width=\textwidth]{..//Plots/Flobuds_manuscript_figs/postergroups.png}
+ %\caption{Alternative Fig. \ref{fig:preddy}.}
+ %\end{figure}
+\section*{Tables}
+<< echo=FALSE, results='asis'>>=
+###summarize main effects of these models
+library(xtable)
 
-%EMWOct2 -- New Figure 1 works! I would add the simulations to the caption AFTER the caption explains the figure and  I would color code the names (e.g., 'precocity hierarchy') each differently then color in the circles/triangles that go with that hypothesis (or bound in a colored rectangle or such) -- for the top two I think that's photo, chill, force: photo  and for the bottom one you add force. Just help draw the eye to what to look at.
+xtable(fixef(mod.bb.int,probs = c(.25,.75)))
+xtable(fixef(mod.flo.int,probs = c(.25,.75)),caption = "Phenological sensitivity of leaf (top) and flower (bottom) buds to environmental cues. Caption needs work.",label ="tab:modelests" )
+
+@
+
+<< echo=FALSE, results='asis'>>=
+###summarize main effects of these models
+load("phh.mod.output.Rda")
+xtable(phh2,caption = "Phenological sensitivity of leaf and flower buds to forcing at high levels of chilling and forcing. Caption needs work.",label ="tab:phh" )
+
+@
 
 \section*{Figures}
 \begin{figure}[h!]
     \centering
-         \includegraphics[width=.8\textwidth]{..//Plots/Flobuds_manuscript_figs/simulations.png}
-    \caption{\textbf{Simulations show characteristic patterns of the phenological response to changing cues level for each of the flower-leaf sequence hypotheses.} We simulated the precocity hierarchy hypothesis in \textbf{a)}, by assigning flowering a lower critical heat sum value (F*) than leafing but assigned similar responses to chilling and photoperiod variation. The plot shows the characteristic phh response to temperature with the second phenophases in thee sequence (in this case leafing) having twice the sensitivity to forcing than the first. In \textbf{b)} we maintain the differences in F* values between flowering and leafing but also assigned them different responses to forcing and photoperiod. Here the characteristic forcing sensitivity of the phh is still apparent but the differential sensitivity to chilling and photoperiod is detectable as well. For simulation \textbf{c)}, we assigned identical F* values to both phenophases but maintained differences in their chilling and photoperiod responses. It is important to highlight that in this scenario while F* is the same at for both phases at low levels of chilling, the forcing x chill interaction suggest that at high levels of chilling, the response to forcing would follow the pattern of characteristic phh response to forcing, suggesting that the hypotheses are difficult to disentangle. We produced the plots using Bayesian hierarchical models to evaluate the phenological sensitivity ($\Delta$ day of phenological event/ $\Delta$ environmental cue) of flower and leaf buds under each of these scenarios. Points are the mean estimates and lines represent the 95\% credible intervals. (should I do 50 CI for consistancy with restof figures or should I add 95 to the others?) } 
+         \includegraphics[width=.7\textwidth]{..//Plots/Flobuds_manuscript_figs/simulations.png}
+    \caption{\textbf{Characteristic sensitivity ($\Delta$ day of phenological event/ $\Delta$ environmental cue) patterns of the phenological response to changing cues level for the two major flower-leaf sequence hypotheses.}  \textbf{a)} displays a signature pattern of the precocity hierarchy hypothesis(PHH)( pink boxes) --- with the second phenophases in the sequence (in this case leafing) having twice the sensitivity to forcing than the first. \textbf{b)} dipicts a scenario where both the PHH and the differential sensitivity hypothesis (DSH) contribute to flower-leaf sequence variation. Here the characteristic forcing sensitivity of the PHH is still apparent but the differential sensitivity to chilling and photoperiod is observable as well (blue boxes). \textbf{c)} highlights a typical sensitivity pattern produced by the DSH without the PHH. However the forcing x chill interaction suggests that at high levels of chilling, the response to forcing would follow the characteristic PHH respose, demonstrating that the two hypotheses are difficult to disentangle. All plots above are based on simulations. We simulated the PHH by assigning flowering a lower thermal requirment (F*) than leafing but assigned similar responses to chilling and photoperiod variation. In \textbf{b)} we maintain the differences in F* values between flowering and leafing but also assigned them different responses to forcing and photoperiod. For simulation of the DSH only scenario, we assigned identical F* values to both phenophases but maintained differences in their chilling and photoperiod responses. We produced the plots using Bayesian hierarchical models to evaluate the phenological sensitivity  of flower and leaf buds under each of these scenarios. Points are the mean estimates and lines represent the 95\% credible intervals. } 
     \label{fig:simulations}
 \end{figure}
+\pagebreak
 
 
 \begin{figure}[h!]
     \centering
-         \includegraphics[width=\textwidth]{..//Plots/Flobuds_manuscript_figs/budburstvsflowering.pdf}
+         \includegraphics[width=0.8\textwidth]{..//Plots/Flobuds_manuscript_figs/budburstvsflowering.pdf}
     \caption{\textbf{Experimental results suggest differential sensitivity to environmental cues between flower and leaf buds}. We used a growth chamber manipulation and Bayesian hierarchical models to evaluate the phenological sensitivity ($\Delta$ day of phenological event/ $\Delta$ environmental cue) of flower and leaf buds to varying forcing temperatures, photoperiods, and duration of chilling.   Vegetative buds (circles) were more sensitive to chilling and cue interactions. Flower buds (triangles) advanced with photoperiod increases under all treatment combinations but leaf phenology was delayed with increasing photoperiod when chilling and forcing levels were low. Points indicate mean estimates and lines represent the 50\% credible intervals. These differential sensitivities dictate how FLS patterns vary with changing environmental conditions.}
     \label{fig:model}
 \end{figure}
@@ -197,34 +233,10 @@ Yet, under the high chilling and photoperiod treatments, we found that FLSs for 
 %EMWOct2 -- I like the below one, I was going to suggest you keep the colors and put all on one panel, but I think this may work better as it stresses the wind versus biotic. I would just state more clearly in the caption that wind pollinated all leaf first -- that gets a little lost. 
 \begin{figure}[h!]
     \centering
- \includegraphics[width=.8\textwidth]{..//Plots/Flobuds_manuscript_figs/postergroups2.png}
-    \caption{\textbf{Flower-leaf sequences (FLSs) of temperate, woody species will shift with climate change, but the magnitudes of these shifts vary by amonf FLS categories and depend on the specific dynamics of temperature at a given location.} We used Bayesian, hierarchical models comparing flower and leaf bud responses to variable temperature combinations to predict FLSs patterns under current climate conditions and three climate change scenarios;  an increase in spring warming alone (warm 5), increase in spring warming and increase in winter chilling (warm 5 +chill) and an increase in spring warming and decrease in winter chill (warm 5 -chill). We grouped the species-level posterior estimates by FLS category (flowering-first, concurrent, leafing-first). The points represent the mean estimates and the lines lines represent the 50\% credible intervals. Projected FLS shifts are most pronounced in wind-pollinated, flowering-first shrubs but FLS shifts for all species depend on the relationship between forcing and chilling changes which is likely to vary by location with climate change.}
+ \includegraphics[width=\textwidth]{..//Plots/Flobuds_manuscript_figs/posteriorgroups_go.png}
+    \caption{\textbf{Flower-leaf sequences (FLSs) of temperate, woody species will shift with climate change, but the magnitudes of these shifts vary by amonf FLS categories and depend on the specific dynamics of temperature at a given location.} We used Bayesian, hierarchical models comparing flower and leaf bud responses to variable temperature combinations to predict FLSs patterns under current climate conditions and three climate change scenarios;  an increase in spring warming alone (warm 5), increase in spring warming and increase in winter chilling (warm 5 +chill) and an increase in spring warming and decrease in winter chill (warm 5 -chill). We grouped the species-level posterior estimates by FLS category (flowering-first, concurrent, leafing-first). The points represent the mean estimates and the lines lines represent the 50\% credible intervals. In our study, all flowering-first species are wind-pollinated, and projected FLS shifts are most pronounced in some of these wind-pollinated, flowering-first shrubs. However, FLS shifts for all species depend on the relationship between forcing and chilling changes which is likely to vary by location with climate change.}
     \label{fig:preddy}
 \end{figure}
-
-
-%\begin{figure}[h!]
- %   \centering
- %\includegraphics[width=\textwidth]{..//Plots/Flobuds_manuscript_figs/postergroups.png}
- %\caption{Alternative Fig. \ref{fig:preddy}.}
- %\end{figure}
-
-\section*{Tables}
-<< echo=FALSE, results='asis'>>=
-###summarize main effects of these models
-library(xtable)
-xtable(fixef(mod.bb.int,probs = c(.25,.75)))
-xtable(fixef(mod.flo.int,probs = c(.25,.75)),caption = "Phenological sensitivity of leaf (top) and flower (bottom) buds to environmental cues. Caption needs work.",label ="tab:modelests" )
-
-@
-
-<< echo=FALSE, results='asis'>>=
-###summarize main effects of these models
-load("phh.mod.output.Rda")
-xtable(phh2,caption = "Phenological sensitivity of leaf and flower buds to forcing at high levels of chilling and forcing. Caption needs work.",label ="tab:phh" )
-
-@
-
 
 
 

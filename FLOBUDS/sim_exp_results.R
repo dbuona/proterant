@@ -177,28 +177,37 @@ pd=position_dodgev(height=0.1)
 a<-nodiff %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("force:photo","chill:photo","force:chill","chill","photo","force"))) %>%
-  ggplot(aes(Estimate,trait))+geom_point(aes(shape=phase),position=pd,size=3)+
+  ggplot(aes(Estimate,trait))+geom_rect(ymin=5.5,ymax=6.5,xmin=-22,xmax=-8,fill="hotpink")+geom_point(aes(shape=phase),position=pd,size=3)+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=phase),position=pd,width=0)+
- ggthemes::theme_clean(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  ggtitle("Precocity hierarchy")+ylab("cue")+xlab("sensitivity")+xlim(-25,15)
+ ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  ylab("cue")+xlab("sensitivity")+xlim(-25,15)
 
 b<-diff.int %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("force:photo","chill:photo","force:chill","chill","photo","force"))) %>%
-  ggplot(aes(Estimate,trait))+geom_point(aes(shape=phase),position=pd,size=3)+
+  ggplot(aes(Estimate,trait))+geom_rect(ymin=5.5,ymax=6.5,xmin=-22,xmax=-8,fill="hotpink")+
+  geom_rect(ymin=3.5,ymax=4.5,xmin=-22,xmax=-8,fill="skyblue")+
+  geom_rect(ymin=4.5,ymax=5.5,xmin=-3,xmax=2,fill="skyblue")+
+  geom_rect(ymin=2.5,ymax=3.5,xmin=2,xmax=12,fill="hotpink")+
+  geom_point(aes(shape=phase),position=pd,size=3)+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=phase),position=pd,width=0)+
-  ggthemes::theme_clean(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  ggtitle("Precocity hierarchy & differential sensitity")+ylab("cue")+xlab("sensitivity")+xlim(-25,15)
+  ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  ylab("cue")+xlab("sensitivity")+xlim(-25,15)
 
 
 c<-diff.3 %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("force:photo","chill:photo","force:chill","chill","photo","force"))) %>%
-  ggplot(aes(Estimate,trait))+geom_point(aes(shape=phase),position=pd,size=3)+
+  ggplot(aes(Estimate,trait))+
+  geom_rect(ymin=3.5,ymax=4.5,xmin=-22,xmax=-8,fill="skyblue")+
+  geom_rect(ymin=4.5,ymax=5.5,xmin=-3,xmax=2,fill="skyblue")+
+  geom_rect(ymin=2.5,ymax=3.5,xmin=2,xmax=12,fill="hotpink")+
+  geom_point(aes(shape=phase),position=pd,size=3)+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=phase),position=pd,width=0)+
-  ggthemes::theme_clean(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  ggtitle("Differential sensitivity")+ylab("cue")+xlab("sensitivity")+xlim(-25,15)
+  ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+ ylab("cue")+xlab("sensitivity")+xlim(-25,15)+ggtitle("Differential sensitivity" )
 
+?ggtitle()
 d<-thresh %>%
   arrange(Estimate) %>%
   mutate(trait = factor(trait, levels=c("force:photo","chill:photo","force:chill","chill","photo","force"))) %>%
@@ -215,7 +224,7 @@ e<-thresh2 %>%
   ggthemes::theme_clean(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
   ggtitle("Differential sensitivity-threshholds" )+ylab("cue")+xlab("sensitivity")
 
-
-png("Plots/Flobuds_manuscript_figs/simulations.png",width = 5,height = 5,units = "in",res=200)
-ggpubr::ggarrange(a,b,c,ncol=1,common.legend = TRUE,legend="bottom",labels = c("a","b","c","d"))
+save.image("simulations.Rda")
+png("Plots/Flobuds_manuscript_figs/simulations.png",width = 5,height = 7,units = "in",res=300)
+ggpubr::ggarrange(a,b,c,ncol=1,common.legend = TRUE,legend="bottom",labels = c("a)","b)","c)","d"))
 dev.off()

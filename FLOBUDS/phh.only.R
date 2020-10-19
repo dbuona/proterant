@@ -2,7 +2,7 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
-
+load("writing/phh.mod.output.Rda")
 library(ggplot2)
 library(tidyverse)
 library("brms")
@@ -59,27 +59,36 @@ extract_coefs<-function(x){rownames_to_column(as.data.frame(coef(x, summary=TRUE
 
 
 flo<-extract_coefs(mod.flo.int)
-flo$phase<-"reproductive"
+flo$phase<-"flower"
 leaf<-extract_coefs(mod.bb.int.phh)
-leaf$phase<-"vegetative"
+leaf$phase<-"leaf"
 phh<-rbind(flo,leaf)
 colnames(phh)
 
 phh$order<-NA
 
-phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="reproductive")]<-"first"
-phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="reproductive")]<-"second"
+phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="flower")]<-"first"
+phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="flower")]<-"second"
 
-phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="reproductive")]<-"second"
+phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="leaf")]<-"second"
 
-phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="reproductive")]<-"first"
+phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="leaf")]<-"first"
+
 phh2<-dplyr::select(phh,GEN.SPA,GEN.SPA.Estimate.Force,GEN.SPA.Est.Error.Force,GEN.SPA.Q25.Force,GEN.SPA.Q75.Force,phase,order)
 colnames(phh2)<-c("Species","Estimate","error","Q25","Q75","phase","sequence")
 phh2<-phh2 %>%arrange(Species,sequence)
 
+GEN.SPA<-unique(phh$GEN.SPA)
+Species<-c("Acer pensylvanicum","Acer rubrum","Comptonia perigrina",
+           "Corylus cornuta","Ilex mucronata", "Ilex verticillata", "Prunus penylvanica","Prunus virginiana",
+           "Vaccinium corymbosum","Viburnum acerifolium")
+coresp<-data.frame(GEN.SPA,Species)
+
+phh<-left_join(phh,coresp)
 save.image("phh.mod.output.Rda")
-png("Plots/Flobuds_manuscript_figs/phh_plot.png",width = 5,height = 5,units = "in",res=300)
-ggplot(phh,aes(GEN.SPA.Estimate.Force,GEN.SPA))+geom_point(aes(shape=phase,color=order),size=2)+
+png("Plots/Flobuds_manuscript_figs/phh_plot.png",width = 5,height = 3,units = "in",res=250)
+ggplot(phh,aes(GEN.SPA.Estimate.Force,Species))+geom_point(aes(shape=phase,color=order),size=2)+
 geom_errorbarh(aes(xmin=GEN.SPA.Q25.Force,xmax=GEN.SPA.Q75.Force,group=phase,color=order),height=0)+scale_color_brewer(type="qual",palette = 2)+  
-geom_vline(xintercept = 0,linetype="dashed")+ggthemes::theme_base(base_size = 11)+ylab("Species")+xlab("Sensitivity to forcing")
+geom_vline(xintercept = 0,linetype="dashed")+ggthemes::theme_few(base_size = 11)+ylab("Species")+xlab("Sensitivity to forcing")+
+  theme(axis.text.y = element_text(face="italic"))
 dev.off()

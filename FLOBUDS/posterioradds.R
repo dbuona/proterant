@@ -1,7 +1,9 @@
 ###  extracts and add posteriors to group and plot posteriors by xls classes
-
+rm(list=ls()) 
+options(stringsAsFactors = FALSE)
+graphics.off()
 library("tidybayes")
-load("flobud.main.mods.Rda")
+load("writing/flobud.main.mods.Rda")
 
 goober<-mod.flo.int %>%
   spread_draws(b_Intercept,b_Force,b_Chill,b_Light,`b_Chill:Light`,`b_Chill:Force`,`b_Light:Force`)
@@ -34,9 +36,9 @@ flooby<-left_join(goober2,goober,by=c(".chain",".iteration",".draw")) %>%
 
 
 flooby$category<-NA
-flooby$category[which(flooby$GEN.SPA %in% c("COR.COR","COM.PER","ACE.RUB"))]<-"hyst"
-flooby$category[which(flooby$GEN.SPA %in% c("VAC.COR","ILE.MUC","ACE.PEN"))]<-"syn"
-flooby$category[which(flooby$GEN.SPA %in% c("PRU.PEN","ILE.VER","PRU.VIR","VIB.ACE"))]<-"ser"
+flooby$category[which(flooby$GEN.SPA %in% c("COR.COR","COM.PER","ACE.RUB"))]<-"flowering-first"
+flooby$category[which(flooby$GEN.SPA %in% c("VAC.COR","ILE.MUC","ACE.PEN"))]<-"concurrent"
+flooby$category[which(flooby$GEN.SPA %in% c("PRU.PEN","ILE.VER","PRU.VIR","VIB.ACE"))]<-"leafing-first"
 
 flooby<-flooby%>% group_by(category,scenario)%>%
   mean_qi(dof,.width=0.5)
@@ -74,9 +76,9 @@ looby<-left_join(loober2,loober,by=c(".chain",".iteration",".draw")) %>%
   gather(scenario,dof,26:29)
 
 looby$category<-NA
-looby$category[which(looby$GEN.SPA %in% c("COR.COR","COM.PER","ACE.RUB"))]<-"hyst"
-looby$category[which(looby$GEN.SPA %in% c("VAC.COR","ILE.MUC","ACE.PEN"))]<-"syn"
-looby$category[which(looby$GEN.SPA %in% c("PRU.PEN","ILE.VER","PRU.VIR","VIB.ACE"))]<-"ser"
+looby$category[which(looby$GEN.SPA %in% c("COR.COR","COM.PER","ACE.RUB"))]<-"flowering-first"
+looby$category[which(looby$GEN.SPA %in% c("VAC.COR","ILE.MUC","ACE.PEN"))]<-"concurrent"
+looby$category[which(looby$GEN.SPA %in% c("PRU.PEN","ILE.VER","PRU.VIR","VIB.ACE"))]<-"leafing-first"
 
 looby<-looby%>% group_by(category,scenario)%>%
   mean_qi(dof,.width=0.5)
@@ -87,11 +89,16 @@ flooby$phase="flower"
 
 posty<-rbind(flooby,looby)
 posty$class<-paste(posty$phase,posty$category)
-posty$pollination<-ifelse(posty$category=="hyst","abotic","biotic")
+posty$pollination<-ifelse(posty$category=="flowering-first","abotic","biotic")
 
 posty$scenario2 = factor(posty$scenario, levels=c('basepred',"warm_only","less_chill","more_chill"))
 
+posty$scenario3<-NA
 
+posty$scenario3[which(posty$scenario2=="basepred")]<-"base prediction"
+posty$scenario3[which(posty$scenario2=="warm_only")]<-"warming only"
+posty$scenario3[which(posty$scenario2=="less_chill")]<-"decreasing chilling"
+posty$scenario3[which(posty$scenario2=="more_chill")]<-"increasing chilling"
 setEPS()
 postscript("Plots/postergroups.eps",width = 8, height = 4)
 
@@ -114,19 +121,21 @@ posty %>%
   scale_x_discrete(labels =c("FL","F=L","LF"))
 dev.off()  
 
-setEPS()
-postscript("Plots/postergroups2.eps",width = 8, height = 6)
+#setEPS()
+#postscript("Plots/postergroups2.eps",width = 8, height = 4)
+png("Plots/posteriorgroups_go.png",width = 7, height= 2.5,units = 'in',res = 200)
 pd=position_dodge(width=1)
 posty %>%
   arrange(dof) %>%
-  mutate(category = factor(category, levels=c("hyst","syn","ser"))) %>%
-  ggplot(aes(0,dof,color=category,shape=phase,group =category))+geom_point(size=2.5,position=pd)+geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0.1)+
-  ggthemes::theme_few(base_size = 10)+
-  facet_grid(pollination ~ scenario2,drop=TRUE, scales="free_x",switch="x")+
-  theme(
-    #axis.ticks.x=element_blank(),
+  mutate(category = factor(category, levels=c("flowering-first","concurrent","leafing-first"))) %>%
+  ggplot(aes(0,dof,color=category,shape=phase,group =category))+
+  geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0.1,alpha=0.5)+
+  geom_point(size=2.5,position=pd)+
+  ggthemes::theme_few(base_size = 11)+
+  facet_grid(pollination ~ scenario3,drop=TRUE, scales="free_x",switch="x")+
+  theme(axis.title.x =element_blank(),
     strip.placement = "bottom",
-    strip.background = element_rect(color="black",fill="lightblue"),
+    strip.background = element_rect(color="black"),
     panel.spacing.x=unit(0,"cm"),
     panel.spacing.y=unit(0,"cm"))+
   ylim(5,100)+

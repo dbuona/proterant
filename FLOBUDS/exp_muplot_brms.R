@@ -42,10 +42,11 @@ muplotfx <- function(modelhere,modelhere2, nameforfig, width, height, ylim, xlim
 
   }
   par(xpd=TRUE) # so I can plot legend outside
-  legend(leg1, leg2, sort(unique(gsub("_", " ", dat$GEN.SPA))), pch=rep(c(15),each=10), ### need to change
+  legend(leg1, leg2, sort(unique(gsub("_", " ", c("Comptonia perigrina","Viburnum acerifolium", "Ilex verticillata","Vaccinium corymbosum","Acer penyslyvanicum",
+  "Prunus virginiana","Corylus cornuta","Prunus pensylvanica","Ilex mucronata","Acer rubrum")))), pch=rep(c(15),each=10), ### need to change
          col=alpha(my.pal[1:length(spnum)], alphahere),
-         cex=1, bty="n", text.font=3)
+         cex=.8, bty="n", text.font=3)
   legend(leg3, leg4, legend=leg.txt, pch=c(19,17), ### need to change
-         cex=1, bty="n", text.font=3)
+         cex=.8, bty="n", text.font=3)
   
 }
