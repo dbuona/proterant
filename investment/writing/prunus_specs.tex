@@ -1,0 +1,221 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{tabularx}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Oct 20 14:48:20 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlrr}
+  \hline
+ & specificEpithet & n & n.wcounty \\ 
+  \hline
+1 & virginiana & 1344 & 815 \\ 
+  2 & serotina & 992 & 698 \\ 
+  3 & americana & 1002 & 542 \\ 
+  4 & pensylvanica & 690 & 413 \\ 
+  5 & susquehanae & 298 & 239 \\ 
+  6 & rivularis & 383 & 220 \\ 
+  7 & angustifolia & 404 & 219 \\ 
+  8 & emarginata & 329 & 217 \\ 
+  9 & maritima & 260 & 217 \\ 
+  10 & mexicana & 346 & 201 \\ 
+  11 & nigra & 234 & 163 \\ 
+  12 & pumila & 304 & 146 \\ 
+  13 & sp. & 292 & 138 \\ 
+  14 & umbellata & 248 & 129 \\ 
+  15 & ilicifolia & 135 & 116 \\ 
+  16 & gracilis & 167 &  94 \\ 
+  17 & caroliniana & 137 &  85 \\ 
+  18 & avium &  94 &  83 \\ 
+  19 & hortulana & 281 &  83 \\ 
+  20 & cerasus &  84 &  62 \\ 
+  21 & fasciculata &  87 &  61 \\ 
+  22 &  &  79 &  58 \\ 
+  23 & domestica &  66 &  53 \\ 
+  24 & andersonii &  65 &  47 \\ 
+  25 & persica &  59 &  45 \\ 
+  26 & salicina &  85 &  39 \\ 
+  27 & alleghaniensis &  51 &  38 \\ 
+  28 & subcordata &  51 &  37 \\ 
+  29 & mahaleb &  46 &  30 \\ 
+  30 & fremontii &  30 &  26 \\ 
+  31 & minutiflora &  25 &  17 \\ 
+  32 & cerasifera &  20 &  16 \\ 
+  33 & hypoxantha &  21 &  16 \\ 
+  34 & alabamensis &  28 &  14 \\ 
+  35 & havardii &  18 &  13 \\ 
+  36 & texana &  22 &  12 \\ 
+  37 & padus &  16 &  11 \\ 
+  38 & geniculata &  11 &  10 \\ 
+  39 & serrulata &  14 &   9 \\ 
+  40 & pugetensis &   8 &   8 \\ 
+  41 & spinosa &  17 &   8 \\ 
+  42 & tomentosa &  11 &   8 \\ 
+  43 & caudata &  17 &   7 \\ 
+  44 & reverchonii &   7 &   7 \\ 
+  45 & buergeriana &  10 &   6 \\ 
+  46 & laurocerasus &   7 &   6 \\ 
+  47 & fultonensis &   5 &   5 \\ 
+  48 & palmeri &   5 &   5 \\ 
+  49 & polyandra &   5 &   5 \\ 
+  50 & slavinii &  29 &   5 \\ 
+  51 & trichostoma &   9 &   5 \\ 
+  52 & eremophila &   4 &   4 \\ 
+  53 & mugus &   6 &   4 \\ 
+  54 & murrayana &   4 &   4 \\ 
+  55 & undulata &  20 &   4 \\ 
+  56 & arkansana &   3 &   3 \\ 
+  57 & brachypoda &  17 &   3 \\ 
+  58 & conradinae &  14 &   3 \\ 
+  59 & dielsiana &   7 &   3 \\ 
+  60 & dunbarii &   3 &   3 \\ 
+  61 & henryi &  17 &   3 \\ 
+  62 & kansuensis &   3 &   3 \\ 
+  63 & laxiflora &   3 &   3 \\ 
+  64 & speciosa &   3 &   3 \\ 
+  65 & venulosa &   3 &   3 \\ 
+  66 & armeniaca &   6 &   2 \\ 
+  67 & clarofolia &   2 &   2 \\ 
+  68 & eximia &   2 &   2 \\ 
+  69 & indet &   2 &   2 \\ 
+  70 & japonica &   5 &   2 \\ 
+  71 & meyeri &   2 &   2 \\ 
+  72 & nepaulensis &   3 &   2 \\ 
+  73 & tenuifolia &   2 &   2 \\ 
+  74 & venusta &   2 &   2 \\ 
+  75 & xerocarpus &   2 &   2 \\ 
+  76 & yedoensis &   2 &   2 \\ 
+  77 & arborea &   9 &   1 \\ 
+  78 & australis &   1 &   1 \\ 
+  79 & brigantina &   1 &   1 \\ 
+  80 & carcharias &   1 &   1 \\ 
+  81 & cistena &   1 &   1 \\ 
+  82 & davidiana &   1 &   1 \\ 
+  83 & dulcis &   3 &   1 \\ 
+  84 & fruticosa &   1 &   1 \\ 
+  85 & gongshanensis &   4 &   1 \\ 
+  86 & grayana &   1 &   1 \\ 
+  87 & helenae &   1 &   1 \\ 
+  88 & huantensis &   1 &   1 \\ 
+  89 & ignotus &   1 &   1 \\ 
+  90 & incisa &   2 &   1 \\ 
+  91 & injucunda &   1 &   1 \\ 
+  92 & insititia &   1 &   1 \\ 
+  93 & juddii &   1 &   1 \\ 
+  94 & lancilimba &   1 &   1 \\ 
+  95 & maackii &   2 &   1 \\ 
+  96 & macgregoriana &   1 &   1 \\ 
+  97 & maximowiczii &   2 &   1 \\ 
+  98 & mira &   2 &   1 \\ 
+  99 & mume &   9 &   1 \\ 
+  100 & obtusata &  12 &   1 \\ 
+  101 & occidentalis &   1 &   1 \\ 
+  102 & orthosepala &   5 &   1 \\ 
+  103 & parksii &   1 &   1 \\ 
+  104 & perulata &  11 &   1 \\ 
+  105 & pilioscula &   3 &   1 \\ 
+  106 & pinetorum &   1 &   1 \\ 
+  107 & pogonostyla &   1 &   1 \\ 
+  108 & polytricha &   3 &   1 \\ 
+  109 & pseudocerasus &   1 &   1 \\ 
+  110 & pullei &   2 &   1 \\ 
+  111 & rhamnoides &   1 &   1 \\ 
+  112 & salicifolia &   8 &   1 \\ 
+  113 & saltuum &   1 &   1 \\ 
+  114 & sana &   1 &   1 \\ 
+  115 & schmittii &   1 &   1 \\ 
+  116 & sclerophylla &   1 &   1 \\ 
+  117 & serrula &   5 &   1 \\ 
+  118 & subhirtella &  10 &   1 \\ 
+  119 & tarda &   1 &   1 \\ 
+  120 & tatsiensis &   3 &   1 \\ 
+  121 & triloba &   1 &   1 \\ 
+  122 & venosa &   5 &   1 \\ 
+  123 & watsoni &   1 &   1 \\ 
+  124 & wilsonii &   4 &   1 \\ 
+  125 & zappeyana &   3 &   1 \\ 
+   \hline
+\end{tabular}
+\end{table}
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Oct 20 14:48:20 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlrr}
+  \hline
+ & specificEpithet & n & n.wcounty \\ 
+  \hline
+1 & americana & 1002 & 542 \\ 
+  2 & rivularis & 383 & 220 \\ 
+  3 & angustifolia & 404 & 219 \\ 
+  4 & maritima & 260 & 217 \\ 
+  5 & mexicana & 346 & 201 \\ 
+  6 & nigra & 234 & 163 \\ 
+  7 & umbellata & 248 & 129 \\ 
+  8 & gracilis & 167 &  94 \\ 
+  9 & hortulana & 281 &  83 \\ 
+  10 & alleghaniensis &  51 &  38 \\ 
+  11 & subcordata &  51 &  37 \\ 
+  12 & texana &  22 &  12 \\ 
+  13 & geniculata &  11 &  10 \\ 
+  14 & murrayana &   4 &   4 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+
+
+\end{document}

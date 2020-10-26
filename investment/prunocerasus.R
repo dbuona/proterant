@@ -8,33 +8,72 @@ library("ncdf4")
 library(raster)
 library(ggplot2)
 library("brms")
+library(dplyr)
+library(purrr)
+library(tidyr)
 
-sp<-read.csv("herbaria_prunus_rec.csv")
+set.seed(600)
+sp<-read.csv("herbaria_prunus_rec.csv") # this is all prunus records in herbaria
 
+####1) count how many sheets of each species there are##############
 allpru<-sp %>%group_by(specificEpithet)%>% count() %>% arrange(desc(n))
+#######################################################################
 
-geoCounty$rMapState<-str_to_title(geoCounty$rMapState) ### centriod coordinates for all US counties
+##2) How many of those have county level informatrion for extrating coordinate?
+geoCounty$rMapState<-str_to_title(geoCounty$rMapState) ### obtain centriod coordinates for all US counties
+
 colnames(geoCounty)[6]<-"stateProvince" ## make column names compatible
-prunus.data<-dplyr::left_join(sp,geoCounty,by=c("county","stateProvince"))
 
-geo.sp<-filter(prunus.data,county!="")
-allpru.geo<-geo.sp %>%group_by(specificEpithet)%>% count() %>% arrange(desc(n))
+prunus.data<-dplyr::left_join(sp,geoCounty,by=c("county","stateProvince")) ## join county ccoodinates
+
+geo.sp<-filter(prunus.data,county!="") ### filter main data sheet to entries with coordinates n=5624
+
+allpru.geo<-geo.sp %>%group_by(specificEpithet)%>% count() %>% arrange(desc(n)) ### count # of sheets/species with coordert
 all.specs<-merge(allpru,allpru.geo,by="specificEpithet")
 colnames(all.specs)[c(2,3)]<-c("n","n.wcounty")
 
-all.specs<-all.specs %>% arrange(desc(n.wcounty))
- ## This assigns each country coordinates
+all.specs<-all.specs %>% arrange(desc(n.wcounty)) ##### This references how many entries of each species
+###################################################
 
-
-
+# 3) How many for the section Prunocerasus?
 pruno<-c("alleghaniensis","angustifolia","americana" ,"gracilis","geniculata","hortulana" ,"maritima",
   "mexicana","murrayana","munsoniana","nigra","rivularis","umbellata","subcordata","texana" )
 
-
-xtable::xtable(all.specs)
-
 prunocerasus<-dplyr::filter(all.specs, specificEpithet %in% pruno)
+####################################################################
+#4) Subet main data sheet to only prunocerasus
+pruny.all<-filter(geo.sp, specificEpithet %in% pruno) #n=1969
+###reduce columns for sanity
+##
+pruny.all<-select(pruny.all,references,catalogNumber,year,month,day,state,county,municipality,specificEpithet,state,lon,lat,rMapCounty)
 
+pruny.all<-filter(pruny.all, references!="") ### only ones with web links 1956
+###############################################################
+#5) select 10 sheet at random from each  species for trial run or as many as there are for ones will less than 10
+nested_prun <- pruny.all %>%
+   group_by(specificEpithet) %>%   # prep for work by Species
+   nest() %>%              # --> one row per Species
+   ungroup() %>% 
+   mutate(n = c(rep(10,12),3,10))
+
+
+sampled_pruny <- nested_prun%>%
+    mutate(samp = map2(data, n, sample_n))
+
+sampled_pruny<-sampled_pruny %>% 
+  select(-data) %>%
+  unnest(samp)
+
+
+### now output an even more simplified data sheet to start working on
+trial_sheet<-select(sampled_pruny,specificEpithet,references,catalogNumber)
+
+trial_sheet$flowers<-NA
+trial_sheet$leaves<-NA
+trial_sheet$bbch.f<-NA
+trial_sheet$bbch.v<-NA
+
+write.csv(trial_sheet,"pruno_checker.csv",row.names = FALSE,na = "")
 
 
 palmer.b <- brick("lbda-v2_kddm_pmdi_2017.nc")  ## read in balmer drought index data 
