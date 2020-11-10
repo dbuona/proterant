@@ -9,10 +9,10 @@ library(raster)
 library(ggplot2)
 library("brms")
 
-sp<-read.csv("herbaria_prunus_rec.csv") ## all the prunus records
+sp<-read.csv("Data/herbaria_prunus_rec.csv") ## all the prunus records
 
 
-geoCounty$rMapState<-str_to_title(geoCounty$rMapState) ### centriod coordinates for all US counties
+geoCounty$rMapState<-str_to_title(geoCounty$rMapState) ###z_archieve/ centriod coordinates for all US counties
 colnames(geoCounty)[6]<-"stateProvince" ## make column names compatible
 
 prunus.data<-dplyr::left_join(sp,geoCounty,by=c("county","stateProvince")) ## This assigns each country coordinates

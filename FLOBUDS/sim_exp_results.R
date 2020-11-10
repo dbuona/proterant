@@ -9,6 +9,7 @@ library(ggstance)
 
 set.seed(1000)
 setwd("~/Documents/git/proterant/FLOBUDS")
+#load("simulations.Rda")
 weather<-data.frame(airt=rep(c(25,15),each=100),doe=rep(1:100,2)) ## set the temperature for each day of the experiment
 weather$heatsum<-weather$airt-5 ##this calculate the GDD of each day
 
@@ -36,8 +37,8 @@ df2<-data.frame(tree.id=numeric(),chill=numeric(),photo=numeric(),flowering=nume
 for(j in c(1:length(inds))){ #now weill make some differntial senstivity
   photo<-sample(c(0,1),1)
   chill<-sample(c(0,1),1)
-  dof<-rnorm(1,200,25)-(rnorm(1,100,25)*chill)-(rnorm(1,20,10)*photo) #here fstar are dependent of chillign difference and forcing too
-  dol<-rnorm(1,400,25)-(rnorm(1,200,25)*chill)-(rnorm(1,0,10)*photo)
+  dof<-rnorm(1,200,50)-(rnorm(1,100,50)*chill)-(rnorm(1,20,15)*photo) #here fstar are dependent of chillign difference and forcing too
+  dol<-rnorm(1,400,50)-(rnorm(1,200,25)*chill)-(rnorm(1,0,15)*photo)
   df2here<-data.frame(tree.id=inds[j],chill=chill,photo=photo,GDD.flo=dof,GDD.leaf=dol)
   
   df2<-rbind(df2,df2here)}
@@ -54,8 +55,8 @@ df3<-data.frame(tree.id=numeric(),chill=numeric(),photo=numeric(),flowering=nume
 for(j in c(1:length(inds))){ #now weill make some differntial senstivity
   photo<-sample(c(0,1),1)
   chill<-sample(c(0,1),1)
-  dof<-rnorm(1,400,25)-(rnorm(1,100,25)*chill)-(rnorm(1,20,10)*photo) #here fstar are dependent of chillign difference and forcing too
-  dol<-rnorm(1,400,25)-(rnorm(1,200,25)*chill)-(rnorm(1,0,10)*photo)
+  dof<-rnorm(1,400,50)-(rnorm(1,100,50)*chill)-(rnorm(1,20,15)*photo) #here fstar are dependent of chillign difference and forcing too
+  dol<-rnorm(1,400,50)-(rnorm(1,200,50)*chill)-(rnorm(1,0,15)*photo)
   df3here<-data.frame(tree.id=inds[j],chill=chill,photo=photo,GDD.flo=dof,GDD.leaf=dol)
   
   df3<-rbind(df3,df3here)}
@@ -71,8 +72,8 @@ df4<-data.frame(tree.id=numeric(),chill=numeric(),photo=numeric(),flowering=nume
 for(j in c(1:length(inds))){ #now weill make some differntial senstivity
   photo<-sample(c(0,1),1)
   chill<-sample(c(0,1,2),1)
-  dof<-ifelse(chill==2,rnorm(1,200,25)-(rnorm(1,100,25)*chill)-(rnorm(1,20,10)*photo),rnorm(1,200,25)-(rnorm(1,20,10)*photo)) #here fstar are dependent of chillign difference and forcing too
-  dol<-ifelse(chill!=0,rnorm(1,400,25)-(rnorm(1,100,25)*chill)-(rnorm(1,0,10)*photo),rnorm(1,400,25)-(rnorm(1,0,10)*photo))
+  dof<-ifelse(chill==2,rnorm(1,200,50)-(rnorm(1,100,50)*chill)-(rnorm(1,20,15)*photo),rnorm(1,200,25)-(rnorm(1,20,10)*photo)) #here fstar are dependent of chillign difference and forcing too
+  dol<-ifelse(chill!=0,rnorm(1,400,50)-(rnorm(1,100,50)*chill)-(rnorm(1,0,15)*photo),rnorm(1,400,25)-(rnorm(1,0,10)*photo))
   df4here<-data.frame(tree.id=inds[j],chill=chill,photo=photo,GDD.flo=dof,GDD.leaf=dol)
   
   df4<-rbind(df4,df4here)}
@@ -179,8 +180,8 @@ a<-nodiff %>%
   mutate(trait = factor(trait, levels=c("force:photo","chill:photo","force:chill","chill","photo","force"))) %>%
   ggplot(aes(Estimate,trait))+geom_rect(ymin=5.5,ymax=6.5,xmin=-22,xmax=-8,fill="hotpink")+geom_point(aes(shape=phase),position=pd,size=3)+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=phase),position=pd,width=0)+
- ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  ylab("cue")+xlab("sensitivity")+xlim(-25,15)
+ ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black",linetype="dashed")+
+  ylab("cue")+xlab("sensitivity")+xlim(-25,15)+ggtitle("Forcing hierarchy" )
 
 b<-diff.int %>%
   arrange(Estimate) %>%
@@ -191,8 +192,8 @@ b<-diff.int %>%
   geom_rect(ymin=2.5,ymax=3.5,xmin=2,xmax=12,fill="hotpink")+
   geom_point(aes(shape=phase),position=pd,size=3)+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=phase),position=pd,width=0)+
-  ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
-  ylab("cue")+xlab("sensitivity")+xlim(-25,15)
+  ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black",linetype="dashed")+
+  ylab("cue")+xlab("sensitivity")+xlim(-25,15) +ggtitle("Forcing hierarchy + Differential sensitivity" )
 
 
 c<-diff.3 %>%
@@ -204,7 +205,7 @@ c<-diff.3 %>%
   geom_rect(ymin=2.5,ymax=3.5,xmin=2,xmax=12,fill="hotpink")+
   geom_point(aes(shape=phase),position=pd,size=3)+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=phase),position=pd,width=0)+
-  ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  ggthemes::theme_few(base_size = 11)+geom_vline(aes(xintercept=0),color="black",linetype="dashed")+
  ylab("cue")+xlab("sensitivity")+xlim(-25,15)+ggtitle("Differential sensitivity" )
 
 ?ggtitle()
@@ -213,7 +214,7 @@ d<-thresh %>%
   mutate(trait = factor(trait, levels=c("force:photo","chill:photo","force:chill","chill","photo","force"))) %>%
   ggplot(aes(Estimate,trait))+geom_point(aes(shape=phase),position=pd,size=3)+
   geom_errorbarh(aes(xmin=Q2.5,xmax=Q97.5,group=phase),position=pd,width=0)+
-  ggthemes::theme_clean(base_size = 11)+geom_vline(aes(xintercept=0),color="black")+
+  ggthemes::theme_clean(base_size = 11)+geom_vline(aes(xintercept=0),color="black",linetype="dashed")+
   ggtitle("Differential sensitivity-threshholds" )+ylab("cue")+xlab("sensitivity")
 
 e<-thresh2 %>%
@@ -226,5 +227,5 @@ e<-thresh2 %>%
 
 save.image("simulations.Rda")
 png("Plots/Flobuds_manuscript_figs/simulations.png",width = 5,height = 7,units = "in",res=300)
-ggpubr::ggarrange(a,b,c,ncol=1,common.legend = TRUE,legend="bottom",labels = c("a)","b)","c)","d"))
+ggpubr::ggarrange(a,b,c,ncol=1,common.legend = TRUE,legend="bottom",labels = c("a)","b)","c)" ))
 dev.off()

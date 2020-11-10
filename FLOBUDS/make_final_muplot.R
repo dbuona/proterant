@@ -3,14 +3,17 @@ options(stringsAsFactors = FALSE)
 
 ### makes main effect size plots 
 ########## THis make a plot#################
-
+setwd("Documents/git/proterant/FLOBUDS/")
 library(broom)
 library(RColorBrewer)
+library(dplyr)
+library(scales)
 load("writing/flobud.main.mods.Rda")
 
 figpath <- "Plots"
 
 cols <- adjustcolor("indianred3", alpha.f = 0.3) 
+
 my.pal <- rep(brewer.pal(n = 10, name = "Paired"), 8)
 # display.brewer.all()
 alphahere = 1

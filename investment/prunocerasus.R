@@ -13,7 +13,7 @@ library(purrr)
 library(tidyr)
 
 set.seed(600)
-sp<-read.csv("herbaria_prunus_rec.csv") # this is all prunus records in herbaria
+sp<-read.csv("Data/herbaria_prunus_rec.csv") # this is all prunus records in herbaria
 
 ####1) count how many sheets of each species there are##############
 allpru<-sp %>%group_by(specificEpithet)%>% count() %>% arrange(desc(n))
@@ -45,8 +45,8 @@ prunocerasus<-dplyr::filter(all.specs, specificEpithet %in% pruno)
 pruny.all<-filter(geo.sp, specificEpithet %in% pruno) #n=1969
 ###reduce columns for sanity
 ##
-pruny.all<-select(pruny.all,references,catalogNumber,year,month,day,state,county,municipality,specificEpithet,state,lon,lat,rMapCounty)
-
+pruny.all<-dplyr::select(pruny.all,references,catalogNumber,year,month,day,state,county,municipality,specificEpithet,state,lon,lat,rMapCounty)
+sum(prunocerasus$n)
 pruny.all<-filter(pruny.all, references!="") ### only ones with web links 1956
 ###############################################################
 #5) select 10 sheet at random from each  species for trial run or as many as there are for ones will less than 10

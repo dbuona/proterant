@@ -68,7 +68,7 @@ climatt<-as.data.frame(chilling(hourtemps,Start_JDay=365-31-30-15,End_JDay=31+28
 envtoreal<-data.frame(UtahEst=c(paste(mean(climatt$Utah_Model),((sd(climatt$Utah_Model))),sep=","),chillref$Utah_Model,chillrefshort$Utah_Model),
                       CpEst=c(paste(mean(climatt$Chill_portions),sd(cllimate),chillref$Chill_portions,chillrefshort$Chill_portions),
                       ChEst=c(mean(climatt$Chilling_Hours),chillref$Chilling_Hours,chillrefshort$Chilling_Hours),
-           treatment=c("HFaverage Oct 15-April 15","60 days chamber","30 days chamber"))
+           treatment=c("HFaverage Oct 15-April 15","60 days chamber","30 days chamber")))
 
 
 able<-data.frame(Estimate=c("Utah Model","Chill Hours", "Dynamic Model"),
@@ -79,7 +79,7 @@ Chamber_60_days=c(chillref$Utah_Model,chillref$Chilling_Hours,chillref$Chill_por
 
 is.num <- sapply(able, is.numeric)
 able[is.num] <- lapply(able[is.num], round, 2)
-
+save.image("expfieldcomp.Rda")
 write.csv(able,"..//FLOBUDS/input/expfieldcomparisontable.csv",row.names = TRUE)
 
            

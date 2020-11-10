@@ -54,7 +54,7 @@ mod.flo.int<-brm(flo_day~Force+(Force|GEN.SPA),
 coef(mod.flo.int)
 coef(mod.bb.int.phh)
 
-extract_coefs<-function(x){rownames_to_column(as.data.frame(coef(x, summary=TRUE,probs=c(0.25,0.75))),"GEN.SPA")
+extract_coefs<-function(x){rownames_to_column(as.data.frame(coef(x, summary=TRUE,probs=c(0.025,0.25,0.75,0.975))),"GEN.SPA")
 }
 
 
@@ -74,8 +74,8 @@ phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!=
 
 phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="leaf")]<-"first"
 
-phh2<-dplyr::select(phh,GEN.SPA,GEN.SPA.Estimate.Force,GEN.SPA.Est.Error.Force,GEN.SPA.Q25.Force,GEN.SPA.Q75.Force,phase,order)
-colnames(phh2)<-c("Species","Estimate","error","Q25","Q75","phase","sequence")
+phh2<-dplyr::select(phh,GEN.SPA,GEN.SPA.Estimate.Force,GEN.SPA.Est.Error.Force,GEN.SPA.Q2.5.Force,GEN.SPA.Q25.Force,GEN.SPA.Q75.Force,GEN.SPA.Q97.5.Force,phase,order)
+colnames(phh2)<-c("Species","Estimate","error","Q2.5","Q25","Q75","Q97.5","phase","sequence")
 phh2<-phh2 %>%arrange(Species,sequence)
 
 GEN.SPA<-unique(phh$GEN.SPA)

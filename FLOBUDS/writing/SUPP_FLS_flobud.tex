@@ -1,0 +1,242 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{authblk}
+\usepackage{gensymb}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\usepackage[small]{caption}
+\usepackage[section]{placeins}
+\setkeys{Gin}{width=0.8\textwidth}
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+
+ \topmargin -1.5cm 
+ \oddsidemargin -0.04cm 
+ \evensidemargin -0.04cm 
+ \textwidth 16.59cm
+ \textheight 21.94cm 
+ \parskip 7.2pt 
+\renewcommand{\baselinestretch}{1.8} 	
+\parindent 0pt
+\usepackage{setspace}
+\usepackage{lineno}
+
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+
+\bibliographystyle{..//..//sub_projs/refs/styles/besjournals.bst}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+\externaldocument{FLS_flobud}
+
+\linenumbers
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\section*{Tables}
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{lll}
+  \hline
+  Species & Family  & flower-leaf sequence classification  \\ 
+  \hline
+  \textit{Acer pensylvanicum}& Sapindaceae & flowers after leaves\\
+  \textit{Acer rubrum}& Sapindaceae & flowers before leaves\\
+  \textit{Corylus cornuta}& Betulaceae & flowers before leaves\\
+  \textit{Comptonia peregrina}& Myrtaceae & flowers before leaves\\
+  \textit{Ilex mucronata} & Aquifoliaceae & flowers with leaves\\
+   \textit{Ilex verticillata} & Aquifoliaceae & flowers after leaves\\
+   \textit{Prunus pensylvanica} & Rosaceae & flowers with leaves\\
+   \textit{Prunus virginiana} & Rosaceae & flowers with/after leaves\\
+   \textit{Vaccinium corymbosum} & Ericaceae & flowers after leaves\\
+   \textit{Viburnum acerifolium} & Adoxaceae & flowers after leaves\\
+   \hline
+\end{tabular}
+\caption{\textbf{Flower and leaf phenological sensitivity to environmental cues was investigated in 10 species.} Flower-leaf sequences classifications are based on \citet{Barnes2004} and \citet{Barnes2016}. We also sampled cutting from \textit{Acer saccharum} and \textit{Betula alleghaniensis}but did not include them in this this analyses because they failed to flower under any treatment conditions.}
+\label{tab:splist}
+\end{table}
+
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Nov  3 12:11:49 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlrrrr}
+  \hline
+ & Estimate & Havard\_Forest & sd & Chamber\_30\_days & Chamber\_60\_days \\ 
+  \hline
+1 & Utah Model & 979.64 & 248.34 & 720.00 & 1440.00 \\ 
+  2 & Chill Hours & 1170.71 & 273.07 & 720.00 & 1440.00 \\ 
+  3 & Dynamic Model & 86.56 & 16.64 & 21.25 & 43.50 \\ 
+   \hline
+\end{tabular}
+\caption{Chilling comparisions between feild and experimental conditions} 
+\label{tab:chillcomps}
+\end{table}
+
+
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Nov  3 12:11:57 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & Estimate & Est.Error & Q2.5 & Q25 & Q75 & Q97.5 \\ 
+  \hline
+Intercept & 70.81 & 9.18 & 52.99 & 64.94 & 76.88 & 88.08 \\ 
+  Chill & -30.41 & 5.40 & -40.45 & -33.89 & -27.15 & -19.25 \\ 
+  Light & 5.87 & 5.13 & -4.17 & 2.42 & 9.16 & 15.92 \\ 
+  Force & -17.76 & 5.21 & -28.21 & -21.10 & -14.29 & -8.22 \\ 
+  Chill:Light & -5.17 & 4.35 & -13.62 & -8.03 & -2.31 & 3.56 \\ 
+  Chill:Force & 12.37 & 4.84 & 2.62 & 9.26 & 15.51 & 21.85 \\ 
+  Light:Force & -12.62 & 4.10 & -20.50 & -15.37 & -9.87 & -4.79 \\ 
+   \hline
+\end{tabular}
+\end{table}
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Nov  3 12:11:57 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & Estimate & Est.Error & Q2.5 & Q25 & Q75 & Q97.5 \\ 
+  \hline
+Intercept & 77.53 & 9.92 & 58.14 & 71.05 & 83.88 & 97.18 \\ 
+  Chill & -21.23 & 7.42 & -35.35 & -26.14 & -16.32 & -6.07 \\ 
+  Light & -5.72 & 5.70 & -18.28 & -9.01 & -2.03 & 4.86 \\ 
+  Force & -18.98 & 6.51 & -32.09 & -23.02 & -14.93 & -6.37 \\ 
+  Chill:Light & -0.88 & 6.11 & -13.59 & -4.72 & 3.21 & 10.55 \\ 
+  Chill:Force & 7.01 & 6.62 & -6.35 & 2.98 & 11.11 & 20.31 \\ 
+  Light:Force & -5.61 & 6.42 & -19.08 & -9.51 & -1.46 & 6.37 \\ 
+   \hline
+\end{tabular}
+\caption{Phenological sensitivity of leaf (top) and flower (bottom) buds to environmental cues. Caption needs work.} 
+\label{tab:modelests}
+\end{table}
+
+
+
+% latex table generated in R 3.6.2 by xtable 1.8-4 package
+% Tue Nov  3 12:12:00 2020
+\begin{table}[ht]
+\centering
+\begin{tabular}{rlrrrrrrll}
+  \hline
+ & Species & Estimate & error & Q2.5 & Q25 & Q75 & Q97.5 & phase & sequence \\ 
+  \hline
+1 & ACE.PEN & -10.71 & 3.92 & -17.87 & -13.48 & -8.19 & -2.28 & leaf & first \\ 
+  2 & ACE.PEN & -17.43 & 6.15 & -30.48 & -20.68 & -14.00 & -5.59 & flower & second \\ 
+  3 & ACE.RUB & -16.76 & 7.25 & -33.11 & -20.21 & -13.09 & -2.88 & flower & first \\ 
+  4 & ACE.RUB & -28.39 & 6.22 & -40.52 & -32.69 & -24.08 & -16.20 & leaf & second \\ 
+  5 & COM.PER & -13.28 & 3.33 & -19.62 & -15.50 & -11.17 & -6.60 & flower & first \\ 
+  6 & COM.PER & -15.47 & 3.69 & -23.06 & -17.82 & -13.01 & -8.53 & leaf & second \\ 
+  7 & COR.COR & -15.55 & 4.50 & -24.71 & -18.13 & -12.87 & -6.79 & flower & first \\ 
+  8 & COR.COR & -19.82 & 4.04 & -28.13 & -22.41 & -17.10 & -11.99 & leaf & second \\ 
+  9 & ILE.MUC & -10.44 & 3.81 & -17.42 & -13.09 & -8.05 & -2.45 & leaf & first \\ 
+  10 & ILE.MUC & -16.05 & 4.06 & -24.19 & -18.58 & -13.47 & -7.94 & flower & second \\ 
+  11 & ILE.VER & -8.66 & 3.73 & -15.58 & -11.19 & -6.19 & -1.12 & leaf & first \\ 
+  12 & ILE.VER & -20.43 & 10.72 & -43.88 & -25.92 & -14.18 & -2.14 & flower & second \\ 
+  13 & PRU.PEN & -10.24 & 4.14 & -18.67 & -12.99 & -7.50 & -2.14 & leaf & first \\ 
+  14 & PRU.PEN & -13.85 & 4.02 & -21.59 & -16.46 & -11.40 & -5.39 & flower & second \\ 
+  15 & PRU.VIR & -26.68 & 5.11 & -37.14 & -30.02 & -23.09 & -17.20 & leaf & first \\ 
+  16 & PRU.VIR & -23.69 & 7.67 & -40.07 & -28.74 & -17.84 & -10.95 & flower & second \\ 
+  17 & VAC.COR & -7.06 & 3.85 & -14.45 & -9.62 & -4.56 & 0.66 & leaf & first \\ 
+  18 & VAC.COR & -13.10 & 3.60 & -20.30 & -15.49 & -10.79 & -5.99 & flower & second \\ 
+  19 & VIB.ACE & -12.68 & 3.78 & -19.97 & -15.14 & -10.29 & -5.10 & leaf & first \\ 
+  20 & VIB.ACE & -21.60 & 8.52 & -39.63 & -26.63 & -16.00 & -6.85 & flower & second \\ 
+   \hline
+\end{tabular}
+\caption{Phenological sensitivity of leaf and flower buds to forcing at high levels of chilling and forcing. Caption needs work.} 
+\label{tab:phh}
+\end{table}
+
+
+\pagebreak[4]
+
+\section*{Figures}
+
+ \begin{figure}[!ht]
+    \centering
+ \includegraphics[width=\textwidth]{..//Plots/fieldmodcomparisions.jpeg}
+    \caption{\textbf{Model predictions of flower-leaf sequence interphases (days between phenophase) under artificial conditions designed to approximate ``average" field conditions reflect FLS interphases observed at Harvard Forest in Pertersham MA.}. This comparison suggest that the baseline environmental treatments  applied in our experiment appropriately capture natural conditions. Dot represent means FLS interphase in both datasets, and lines represent the 89\% credible intervals and the full range of observations for our model predictions and Harvard Forest data respectively.  Harvard Forest phenological records are from \citet{Okeefe2015}.}
+    \label{fig:validate}
+\end{figure}
+
+ \begin{figure}[!ht]
+    \centering
+ \includegraphics[width=\textwidth]{..//Plots/Flobuds_manuscript_figs/climpredictions.jpg}
+    \caption{\textbf{}}
+    \label{fig:preddy_sp}
+\end{figure}
+
+\pagebreak[4]
+
+\section*{Supplimentary Methods}
+\subsection*{Simulations}
+\noident To better understand the patterns of phenological sensitivity generated by the precocity hierarchy hypothesis (PHH) and the differential sensitivity hypothesis (DSH) respectively, we mathematically simulated the underlying physiology of each hypothesis, and these simulations to generate flower and leaf phenology under two levels of chilling, forcing and photoperiod in a fully factorial simulation.\\
+
+\noindent For the PHH we assigned flowering and leafing a critical heat sum threshold (F*) above which the phenological event would take place. We did this using a growing degree model with a base temperature of 5\degree C \citep{}. For the PHH simulations, we assigned flowering an F* of 200 GDDs and leafing an F* of 400 GDDs. In this scenario we let increased both chilling and photoperiod reduce the F* value for each phenophase by 100 and 20 respectively.\\
+
+\noindent For the DSH we assigned flowering and leafing identical F* values of 400. As in the previous scenario, we let increased chilling and photoperiod reduce the F* values, but these cues reduced the F* for leafing by 200 and 0 respectively and for flowering by 100 and 20.
+
+\noindent We also included a third scenario that included both initial F* differences of the PHH (flowering: 200 and leafing: 400) and the differential response to chilling and photoperiod of the DSH (flowering: -100 chilling, -20 photoperiod, leafing -200 chilling, 0 photoperiod).
+
+\bibliography{..//..//sub_projs/refs/hyst_outline.bib} 
+
+\end{document}
