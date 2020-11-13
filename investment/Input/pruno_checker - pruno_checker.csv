@@ -1,0 +1,134 @@
+specificEpithet,references,catalogNumber,flowers,leaves,bbch.f,bbch.v,flagged,note,flagged_question,question_note,entered_by
+umbellata,http://data.huh.harvard.edu/2b3c8a19-64ee-44fc-a6e6-b98bb32a6afc/image,barcode-01724908,Y,Y,65,11,,,,,DB
+umbellata,http://data.huh.harvard.edu/b07cda28-54a0-4b4b-8943-6741b8172035/image,barcode-01725017,Y,Y,67,17,,,,,DB
+umbellata,http://data.huh.harvard.edu/416b0547-cb03-498a-ad59-602a0d8cb519/image,barcode-01724914,N,Y,,,,,,,DB
+umbellata,http://data.huh.harvard.edu/bd11fb2b-fe80-4d8d-81d3-c364d2a0ffa5/image,barcode-01724876,Y,N,65,0,,,,,SC
+umbellata,http://data.huh.harvard.edu/814c928b-bce4-441c-bda0-e38671f0ec76/image,barcode-01724939,N,Y,,,,,,,SC
+umbellata,http://data.huh.harvard.edu/b833835c-8a0d-45c3-8ef8-e1d99271da2d/image,barcode-01724949,N,Y,,,,,,,SC
+umbellata,http://data.huh.harvard.edu/3c85ddb4-a531-4551-a823-a21bf48a1c35/image,barcode-01724940,N,Y,,,,,,,SC
+umbellata,http://data.huh.harvard.edu/4e90a24f-dd2b-4461-8588-395e6431043a/image,barcode-01724836,Y,N,67,0,,,,,SC
+umbellata,http://data.huh.harvard.edu/b3362e5b-4cd7-4449-a5ee-ff8260224624/image,barcode-01724847,N,Y,,,,,,,SC
+umbellata,http://data.huh.harvard.edu/587c7236-e7cd-4611-b94f-e0bb2948d54f/image,barcode-01724985,N,Y,,,,,,,SC
+hortulana,http://data.huh.harvard.edu/baee0adc-d123-4cc4-8439-6c67f84a6247/image,barcode-01722220,N,Y,,,,,,,DB
+hortulana,http://data.huh.harvard.edu/c7312185-d617-4b48-a147-d0a167bb6edf/image,barcode-01722096,N,Y,,,,,,,DB
+hortulana,http://data.huh.harvard.edu/a93a85d0-7f10-4956-827a-21df88b36975/image,barcode-01722168,N,Y,,,,,,,DB
+hortulana,http://data.huh.harvard.edu/66e1ba7a-19eb-4ee6-a49e-10706809ea9e/image,barcode-01722199,N,Y,,,,,,,DB
+hortulana,http://data.huh.harvard.edu/4f66fc38-e5af-442b-b559-951ce4f68b12/image,barcode-01722071,N,Y,,,,,,,DB
+hortulana,http://data.huh.harvard.edu/4175e02b-b7e2-4cbf-a95b-cbb28501db70/image,barcode-01722222,N,Y,,,,,,,SC
+hortulana,http://data.huh.harvard.edu/6a2993e9-e842-4f57-a3af-1e4a6e765577/image,barcode-01722090,N,Y,,,,,,,SC
+hortulana,http://data.huh.harvard.edu/5918a2df-bfb2-49df-8c32-77523f0c44e5/image,barcode-01722225,N,Y,,,,,,,SC
+hortulana,http://data.huh.harvard.edu/07b32970-0a8f-4829-8584-4fefe84f2dd3/image,barcode-01722116,Y,Y,67,11,Y,two collection dates,,,SC
+hortulana,http://data.huh.harvard.edu/409089c2-72a0-4d1b-8ae7-b8de673a6d96/image,barcode-01722072,Y,Y,89,,,,,,SC
+americana,http://data.huh.harvard.edu/aea50088-84fc-4238-b286-22f6b4f16af6/image,barcode-00484003,Y,Y,65,17,,,,,DB
+americana,http://data.huh.harvard.edu/7c70e041-5470-43a5-873c-3627ed95a88f/image,barcode-01705492,N,Y,,,,,,,
+americana,http://data.huh.harvard.edu/4e2b1d88-5cde-4e0a-a9d9-8a62d9ca7094/image,barcode-01705336,Y,Y,67,10,Y,Two collection dates,,,SC
+americana,http://data.huh.harvard.edu/ee9898bc-b6f6-4ac1-b8df-220d1475c60b/image,barcode-00484020,N,Y,,,,,,,SC
+americana,http://data.huh.harvard.edu/f5cc1ac3-13ec-4c34-8434-d6aa22b3ef0d/image,barcode-01705239,N,Y,,,,,,,SC
+americana,http://data.huh.harvard.edu/959c91f5-8a1a-46cd-b56a-df1bf5d83309/image,barcode-01705897,N,Y,,,,,,,SC
+americana,http://data.huh.harvard.edu/d90b8597-b03b-4782-a900-a792bf0a0825/image,barcode-01705522,N,Y,,,,,,,SC
+americana,http://data.huh.harvard.edu/c715d8b3-eace-4e32-9746-489a3c5f3b86/image,barcode-01705403,Y,Y,67,17,,,Y,2 branches -are they at same stage?,SC
+americana,http://data.huh.harvard.edu/e99374b9-fc9d-4638-aae8-d0f806847538/image,barcode-01705161,N,Y,,,,,Y,Buds visible?,SC
+americana,http://data.huh.harvard.edu/5aac765f-f4ea-4705-8cc6-3321469b644e/image,barcode-01705467,N,Y,,,,,,,SC
+rivularis,http://data.huh.harvard.edu/60b92e6f-d2ad-41c2-880c-55b89e00addb/image,barcode-01723893,Y,Y,65,19,,,,,DB
+rivularis,http://data.huh.harvard.edu/5e67c8ac-e092-4ff3-afad-02a80c74a629/image,barcode-00026972,Y,Y,67,15,Y,two collection dates,,,SC
+rivularis,http://data.huh.harvard.edu/9b7e725a-6eb2-485b-a332-6413f8d1d161/image,barcode-01723713,Y,Y,67,11,,,,,SC
+rivularis,http://data.huh.harvard.edu/412baf77-87a3-4888-9582-0621a2e50dee/image,barcode-01723891,Y,Y,65,11,,,,,SC
+rivularis,http://data.huh.harvard.edu/8c69e0f8-8c22-428c-8258-c1e1b5110e17/image,barcode-01723833,N,Y,,,,,,,SC
+rivularis,http://data.huh.harvard.edu/821f303a-505e-44cb-8f29-6ed6958ffddc/image,barcode-01723655,N,Y,,,,,,,SC
+rivularis,http://data.huh.harvard.edu/2b010d0b-474f-4d52-8e29-341436779bda/image,barcode-01723783,N,Y,,,,,,,SC
+rivularis,http://data.huh.harvard.edu/441bcf50-741d-4127-b95e-5efb9a7ce747/image,barcode-01723889,Y,Y,89,19,,,Y,1 bud/fruit visible?,SC
+rivularis,http://data.huh.harvard.edu/97ef91d0-8034-4d5e-a39a-0ec8cb674ee6/image,barcode-01723768,Y,Y,65,10,,,Y,65 or 67 for bbch.f?,SC
+rivularis,http://data.huh.harvard.edu/59bca5f6-5031-4859-ac6f-ae957dea7582/image,barcode-01723733,N,Y,,,,,,,SC
+nigra,http://data.huh.harvard.edu/4e3613ba-e0ad-4bca-88ca-2e744cba4e11/image,barcode-01722879,N,Y,,,,,,,DB
+nigra,http://data.huh.harvard.edu/12d0fac6-1acd-42ac-887b-4af1787d08de/image,barcode-00740011,Y,Y,67,15,,,,,SC
+nigra,http://data.huh.harvard.edu/7efc4ce1-8ced-44f1-a865-eee0a8df7af0/image,barcode-00632922,N,Y,,,,,,,SC
+nigra,http://data.huh.harvard.edu/765d18bc-12cf-487a-9892-3e474ea40ecd/image,barcode-00632915,Y,Y,67,10,,,,,SC
+nigra,http://data.huh.harvard.edu/0eeb3241-56d7-4824-98a2-8c1012aacc24/image,barcode-00632900,Y,Y,89,19,,,,,SC
+nigra,http://data.huh.harvard.edu/247d2e9e-986e-44f1-a0e4-00c1160b9442/image,barcode-00742630,Y,Y,89,19,,,,,SC
+nigra,http://data.huh.harvard.edu/99370a79-884a-4bf4-b946-88296eb25c75/image,barcode-01722887,Y,Y,67,10,,,,,SC
+nigra,http://data.huh.harvard.edu/1e413b79-e903-42f9-81ce-ebaf7a88684c/image,barcode-01722906,N,Y,,,,,,,SC
+nigra,http://data.huh.harvard.edu/1cb64a3b-f006-4ab3-8eeb-92e9bc74d2a6/image,barcode-00742715,Y,Y,67,11,,,,,SC
+nigra,http://data.huh.harvard.edu/aa09e2ad-303f-465a-9e40-707aaceaa877/image,barcode-00742664,Y,Y,65,15,,,,,SC
+angustifolia,http://data.huh.harvard.edu/ab2b7a41-2ee0-44b1-9812-a01fc2efadce/image,barcode-01705990,Y,Y,89,19,,,,,DB
+angustifolia,http://data.huh.harvard.edu/d06a1cb1-1b67-4558-8a3d-9dc9fcb351ca/image,barcode-01705950,N,Y,,,,,,,SC
+angustifolia,http://data.huh.harvard.edu/05e34ad9-8030-4d28-b42b-cebd0f6fea61/image,barcode-01721277,Y,Y,67,11,,,,,SC
+angustifolia,http://data.huh.harvard.edu/64c94765-3dd8-4c38-a6e6-1485f4f6a301/image,barcode-01721229,Y,Y,89,19,,,,,SC
+angustifolia,http://data.huh.harvard.edu/f393abaf-eb96-4574-8bd1-b322ce57fdf4/image,barcode-01721307,N,Y,,,,,,,SC
+angustifolia,http://data.huh.harvard.edu/bcad2d0a-7c62-488f-9fd7-3cd5bc86a6cb/image,barcode-01705952,N,Y,,,,,,,SC
+angustifolia,http://data.huh.harvard.edu/8dab1b34-5b4f-49bf-8cf7-498ebfc8c112/image,barcode-01705975,N,Y,,,,,,,SC
+angustifolia,http://data.huh.harvard.edu/59dfb524-0007-4598-bfbf-9f76657e2748/image,barcode-01721154,Y,Y,89,15,,,,,SC
+angustifolia,http://data.huh.harvard.edu/7d18497e-151c-4881-95c9-9225b513013f/image,barcode-01705938,Y,Y,67,9,,,,,SC
+angustifolia,http://data.huh.harvard.edu/fb84ca7c-91ef-4eca-9a1f-71022999219a/image,barcode-01721238,N,Y,,,,,,,SC
+subcordata,http://data.huh.harvard.edu/ba7bfa70-3539-4826-927c-1ceb398a4555/image,barcode-01724655,Y,Y,67,17,,,,,SC
+subcordata,http://data.huh.harvard.edu/23722dc1-43b8-4155-86c5-a1273bf155af/image,barcode-00346707,Y,Y,69,15,,,Y,is the fruit set visible?,SC
+subcordata,http://data.huh.harvard.edu/abbfde82-2973-46e1-8f1d-288adc770a8b/image,barcode-00346680,N,Y,,,,,,,DB
+subcordata,http://data.huh.harvard.edu/7bfa1c57-f6f6-431e-9d77-cdc249f6211e/image,barcode-00346696,Y,Y,67,17,,,Y,15 or 17?,SC
+subcordata,http://data.huh.harvard.edu/81bba1cc-40ea-4758-bb2d-f8d1b05784d4/image,barcode-00346687,Y,Y,67,9,,,,,SC
+subcordata,http://data.huh.harvard.edu/e0213220-0606-4bff-ad41-83a7f9271e4f/image,barcode-00346702,Y,Y,89,17,,,Y,fruit isn't attached,SC
+subcordata,http://data.huh.harvard.edu/e5ed43e6-cbc0-4032-8f8d-f63d50f885ff/image,barcode-00346683,Y,Y,67,15,,,,,SC
+subcordata,http://data.huh.harvard.edu/3537cf22-6c97-4cac-99de-7f77ff6ce123/image,barcode-00346692,Y,Y,67,17,,,,,SC
+subcordata,http://data.huh.harvard.edu/8a193f19-781e-441f-89a7-d7f3b369b9b9/image,barcode-00346678,Y,Y,89,19,,,,,SC
+subcordata,http://data.huh.harvard.edu/3ae63c5b-8759-4393-b637-83d1ff60bb6f/image,barcode-01724653,Y,Y,67,10,,,,,SC
+gracilis,http://data.huh.harvard.edu/e0119aa6-79db-4ebf-92c2-e2acf3e65b8d/image,barcode-01721949,Y,Y,89,19,,,,,DB
+gracilis,http://data.huh.harvard.edu/81bf24a6-81d6-4c0a-a5d8-817339309a18/image,barcode-01722019,Y,Y,69,19,,,Y,buds are fruit?,SC
+gracilis,http://data.huh.harvard.edu/75eaf164-d9eb-4774-92ae-fe2915d99db7/image,barcode-01721994,N,Y,,,,,,,SC
+gracilis,http://data.huh.harvard.edu/908d62a8-ec00-4f5a-b8d1-1ab079af6042/image,barcode-01721950,Y,Y,67,17,,,,,SC
+gracilis,http://data.huh.harvard.edu/a0731a01-5b4f-47e0-9dd4-7e9d5913d934/image,barcode-01722017,Y,Y,89,19,,,Y,One fruit-not attached?,SC
+gracilis,http://data.huh.harvard.edu/6048286c-e6d4-4852-a8a8-6a50c9e20b51/image,barcode-01722032,Y,Y,67,11,,,Y,multiple branches -11 or 15?,SC
+gracilis,http://data.huh.harvard.edu/900ce814-048d-4ec7-9873-7ab40eeece7d/image,barcode-01721952,Y,Y,67,17,Y,2 different collection dates,,,SC
+gracilis,http://data.huh.harvard.edu/7ef94d64-20d5-4c6e-88ac-00b53a177f18/image,barcode-01721955,Y,Y,67,15,,,,,SC
+gracilis,http://data.huh.harvard.edu/8fdd3660-f571-4e8e-8d4d-1311c71e92f3/image,barcode-01721980,N,Y,,,,,,,SC
+gracilis,http://data.huh.harvard.edu/cb3539bc-9a27-41b5-b873-1333922e1b31/image,barcode-01722030,Y,Y,67,9,,,,,SC
+mexicana,http://data.huh.harvard.edu/0d1bedd5-49fe-449e-a7e8-ea205d8425cc/image,barcode-01722721,N,Y,,,,,,,DB
+mexicana,http://data.huh.harvard.edu/0921cf25-2b51-429d-a94d-0a900e2f157b/image,barcode-01722516,N,Y,,,,,,,SC
+mexicana,http://data.huh.harvard.edu/2a8ddd51-7b19-466a-8e30-c9ff657991ea/image,barcode-01722643,Y,Y,89,17,,,,,SC
+mexicana,http://data.huh.harvard.edu/2226bbe8-d8f9-4762-af4b-af1aad1631b9/image,barcode-01722527,N,Y,,,,,,,SC
+mexicana,http://data.huh.harvard.edu/3044a68c-42f2-4e78-bdc1-3b8080778bca/image,barcode-01722570,N,Y,,,,,,,SC
+mexicana,http://data.huh.harvard.edu/b6a18cf4-3dc0-42f7-b7fc-707d1aa5b0e5/image,barcode-01722444,N,Y,,,,,,,SC
+mexicana,http://data.huh.harvard.edu/5aa5fce2-b5e9-451f-a9f9-2deba082b96f/image,barcode-01722738,Y,Y,89,19,,,,,SC
+mexicana,http://data.huh.harvard.edu/38e986e1-0e80-422d-89b7-b3f8eb6ef7f2/image,barcode-01722578,Y,Y,67,11,,,,,SC
+mexicana,http://data.huh.harvard.edu/0310d83d-888e-4311-b062-a91b76aa7300/image,barcode-01722716,N,Y,,,,,,,SC
+mexicana,http://data.huh.harvard.edu/137b3db6-0354-4b6b-ac5a-054d98271b1d/image,barcode-01722589,Y,Y,67,9,,,,,SC
+texana,http://data.huh.harvard.edu/b41b2b7d-33e7-4e23-ba2f-e6af5eebc3ea/image,barcode-01724764,N,Y,,,,,,,DB
+texana,http://data.huh.harvard.edu/c24c2568-f35c-43ae-bcf7-f5ab82f6305f/image,barcode-01724776,N,Y,,,,,,,SC
+texana,http://data.huh.harvard.edu/c82fb901-1dfb-4b14-80bb-e23a2678739f/image,barcode-01724772,Y,Y,67,17,,,,,SC
+texana,http://data.huh.harvard.edu/46c1cc06-d629-4e19-b424-53dba69b5c59/image,barcode-01724771,Y,Y,69,17,,,Y,69 or 89?,SC
+texana,http://data.huh.harvard.edu/d465d16f-b464-4e9d-8fce-cbeb964c0fe6/image,barcode-01724773,N,Y,,,,,,,SC
+texana,http://data.huh.harvard.edu/80d6c269-5d0a-4c57-b755-abd3197ed457/image,barcode-01724779,Y,Y,67,15,,,,,SC
+texana,http://data.huh.harvard.edu/35028546-708b-4f80-939f-c2289d87f72b/image,barcode-01724774,N,Y,,,,,,,SC
+texana,http://data.huh.harvard.edu/be83a5c7-a652-4063-b4c3-847c74258967/image,barcode-01724770,N,Y,,,,,,,SC
+texana,http://data.huh.harvard.edu/4027e3d9-e2d3-4c6d-8a16-9cdb13f187a3/image,barcode-01724778,Y,Y,67,15,Y,two different collection dates ,,,SC
+texana,http://data.huh.harvard.edu/523eab28-329a-4ad1-85e5-af100a32db46/image,barcode-01724759,Y,Y,67,17,,,,,SC
+maritima,http://data.huh.harvard.edu/f8b10c53-3eb2-4e57-a067-a08a6e2c4cba/image,barcode-00673855,Y,Y,65,17,,,,,DB
+maritima,http://data.huh.harvard.edu/1833c638-7a8f-4643-8893-2a47f4758ef9/image,barcode-00673858,Y,Y,65,10,,,,,DB
+maritima,http://data.huh.harvard.edu/3ac714b5-d627-4eab-966a-6a49dc647019/image,barcode-00673889,Y,Y,65,15,,,,,DB
+maritima,http://data.huh.harvard.edu/aa664e84-e29d-446e-b479-10b8ace5e276/image,barcode-00669283,Y,N,65,0,Y,flowers and leaves collected seperate days,,,DB
+maritima,http://data.huh.harvard.edu/6c6c26a8-f4d5-4e24-9e34-faf5a2c82e73/image,barcode-00669265,Y,Y,89,19,,,,,DB
+maritima,http://data.huh.harvard.edu/aede9e5b-5e40-4236-96a0-a85a5491becd/image,barcode-00673882,Y,Y,65,11,Y,old fruits also included,,,DB
+maritima,http://data.huh.harvard.edu/7a394e87-ee7e-4eb8-bebc-dedc88a7e47f/image,barcode-00669335,Y,Y,60,15,Y,two different collection dates,,,DB
+maritima,http://data.huh.harvard.edu/5adebe8d-267e-4060-9683-26b2feea4c14/image,barcode-00673809,Y,Y,89,19,,,,,DB
+maritima,http://data.huh.harvard.edu/fc62f620-308b-44a6-848e-0ef39c6b1677/image,barcode-00673879,N,Y,,,,,,,DB
+maritima,http://data.huh.harvard.edu/7a93088c-fe7d-4a7f-a249-145d80b7301d/image,barcode-00669341,Y,Y,63,15,Y,two different collection dates,,,DB
+alleghaniensis,http://data.huh.harvard.edu/5939b0eb-4289-48ba-b3ac-b150ce58987a/image,barcode-01704970,N,Y,,,,,,,DB
+alleghaniensis,http://data.huh.harvard.edu/01fb9b52-1b06-4bca-a507-f7a1cfd3a8d9/image,barcode-01704952,Y,Y,89,19,,,,,SC
+alleghaniensis,http://data.huh.harvard.edu/4e8f50e2-982a-4e33-8fba-073805d53452/image,barcode-01704964,Y,Y,89,19,,,,,SC
+alleghaniensis,http://data.huh.harvard.edu/22908a06-af97-426b-a3d6-929118d5fbdc/image,barcode-01704954,Y,Y,89,19,,,,,SC
+alleghaniensis,http://data.huh.harvard.edu/84974e63-1255-4455-be2f-024aa65110da/image,barcode-00703447,Y,Y,67,17,,,,,SC
+alleghaniensis,http://data.huh.harvard.edu/36e9bce0-6cd8-458d-afc9-bf363fc41c9f/image,barcode-01704938,Y,Y,67,17,,,,,SC
+alleghaniensis,http://data.huh.harvard.edu/61450988-fdd1-4354-a2fb-201325b46a54/image,barcode-01704962,N,Y,,,,,,,SC
+alleghaniensis,http://data.huh.harvard.edu/47d5d2b9-a382-4f29-9e03-d6fbb1ed74a2/image,barcode-01704937,N,Y,,,,,,,SC
+alleghaniensis,http://data.huh.harvard.edu/bcbaa219-b431-40e9-88ce-a43cb0e8146b/image,barcode-00703453,Y,Y,67,11,Y,Two different collection dates,,,SC
+alleghaniensis,http://data.huh.harvard.edu/fb9a68b2-dbb8-437a-be06-4851317507a1/image,barcode-01704957,N,Y,,,,,,,SC
+murrayana,http://data.huh.harvard.edu/5e0c7962-431b-4f92-8c01-c6efa77981a7/image,barcode-01722797,N,Y,,,,,,,DB
+murrayana,http://data.huh.harvard.edu/a9f7d591-66e0-47e9-a58f-fc2920669678/image,barcode-00026886,Y,Y,67,17,,,,,DB
+murrayana,http://data.huh.harvard.edu/0527137a-4498-45c7-be55-4237ffcfdfc3/image,barcode-01723884,Y,Y,67,15,,,,,DB
+geniculata,http://data.huh.harvard.edu/cdb9359f-17f5-4b22-9e5e-3546d4d01d48/image,barcode-01721871,N,Y,,,,,,,DB
+geniculata,http://data.huh.harvard.edu/e6adf2c5-f654-48a0-933c-fafa949959fa/image,barcode-01723881,N,Y,,,,,,,SC
+geniculata,http://data.huh.harvard.edu/48245a5a-6bfb-4970-a67e-5f063d18801d/image,barcode-01721864,Y,Y,67,9,,,,,SC
+geniculata,http://data.huh.harvard.edu/d483faf5-2fcd-491c-a6c6-0b4b52106d13/image,barcode-01721868,N,Y,,,,,,,SC
+geniculata,http://data.huh.harvard.edu/52c3ae42-5734-48b0-a322-f46edaddd6b6/image,barcode-01721870,Y,N,67,0,,,,,SC
+geniculata,http://data.huh.harvard.edu/7fa4b350-f5f8-4473-b567-01a8a566569c/image,barcode-01721867,Y,Y,69,10,,,,,SC
+geniculata,http://data.huh.harvard.edu/be779ded-f1ed-4dba-9443-c26461e115ae/image,barcode-01721869,N,Y,,,,,,,SC
+geniculata,http://data.huh.harvard.edu/a473d6da-5d50-4cae-9907-bd9f1eff5809/image,barcode-01721863,Y,Y,67,11,,,,,SC
+geniculata,http://data.huh.harvard.edu/fdbf857a-a28e-4b68-8661-9a79456a1244/image,barcode-01721866,N,Y,,,,,,,SC
+geniculata,http://data.huh.harvard.edu/9e5f8171-1d63-4141-9cf5-4c80bad0e825/image,barcode-01721862,Y,N,67,0,Y,two different collection dates,,,SC

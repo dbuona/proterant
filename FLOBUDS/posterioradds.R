@@ -3,6 +3,10 @@ rm(list=ls())
 options(stringsAsFactors = FALSE)
 graphics.off()
 library("tidybayes")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+setwd("~/Documents/git/proterant/FLOBUDS")
 load("writing/flobud.main.mods.Rda")
 
 goober<-mod.flo.int %>%
@@ -124,15 +128,15 @@ dev.off()
 #setEPS()
 #postscript("Plots/postergroups2.eps",width = 8, height = 4)
 png("Plots/posteriorgroups_go.png",width = 7, height= 2.5,units = 'in',res = 200)
-pd=position_dodge(width=1)
+pd=position_dodge(width=1.5)
 posty %>%
   arrange(dof) %>%
   mutate(category = factor(category, levels=c("flowering-first","concurrent","leafing-first"))) %>%
   ggplot(aes(0,dof,color=category,shape=phase,group =category))+
-  geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0.1,alpha=0.5)+
+  geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0.4,alpha=0.5)+
   geom_point(size=2.5,position=pd)+
   ggthemes::theme_few(base_size = 11)+
-  facet_grid(pollination ~ scenario3,drop=TRUE, scales="free_x",switch="x")+
+  facet_wrap( ~ scenario3,drop=TRUE, scales="free_x",switch="x",ncol=4)+
   theme(axis.title.x =element_blank(),
     strip.placement = "bottom",
     strip.background = element_rect(color="black"),

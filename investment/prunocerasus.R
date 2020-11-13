@@ -40,6 +40,7 @@ pruno<-c("alleghaniensis","angustifolia","americana" ,"gracilis","geniculata","h
   "mexicana","murrayana","munsoniana","nigra","rivularis","umbellata","subcordata","texana" )
 
 prunocerasus<-dplyr::filter(all.specs, specificEpithet %in% pruno)
+sum(prunocerasus$n)
 ####################################################################
 #4) Subet main data sheet to only prunocerasus
 pruny.all<-filter(geo.sp, specificEpithet %in% pruno) #n=1969

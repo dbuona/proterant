@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+\renewcommand{\baselinestretch}{1.8}
+\usepackage{textcomp}
+\usepackage{fontenc}
+\usepackage{graphicx}
+\usepackage{caption} % for Fig. captions
+\usepackage{gensymb} % for \degree
+\usepackage{placeins} % for \images
+\usepackage[margin=1in]{geometry} % to set margins
+\usepackage{setspace}
+\usepackage{lineno}
+%\usepackage{cite}
+\usepackage{amssymb} % for math symbols
+\usepackage{amsmath} % for aligning equations
+\usepackage[sort&compress]{natbib}
+\bibliographystyle{..//refs/styles/besjournals.bst}
+%\usepackage{xr-hyper}
+
+% line numbers for letter
+% line numbers for letter
+
+
+\title{GSAS Merit Fellowship: Statement of Purpose}
+\date{November 2021}
+\author{Daniel Buonaiuto\\
+Dept. of Organismic and Evolutionary Biology}
+\begin{document}
+\maketitle
+\section*{Background}
+In a typical model of plant development, vegetative growth precedes reproduction. However, for as many as 30\% of trees and shrubs of eastern North America, it is not the green tips of leaves that mark the start of the growing season, but the colors of flowers \citep{Buonaiuto2020}. Why do so many species in these regions produce their flowers before their leaves; during the time of year when risk of frost damage is the highest \citep{Augspurger:2013aa} and their energy reserves are at their lowest \citep{Primack1987}? \\
+
+Several hypotheses have been put forth in the literature to explain this risky behavior. Flowering during the leafless season may allow for efficient pollen transfer in wind-pollinated species \citep{Rathcke_1985} or reduce drought stress by partitioning the evaporative demand of flowers and leaves across the seasons \citep{Gougherty2018}. Flowering-first may also simply be a byproduct of extremely early flowering \citep{Primack1987} and variation in FLS patterns among species could also be more strongly determined be developmental or evolutionary constraints than ecological function \citep{Gougherty2018,Diggle1995}.\\
+
+In a previous project my colleagues and I used statistical modeling to compare and evaluate these hypotheses \citep{Buonaiuto2020}. Across all of our models, we consistently found a strong association between wind-pollination and the flowering-first FLS. We also found that early flowering and phylogeny, the shared evolutionary lineages among taxa, strongly influence this trait. This support for multiple hypotheses suggests that flowering-first FLS’s may have evolved multiple times under different environmental conditions and raises new questions about the functional significance of this trait.\\
+
+In particular, the strong support for the wind-pollination hypothesis from our models offers little information about the functional significance of flowering-first in the many insect-pollinated species share this FLS. To fill in this gap, I intend to undertake a new project that will explore the functional ecology of flowering-first FLSs in insect-pollinated taxa by exploring associations between FLSs, species distributions and functional traits using a large data set of herbaria specimens. I present the details of this project below.
+
+\section*{Project Proposal: The functional ecology of flower-leaf sequences in the American plums}
+%A more nuanced understanding about the function of FLS variation may result from pattern deconstruction (i.e. grouping of species according to subclades or other commonalities; \citep{Terribile2009)}. 
+The American plums (\textit{Prunus} subsp. \textit{Prunus} sect. \textit{Prunocerasus}) are an ideal group to use to address my research question. The section consists of 16 species that are distributed across North America and vary in their FLSs \citep{Shaw:2004aa}. The Harvard herbaria houses 3,134 digitized specimens of these species and the Consortium of Midwest Herbaria collection contains an additional 13,869. Leveraging these 17000+ specimens, I will test the major hypotheses of the function of FLS variation in insect-pollinated taxa by testing for correlations between FLS patterns and the functional traits and ecological requirements of these species.
+\subsection*{Part I: Quantification of FLS variation in \textit{Prunocerasus}}
+A major challenge to study FLS variation is that most data sources describe FLS patterns using broad verbal descriptions ( e.g. ``flowers before leaves”). These categories are imprecise and, unsurprisingly, different sources classify the same species differently \citep{Buonaiuto2020}. While it’s possible that these differences could reflect temporal or geographic variability in FLSs, they could equally be the product of observer bias. It is important to apply a more rigorous quantitative method for describing FLSs.\\
+
+To characterize FLS patterns among \textit{Prunocerasus} species, I will score the vegetative and flowering stages of 500-1000 herbarium specimens per species using the BBCH scale \citep{Finn2007}, a standardized method for robustly evaluating the timing of seasonal events in plants. From these data, I will be able to use Bayesian generalized linear models to predict a likelihood that a given species flowers before its leaves emerge, providing the first quantitative estimates of FLS variation for these species, and demonstrating a robust method to do so for other taxa. Using this method, I will also be able to quantify variation in FLS patterns within species and test for any temporal or environmental covariates that may drive this variation.
+
+\subsection*{Part II: Assessing FLS hypotheses}
+Each of the dominant hypotheses of the functional ecology of FLS variation makes a prediction about the environmental characteristics or biological traits that should be associated with flowering-first species.\\
+
+The \textbf{water limitation hypothesis} \citep{Gougherty2018} predicts that the geographic ranges of leafing-first species will be more limited by water availability than flowering-first species. To test this hypothesis, I have obtained measurements of the historic drought conditions (based on the Palmer Drought Severity Index \citep{Dai:2004aa}) at the collection site of each herbarium specimen and will test for differences in aridity tolerance across geographic ranges of predominantly flowering-first and leafing-first taxa.\\
+
+The \textbf{early flowering hypothesis} suggests that flowering-first is an adaptation that allows for extended fruit development time \citep{Primack1987}, and predicts that flowering-first species will have larger fruits than leafing-first species. To test this hypothesis, I will measure the diameter of fruits present on herbarium specimens and test for differences between predominantly flowering-first and leafing-first taxa.\\
+
+The \textbf{insect-visibility hypothesis} suggest that flowering-first species are easier for insect pollinators to locate \citep{Janzen1967} and predicts that flower displays will differ in size between flowering-first and leafing-first species. To test this hypothesis, I will measure the corolla diameter of 5-10 flowers from 50-100 herbarium specimens/species and compare the flower size between predominantly flowering-first and leafing-first taxa.
+
+\section*{Scope and implications of the project}
+I have tested the methods described above in a pilot study of a subset of \textit{Prunocersus} herbarium  specimens (10-15 per species) and believe the methods are robust for both quantifying FLS patterns among species and testing the FLS hypotheses through trait associations. This pilot has also shown that with a focused effort on data collection, the majority of this work could be completed in a semester. The support of the GSAS merit fellowship would allow me to prioritize this work and make this concetrated effort required to successfully complete this project possible.\\
+
+Upon completion, this project will fill in a major gap in the basic understanding of the functional significance of flower-leaf sequence variation in deciduous woody plants. Additionally, because FLS patterns are shifting with climate change \citep{Buonaiuto2020, Augspurger:2020aa}, improving our understanding of the function of FLS patterns is an important step for predicting the scope and implications of FLS shifts in the future.
+
+\bibliography{..//..//sub_projs/refs/hyst_outline.bib}
+
+\end{document}
