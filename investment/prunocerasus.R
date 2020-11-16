@@ -48,7 +48,10 @@ pruny.all<-filter(geo.sp, specificEpithet %in% pruno) #n=1969
 ##
 pruny.all<-dplyr::select(pruny.all,references,catalogNumber,year,month,day,state,county,municipality,specificEpithet,state,lon,lat,rMapCounty)
 sum(prunocerasus$n)
-pruny.all<-filter(pruny.all, references!="") ### only ones with web links 1956
+pruny.all<-filter(pruny.all, references!="")### only ones with web links 1956
+
+table(pruny.all$specificEpithet)
+
 ###############################################################
 #5) select 10 sheet at random from each  species for trial run or as many as there are for ones will less than 10
 nested_prun <- pruny.all %>%
