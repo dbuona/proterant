@@ -1,3 +1,18 @@
+
+#### 1 set your working director and read in the pruno checkers csv
+#hit use function read.csv()
+
+
+###3 2 view the data, what are the columnnames?
+
+ ## change columntan of column 5 to " flowery thing"
+
+
+
+
+
+
+
 ## 1) house keeping
 
 rm(list=ls()) 
@@ -14,6 +29,7 @@ library(ggplot2)
 
 d<-read.csv("pruno_checker - pruno_checker.csv")
 
+d$fruits<-ifelse()
 
 head(d) ## see the first road
 nrow(d)
@@ -21,7 +37,7 @@ nrow(d)
 ### Q1 how many flower did we have per dataset
 table(d$flowers)
 75/nrow(d)
-
+table(d$specificEpithet,d$flowers)
 
 
 
@@ -41,14 +57,11 @@ d2<-na.omit(d)
 ggplot(d2, aes(x = as.factor(bbch.v),as.factor( bbch.f)))+
    stat_bin2d(bins=c(7,6))+
 geom_rect(xmin=as.factor(0),xmax=as.factor(17),ymin=as.factor(60),ymax=as.factor(65),alpha=0.1,fill="goldenrod")+
-   facet_wrap(~specificEpithet)
-
-+
-   theme_minimal()
+   facet_wrap(~specificEpithet)+theme_minimal()
    
-?stat_bin2d()
+)
 
- d2$FLS<-ifelse(d2$bbch.f<67 &d2$bbch.v<=17,1,0)
+ d2$FLS<-ifelse(d2$bbch.f<67 &d2$bbch.v<17,1,0)
 ggplot(d2,aes(as.factor(FLS)))+geom_bar()+facet_wrap(~specificEpithet)
 
 MOD1<-brms::brm(FLS~1+(1|specificEpithet),family="bernoulli",data=d2)
