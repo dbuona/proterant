@@ -26,11 +26,19 @@ muplotfx <- function(modelhere,modelhere2, nameforfig, width, height, ylim, xlim
     lines(modoutput2[(modoutput2$term==rownameshere[i]),c("lower","upper")],rep(pos.y,2),col="darkgrey")
     points(pos.x,pos.y,cex=1.5,pch=17,col="darkblue")
     points(pos.x2,pos.y,cex=1.5,pch=19,col="darkblue")
-    for(spsi in 1:length(spnum)){#
+    
+    values<-c()
+ 
+        for(spsi in 1:length(spnum)){
       pos.sps.i<-which(grepl(paste("[",spsi,"]",sep=""),mod.ranef$parameter,fixed=TRUE))
+  
       jitt<-0.075
-      pos.y.sps.i<-pos.y-jitt*c(spnum[2])
+      ii<-as.numeric(as.factor((spnum[spsi])))
+      valueshere<-c(ii) 
+      values<-sum(values,valueshere)
+      pos.y.sps.i<-pos.y-jitt*values
       print(pos.y.sps.i)
+      
       pos.x.sps.i<-mod.ranef[pos.sps.i[i],"mean"]
       pos.x.sps.2<-mod.ranef2[pos.sps.i[i],"mean"]
       lines(mod.ranef[pos.sps.i[i],c("25%","75%")],rep(pos.y.sps.i,2),

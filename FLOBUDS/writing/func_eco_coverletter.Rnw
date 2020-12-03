@@ -1,0 +1,36 @@
+\documentclass[11.75 pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{gensymb}
+%\begin{footnotesize}
+%\address{1300 Centre Street \\ Boston, MA, 20131}
+%\end{footnotesize}
+\begin{document}
+\bibliographystyle{..//..//sub_projs/refs/styles/besjournals.bst}
+\def\labelitemi{--}
+\parindent=24pt
+\noindent\includegraphics[width=0.2\textwidth]{/Users/danielbuonaiuto/Desktop/arb_logo.png}
+\pagenumbering{gobble}
+\\\\
+\noindent{Dear Dr. Meyer,}\\
+\vspace{1.5ex}
+
+\noindent Please consider this manuscript ``Differences in flower and leaf bud environmental responses drive shifts in spring phenological sequences of temperate woody plants" as a Research Article in \textit{Functional Ecology}.\\
+
+\noindent The relative timing of flower and leaf emergence in the spring strongly influences the ecology of deciduous woody plants and may be particularly consequential to reproductive fitness and physiological functioning of species in temperate forests \citep{Rathcke_1985}. Decades of experimental research confirms that in these taxa, both flower and leaf phenology are cued by the same environmental conditions, temperature and day length \citep{Ettinger:2020aa,Forrest2010}. However, observed shifts in the order and duration of flower-leaf sequences (FLSs) due to climate change suggests that there must be differences in how these phases respond to shared environmental cues \citep{Buonaiuto2020}, but previous studies that have attempted to characterize these differences have generated competing explanations \citep [e.g.][]{Guo2014,Citadin2001}. Resolving this controversy is a necessary step both for understanding the basic biology of FLSs and for predicting the magnitude and---ultimately---fitness impacts of FLS shifts with climate change.\\
+
+\noindent Our submission details an experiment that robustly evaluates the differences in the response to shared environmental cues between flower and leaf buds and explains how these differences impact FLS variation. While most previous studies on this topic have focused on individual crop species, we performed a full-factorial growth-chamber experiment manipulating chilling, forcing and photoperiod cues for flower and leaf buds for 10 wild tree and shrubs species common to the temperate forests of eastern North American. The scope of our experiment allowed us to compare the existing FLS hypotheses, and to better understand how FLS dynamics are likely to vary among species and locations over time.\\
+
+\noindent We believe this work would be of broad interest to the readers of \textit{Functional Ecology.} One finding of particular note from our study is that the FLSs of wind-pollinated species that flower before their leaves had the strongest response to environmental manipulations, suggesting they are likely to have the largest FLS shifts with climate change. Given the importance of the time between flowering and leafing for pollen transport in these taxa \citep{Friedman2009}, our findings suggest the pollination ecology of wind-pollinated species may be particularly at risk for declines in reproductive performance due to FLS shifts. While much of the research around phenology and pollination in the context of global change has centered around plant-pollinator interactions \citep{Memmott2007}, which is of little relevance to abiotically pollinated taxa, our study adds to an emerging body of literature suggesting that the impact of climate change on the reproductive ecology of wind-pollinated taxa must be part of a global change research agenda \citep{Kling:2020aa,Ziello:2012aa}.\\
+
+\noindent The main text of this manuscript is 1,796 words in length and it contains 4 figures. It is co-authored by E.M. Wolkovich and is not under consideration elsewhere. We hope that you will find it suitable for publication in \textit{Functional Ecology}, and look forward to hearing from you.\\\\ % DB: Im actually not sure about with word count. I usally copy and paste my text into overleaf.com which usally does a good job on tex files but it was giving me wird errors.
+\\Sincerely,\\\\\\\\\\
+
+\noindent Daniel Buonaiuto\\
+
+\pagebreak
+
+\bibliography{..//..//sub_projs/refs/hyst_outline.bib} 
+
+\end{document}
