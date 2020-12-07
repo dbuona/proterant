@@ -1,4 +1,4 @@
-load("flobud.main.mods.Rda")
+load("writing/flobud.main.mods.Rda")
 small<-filter(dat,!is.na(flo_day))
 small<-filter(small,!is.na(budburst.9.))
 
@@ -68,10 +68,17 @@ prey<-filter(predy,scenario %in% c("field","historic"))
 prey$scenario[which(prey$scenario %in% c("field"))]<-"observed"
 prey$scenario[which(prey$scenario %in% c("historic"))]<-"predicted"
 
+prey$GEN.SPA[which(prey$GEN.SPA=="ACE.PEN")]<-"A. pensylvanicum"
+prey$GEN.SPA[which(prey$GEN.SPA=="ACE.RUB")]<-"A. rubrum"
+prey$GEN.SPA[which(prey$GEN.SPA=="ILE.MUC")]<-"I. mucronata"
+prey$GEN.SPA[which(prey$GEN.SPA=="ILE.VER")]<-"I. veticillata"
+prey$GEN.SPA[which(prey$GEN.SPA=="VAC.COR")]<-"V. corymbosum"
+
+
 jpeg("Plots/fieldmodcomparisions_freescale.jpeg",width = 5, height = 6, units = 'in', res=300)
-ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA,scales="free_y")+theme_bw()+geom_hline(yintercept=0)
+ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA,scales="free_y")+theme_bw()+geom_hline(yintercept=0)+ theme(strip.text = element_text(face = "italic"))
 dev.off()
 jpeg("Plots/fieldmodcomparisions.jpeg",width = 5, height = 6, units = 'in', res=300)
-ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
+ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)+ theme(strip.text = element_text(face = "italic"))
 dev.off()
 

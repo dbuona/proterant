@@ -70,16 +70,18 @@ rm(list=ls())
 options(stringsAsFactors = FALSE)
 load("expfieldcomp.Rda")
 library(xtable)
-xtable(able,caption = "Comparisons between the average amount of chilling accumulated by woody plants at Harvard Forest (Petersham, MA, USA) between 15 October and 15 April in the field (Harvard Forest) and our experimental treatments (Chamber 30 days, Chamber 60 days)  using three alternative methods for calculating chilling. See Materials and Methods for further details.", label ="tab:chillcomps") % EMW5Dec20: Harvard is mis-spelled in column name, also you should be able to remove the underscores in the column names.
+colnames(able)<-c("Estimate","Harvard Forest", "sd", "Chamber: 30 days", "Chamber: 60 days")
+xtable(able,caption = "Comparisons between the average amount of chilling accumulated by woody plants at Harvard Forest (Petersham, MA, USA) between 15 October and 15 April in the field (Harvard Forest) and our experimental treatments (Chamber 30 days, Chamber 60 days)  using three alternative methods for calculating chilling. See Materials and Methods for further details.", label ="tab:chillcomps") 
 @
+
 
 << echo=FALSE, results='asis', message=FALSE>>=
 ###summarize main effects of these models
 library(xtable)
 require(brms,quietly=TRUE)
 load("flobud.main.mods.Rda")
-xtable(fixef(mod.bb.int,probs = c(.025,.25,.75,.975)),caption = " Mean effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions on budburst of 10 woody plant species",label ="tab:modelests")
-xtable(fixef(mod.flo.int,probs =  c(.025,.25,.75,.975)),caption = " Mean effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions on flowering of 10 woody plant species",label ="tab:modelests2" )
+xtable(fixef(mod.bb.int,probs = c(.025,.25,.75,.975)),caption = " Mean ('Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions on budburst of 10 woody plant species from Bayesian hierarchical models.",label ="tab:modelests")
+xtable(fixef(mod.flo.int,probs =  c(.025,.25,.75,.975)),caption = "Mean ('Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions on flowering of 10 woody plant species from Bayesian hierarchical models.",label ="tab:modelests2" )
 
 @
 
@@ -87,7 +89,30 @@ xtable(fixef(mod.flo.int,probs =  c(.025,.25,.75,.975)),caption = " Mean effects
 << echo=FALSE, results='asis'>>=
 ###summarize main effects of these models
 load("phh.mod.output.Rda")
-xtable(phh2,caption = "Mean effects of forcing temperature on the phenology of flower and leaf buds of 10 temperate woody plany species when under long photoperiod and long chilling duration experimental treatments ",label ="tab:phh" )
+phh2[1,1]<-"A. pensylvanicum"
+phh2[2,1]<-"A. pensylvanicum"
+phh2[3,1]<-"A. rubrum"
+phh2[4,1]<-"A. rubrum"
+phh2[5,1]<-"C. peregrina"
+phh2[6,1]<-"C. peregrina"
+phh2[7,1]<-"C. cornuta"
+phh2[8,1]<-"C. cornuta"
+phh2[9,1]<-"I. mucronata"
+phh2[10,1]<-"I. mucronata"
+phh2[11,1]<-"I. verticillata"
+phh2[12,1]<-"I. verticillata"
+phh2[13,1]<-"P. pensylvanica"
+phh2[14,1]<-"P. pensylvanica"
+phh2[15,1]<-"P. virginiana"
+phh2[16,1]<-"P. virginiana"
+phh2[17,1]<-"V. corymbosum"
+phh2[18,1]<-"V. corymbosum"
+phh2[19,1]<-"V. acerifolium"
+phh2[20,1]<-"V. acerifolium"
+
+
+
+xtable(phh2,include.rownames=FALSE,align= c("l",">{\\itshape}l","l","l","l","l","l","l","l","l"),caption = "Mean('Estimate') and quantile (`Q') estimates of effects of forcing temperature and all two-way interactions on budburst and flowering of 10 woody plant species from Bayesian hierarchical models under long photoperiod and long chilling duration experimental treatments. ",label ="tab:phh" )
 
 @
 
@@ -97,7 +122,7 @@ xtable(phh2,caption = "Mean effects of forcing temperature on the phenology of f
 
  \begin{figure}[!ht]
     \centering
- \includegraphics[width=\textwidth]{..//Plots/fieldmodcomparisions.jpeg}
+ \includegraphics[width=.8\textwidth]{..//Plots/fieldmodcomparisions.jpeg}
     \caption{A comparison of the estimated mean flower-leaf sequence interphases (days between phenophase) for six woody plant species under artificial conditions designed to approximate ``average" field conditions and observed mean FLS interphases in the field at Harvard Forest in Pertersham MA. Dots represent means FLS interphase in both datasets, and lines represent the 89\% credible intervals and the full range of observations for our model predictions and Harvard Forest data respectively. Harvard Forest phenological records are from \citet{Okeefe2015}.}
     \label{fig:validate}
 \end{figure}
@@ -109,14 +134,13 @@ xtable(phh2,caption = "Mean effects of forcing temperature on the phenology of f
     \label{fig:preddy_sp}
 \end{figure}
 
-\pagebreak[4]
 
 \section*{Supplemental Methods}
 \subsection*{Simulations}
 \noident To better understand the patterns of phenological sensitivity generated by the forcing hierarchy hypothesis (FHH) and the differential sensitivity hypothesis (DSH) respectively, we simulated the underlying physiology of each hypothesis, and used these simulations to generate flower and leaf phenology under two levels of chilling, forcing, and photoperiod in a fully factorial experimental design.\\
 
 % EMW5Dec20: Citation missing
-\noindent For the FHH we assigned flowering and leafing a critical heat sum threshold (F*) above which the phenological event would take place. We did this using a growing degree model with a base temperature of 5\degree C \citep{}. For the FHH simulations, we assigned flowering an F* of 200 GDDs and leafing an F* of 400 GDDs. In this scenario we let increased both chilling and photoperiod reduce the F* value for each phenophase by 100 and 20 respectively.\\
+\noindent For the FHH we assigned flowering and leafing a critical heat sum threshold (F*) above which the phenological event would take place. We did this using a growing degree model with a base temperature of 5\degree C \citep{Fu:2014aa}. For the FHH simulations, we assigned flowering an F* of 200 GDDs and leafing an F* of 400 GDDs. In this scenario we let increased both chilling and photoperiod reduce the F* value for each phenophase by 100 and 20 respectively.\\
 
 \noindent For the DSH we assigned flowering and leafing identical F* values of 400. As in the previous scenario, we let increased chilling and photoperiod reduce the F* values, but these cues reduced the F* for leafing by 200 and 0 respectively and for flowering by 100 and 20.
 
