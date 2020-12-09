@@ -34,11 +34,14 @@
 \usepackage{xr-hyper}
 \usepackage{hyperref}
 \externaldocument{FLS_flobud}
-
-% \linenumbers
+\title{Supporting Information: Differences in flower and leaf bud environmental responses drive shifts in spring phenological sequences of temperate woody plants}
+\date{}
+\author{}
+ 
 
 \begin{document}
-
+\maketitle
+\linenumbers
 \section*{Tables}
 
 \begin{table}[!ht]

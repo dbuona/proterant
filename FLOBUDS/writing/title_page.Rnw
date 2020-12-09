@@ -1,0 +1,55 @@
+\documentclass[11pt]{article}
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{authblk}
+\usepackage{gensymb}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\usepackage[small]{caption}
+
+\setkeys{Gin}{width=0.8\textwidth}
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+
+ \topmargin -1.5cm 
+ \oddsidemargin -0.04cm 
+ \evensidemargin -0.04cm 
+ \textwidth 16.59cm
+ \textheight 21.94cm 
+ \parskip 7.2pt 
+\renewcommand{\baselinestretch}{1.6} 	
+\parindent 0pt
+\usepackage{setspace}
+\usepackage{lineno}
+
+\bibliographystyle{..//..//sub_projs/refs/styles/besjournals.bst}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+\externaldocument{SUPP_FLS_flobud}
+
+\linenumbers
+\title{Differences in flower and leaf bud environmental responses drive shifts in spring phenological sequences of temperate woody plants}
+\date{}
+\author{D.M. Buonaiuto $^{1,2,a}$, E.M. Wolkovich$^{3}$}
+\begin{document}
+\maketitle
+\noindent \emph{Author affiliations:}\\
+\noindent $^1$Arnold Arboretum of Harvard University, Boston, Massachusetts, USA. ORCID: 0000-0003-4022-2591\\
+$^2$Department of Organismic and Evolutionary Biology, Harvard University, Cambridge, Massachusetts, USA \\
+$^3$Forest \& Conservation Sciences, Faculty of Forestry, University of British Columbia, Vancouver, British Columbia, Canada\\
+$^a$Corresponding author: 617.823.0687; dbuonaiuto@g.harvard.edu\\
+
+\textbf{Acknowledgements:} We thank C. de Keyzer for generously helping to collect and prepare plant materials for the experiment. We also thank R. Lee for help with monitoring and maintaining the experiment.\\
+
+\textbf{Author Contributions:} DMB and EMW conceived of the experiment; DMB collected the data and performed the statistical analyses, DMB and EMW wrote the manuscript. All authors contributed critically to the drafts and gave final approval for publication.\\
+
+\textbf{Data Availability Statement:} Data will be available on KNB (https://knb.ecoinformatics.org/) upon publication. All modeling code will be made available upon request.
+
+
+
+\end{document}
