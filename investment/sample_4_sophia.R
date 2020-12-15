@@ -18,6 +18,11 @@ set.seed(100)
 ##start with georeferences
 d.geo<-filter(d,!is.na(lat))
 
+table(d.geo$specificEpithet)
+table(d$specificEpithet) 
+## FYI using no locaity specimens would
+#increases subcordata by 59
+#geniculata by 67 #texana by 25 #alleghaniensis by 132
 
 nested_prun <- d.geo %>%
   group_by(specificEpithet) %>%   # prep for work by Species
