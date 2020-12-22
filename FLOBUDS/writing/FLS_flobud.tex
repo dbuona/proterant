@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
 % maxwidth is the original width if it is less than linewidth
 % otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
@@ -84,10 +84,17 @@
 
 \title{Differences in flower and leaf bud environmental responses drive shifts in spring phenological sequences of temperate woody plants}
 \date{}
-\author{}
+\author{D.M. Buonaiuto $^{1,2,a}$, E.M. Wolkovich$^{3}$}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
-
+\begin{document}
+\maketitle
+\noindent \emph{Author affiliations:}\\
+\noindent $^1$Arnold Arboretum of Harvard University, Boston, Massachusetts, USA. ORCID: 0000-0003-4022-2591\\
+$^2$Department of Organismic and Evolutionary Biology, Harvard University, Cambridge, Massachusetts, USA \\
+$^3$Forest \& Conservation Sciences, Faculty of Forestry, University of British Columbia, Vancouver, British Columbia, Canada\\
+$^a$Corresponding author: 617.823.0687; dbuonaiuto@g.harvard.edu\\
+\pagebreak
 
 
 \maketitle
@@ -132,7 +139,7 @@ is important, as they have substantially different implications regarding the po
 
 \subsection*{Growth chamber study}
 
-\noindent We sampled plant material from Harvard Forest in Petersham, MA, USA (42.5314\degree N, 72.1900\degree W) on 25 October 2017, immediately after most plants in the area entered dormancy but before they could accumulate significant chilling in the field. We collected branch cuttings from 7-13 individuals of 12 woody plant species (4-12 cuttings per individual for a total of 48-56 per species), consisting of a mix of deciduous shrubs, understory and canopy trees commonly found in mesic hardwood forests of the eastern United States. We selected species displaying variation of the three major FLS patterns; species for which flowers appear before leaves (flowering-first; \textit{Acer rubrum}, \textit{Betula alleghaniensis}, \textit{Comptonia peregrina}, and \textit{Corylus cornuta}), species for which flowers appear with their leaves (concurrent; \textit{Acer pensylvanicum}, \textit{Acer saccharum}, \textit{Ilex mucronata}, \textit{Prunus pensylvanica}, \textit{Vaccinium corymbosum}), and species for which flowers appear after leaf development (leafing-first; \textit{Ilex verticillata}, \textit{Prunus virginiana}, \textit{Viburnum acerifolium}), These species also vary in other important functional traits including pollination syndrome, bud type, and growth habit (see tab. \ref{tab:splist} for details and full species list). 
+\noindent We sampled plant material from Harvard Forest in Petersham, MA, USA (42.5314\degree N, 72.1900\degree W) on 25 October 2017, immediately after most plants in the area entered dormancy but before they could accumulate significant chilling in the field. We collected branch cuttings from 7-13 individuals of 12 woody plant species (4-12 cuttings per individual for a total of 48-56 per species), consisting of a mix of deciduous shrubs, understory and canopy trees commonly found in mesic hardwood forests of the eastern United States. The use of branch cuttings to study woody plant phenology in artificial environments is common \citep{Ettinger:2020aa}, and these methods have been shown to match whole-plant phenological patterns  \citep{Vitasse:2014aa,Primack2015}. We selected species displaying variation of the three major FLS patterns; species for which flowers appear before leaves (flowering-first; \textit{Acer rubrum}, \textit{Betula alleghaniensis}, \textit{Comptonia peregrina}, and \textit{Corylus cornuta}), species for which flowers appear with their leaves (concurrent; \textit{Acer pensylvanicum}, \textit{Acer saccharum}, \textit{Ilex mucronata}, \textit{Prunus pensylvanica}, \textit{Vaccinium corymbosum}), and species for which flowers appear after leaf development (leafing-first; \textit{Ilex verticillata}, \textit{Prunus virginiana}, \textit{Viburnum acerifolium}), These species also vary in other important functional traits including pollination syndrome, bud type, and growth habit (see tab. \ref{tab:splist} for details and full species list). 
 
 We transported all cuttings to the Arnold Arboretum in Boston, MA (USA) where they were re-cut in water to prevent callousing and cavitation and placed in 500 ml Erlenmeyer flasks with distilled water.\\ 
 
@@ -140,7 +147,7 @@ We transported all cuttings to the Arnold Arboretum in Boston, MA (USA) where th
 and first flower open (BBCH 60). At the conclusion of this period we assessed all individuals that did not undergo budburst and excluded 56 dead twigs from our analyses. 
 
 \subsection*{Data analysis}
-\noindent To assess the phenological sensitivity of each phase, we fit mixed-effects hierarchical models with chilling, forcing, photoperiod and all two-way interactions as the fixed effects and species as a grouping factor on both the slopes and the intercepts. We chose a Bayesian hierarchical approach in order to identify systematic trends across species' responses while accounting for sample size, variance, and the unique effect of each species. We also used z-scoring to standardized the units of each environmental predictor to allow for appropriate comparisons between them \citep{Gelman2007}. We modeled the effects of environmental parameters on flower opening and leaf budburst separately. We also fit a model with FLS interphase (day of budburst - day of flowering) as a response variable to compare these estimates with field observations. Two species, \textit{Betula allegheniensis} and \textit{Acer saccharum}, produced no flowers in our trial, so we excluded them from our analysis. In total, our analyses included 464 twigs from 10 species. \\ 
+\noindent To assess the phenological sensitivity of each phase, we fit mixed-effects hierarchical models with chilling, forcing, photoperiod and all two-way interactions as the fixed effects and species as a grouping factor on both the slopes and the intercepts. We chose a Bayesian hierarchical approach in order to identify systematic trends across species' responses while accounting for sample size, variance, and the unique effect of each species. We also used z-scoring to standardized the units of each environmental predictor to allow for appropriate comparisons between them \citep{Gelman2007}. We modeled the effects of environmental parameters on flower opening and leaf budburst separately. We also fit a model with FLS interphase (day of budburst - day of flowering) as a response variable to compare these estimates with field observations. Two species, \textit{Betula allegheniensis} and \textit{Acer saccharum}, produced no flowers in our trial, likely because flowering branches were out of reach during our field sampling, so we excluded them from our analysis. In total, our analyses included 464 twigs from 10 species. \\ 
 
 The models we fit appear below:\\
 
@@ -212,6 +219,12 @@ Because these dynamics are more extreme than most studies suggest \citep{Thacker
 \noindent The different FLS response patterns we observed across species may correlate with suite of interrelated anatomical, physiological and phenological traits. The species that maintained FLS structure across our climate change scenarios generally shared a strongly leafing-first FLS, with a fairly long FLS interphase (Fig \ref{fig:preddy}). These species tended to have mixed buds (leaf and flower primordia together in one bud) so there may be strong physical constraints on their FLSs. By contrast, the species that were most sensitive to FLS shifts were monoecious, flowering-first, wind-pollinated shrubs (Fig \ref{fig:preddy}, Fig \ref{fig:preddy_sp}). This result supports other evidence that the reproductive phenology of wind-pollinated species may be more sensitive to climate change compared to biotically pollinated taxa \citep{Ziello:2012aa}. Given the hypothesized function of FLSs in wind-pollinated species, the significant reductions in FLS interphases we observed suggest that these species, and flowering-first, wind-pollinated taxa in general, may face particular risk for reproductive performance reductions.\\
 
 \noindent While much of the public interest around phenology and pollination in the context of global change has centered around trophic mismatches between pollinator and floral phenology \citep{Memmott2007}, which is of little relevance to abiotically pollinated taxa, our study identified the possibility that the effects of FLS shifts with climate change may be particularly important for wind-pollinated woody plants. The direction and magnitude of FLS shifts we observed in these taxa, coupled with the hypothesized function of a flowering-first FLS in wind-pollinated species, suggests that FLS variation in this functional group should be explored in greater detail in the future. More research is needed to identify species' traits that may correlate with the potential for FLS shifts, but flowering-first, wind-pollinated species may be particular sensitive to FLS shifts. Our results suggest that species in this functional group should be considered a research priority for the study of spring phenological sequences in deciduous woody plants.\\ 
+
+\section*{Acknowledgements:} We thank C. de Keyzer for generously helping to collect and prepare plant materials for the experiment. We also thank R. Lee for help with monitoring and maintaining the experiment.\\
+
+\section*{Author Contributions:} DMB and EMW conceived of the experiment; DMB collected the data and performed the statistical analyses, DMB and EMW wrote the manuscript. All authors contributed critically to the drafts and gave final approval for publication.\\
+
+\section*{Data Availability Statement:} Data will be available on KNB (https://knb.ecoinformatics.org/) upon publication. All modeling code will be made available upon request.
 
 
 \bibliography{..//..//sub_projs/refs/hyst_outline.bib} 
