@@ -7,6 +7,10 @@ library(ggplot2)
 library(brms)
 library(tibble)
 library(lubridate)
+library(stringr)
+library("ncdf4")
+library(raster)
+
 
 setwd("~/Documents/git/proterant/investment/input")
 load("PrunusFLSs.Rda")
@@ -64,8 +68,11 @@ d.flo$eventDate2<-as.Date(d.flo$eventDate,format =  "%Y-%m-%d")
 d.flo$doy<-yday(d.flo$eventDate2)
 
 d.flo$doy.cent<-d.flo$doy-mean(d.flo$doy,na.rm=TRUE)
-
+d.flo<-filter(d.flo,!is.na(doy.cent))
 ### run model
+##rerun for loo
+mod1<-brm(bbch.v~(1|specificEpithet),data=d.flo)
+
 mod2<-brm(bbch.v~doy.cent+(doy.cent|specificEpithet),data=d.flo)
 mod2.out<-extract_coefsF(mod2)
 mod2.out<-dplyr::select(mod2.out,1:7)
@@ -80,10 +87,11 @@ mod2a.out<-dplyr::select(mod2a.out,1:7)
 colnames(mod2a.out)<-c("species","Estimate","SE","Q2.5","Q25","Q75","Q97.5")
 mod2a.out$species <- factor(mod2a.out$species, levels = mod2a.out$species[order(mod2a.out$Estimate)])
 
+mod1 <- add_criterion(mod1, "loo",reloo=TRUE)
 mod2 <- add_criterion(mod2, "loo",reloo=TRUE)
 mod2a <- add_criterion(mod2a, "loo",reloo=TRUE)
 
-loo_compare(mod2,mod2a) ### pooling on intercept model is better
+loo_compare(mod1,mod2,mod2a) ### pooling on intercept model is better
 jpeg("..//Plots/seeminglybestplot.jpeg")
 ggplot(mod2a.out,aes(species,Estimate))+geom_point()+
   geom_errorbar(aes(ymin=Q2.5,ymax=Q97.5),width=0,linetype="dotted")+
@@ -330,3 +338,59 @@ mod1a <- add_criterion(mod1a, "loo")
 
 
 loo_compare(mod1,mod1a)
+
+##compare to pdsi estiamtes
+palmer.b <- brick("..//lbda-v2_kddm_pmdi_2017.nc")
+
+lonpoints<-d.flo$lon # make vector of prunus coordinates
+latpoints<-d.flo$lat #
+extract.pts <- cbind(lonpoints,latpoints)
+
+mean.prunus <-calc(palmer.b, fun = mean,na.rm=TRUE) #average palmer drought index acrosss time
+ext<-raster::extract(mean.prunus,extract.pts,method="simple")
+
+d.flo$pdsi<-ext
+
+mod.pdsi<-brm(pdsi~(1|specificEpithet),data=d.flo)
+
+mod.pdsi.out<-extract_coefsF(mod.pdsi)
+
+colnames(mod.pdsi.out)<-c("species","Estimate","SE","Q2.5","Q25","Q75","Q97.5")
+
+jpeg("..//Plots/pdsi.jpeg",width = 10,height=8,units = 'in',res=200)
+ggplot()+
+  geom_point(data=mod2a.out,aes(species,Estimate),color="black")+
+  geom_errorbar(data=mod2a.out,aes(x=species,ymin=Q2.5,ymax=Q97.5),width=0,linetype="dotted",color="black")+
+  geom_errorbar(data=mod2a.out,aes(x=species,ymin=Q25,ymax=Q75),width=0,color="black")+ggthemes::theme_clean()+
+  scale_y_continuous( breaks =  c(9,11,15,17,19), sec.axis=sec_axis(~.-12, name="PDSI"))+
+  geom_point(data=mod.pdsi.out,aes(species,Estimate*10+12),color="firebrick")+
+  geom_errorbar(data=mod.pdsi.out,aes(x=species,ymin=Q2.5*10+12,ymax=Q97.5*10+12),width=0,linetype="dotted",color="firebrick")+
+  geom_errorbar(data=mod.pdsi.out,aes(x=species,ymin=Q25*10+12,ymax=Q75*10+12),width=0,color="firebrick")+ggthemes::theme_clean()+
+  theme(axis.text.x = element_text(angle = 300,hjust=-0.1))
+dev.off()
+
+d.flotax<-d.flo
+
+d.flotax$specificEpithet<-ifelse(d.flotax$specificEpithet=="munsoniana","rivularis",d.flotax$specificEpithet)
+unique(d.flotax$specificEpithet)
+d.flotax$specificEpithet<-ifelse(d.flotax$specificEpithet=="alleghaniensis","umbellata",d.flotax$specificEpithet)
+
+mod2atax<-brm(bbch.v~doy.cent+(1|specificEpithet),data=d.flotax)
+mod2atax.out<-extract_coefsF(mod2atax)
+mod2atax.out<-dplyr::select(mod2atax.out,1:7)
+
+colnames(mod2atax.out)<-c("species","Estimate","SE","Q2.5","Q25","Q75","Q97.5")
+mod2atax.out$species <- factor(mod2atax.out$species, levels = mod2atax.out$species[order(mod2atax.out$Estimate)])
+
+
+
+## pooling on intercept model is better
+jpeg("..//Plots/seeminglybestplottaxa.jpeg")
+ggplot(mod2atax.out,aes(species,Estimate))+geom_point()+
+  geom_errorbar(aes(ymin=Q2.5,ymax=Q97.5),width=0,linetype="dotted")+
+  geom_errorbar(aes(ymin=Q25,ymax=Q75),width=0)+ggthemes::theme_clean()+
+  scale_y_continuous(limits = c(0, 19), breaks =  c(9,11,15,17,19))+ggtitle("Control for date, limited taxa")+
+  theme(axis.text.x = element_text(angle = 300,hjust=-0.1))
+dev.off()
+
+
