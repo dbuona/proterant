@@ -67,5 +67,5 @@ lm(fls.pic~1)
 
 #instread just calculate a phyosignal
 rownames(final.df)<-final.df$taxa
-phylosig(pruned.by.anthy,final.df$meanFLS,method="lambda",nsim = 100) ### 0.1r
+phylosig(pruned.by.anthy,final.df$meanFLS,method="lambda",nsim = 100, test=TRUE) ### 0.1r
 
