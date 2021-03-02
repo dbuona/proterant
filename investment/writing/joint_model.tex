@@ -1,0 +1,40 @@
+ \documentclass[11pt]{article}
+\usepackage[top=1.00in, bottom=1.0in, left=1.1in, right=1.1in]{geometry}
+\renewcommand{\baselinestretch}{1.1}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+
+\def\labelitemi{--}
+\parindent=0pt
+
+\begin{document}
+
+\renewcommand{\refname}{\CHead{}}
+\subsection*{The model I think I want}
+
+\begin{align*}
+
+$$\hat{y}_{fls, i} &= \alpha_{fls.grand} + \alpha_{fls, sp[i]}}$$
+$$\alpha_{fls, sp} &\sim N(0, \sigma_{\alpha, fls})$$ 
+$$y_{fls} & \sim N(\hat{y}_{fls},\sigma^2_{fls, y})$$ 
+
+
+
+$$\hat{y}_{trait, i} &= \alpha_{trait.grand} + \alpha_{trait, sp[i]}}$$
+$$\alpha_{trait, sp} & \sim N(0, \sigma_{\alpha, trait})$$
+$$y_{trait}& \sim N(\hat{y}_{trait},\sigma^2_{trait, y})$$
+\end{align*}
+
+And put them together:\\
+
+
+$$ N(\hat{y}_{trait},\sigma^2_{trait, y}) &\sim N(\hat{y}_{fls},\sigma^2_{fls, y}) $$
+
+
+or maybe simply...\\
+
+ $$y_{trait}& \sim y_{fls}$$
+
+
+\end{document}

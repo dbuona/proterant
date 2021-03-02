@@ -1,0 +1,36 @@
+\documentclass{article}
+
+\linenumbers
+\title{Caution to the wind: global change and reproductive uncertainty for wind-pollinated plants}\\
+
+\date{}
+\author{D.M. Buonaiuto $^{1,2,a}$}
+\begin{document}
+\noindent Biotic pollination is one of the many ecological processes being disrupted by global change \citep{Gerard:2020aa} and the study of pollinator services has become a high priority topic in global change research \citep{Dicks975,Kremen:2000aa}. Yet, often left out from the scientific conversations about global change and pollination are the estimated 10-20\% of terrestrial plants that are pollinated by the wind \citep{Ollerton:2011aa,Friedman:2009aa,Ackerman:2000aa}. While this may be a small percentage taxonomically, wind-pollinated species dominate the vast temperate and boreal regions of the globe \citep{Regal:1982aa} and are critical for human livelihood and ecological well being.\\
+
+\noindent While pollinators are declining with global change, the wind remains. %Despite predicted changes to wind patterns associated with climate change \citep{IPCC2013}, 
+It is therefore tempting to think that wind-pollinated taxa might be immune to the uncertain pollination future faced by their biotically-pollinated relatives. In fact, it is likely that wind-pollination in angiosperms evolved from biotically-pollinated ancestors for reproductive assurance in times when pollinator services were unreliable \citep{Friedman:2009aa}. Some have even suggested as pollinator services continue to decline with global change, wind-pollinated species may come to dominate many ecosystems \citep{Bond:1995aa,Hoiss:2013aa}.\\
+
+\noindent However, the continued reproductive success of wind-pollinated species in an era of global climate change should not be taken for granted. While many abiotic and biotic driver of global change may indeed increase the likelihood of pollination succcess for wind-pollinated taxa, there are several aspects of the pollination biology of wind-pollinated species that may be vulnerable to disruptions from global change. In the section below we highlight several abiotic and biotic impact of global change and discuss there potential to alter the pollination biology of wind-pollinated taxa.
+
+abiotic factirs
+Both increased atmospheric carbon dioxide concentrations \citep{} and warming spring temperatures \citep{} are predicted to drive increases in pollen production for wind-pollinated taxa. These impacts have already been observed through increases in the duration and intesity of the airbourne pollen season \citep{}  and models suggest thes increases will contrinue as the climate continues to warm. 
+
+Climate models also predict that continued climate warming will impact the direction and speed of surface winds. 
+Together these 
+
+Increased warming, CO2 concentration should drive increases in pollen production. This has been seen by the increase in duration and sevrity of the pollen season, and could imrpove pollnation success. But wind pollen only remain vaible for short time, and as such successful wind pollination relies on high floral synchrony. There is evidence that synchrony is being disrupted with climate change, 
+
+\subsection{Pollen transport and capture}
+\subsubsection*{Abiotic factors}
+Increased wind speeds could increase dispersal distances. This is only adaptive if in the same direction as cliamte change (polward and upwards).\\
+Altered precipitation regimes could increase rain interception.\\
+\subsubsection*{biotic facotors}
+Synchrony
+FLSs
+Distrubance invasive species
+
+{Biotic factors}
+
+
+\end{document}

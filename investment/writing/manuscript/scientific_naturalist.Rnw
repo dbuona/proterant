@@ -1,0 +1,53 @@
+\documentclass[11pt]{article}
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{authblk}
+\usepackage{gensymb}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\usepackage[small]{caption}
+
+\setkeys{Gin}{width=0.8\textwidth}
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+
+\topmargin -1.5cm 
+\oddsidemargin -0.04cm 
+\evensidemargin -0.04cm 
+\textwidth 16.59cm
+\textheight 21.94cm 
+\parskip 7.2pt 
+\renewcommand{\baselinestretch}{1} 	
+\parindent 0pt
+\usepackage{setspace}
+\usepackage{lineno}
+#\bibliographystyle{..//..//refs/bibstyles/amnat.bst}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+
+
+\title{Evolutionary and ecological drivers of  \text{Prunus}.
+}
+ In 1914 the yong botanist Ames successful mapped the complete  geographic range distrubution of the America beach plum from a low flying plane \citep{}. What made this endevor successful was a unique characteristic of the floral phenology of this species; unlike most woody plants that leafout before their flowers open, the profusion of white flowers Prunus maritima appear before their leaves, making them an easy target for fly-by botanists. This flowering-first flower-leaf sequence (FLS), known as hysteranthy, proteranthy or precocious flowering \citep{} is signature of many other species in \textit{Prunus}, a cosmopoliton genus of ~ 200 species of trees and shrubs. Yet flowering-first is is not ubiquitous in the genus, a similiar arial botany attempt with even closely related and co-occuring P. serotina or P. pensylvanica would have surely failed as theirs leafing-first FLSs would have obscured its flowers.
+
+The significance of this variation in FLS among even closely related species is a tradeoff. The risks, the rewards are less clear. Severl recent analyses 
+ 
+This 
+ 
+ However, it is likely that a similar attempt to acertain the range of even a closely related Prunus species, who have failed, as 
+ 
+ But this flowering-first flower-leaf sequence (FLS) comes with a cost; requiring this initial reproductive investment at a time of the year when carbon reserves at at their lowest and the risk of damage from last season frost is highest.
+ 
+Yet despite these risks, the flowering-first FLS is comparatvively common in temperate regions, and several analyses suggest that there are adaptive benefits 
+
+\begin{document}
+
+
+
+
+\end{document}

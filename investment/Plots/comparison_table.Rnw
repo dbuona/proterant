@@ -1,0 +1,22 @@
+\documentclass{article}
+
+\begin{document}
+
+<<echo=FALSE ,results="asis",message=FALSE,warning=FALSE>>=
+### Explore the prunus data
+rm(list=ls()) 
+options(stringsAsFactors = FALSE)
+graphics.off()
+library(dplyr)
+library(ggplot2)
+library(xtable)
+
+setwd("~/Documents/git/proterant/investment/input")
+lit<-read.csv("lit_comparisons.csv")
+tab<-xtable(lit)
+print(tab)
+@
+
+
+
+\end{document}
