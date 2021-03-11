@@ -26,11 +26,19 @@ spp <- unique(dat$GEN.SPA)
 
 modelhere <-mod.bb.int
 modelhere2<-mod.flo.int
-leg.txt <- c("flower","leaf")
+modelhere3<-mod.lo.int
+leg.txt <- c("flowering","budburst","leafout")
 source("exp_muplot_brms.R")
 source("prep4plot.R")
 
 
 
-muplotfx(modelhere,modelhere2, "budburstvsflowering",8, 8, c(0,6), c(-50, 30) , 35, 3.3,35,4)
+muplotfx(modelhere,modelhere2, modelhere3,"all3phases",8, 8, c(0,6), c(-50, 30) , 35, 3.3,35,4)
 dev.off()
+
+muplotfx2(modelhere,modelhere2, modelhere3,"goo",8, 8, c(0,6), c(-25, 30) , 35, 3.3,35,4)
+dev.off()
+
+#### differences
+
+

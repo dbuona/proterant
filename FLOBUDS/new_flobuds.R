@@ -18,7 +18,7 @@ library("tidybayes")
 
 #options(device = "quartz")
 setwd("~/Documents/git/proterant/FLOBUDS")
-#load("new_flobud.mods.Rda")
+load("writing/flobud.main.mods.Rda")
 dat<-read.csv("flobudsdata.use.csv",header = TRUE)
 
 dat$Light<-ifelse(dat$Light=="S",0,1)
@@ -45,10 +45,28 @@ mod.flo.int<-brm(flo_day~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+
                 warmup = 3000)   
 
 
+
+
+lo.int<-get_prior(leaf_day.15.~Chill+Light+Force+Chill:Light+Chill:Force+Force:Light,data = dat, family = gaussian())
+
+mod.lo.int<-brm(leaf_day.15. ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(Chill+Light+Force+Chill:Light+Chill:Force+Force:Light|GEN.SPA),
+                data = dat, family = gaussian(),
+                iter= 4000,
+                warmup = 3000)   
+
+
 save.image("flobud.main.mods.Rda")
 
 summary(mod.flo.int)
 summary(mod.bb.int)
+summary(mod.lo.int)
+fixef(mod.lo.int)
+fixef(mod.flo.int)
+
+dat %>% dplyr::group_by(GEN.SPA) %>% dplyr::summarise(meandvr=mean(leaf_day.15.-budburst.9.,na.rm=TRUE))
+
+sd(dat$leaf_day.15.-dat$budburst.9.,na.rm=TRUE)
+
 bayestestR::effective_sample(mod.flo.int,effects = c("all"))
 bayestestR::effective_sample(mod.bb.int)
 
