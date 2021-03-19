@@ -226,6 +226,7 @@ e<-thresh2 %>%
   ggtitle("Differential sensitivity-threshholds" )+ylab("cue")+xlab("sensitivity")
 
 save.image("simulations.Rda")
+load("simulations.Rda")
 png("Plots/Flobuds_manuscript_figs/simulations.png",width = 5,height = 7,units = "in",res=300)
-ggpubr::ggarrange(a,b,c,ncol=1,common.legend = TRUE,legend="bottom",labels = c("a)","b)","c)" ))
+ggpubr::ggarrange(a,c,b,ncol=1,common.legend = TRUE,legend="bottom",labels = c("a)","b)","c)" ))
 dev.off()

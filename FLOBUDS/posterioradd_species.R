@@ -44,7 +44,7 @@ flooby$category[which(flooby$GEN.SPA %in% c("COR.COR","COM.PER","ACE.RUB"))]<-"f
 flooby$category[which(flooby$GEN.SPA %in% c("VAC.COR","ILE.MUC","ACE.PEN"))]<-"concurrent"
 flooby$category[which(flooby$GEN.SPA %in% c("PRU.PEN","ILE.VER","PRU.VIR","VIB.ACE"))]<-"leafing-first"
 
-flooby<-flooby%>% group_by(category,scenario)%>%
+flooby<-flooby%>% group_by(category,scenario,GEN.SPA)%>%
   mean_qi(dof,.width=0.5)
 
 
@@ -84,13 +84,13 @@ looby$category[which(looby$GEN.SPA %in% c("COR.COR","COM.PER","ACE.RUB"))]<-"flo
 looby$category[which(looby$GEN.SPA %in% c("VAC.COR","ILE.MUC","ACE.PEN"))]<-"concurrent"
 looby$category[which(looby$GEN.SPA %in% c("PRU.PEN","ILE.VER","PRU.VIR","VIB.ACE"))]<-"leafing-first"
 
-looby<-looby%>% group_by(category,scenario)%>%
+looby<-looby%>% group_by(category,scenario,GEN.SPA)%>%
   mean_qi(dof,.width=0.5)
 
 
 #######
 bboober<-mod.bb.int %>%
-spread_draws(b_Intercept,b_Force,b_Chill,b_Light,`b_Chill:Light`,`b_Chill:Force`,`b_Light:Force`)
+  spread_draws(b_Intercept,b_Force,b_Chill,b_Light,`b_Chill:Light`,`b_Chill:Force`,`b_Light:Force`)
 
 bboober2<-mod.bb.int%>%
   spread_draws(r_GEN.SPA[GEN.SPA,term])%>%
@@ -123,7 +123,7 @@ bbooby$category[which(bbooby$GEN.SPA %in% c("COR.COR","COM.PER","ACE.RUB"))]<-"f
 bbooby$category[which(bbooby$GEN.SPA %in% c("VAC.COR","ILE.MUC","ACE.PEN"))]<-"concurrent"
 bbooby$category[which(bbooby$GEN.SPA %in% c("PRU.PEN","ILE.VER","PRU.VIR","VIB.ACE"))]<-"leafing-first"
 
-bbooby<-bbooby%>% group_by(category,scenario)%>%
+bbooby<-bbooby%>% group_by(category,scenario,GEN.SPA)%>%
   mean_qi(dof,.width=0.5)
 #ggplot(flooby,aes(scenario,dof))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper))+facet_wrap(~category)
 
@@ -147,123 +147,119 @@ posty$scenario3[which(posty$scenario2=="more_chill")]<-"upup"
 
 
 
-setEPS()
-postscript("Plots/postergroups.eps",width = 8, height = 4)
-
-pd=position_dodge(width=0.1)
-posty %>%
-  arrange(dof) %>%
-  mutate(category = factor(category, levels=c("hyst","syn","ser"))) %>%
-  ggplot(aes(category,dof,color=phase,shape=phase,fill=phase))+geom_point(size=2.5,position=pd)+geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0)+
-  ggthemes::theme_few(base_size = 10)+
-  facet_grid(. ~ scenario2, scales="free_x",switch="x",drop = TRUE)+
-  theme(
-    #axis.ticks.x=element_blank(),
-    strip.placement = "bottom",
-    strip.background = element_rect(color="black"),
-    panel.spacing.x=unit(0,"cm"))+
-  ylim(5,100)+
-  ylab("Day of phenological event")+
-  scale_color_manual(values=c("darkorchid3","darkgreen"))+
-  scale_shape_manual(values=c(15,19,17))+
-  scale_x_discrete(labels =c("FL","F=L","LF"))
-dev.off()  
 
 #setEPS()
 #postscript("Plots/postergroups2.eps",width = 8, height = 4)
 
 pd=position_dodge(width=1.5)
-goo<-posty %>%
+one<-posty %>%
   arrange(dof) %>%
   mutate(category = factor(category, levels=c("flowering-first","concurrent","leafing-first"))) %>%
-  ggplot(aes(0,dof,color=category,shape=phase,group =category))+
-  geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0.4,alpha=0.5)+
-  geom_point(size=2.5,position=pd)+
-  ggthemes::theme_few(base_size = 11)+
-  facet_wrap( ~ scenario3,drop=TRUE, scales="free_x",switch="x",ncol=4,
-              labeller = as_labeller(c(`base` = "Baseline \n(C=6w,F=21°C)",`forcing` = "+Forcing \n(C=6w,F=+6°C)", `updown` = "+Force/-Chill \n(C=4w,F=+6°C)",`upup` = "+Force/+Chill \n(C=8w,F=+6°C)")))+
-  theme(axis.title.x =element_blank(),
-    strip.placement = "top",
-    strip.background = element_rect(color="black"),
-    panel.spacing.x=unit(0,"cm"),
-    panel.spacing.y=unit(0,"cm"))+
-  ylim(5,100)+
-  ylab("Day of phenological event")+
-  scale_color_manual(values = c("#fc8d62","#8da0cb","#66c2a5"))+
+  ggplot(aes(scenario3,dof,shape=phase,color=phase))+
+  geom_errorbar(aes(ymin=.lower,ymax=.upper),width=0.0)+
+  geom_point(size=2.5)+
+  ggthemes::theme_few()+
+  facet_wrap( ~ GEN.SPA,nrow=1,switch = "x")+
+  theme(strip.background = element_blank(),
+  strip.text.x = element_blank())+
+  scale_color_manual(values = c("lightgreen","purple","darkgreen"))+
   scale_shape_manual(values=c(17,19,15))+
-  scale_x_discrete(labels =c("FL","F=L","LF"))+
+  scale_x_discrete(labels=c("Baseline",
+                            "+Forcing",
+                            "+Force/-Chill",
+                            "+Force/+Chill"))+
+  theme(axis.title.x =element_blank(),
+        axis.text.x = element_text(angle=270,vjust=0),
+        #axis.text.x = element_blank(),
+        #axis.ticks.x = element_blank(),
+        strip.placement = "bottom",
+        panel.spacing.x=unit(0,"cm"),
+        panel.spacing.y=unit(0,"cm"))+
+  ylim(0,110)+
+  ylab("Day of phenological event")+
   theme(legend.position = "bottom")
+ 
   
 
 
+one
 dev.off()  
 
 posto<-spread(posty,phase,dof)
 
-
-posto2<-posto%>%group_by(category,scenario3) %>%summarise(interphase=mean(leafout,na.rm=TRUE)-mean(flowering,na.rm=TRUE))
-posto3<-posto%>%group_by(category,scenario3) %>%summarise(interphase=mean(budburst,na.rm=TRUE)-mean(flowering,na.rm=TRUE))
+posto2<-posto%>%group_by(GEN.SPA,scenario3) %>%summarise(interphase=mean(leafout,na.rm=TRUE)-mean(flowering,na.rm=TRUE))
+posto3<-posto%>%group_by(GEN.SPA,scenario3) %>%summarise(interphase=mean(budburst,na.rm=TRUE)-mean(flowering,na.rm=TRUE))
 
 loerror<-filter(posto,!is.na(leafout))
 
 ferror<-filter(posto,!is.na(flowering))
 bberror<-filter(posto,!is.na(budburst))
+
+
+
+posto2$interphase2<-abs(posto2$interphase)
+posto3$interphase2<-abs(posto3$interphase)
+
+posto2$Hyst<-ifelse(posto2$interphase>=0,"Flower-first", "Vegetative-First ")
+posto3$Hyst<-ifelse(posto3$interphase>=0,"Flower-first", "Vegetative-First ")
+
 posto2$CI<-abs(loerror$.lower-ferror$.upper)*.5
 posto3$CI<-abs(bberror$.lower-ferror$.upper)*.5
 
-goo2<-posto2 %>%
+two<-posto2 %>%
   arrange(interphase) %>%
-  mutate(category = factor(category, levels=c("flowering-first","concurrent","leafing-first"))) %>%
-  ggplot()+geom_point(aes(0,y=interphase,color=category),position=pd,size=2,shape=8)+
-  geom_errorbar(aes(0,ymin=interphase-CI,ymax=interphase+CI,color=category),position=pd,width=0)+
-  #geom_text(aes(0,y=interphase+2,color=category,label=round(interphase,digits=1)),position=pd,size=3)+
-  ggthemes::theme_few(base_size = 10)+facet_wrap( ~ scenario3,drop=TRUE,switch="x",ncol=4)+
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )+
-  theme(axis.title.x =element_blank(),
-        strip.placement = "bottom",
-        strip.background = element_rect(color="black"),
-        panel.spacing.x=unit(0,"cm"),
-        panel.spacing.y=unit(0,"cm"))+
+  ggplot()+geom_point(aes(scenario3,y=interphase),position=pd,size=2,shape=8)+
+  geom_errorbar(aes(scenario3,ymin=interphase-CI,ymax=interphase+CI),width=0)+
+  #geom_text(aes(scenario3,y=interphase2+CI+3,label=paste(round(interphase2,digits=0),"(",round(CI,digits=0),")"),color=Hyst),position=pd,size=3)+
+  ggthemes::theme_few(base_size = 10)+facet_wrap( ~ GEN.SPA,nrow=1,scales="free_y")+
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank())+
   ylab("Flowering-leafout \ninterphase (days)")+
-  
-  scale_color_manual(values = c("#fc8d62","#8da0cb","#66c2a5"))+
-  scale_shape_manual(values=c(17,19,15))+
-  scale_x_discrete(labels =c("FL","F=L","LF"))+
-  theme(legend.position ="none")+theme(legend.position = "none")+
-  geom_hline(yintercept=0,linetype="dotted")
-goo2  
-
-
-goo3<-posto3 %>%
-  arrange(interphase) %>%
-  mutate(category = factor(category, levels=c("flowering-first","concurrent","leafing-first"))) %>%
-  ggplot()+geom_point(aes(0,y=interphase,color=category),shape=8,position=pd,size=2)+
-  geom_errorbar(aes(0,ymin=interphase-CI,ymax=interphase+CI,color=category),position=pd,width=0)+
-  #geom_text(aes(0,y=interphase+2,color=category,label=round(interphase,digits=1)),position=pd,size=3)+
-  ggthemes::theme_few(base_size = 10)+facet_wrap( ~ scenario3,drop=TRUE,switch="x",ncol=4)+
-  theme(
-    strip.background = element_blank(),
-    strip.text.x = element_blank()
-  )+
+ scale_color_manual(values=c("black","red"))+
+  scale_x_discrete(labels=c("Baseline",
+                            "+Forcing",
+                            "+Force/-Chill",
+                            "+Force/+Chill"))+
   theme(axis.title.x =element_blank(),
-        strip.placement = "bottom",
-        strip.background = element_rect(color="black"),
-        panel.spacing.x=unit(0,"cm"),
-        panel.spacing.y=unit(0,"cm"))+
-  ylab("Flowering-budburst \ninterphase (days)")+
-  scale_color_manual(values = c("#fc8d62","#8da0cb","#66c2a5"))+
-  scale_shape_manual(values=c(17,19,15))+
-  scale_x_discrete(labels =c("FL","F=L","LF"))+
-  theme(legend.position ="none")+theme(legend.position = "none")+
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank())+theme(legend.position ="none")+
   geom_hline(yintercept=0,linetype="dotted")
-goo3 
+ 
 
+two
 
-png("Plots/posteriorgroups_go.png",width = 8, height= 9,units = 'in',res = 200)
-ggpubr::ggarrange(goo2,goo3,goo,nrow=3,ncol=1,heights = c(.2,.2,1),labels = c("a)","b)","c)"),label.x = .07)
-dev.off()
+posto3$species<-NA
+posto3$species[which(posto3$GEN.SPA=="ACE.PEN")]<-"Acer pensylvanicum"
+posto3$species[which(posto3$GEN.SPA=="ACE.RUB")]<-"Acer rubrum"
+posto3$species[which(posto3$GEN.SPA=="COM.PER")]<-"Comptonia peregrina"
+posto3$species[which(posto3$GEN.SPA=="COR.COR")]<-"Corylus cornuta"
+posto3$species[which(posto3$GEN.SPA=="ILE.MUC")]<-"Ilex mucronata"
+posto3$species[which(posto3$GEN.SPA=="ILE.VER")]<-"Ilex verticillata"
+posto3$species[which(posto3$GEN.SPA=="PRU.PEN")]<-"Prunus pensylvanica"
+posto3$species[which(posto3$GEN.SPA=="PRU.VIR")]<-"Prunus virginiana"
+posto3$species[which(posto3$GEN.SPA=="VAC.COR")]<-"Vaccinium corymbosum"
+posto3$species[which(posto3$GEN.SPA=="VIB.ACE")]<-"Viburnum acerifolium"
 
-### now do the
+  three<-posto3 %>%
+    arrange(interphase) %>%
+    ggplot()+geom_point(aes(scenario3,y=interphase),position=pd,size=2,shape=8)+
+    geom_errorbar(aes(scenario3,ymin=interphase-CI,ymax=interphase+CI),width=0)+
+    #geom_text(aes(scenario3,y=interphase2+4,label=paste(round(interphase2,digits=0),round(CI,digits=2)),color=Hyst),position=pd,size=3)+
+    ggthemes::theme_few(base_size = 10)+facet_wrap( ~ species,nrow=1,scales="free_y")+
+   
+    ylab("Flowering-budburst \ninterphase (days)")+
+   scale_color_manual(values=c("black","red"))+
+    scale_x_discrete(labels=c("Baseline",
+                              "+Forcing",
+                              "+Force/-Chill",
+                              "+Force/+Chill"))+
+    theme(axis.title.x =element_blank(),
+         axis.text.x = element_blank(),
+         axis.ticks.x = element_blank())+theme(legend.position ="none")+
+     theme(strip.text = element_text(face = "italic"))+geom_hline(yintercept=0,linetype="dotted")
+
+  png("Plots/species_projections.png",width = 14, height= 10,units = 'in',res = 300)  
+  ggpubr::ggarrange(three,two,one,ncol=1,nrow=3,heights = c(.2,.2,1))
+dev.off()  
+  
+

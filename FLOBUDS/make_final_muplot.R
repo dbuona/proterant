@@ -36,8 +36,23 @@ source("prep4plot.R")
 muplotfx(modelhere,modelhere2, modelhere3,"all3phases",8, 8, c(0,6), c(-50, 30) , 35, 3.3,35,4)
 dev.off()
 
-muplotfx2(modelhere,modelhere2, modelhere3,"goo",8, 8, c(0,6), c(-25, 30) , 35, 3.3,35,4)
+xlab <- "Difference in phenological sensitivity"
+source("weird_muplotsource.R")
+
+png("Plots/grover.png",width = 10, height= 8, units = "in",res = 300)
+par(mfrow=c(1,3))
+muplotfx2(modoutput1,modoutput2,mod.ranef,mod.ranef2,"Diffplot_bb_flo",8, 8, c(0,6.3), c(-25, 25) , 28, 3.3,35,4,"Flowering","Leaf \nbudburst")
+
+
+muplotfx3(modoutput3,modoutput2,mod.ranef3,mod.ranef2,"Diffplot_lo_flo",5, 8, c(0,6.3), c(-25, 25) , 28, 3.3,35,4,"Flowering","Leafout")
+
+
+muplotfx4(modoutput3,modoutput1,mod.ranef3,mod.ranef,"Diffplot_lo_bb",8, 8, c(0,6.3), c(-25, 25) , 27, 3.3,35,4,"Leaf \nBudburst","Leafout")
+
+
 dev.off()
+
+
 
 #### differences
 

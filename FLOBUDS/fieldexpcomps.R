@@ -1,4 +1,5 @@
 load("writing/flobud.main.mods.Rda")
+library(brms)
 small<-filter(dat,!is.na(flo_day))
 small<-filter(small,!is.na(budburst.9.))
 
@@ -17,7 +18,7 @@ mod.FLS.small<-brm(FLS ~ Chill+Light+Force+Chill:Light+Chill:Force+Force:Light+(
 ###prediction plots
 HFreal<-read.csv(file = "..//Data/hf003-05-mean-ind.csv")
 HFreal$FLS<-HFreal$bb.jd-HFreal$fopn.jd
-HFrealmeans<-HFreal %>% group_by(species) %>% dplyr::summarize(Estimate=mean(FLS,na.rm = TRUE),Q94.5=max(FLS,na.rm = TRUE),Q5.5=min(FLS,na.rm = TRUE))
+HFrealmeans<-HFreal %>% dplyr::group_by(species) %>% dplyr::summarize(Estimate=mean(FLS,na.rm = TRUE),Q75=max(FLS,na.rm = TRUE),Q25=min(FLS,na.rm = TRUE))
 HFrealmeans<-filter(HFrealmeans,species %in% c('ACPE',"ACRU","NEMU","ILVE","VACO"))
 HFrealmeans$GEN.SPA<-NA
 
@@ -36,7 +37,7 @@ new.data<-data.frame(GEN.SPA=rep(unique(small$GEN.SPA),9),
 
 
 
-prediction<-predict(mod.FLS.small,newdata=new.data,probs = c(.055,.945))
+prediction<-predict(mod.FLS.small,newdata=new.data,probs = c(.25,.75))
 predy<-cbind(new.data,prediction)
 
 
@@ -47,7 +48,7 @@ predy$scenario[which(predy$Force==1 & predy$Chill== 1)]<-"5+chill"
 predy$scenario[which(predy$Force==1 & predy$Chill== 0)]<-"5-chill"
 unique(predy$scenario)
 predy <- na.omit(predy) 
-predy<-dplyr::select(predy,GEN.SPA,Estimate,Q5.5,Q94.5,scenario)
+predy<-dplyr::select(predy,GEN.SPA,Estimate,Q25,Q75,scenario)
 
 predy<-rbind(predy,HFrealmeans)
 
@@ -62,9 +63,9 @@ predy<-filter(predy,GEN.SPA %in% c("ACE.PEN","ACE.RUB","ILE.MUC","ILE.VER","VAC.
 predy %>%
   arrange(Estimate) %>%
   mutate(scenario = factor(scenario, levels=c("field","historic","warm 5","warm 10", "5-chill","10-chill", "5+chill","10+chill"))) %>%
-  ggplot(aes(scenario,Estimate))+geom_point(aes(color=grouper))+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0,color=grouper))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
+  ggplot(aes(scenario,Estimate))+geom_point(aes(color=grouper))+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0,color=grouper))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)
 
-prey<-filter(predy,scenario %in% c("field","historic"))
+prey<-dplyr::filter(predy,scenario %in% c("field","historic"))
 prey$scenario[which(prey$scenario %in% c("field"))]<-"observed"
 prey$scenario[which(prey$scenario %in% c("historic"))]<-"predicted"
 
@@ -76,9 +77,9 @@ prey$GEN.SPA[which(prey$GEN.SPA=="VAC.COR")]<-"V. corymbosum"
 
 
 jpeg("Plots/fieldmodcomparisions_freescale.jpeg",width = 5, height = 6, units = 'in', res=300)
-ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA,scales="free_y")+theme_bw()+geom_hline(yintercept=0)+ theme(strip.text = element_text(face = "italic"))
+ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0))+facet_wrap(~GEN.SPA,scales="free_y")+theme_bw()+geom_hline(yintercept=0)+ theme(strip.text = element_text(face = "italic"))+xlab("")
 dev.off()
 jpeg("Plots/fieldmodcomparisions.jpeg",width = 5, height = 6, units = 'in', res=300)
-ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q5.5,ymax=Q94.5,width=0))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)+ theme(strip.text = element_text(face = "italic"))
+ggplot(prey,aes(scenario,Estimate))+geom_point(aes())+geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0))+facet_wrap(~GEN.SPA)+theme_bw()+geom_hline(yintercept=0)+ theme(strip.text = element_text(face = "italic"))+xlab("")
 dev.off()
 

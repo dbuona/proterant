@@ -32,7 +32,7 @@
 
 \bibliographystyle{..//..//sub_projs/refs/styles/besjournals.bst}
 \usepackage{xr-hyper}
-\usepackage{hyperref}
+%\usepackage{hyperref}
 \externaldocument{FLS_flobud}
 \title{Supporting Information: Differences in flower and leaf bud environmental responses drive shifts in spring phenological sequences of temperate woody plants}
 \date{}

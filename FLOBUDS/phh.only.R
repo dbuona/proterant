@@ -22,7 +22,7 @@ library(RColorBrewer)
 
 #options(device = "quartz")
 setwd("~/Documents/git/proterant/FLOBUDS")
-
+load("phh.mod.output.Rda")
 dat<-read.csv("flobudsdata.use.csv",header = TRUE)
 
 dat$Light<-ifelse(dat$Light=="S",0,1)
@@ -59,20 +59,20 @@ extract_coefs<-function(x){rownames_to_column(as.data.frame(coef(x, summary=TRUE
 
 
 flo<-extract_coefs(mod.flo.int)
-flo$phase<-"flower"
+flo$phase<-"flowering"
 leaf<-extract_coefs(mod.bb.int.phh)
-leaf$phase<-"leaf"
+leaf$phase<-"leaf budburst"
 phh<-rbind(flo,leaf)
 colnames(phh)
 
 phh$order<-NA
 
-phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="flower")]<-"first"
-phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="flower")]<-"second"
+phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="flowering")]<-"first"
+phh$order[which(phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="flowering")]<-"second"
 
-phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="leaf")]<-"second"
+phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase!="leaf budburst")]<-"second"
 
-phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="leaf")]<-"first"
+phh$order[which(!phh$GEN.SPA %in% c("COM.PER","ACE.RUB","COR.COR") & phh$phase=="leaf budburst")]<-"first"
 
 phh2<-dplyr::select(phh,GEN.SPA,GEN.SPA.Estimate.Force,GEN.SPA.Est.Error.Force,GEN.SPA.Q2.5.Force,GEN.SPA.Q25.Force,GEN.SPA.Q75.Force,GEN.SPA.Q97.5.Force,phase,order)
 colnames(phh2)<-c("Species","Estimate","error","Q2.5","Q25","Q75","Q97.5","phase","sequence")
