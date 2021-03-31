@@ -177,7 +177,7 @@ goo<-posty %>%
   arrange(dof) %>%
   mutate(category = factor(category, levels=c("flowering-first","concurrent","leafing-first"))) %>%
   ggplot(aes(0,dof,color=category,shape=phase,group =category))+
-  geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0.4,alpha=0.5)+
+  geom_errorbar(aes(ymin=.lower,ymax=.upper),position=pd,width=0,alpha=0.5)+
   geom_point(size=2.5,position=pd)+
   ggthemes::theme_few(base_size = 11)+
   facet_wrap( ~ scenario3,drop=TRUE, scales="free_x",switch="x",ncol=4,

@@ -84,7 +84,8 @@
 \usepackage{xr-hyper}
 %\usepackage{hyperref}
 \externaldocument{FLS_flobud}
-\title{Supporting Information: Differences in flower and leaf bud environmental responses drive shifts in spring phenological sequences of temperate woody plants}
+\externaldocument{JOErev_resp_parII}
+\title{Supporting Information: Differences between flower and leaf phenological responses to environmental variation drive shifts in spring phenological sequences of temperate woody plants}
 \date{}
 \author{}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -117,8 +118,6 @@
 \label{tab:splist}
 \end{table}
 
-% latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed Mar 17 15:49:46 2021
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlrrrr}
@@ -130,14 +129,10 @@
   3 & Dynamic Model & 86.56 & 16.64 & 21.25 & 43.50 \\ 
    \hline
 \end{tabular}
-\caption{Comparisons between the average amount of chilling accumulated by woody plants at Harvard Forest (Petersham, MA, USA) between 15 October and 15 April in the field (Harvard Forest) and our experimental treatments (Chamber: 30 days, Chamber: 60 days)  using three alternative methods for calculating chilling. See Materials and Methods for further details.} 
-\label{tab:chillcomps}
-\end{table}
+\caption{Comparisons between the average amount of chilling accumulated by woody plants at Harvard Forest (Petersham, MA, USA) between 15 October and 15 April in the field (Harvard Forest) and our experimental treatments (Chamber: 30 days, Chamber: 60 days)  using three alternative methods for calculating chilling (Utah Model, Chill hours, Dynamic Model, \citep[see][]{Luedeling:2011ab} for details).}
+ \label{tab:chillcomps}
+ \end{table}
 
-
-
-% latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed Mar 17 15:49:53 2021
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
@@ -153,11 +148,10 @@ Intercept & 70.81 & 9.18 & 52.99 & 64.94 & 76.88 & 88.08 \\
   Light:Force & -12.62 & 4.10 & -20.50 & -15.37 & -9.87 & -4.79 \\ 
    \hline
 \end{tabular}
-\caption{ Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions on budburst of 10 woody plant species from Bayesian hierarchical models.} 
+\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions (change in day of phenological event/ change in environmental cue; 4 weeks chilling/6\degree C forcing/4 hours photoperiod) on leaf budburst of 10 woody plant species from Bayesian hierarchical models.}
 \label{tab:modelests}
 \end{table}
-% latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed Mar 17 15:49:53 2021
+
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrr}
@@ -173,44 +167,42 @@ Intercept & 77.53 & 9.92 & 58.14 & 71.05 & 83.88 & 97.18 \\
   Light:Force & -5.61 & 6.42 & -19.08 & -9.51 & -1.46 & 6.37 \\ 
    \hline
 \end{tabular}
-\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions on flowering of 10 woody plant species from Bayesian hierarchical models.} 
+\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions (change in day of phenological event/change in environmental cue; 4 weeks chilling/6\degree C forcing/4 hours photoperiod) on flowering of 10 woody plant species from Bayesian hierarchical models.}
 \label{tab:modelests2}
 \end{table}
 
 
-
-% latex table generated in R 3.6.2 by xtable 1.8-4 package
-% Wed Mar 17 15:49:56 2021
 \begin{table}[ht]
 \centering
-\begin{tabular}{l>{\itshape}lllllllll}
+\begin{tabular}{rlrrrrrrll}
   \hline
  & Species & Estimate & error & Q2.5 & Q25 & Q75 & Q97.5 & phase & sequence \\ 
   \hline
-1 & A. pensylvanicum & -10.71 & 3.92 & -17.87 & -13.48 & -8.19 & -2.28 & leaf & first \\ 
-  2 & A. pensylvanicum & -17.43 & 6.15 & -30.48 & -20.68 & -14.00 & -5.59 & flower & second \\ 
-  3 & A. rubrum & -16.76 & 7.25 & -33.11 & -20.21 & -13.09 & -2.88 & flower & first \\ 
-  4 & A. rubrum & -28.39 & 6.22 & -40.52 & -32.69 & -24.08 & -16.20 & leaf & second \\ 
-  5 & C. peregrina & -13.28 & 3.33 & -19.62 & -15.50 & -11.17 & -6.60 & flower & first \\ 
-  6 & C. peregrina & -15.47 & 3.69 & -23.06 & -17.82 & -13.01 & -8.53 & leaf & second \\ 
-  7 & C. cornuta & -15.55 & 4.50 & -24.71 & -18.13 & -12.87 & -6.79 & flower & first \\ 
-  8 & C. cornuta & -19.82 & 4.04 & -28.13 & -22.41 & -17.10 & -11.99 & leaf & second \\ 
-  9 & I. mucronata & -10.44 & 3.81 & -17.42 & -13.09 & -8.05 & -2.45 & leaf & first \\ 
-  10 & I. mucronata & -16.05 & 4.06 & -24.19 & -18.58 & -13.47 & -7.94 & flower & second \\ 
-  11 & I. verticillata & -8.66 & 3.73 & -15.58 & -11.19 & -6.19 & -1.12 & leaf & first \\ 
-  12 & I. verticillata & -20.43 & 10.72 & -43.88 & -25.92 & -14.18 & -2.14 & flower & second \\ 
-  13 & P. pensylvanica & -10.24 & 4.14 & -18.67 & -12.99 & -7.50 & -2.14 & leaf & first \\ 
-  14 & P. pensylvanica & -13.85 & 4.02 & -21.59 & -16.46 & -11.40 & -5.39 & flower & second \\ 
-  15 & P. virginiana & -26.68 & 5.11 & -37.14 & -30.02 & -23.09 & -17.20 & leaf & first \\ 
-  16 & P. virginiana & -23.69 & 7.67 & -40.07 & -28.74 & -17.84 & -10.95 & flower & second \\ 
-  17 & V. corymbosum & -7.06 & 3.85 & -14.45 & -9.62 & -4.56 & 0.66 & leaf & first \\ 
-  18 & V. corymbosum & -13.10 & 3.60 & -20.30 & -15.49 & -10.79 & -5.99 & flower & second \\ 
-  19 & V. acerifolium & -12.68 & 3.78 & -19.97 & -15.14 & -10.29 & -5.10 & leaf & first \\ 
-  20 & V. acerifolium & -21.60 & 8.52 & -39.63 & -26.63 & -16.00 & -6.85 & flower & second \\ 
+1 & A. pensylvanicum & -10.71 & 3.92 & -17.87 & -13.48 & -8.19 & -2.28 & leaf budburst & first \\ 
+  2 & A. pensylvanicum & -17.43 & 6.15 & -30.48 & -20.68 & -14.00 & -5.59 & flowering & second \\ 
+  3 & A. rubrum & -16.76 & 7.25 & -33.11 & -20.21 & -13.09 & -2.88 & flowering & first \\ 
+  4 & A. rubrum & -28.39 & 6.22 & -40.52 & -32.69 & -24.08 & -16.20 & leaf budburst & second \\ 
+  5 & C. peregrina & -13.28 & 3.33 & -19.62 & -15.50 & -11.17 & -6.60 & flowering & first \\ 
+  6 & C. peregrina & -15.47 & 3.69 & -23.06 & -17.82 & -13.01 & -8.53 & leaf budburst & second \\ 
+  7 & C. cornuta & -15.55 & 4.50 & -24.71 & -18.13 & -12.87 & -6.79 & flowering & first \\ 
+  8 & C. cornuta & -19.82 & 4.04 & -28.13 & -22.41 & -17.10 & -11.99 & leaf budburst & second \\ 
+  9 & I. mucronata & -10.44 & 3.81 & -17.42 & -13.09 & -8.05 & -2.45 & leaf budburst & first \\ 
+  10 & I. mucronata & -16.05 & 4.06 & -24.19 & -18.58 & -13.47 & -7.94 & flowering & second \\ 
+  11 & I. verticillata & -8.66 & 3.73 & -15.58 & -11.19 & -6.19 & -1.12 & leaf budburst & first \\ 
+  12 & I. verticillata & -20.43 & 10.72 & -43.88 & -25.92 & -14.18 & -2.14 & flowering & second \\ 
+  13 & P. pensylvanica & -10.24 & 4.14 & -18.67 & -12.99 & -7.50 & -2.14 & leaf budburst & first \\ 
+  14 & P. pensylvanica & -13.85 & 4.02 & -21.59 & -16.46 & -11.40 & -5.39 & flowering & second \\ 
+  15 & P. virginiana & -26.68 & 5.11 & -37.14 & -30.02 & -23.09 & -17.20 & leaf budburst & first \\ 
+  16 & P. virginiana & -23.69 & 7.67 & -40.07 & -28.74 & -17.84 & -10.95 & flowering & second \\ 
+  17 & V. corymbosum & -7.06 & 3.85 & -14.45 & -9.62 & -4.56 & 0.66 & leaf budburst & first \\ 
+  18 & V. corymbosum & -13.10 & 3.60 & -20.30 & -15.49 & -10.79 & -5.99 & flowering & second \\ 
+  19 & V. acerifolium & -12.68 & 3.78 & -19.97 & -15.14 & -10.29 & -5.10 & leaf budburst & first \\ 
+  20 & V. acerifolium & -21.60 & 8.52 & -39.63 & -26.63 & -16.00 & -6.85 & flowering & second \\ 
    \hline
 \end{tabular}
-\caption{Mean(`Estimate') and quantile (`Q') estimates of effects of forcing temperature and all two-way interactions on budburst and flowering of 10 woody plant species from Bayesian hierarchical models under long photoperiod and long chilling duration experimental treatments. } 
+\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature and all two-way interactions (change in day of phenological event/ $\Delta$ environmenta/6 \degree C) on budburst and flowering of 10 woody plant species from Bayesian hierarchical models under long photoperiod and long chilling duration experimental treatments.}
 \label{tab:phh}
+
 \end{table}
 
 
@@ -221,14 +213,23 @@ Intercept & 77.53 & 9.92 & 58.14 & 71.05 & 83.88 & 97.18 \\
  \begin{figure}[!ht]
     \centering
  \includegraphics[width=.8\textwidth]{..//Plots/fieldmodcomparisions.jpeg}
-    \caption{A comparison of the estimated mean flower-leaf sequence interphases (days between phenophase) for six woody plant species under artificial conditions designed to approximate ``average" field conditions and observed mean FLS interphases in the field at Harvard Forest in Pertersham MA. Dots represent means FLS interphase in both datasets, and lines represent the 89\% credible intervals and the full range of observations for our model predictions and Harvard Forest data respectively. Harvard Forest phenological records are from \citet{Okeefe2015}.}
+    \caption{A comparison of the estimated mean flower-leaf sequence interphases (days between phenophase) for six woody plant species under artificial conditions designed to approximate ``average" field conditions and observed mean FLS interphases in the field at Harvard Forest in Pertersham MA. Dots represent means FLS interphase in both datasets, and lines represent the 50\% credible intervals and the full range of observations for our model predictions and Harvard Forest data respectively. Harvard Forest phenological records are from \citet{Okeefe2015}.}
     \label{fig:validate}
 \end{figure}
 
  \begin{figure}[!ht]
     \centering
- \includegraphics[width=\textwidth]{..//Plots/Flobuds_manuscript_figs/climpredictions.jpg}
-    \caption{Projected shifts in flower-leaf sequences under historic environmental conditions and three climate change scenarios differ among species, the three major FLS types, and pollination syndromes. Estimates come from Bayesian, hierarchical models comparing flower and leaf bud responses to variable chilling duration and forcing temperatures. Points represent the mean estimates and lines represent the 50\% and 95\% credible intervals respectively.}
+ \includegraphics[width=\textwidth]{..//Plots/grover.png}
+    \caption{The difference in mean effects of forcing temperature, chilling duration, and photoperiod between leaf budburst, leafout and flowering phenology of 10 temperate woody plant species collected from Harvard Forest (Petersham, MA, USA). Stronger advances in phenology are shown as negative numbers, and delays in phenology as positive numbers. The thicker blue bars depict the main effects for all species and thinner bars indicate the species-specific differences in the responses among phases.}
+    \label{fig:altview}
+\end{figure}
+
+
+
+ \begin{figure}[!ht]
+    \centering
+ \includegraphics[width=\textwidth]{..//Plots/species_projections.png}
+    \caption{Projected shifts in flower-leaf sequences under current environmental conditions (Baseline) and three climate change scenarios (increase forcing, increase forcing/decrease chilling, increase forcing/increase chilling) predict that FLS for 10 common temperate woody plant species. The top two rows show the mean time between flowering and vegetative phenological events (shapes) with 50\% credible intervals (lines). The bottom row shows the predicted event day for each phase. Predictions are based on posterior estimates from Bayesian hierarchical models comparing flowering (circles), leaf budburst (triangles) and leafout (squares) phenological responses to variable chilling duration and forcing temperatures. Shapes represent the mean estimates and lines represent the 50\% credible intervals. }
     \label{fig:preddy_sp}
 \end{figure}
 
@@ -237,7 +238,7 @@ Intercept & 77.53 & 9.92 & 58.14 & 71.05 & 83.88 & 97.18 \\
 \subsection*{Simulations}
 \noident To better understand the patterns of phenological sensitivity generated by the forcing hierarchy hypothesis (FHH) and the differential sensitivity hypothesis (DSH) respectively, we simulated the underlying physiology of each hypothesis, and used these simulations to generate flower and leaf phenology under two levels of chilling, forcing, and photoperiod in a fully factorial experimental design.\\
 
-\noindent For the FHH we assigned flowering and leafing a critical heat sum threshold (F*) above which the phenological event would take place. We did this using a growing degree model with a base temperature of 5\degree C \citep{Fu:2014aa}. For the FHH simulations, we assigned flowering an F* of 200 GDDs and leafing an F* of 400 GDDs. In this scenario we let increased both chilling and photoperiod reduce the F* value for each phenophase by 100 and 20 respectively.\\
+\noindent For the FHH we assigned flowering and leafing a critical heat sum threshold (F*) above which the phenological event would take place. We did this using a growing degree model with a base temperature of 5\degree C \citep{Fu:2014aa}. For the FHH simulations, we assigned flowering an F* of 200 GDDs and leafing an F* of 400 GDDs. In this scenario\linelabel{supple}, higher chilling and photoperiod reduced the F* value for each phenophase by 100 and 20 respectively.\\
 
 \noindent For the DSH we assigned flowering and leafing identical F* values of 400. As in the previous scenario, we let increased chilling and photoperiod reduce the F* values, but these cues reduced the F* for leafing by 200 and 0 respectively and for flowering by 100 and 20.\\
 

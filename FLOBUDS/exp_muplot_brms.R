@@ -11,7 +11,7 @@ muplotfx <- function(modelhere,modelhere2,modelhere3, nameforfig, width, height,
   postscript(file.path(figpath, paste("", nameforfig, ".eps", sep="")),
       width = width, height = height)
   par(xpd=FALSE)
-  par(mar=c(5,7,3,10))
+  par(mar=c(4,7,3,10))
   plot(x=NULL,y=NULL, xlim=xlim, yaxt='n', ylim=ylim,
        xlab=xlab, ylab="", main="")
   axis(2, at=1:6, labels=rev(c("Chill", "Photo", "Force","Chill:Photo","Chill:Force","Photo:Force")), las=1) ### Need to change

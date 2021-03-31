@@ -160,8 +160,6 @@ one<-posty %>%
   geom_point(size=2.5)+
   ggthemes::theme_few()+
   facet_wrap( ~ GEN.SPA,nrow=1,switch = "x")+
-  theme(strip.background = element_blank(),
-  strip.text.x = element_blank())+
   scale_color_manual(values = c("lightgreen","purple","darkgreen"))+
   scale_shape_manual(values=c(17,19,15))+
   scale_x_discrete(labels=c("Baseline",
@@ -186,16 +184,18 @@ one
 dev.off()  
 
 posto<-spread(posty,phase,dof)
+loerror<-filter(posto, !is.na(leafout))
+ferror<-filter(posto, !is.na(flowering))
+bberror<-filter(posto, !is.na(budburst))
 
 posto2<-posto%>%group_by(GEN.SPA,scenario3) %>%summarise(interphase=mean(leafout,na.rm=TRUE)-mean(flowering,na.rm=TRUE))
+loerror$.lower-bberror$.upper
+loerror$.upper-bberror$.lower
+
+posto%>%group_by(GEN.SPA,scenario3) %>%summarise(maxinterphase=mean(.lower,na.rm=TRUE)+mean(.upper,na.rm=TRUE))
+posto%>%group_by(GEN.SPA,scenario3) %>%summarise(maxinterphase=mean(.lower,na.rm=TRUE)+mean(.upper,na.rm=TRUE))
+
 posto3<-posto%>%group_by(GEN.SPA,scenario3) %>%summarise(interphase=mean(budburst,na.rm=TRUE)-mean(flowering,na.rm=TRUE))
-
-loerror<-filter(posto,!is.na(leafout))
-
-ferror<-filter(posto,!is.na(flowering))
-bberror<-filter(posto,!is.na(budburst))
-
-
 
 posto2$interphase2<-abs(posto2$interphase)
 posto3$interphase2<-abs(posto3$interphase)
@@ -203,18 +203,15 @@ posto3$interphase2<-abs(posto3$interphase)
 posto2$Hyst<-ifelse(posto2$interphase>=0,"Flower-first", "Vegetative-First ")
 posto3$Hyst<-ifelse(posto3$interphase>=0,"Flower-first", "Vegetative-First ")
 
-posto2$CI<-abs(loerror$.lower-ferror$.upper)*.5
-posto3$CI<-abs(bberror$.lower-ferror$.upper)*.5
-
 two<-posto2 %>%
   arrange(interphase) %>%
-  ggplot()+geom_point(aes(scenario3,y=interphase),position=pd,size=2,shape=8)+
-  geom_errorbar(aes(scenario3,ymin=interphase-CI,ymax=interphase+CI),width=0)+
-  #geom_text(aes(scenario3,y=interphase2+CI+3,label=paste(round(interphase2,digits=0),"(",round(CI,digits=0),")"),color=Hyst),position=pd,size=3)+
-  ggthemes::theme_few(base_size = 10)+facet_wrap( ~ GEN.SPA,nrow=1,scales="free_y")+
+  ggplot()+geom_point(aes(scenario3,y=interphase2),position=pd,size=3)+
+  +geom_errorbar(aes(scenario3,ymin=interphase2),position=pd,size=3)+
+  geom_text(aes(scenario3,y=interphase2+3,label=round(interphase2,digits=0),color=Hyst),position=pd,size=3)+
+  ggthemes::theme_few(base_size = 10)+facet_wrap( ~ GEN.SPA,nrow=1)+
   theme(strip.background = element_blank(),
         strip.text.x = element_blank())+
-  ylab("Flowering-leafout \ninterphase (days)")+
+  ylab("Mean flowering-leafout \ninterphase (days)")+
  scale_color_manual(values=c("black","red"))+
   scale_x_discrete(labels=c("Baseline",
                             "+Forcing",
@@ -222,32 +219,18 @@ two<-posto2 %>%
                             "+Force/+Chill"))+
   theme(axis.title.x =element_blank(),
         axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())+theme(legend.position ="none")+
-  geom_hline(yintercept=0,linetype="dotted")
+        axis.ticks.x = element_blank())+theme(legend.position ="none")
  
 
 two
-
-posto3$species<-NA
-posto3$species[which(posto3$GEN.SPA=="ACE.PEN")]<-"Acer pensylvanicum"
-posto3$species[which(posto3$GEN.SPA=="ACE.RUB")]<-"Acer rubrum"
-posto3$species[which(posto3$GEN.SPA=="COM.PER")]<-"Comptonia peregrina"
-posto3$species[which(posto3$GEN.SPA=="COR.COR")]<-"Corylus cornuta"
-posto3$species[which(posto3$GEN.SPA=="ILE.MUC")]<-"Ilex mucronata"
-posto3$species[which(posto3$GEN.SPA=="ILE.VER")]<-"Ilex verticillata"
-posto3$species[which(posto3$GEN.SPA=="PRU.PEN")]<-"Prunus pensylvanica"
-posto3$species[which(posto3$GEN.SPA=="PRU.VIR")]<-"Prunus virginiana"
-posto3$species[which(posto3$GEN.SPA=="VAC.COR")]<-"Vaccinium corymbosum"
-posto3$species[which(posto3$GEN.SPA=="VIB.ACE")]<-"Viburnum acerifolium"
-
   three<-posto3 %>%
     arrange(interphase) %>%
-    ggplot()+geom_point(aes(scenario3,y=interphase),position=pd,size=2,shape=8)+
-    geom_errorbar(aes(scenario3,ymin=interphase-CI,ymax=interphase+CI),width=0)+
-    #geom_text(aes(scenario3,y=interphase2+4,label=paste(round(interphase2,digits=0),round(CI,digits=2)),color=Hyst),position=pd,size=3)+
-    ggthemes::theme_few(base_size = 10)+facet_wrap( ~ species,nrow=1,scales="free_y")+
-   
-    ylab("Flowering-budburst \ninterphase (days)")+
+    ggplot()+geom_linerange(aes(scenario3,ymin=.0,ymax=interphase2),position=pd,size=3)+
+    geom_text(aes(scenario3,y=interphase2+4,label=round(interphase2,digits=0),color=Hyst),position=pd,size=3)+
+    ggthemes::theme_few(base_size = 10)+facet_wrap( ~ GEN.SPA,nrow=1)+
+    theme(strip.background = element_blank(),
+          strip.text.x = element_blank())+
+    ylab("Mean flowering-budburst \ninterphase (days)")+
    scale_color_manual(values=c("black","red"))+
     scale_x_discrete(labels=c("Baseline",
                               "+Forcing",
@@ -255,11 +238,11 @@ posto3$species[which(posto3$GEN.SPA=="VIB.ACE")]<-"Viburnum acerifolium"
                               "+Force/+Chill"))+
     theme(axis.title.x =element_blank(),
          axis.text.x = element_blank(),
-         axis.ticks.x = element_blank())+theme(legend.position ="none")+
-     theme(strip.text = element_text(face = "italic"))+geom_hline(yintercept=0,linetype="dotted")
-
-  png("Plots/species_projections.png",width = 14, height= 10,units = 'in',res = 300)  
-  ggpubr::ggarrange(three,two,one,ncol=1,nrow=3,heights = c(.2,.2,1))
+         axis.ticks.x = element_blank())+theme(legend.position ="none")
+three
+one
+  jpeg("Plots/species_projections.jpeg",width = 9, height= 8,units = 'in',res = 300)  
+  ggpubr::ggarrange(three,two,one,ncol=1,nrow=3,heights = c(.3,.3,1))
 dev.off()  
   
 

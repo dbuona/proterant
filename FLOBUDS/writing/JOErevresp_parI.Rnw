@@ -1,0 +1,41 @@
+\documentclass[11.75 pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{gensymb}
+%\begin{footnotesize}
+%\address{1300 Centre Street \\ Boston, MA, 20131}
+%\end{footnotesize}
+\begin{document}
+\bibliographystyle{..//..//sub_projs/refs/styles/besjournals.bst}
+\def\labelitemi{--}
+\parindent=24pt
+\noindent\includegraphics[width=0.3\textwidth]{/Users/danielbuonaiuto/Desktop/arb_logo.png}
+\pagenumbering{gobble}
+\\\\
+\noindent{Dear Dr. Buckley,}\\
+\vspace{1.5ex}
+
+\noindent Please consider our revised manuscript ``Differences between flower and leaf phenological responses to environmental variation drive shifts in spring phenological sequences of temperate woody plants" as a research article in \textit{Journal of Ecology}.\\
+
+\noindent Phenological sequences are a major driver of plant fitness, and for temperate woody plants, the relative timing of flower and leaf emergence, or flower-leaf sequence (FLS), may be particularly important for reproductive and physiological performance in many species. Observed shifts in the timing and duration of FLSs in the last several decades due to anthropogenic climate change indicate that this phenological sequences can be substantially altered by climatic variation, but exactly how the environment determines FLS variation is not well understood. We present data from a full factorial experiment of the major environmental cues for spring phenology for 10 temperate woody plant species to characterize the relationship between FLSs and environmental variation. The results of our multi-species experiment showed that two competing hypotheses about the drivers of FLS variation can be explained by one mechanism, and identified several functional traits (flowering-first FLS and wind-pollination) that may predispose certain species to maladaptive FLS shifts with climate change.\\
+
+\noindent Comments from the Associate Editor and two reviewers suggested our manuscript was generally well written and our analyses thorough and robust, but pointed out several areas for improvement regarding the framing of our manuscript and the presentation of our results. Based on their comments, we have revised the structure of the manuscript to discuss the implications of FLS shifts in wind- and biotically- pollinated taxa separately, and amended our figures substantially to more clearly demonstrate our findings. We have also reworked our manuscript to more explicitly address several concerns about our multi-species approach including phylogenetic relatedness and co-variation with other functional traits.\\
+
+\noindent Reviewer also raised important points about the specific phenological phases we presented. To address these concerns, we have added an additional analysis using a later vegetative phenological stage in addition the our original stages, and re-made all relevant figures to present this comparison.\\
+
+\noindent We feel that the editor's and reviewers' input has helped shape a new submission that is much improved, and we detail our specific changes in the following pages with reviewer comments in \emph{italics} and our responses in regular text.\\
+
+\noindent Our current submission is XXX words in length and it contains 4 figures. As before, it is co-authored by E.M. Wolkovich is not under consideration elsewhere. We hope that you will find it suitable for publication in \textit{Journal of Ecology}, and look forward to hearing from you.\\\\ 
+
+
+\noindent Best,\\
+\\\\\\\\
+
+
+
+\noindent Daniel Buonaiuto
+
+
+
+\end{document}
