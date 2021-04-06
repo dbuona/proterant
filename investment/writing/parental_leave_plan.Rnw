@@ -1,0 +1,84 @@
+\documentclass[12pt]{article}
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{authblk}
+\usepackage{gensymb}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\usepackage[small]{caption}
+
+\setkeys{Gin}{width=0.8\textwidth}
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+
+ \topmargin -1.5cm 
+ \oddsidemargin -0.04cm 
+ \evensidemargin -0.04cm 
+ \textwidth 16.59cm
+ \textheight 21.94cm 
+ \parskip 7.2pt 
+\renewcommand{\baselinestretch}{1.6} 	
+\parindent 0pt
+\usepackage{setspace}
+\usepackage{lineno}
+
+\bibliographystyle{..//..//sub_projs/refs/styles/besjournals.bst}
+\usepackage{xr-hyper}
+%\usepackage{hyperref}
+
+\title{Prunus project plant before paternal leave}
+\date{}
+\author{D.M. Buonaiuto $^{1,2,a}$,S. Collins?$^{3}$, E.M. Wolkovich$^{3}$}
+\begin{document}
+\maketitle
+\noindent \emph{Author affiliations:}\\
+\noindent $^1$Arnold Arboretum of Harvard University, Boston, Massachusetts, USA. ORCID: 0000-0003-4022-2591\\
+$^2$Department of Organismic and Evolutionary Biology, Harvard University, Cambridge, Massachusetts, USA \\
+$^3$Forest \& Conservation Sciences, Faculty of Forestry, University of British Columbia, Vancouver, British Columbia, Canada\\
+$^a$Corresponding author: 617.823.0687; dbuonaiuto@g.harvard.edu\\
+\pagebreak
+
+\section{Introduction and Framing}
+\noindent: The set up is similar to my typical FLSs papers. Good evidence for FLSs mattering in wind-pollinated species, but hysteranthy is prominant in many insect pollinated species. It may be functional too, but evidence is speculative.\\
+
+\noindent Brief review of hypothesis: Insect visibility. Water dynamics (Cold tolerance), Null hypothesis (early flowering), and predictions too!\\
+
+\noindent There haven't been any systematic evaluations of FLS variation in insect pollinated species. Below are some reasons why.\\
+
+\noindent Data limitations. Mainly, FLS categories are amiguous and cannot account for variaiton of FLS. In general studies of FLS have not incorperated variation. Also, the idea theat traits covary. requireing pattern deconstruction.
+
+\noidnet \textit{Prunus} is an ideal system for pattern deconstruction of this trait. \textit{Prunocerasus is even better}.
+
+\noindent we do three things:
+\begin{enumerate}
+\item Model relationships between FLS variation and functional traits for North American \texit{Prunus} species based on categorical descriptions of FLS and mean trait values.
+\item Characterize the FLS variation among species of the sub-clade \textit{Prunucerasus}.
+\item Model how this FLS variation is influences by the hypotheses.
+\end{enumerate}
+
+\subsection{Status}
+\noindent We have a working brms model for part I above. NEEDED: Incorperate phylogeny.\\
+
+\noindent For part II there are a couple options.
+\begin{enumerate}
+\item joint model. Not sure how many pareamenter you could model this way so might have to be a seperate model for each parementer.
+\item measurement error model. Run each submodel seperately and then carry the error through for a subsequent model.
+\end{itemize}
+
+\subsection{relevant code}
+\begin{enumerate}
+\item FNA.R This code cleans and models and plots the FNA data for part I.
+
+
+
+
+
+
+
+
+\end{document}

@@ -16,14 +16,14 @@ dat<-data.frame(y=sample(1:6, N, replace = TRUE, prob = c(0.2, 0.1,0.1, 0.3, 0.2
 #fixef(bmer)
 #newdata<-data.frame(y=1)
 #fitted(bmer,newdata=newdata)
-pp_check(bmer,nsamples = 100)
+#pp_check(bmer,nsamples = 100)
 ## now stan
 datalist.simple <- with(dat, 
                         list(y = dat$y, 
                              N = nrow(dat),
                              K = length(unique(dat$y))))
                       
-fit <- stan('ordi_stan.stan', data=datalist.simple,iter = 1000, warmup=500, chains=2, seed=4938483)
+fit <- stan('stan/ordi_stan.stan', data=datalist.simple,iter = 1000, warmup=500, chains=2, seed=4938483)
 
 m2lni.sum <- summary(fit)$summary[2:6,1:3]
 #c(0.2, 0.1,0.1, 0.3, 0.2,0.1) original probabilities
@@ -79,6 +79,16 @@ lines(x, pad_obs_counts, col="black", lty=1, lw=2)
 
 
 
-##complicate it
-dat$y2<-rnorm(length(dat$y),dat$y+1,sigma)
-dat$y2<-round(dat$y2)
+##complicate it multiple species
+species<-(1:20)
+d<-data.frame(species=numeric(),y=numeric(),probs=numeric())
+
+for (i in species){
+  leafprob<-replicate(1, diff(c(0, sort(runif(5)), 1)))
+  print(leafprob)
+  bbch.v<-sample(1:6,500,replace=TRUE,prob=leafprob)
+  dhere<-data.frame(species=species[i],y=bbch.v,probs=rep(leafprob,length(bbch.v)))
+  d<-rbind(d,dhere)
+}
+
+ggplot(d,aes(y,probs))+stat_summary(aes(color=as.factor(species)))

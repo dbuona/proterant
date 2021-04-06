@@ -24,8 +24,8 @@ library(tidybayes)
 #------Part 1--------------#
 #--------------------------#
 setwd("~/Documents/git/proterant/investment")
-#load("FNA.Rda")
-FNA<-read.csv("Data/zarchieve/cherry_data.csv") ## measurement and FLS data from FNA
+load("FNA.Rda")
+FNA<-read.csv("Data/cherry_data.csv") ## measurement and FLS data from FNA
 ##clean specicies name
 
 FNA$species<-ifelse(FNA$species=="hortunlana","hortulana",FNA$species)
@@ -231,5 +231,26 @@ cor(FNA$petal_low,FNA$meanpdsi,use = "complete.obs")
 cor(FNA$minpdsi,FNA$meanpdsi,use = "complete.obs")
 
 
+## make sure we can use the Zanne tree
+colnames(FNA)
+FNA$name<-paste("Prunus",FNA$species, sep="_")
 
+library(ape)
+library(phytools)
+library(geiger)
+library(caper)
+library(picante)
+library(tidyverse)
+library(boot)
+library(phylolm)
+
+
+
+treee<-read.tree("..//input/Vascular_Plants_rooted.dated.tre")
+names.intree<-treee$tip.label
+namelist<-FNA$name
+
+which(names.intree%in%namelist)
+length(which(namelist%in%names.intree))
+length(which(!namelist%in%names.intree))
 save.image("FNA.Rda")
