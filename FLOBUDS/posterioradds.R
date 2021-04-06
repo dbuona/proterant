@@ -181,7 +181,7 @@ goo<-posty %>%
   geom_point(size=2.5,position=pd)+
   ggthemes::theme_few(base_size = 11)+
   facet_wrap( ~ scenario3,drop=TRUE, scales="free_x",switch="x",ncol=4,
-              labeller = as_labeller(c(`base` = "Baseline \n(C=6w,F=21°C)",`forcing` = "+Forcing \n(C=6w,F=+6°C)", `updown` = "+Force/-Chill \n(C=4w,F=+6°C)",`upup` = "+Force/+Chill \n(C=8w,F=+6°C)")))+
+              labeller = as_labeller(c(`base` = "Baseline \n(C=45d,F=21°C)",`forcing` = "+Forcing \n(C=45d,F=+6°C)", `updown` = "+Force/-Chill \n(C=30d,F=+6°C)",`upup` = "+Force/+Chill \n(C=60,F=+6°C)")))+
   theme(axis.title.x =element_blank(),
     strip.placement = "top",
     strip.background = element_rect(color="black"),

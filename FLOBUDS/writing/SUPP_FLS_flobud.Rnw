@@ -99,7 +99,7 @@ Intercept & 70.81 & 9.18 & 52.99 & 64.94 & 76.88 & 88.08 \\
   Light:Force & -12.62 & 4.10 & -20.50 & -15.37 & -9.87 & -4.79 \\ 
    \hline
 \end{tabular}
-\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions (change in day of phenological event/ change in environmental cue; 4 weeks chilling/6\degree C forcing/4 hours photoperiod) on leaf budburst of 10 woody plant species from Bayesian hierarchical models.}
+\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions (change in day of phenological event/ change in environmental cue; 30 days chilling/6\degree C forcing/4 hours photoperiod) on leaf budburst of 10 woody plant species from Bayesian hierarchical models.}
 \label{tab:modelests}
 \end{table}
 
@@ -118,7 +118,7 @@ Intercept & 77.53 & 9.92 & 58.14 & 71.05 & 83.88 & 97.18 \\
   Light:Force & -5.61 & 6.42 & -19.08 & -9.51 & -1.46 & 6.37 \\ 
    \hline
 \end{tabular}
-\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions (change in day of phenological event/change in environmental cue; 4 weeks chilling/6\degree C forcing/4 hours photoperiod) on flowering of 10 woody plant species from Bayesian hierarchical models.}
+\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature, chilling duration, and photoperiod and all two-way interactions (change in day of phenological event/change in environmental cue; 30 days chilling/6\degree C forcing/4 hours photoperiod) on flowering of 10 woody plant species from Bayesian hierarchical models.}
 \label{tab:modelests2}
 \end{table}
 
@@ -151,7 +151,7 @@ Intercept & 77.53 & 9.92 & 58.14 & 71.05 & 83.88 & 97.18 \\
   20 & V. acerifolium & -21.60 & 8.52 & -39.63 & -26.63 & -16.00 & -6.85 & flowering & second \\ 
    \hline
 \end{tabular}
-\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature and all two-way interactions (change in day of phenological event/ $\Delta$ environmenta/6 \degree C) on budburst and flowering of 10 woody plant species from Bayesian hierarchical models under long photoperiod and long chilling duration experimental treatments.}
+\caption{Mean (`Estimate') and quantile (`Q') estimates of effects of forcing temperature and all two-way interactions (change in day of phenological event/ $\Delta$6\degree C) on budburst and flowering of 10 woody plant species from Bayesian hierarchical models under long photoperiod and long chilling duration experimental treatments.}
 \label{tab:phh}
 
 \end{table}

@@ -26,7 +26,7 @@
 
 \noindent We feel that the editor's and reviewers' input has helped shape a new submission that is much improved, and we detail our specific changes in the following pages with reviewer comments in \emph{italics} and our responses in regular text.\\
 
-\noindent Our current submission is XXX words in length and it contains 4 figures. As before, it is co-authored by E.M. Wolkovich is not under consideration elsewhere. We hope that you will find it suitable for publication in \textit{Journal of Ecology}, and look forward to hearing from you.\\\\ 
+\noindent Our current submission is 5,144 words in length and it contains 4 figures. As before, it is co-authored by E.M. Wolkovich is not under consideration elsewhere. We hope that you will find it suitable for publication in \textit{Journal of Ecology}, and look forward to hearing from you.\\\\ 
 
 
 \noindent Best,\\
