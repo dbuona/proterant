@@ -24,7 +24,7 @@ library(tidybayes)
 #------Part 1--------------#
 #--------------------------#
 setwd("~/Documents/git/proterant/investment")
-load("FNA.Rda")
+#load("FNA.Rda")
 FNA<-read.csv("Data/cherry_data.csv") ## measurement and FLS data from FNA
 ##clean specicies name
 
@@ -76,7 +76,7 @@ pruno.unref<-filter(pruno.unref,!is.na(lon)) # select only entries with lat lon
 pruneo<-rbind(pruno.ref,pruno.unref)
 
 ##now add pdsi data
-palmer.b <- brick("lbda-v2_kddm_pmdi_2017.nc")
+palmer.b <- brick("Data/lbda-v2_kddm_pmdi_2017.nc")
 
 lonpoints<-pruneo$lon # make vector of prunus coordinates
 latpoints<-pruneo$lat #
@@ -91,15 +91,28 @@ ext3<-raster::extract(min.prunus,extract.pts,method="simple")
 pruneo$pdsi<-ext
 pruneo$pdsi.sd<-ext2
 pruneo$pdsi.min<-ext3
+###now do winter T
+str_name<-'Data/Tavg_winter_historical.tif' 
+winter<-raster(str_name)
+
+
+
+extro<-raster::extract(winter,extract.pts,method="simple")
+pruneo$winterT<-(extro-32)*(5/9)
 
 #pdsi summary data
+minT<- pruneo %>% dplyr::group_by(specificEpithet) %>% dplyr::summarise(meanT=mean(winterT,na.rm=TRUE),sdT=sd(winterT,na.rm=TRUE))
+colnames(minT)[1]<-"species"
+setdiff(FNA$species,pdsi$species) ## lose speciosa
+
 pdsi<- pruneo %>% dplyr::group_by(specificEpithet) %>% dplyr::summarise(meanpdsi=mean(pdsi,na.rm=TRUE),sdmean=sd(pdsi,na.rm=TRUE),minpdsi=mean(pdsi.min,na.rm=TRUE),sdmin=sd(pdsi.min,na.rm=TRUE))
 colnames(pdsi)[1]<-"species"
 setdiff(FNA$species,pdsi$species) ## lose speciosa
 
+
 ## combine data
 FNA<-left_join(FNA,pdsi)
-
+FNA<-left_join(FNA,minT)
 ##quick plots
 cor(FNA$petal_low,FNA$petal_high) # .88
 cor(FNA$inflor_low,FNA$inflor_high) #.86 can probably use jsut one or the other in the
@@ -122,114 +135,116 @@ plot(FNA$FLSnum,FNA$inflor_low)
 # FLSnum~ inflorlow*petal_low+me(pdsi,sd)+fruit_low +phylo someday
 
 #rough sd and mean calculation for other predictons
-FNA$petalmean<-(FNA$petal_low+FNA$petal_high)/2
-FNA$petalsd<-(FNA$petal_high-FNA$petal_low)/4 #"rule of ranges"
+#FNA$petalmean<-(FNA$petal_low+FNA$petal_high)/2
+#FNA$petalsd<-(FNA$petal_high-FNA$petal_low)/4 #"rule of ranges"
 
 
-FNA$inflormean<-(FNA$inflor_low+FNA$inflor_high)/2
-FNA$inflorsd<-(FNA$inflor_high-FNA$inflor_low)/4 #"rule of ranges"
+#FNA$inflormean<-(FNA$inflor_low+FNA$inflor_high)/2
+#FNA$inflorsd<-(FNA$inflor_high-FNA$inflor_low)/4 #"rule of ranges"
 
-FNA$fruitmean<-(FNA$fruit_low+FNA$fruit_high)/2
-FNA$fruitsd<-(FNA$fruit_high-FNA$fruit_low)/4 #"rule of ranges"
+#FNA$fruitmean<-(FNA$fruit_low+FNA$fruit_high)/2
+#FNA$fruitsd<-(FNA$fruit_high-FNA$fruit_low)/4 #"rule of ranges"
 
-range01 <- function(x){(x-min(x,na.rm=TRUE))/(max(x,na.rm=TRUE)-min(x,na.rm=TRUE))}
-FNA$fruit.z.mean<-range01(FNA$fruitmean)
-FNA$fruit.z.sd<-range01(FNA$fruitsd)
+zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
+#FNA$fruit.z.mean<-range01(FNA$fruitmean)
+#FNA$fruit.z.sd<-range01(FNA$fruitsd)
 
-FNA$inflor.z.mean<-range01(FNA$inflormean)
-FNA$inflor.z.sd<-range01(FNA$inflorsd)
+#FNA$inflor.z.mean<-range01(FNA$inflormean)
+#FNA$inflor.z.sd<-range01(FNA$inflorsd)
 
-FNA$petal.z.mean<-range01(FNA$petalmean)
-FNA$petal.z.sd<-range01(FNA$petalsd)
-
-FNA$meanpdsi.z<-range01(FNA$meanpdsi)
-FNA$sdpdsi.z<-range01(FNA$sdmean)
-
-FNA$minpdsi.z<-range01(FNA$minpdsi)
-FNA$sdminpdsi.z<-range01(FNA$sdmin)
+#FNA$petal.z.mean<-range01(FNA$petalmean)
+#FNA$petal.z.sd<-range01(FNA$petalsd)
 
 #zscore all predictor
+FNA$meanpdsi.z<-zscore(FNA$meanpdsi)
+FNA$minpdsi.z<-zscore(FNA$minpdsi)
+FNA$petal.z<-zscore(FNA$petal_high)
+FNA$inflor.z<-zscore(FNA$inflor_high)
+FNA$fruit.z<-zscore(FNA$fruit_high)
+FNA$cold.z<-zscore(FNA$meanT)
 
-#FNA$petal_low_z<-(FNA$petal_low-mean(FNA$petal_low))/(sd(FNA$petal_low))
-#FNA$fruit_low_z<-(FNA$fruit_low-mean(FNA$fruit_low))/(sd(FNA$fruit_low))
-#FNA$inflor_low_z<-(FNA$inflor_low-mean(FNA$inflor_low))/(sd(FNA$inflor_low))
-#FNA$meanpdsi_z<-(FNA$meanpdsi-mean(FNA$meanpdsi,na.rm=TRUE))/(sd(FNA$meanpdsi,na.rm=TRUE))
-#FNA$sdmean_z<-(FNA$sdmean-mean(FNA$sdmean,na.rm=TRUE))/(sd(FNA$sdmean,na.rm=TRUE)) ## cant have negatives so cant zscore
-
-#FNA$minpdsi_z<-(FNA$minpdsi-mean(FNA$minpdsi,na.rm=TRUE))/(sd(FNA$minpdsi,na.rm=TRUE))
-#FNA$sdmin_z<-(FNA$sdmin-mean(FNA$sdmin,na.rm=TRUE))/(sd(FNA$sdmin,na.rm=TRUE))
-#FNA$sdmin_z<-(abs(FNA$sdmin_z))
-#FNA$sdmean_z<-(abs(FNA$sdmean_z))
-
-#FNA$petalmeanz<-(FNA$petalmean-mean(FNA$petalmean,na.rm=TRUE))/(sd(FNA$petalmean,na.rm=TRUE))
-#FNA$petalsdz<-(FNA$petalsd-mean(FNA$petalsd,na.rm=TRUE))/(sd(FNA$petalsd,na.rm=TRUE))
-#FNA$petalsdz<-abs(FNA$petalsdz)
-
-#FNA$petalsd<-ifelse(FNA$petalsd==0.000,0.0001,FNA$petalsd)
 
 #get_prior(FLSnum~me(petalmean,petalsd)+me(meanpdsi,sdmean),data=FNA)
 
-FNA$petalsd<-ifelse(FNA$petalsd==0.00000000,0.00001,FNA$petalsd) #sd must be postive
-FNA$fruitsd<-ifelse(FNA$fruitsd==0.00000000,0.00001,FNA$fruitsd)
-FNA$inflorsd<-ifelse(FNA$inflorsd==0.00000000,0.00001,FNA$inflorsd)
 
-FNA$petal.z.sd<-ifelse(FNA$petal.z.sd==0.00000000,0.00001,FNA$petal.z.sd) #sd must be postive
-FNA$fruit.z.sd<-ifelse(FNA$fruit.z.sd==0.00000000,0.00001,FNA$fruit.z.sd)
-FNA$inflor.z.sd<-ifelse(FNA$inflor.z.sd==0.00000000,0.00001,FNA$inflor.z.sd)
-FNA$sdpdsi.z<-ifelse(FNA$sdpdsi.z==0.00000000,0.00001,FNA$sdpdsi.z)
-FNA$inflor.z.sd
-range(FNA$sdpdsi.z,na.rm=TRUE)
-
-FNAordz<-brm(FLSnum~petal.z.mean+inflor.z.mean+meanpdsi.z+fruit.z.mean,
+FNAordz<-brm(FLSnum~petal.z+inflor.z+fruit.z+cold.z+meanpdsi.z,
              data=FNA,
              family=cumulative("logit"),warmup=3000,iter=4000)
 
-
-FNAord.traits<-brm(FLSnum~me(petalmean,petalsd)+me(inflormean,inflorsd)+
-                     me(fruitmean,fruitsd),
-                   data=FNA,
-                   family=cumulative("logit"),warmup=3000,iter=4000,control = list(adapt_delta=.95))
+fixef(FNAordz)
+#FNAord.traits<-brm(FLSnum~me(petalmean,petalsd)+me(inflormean,inflorsd)+
+ #                    me(fruitmean,fruitsd),
+  #                 data=FNA,
+   #                family=cumulative("logit"),warmup=3000,iter=4000,control = list(adapt_delta=.95))
 
 launch_shinystan(FNAordz.error)
 
 
-get_prior(FLSnum~petal.z.mean+inflor.z.mean+
-  me(meanpdsi.z,sdpdsi.z)+fruit.z.mean,
-data=FNA)
+#get_prior(FLSnum~petal.z.mean+inflor.z.mean+
+ # me(meanpdsi.z,sdpdsi.z)+fruit.z.mean,
+#data=FNA)
 
-bprior <- c(prior(normal(0,1), class = b),
-            prior(normal(0,1), class = meanme ),
-            prior(uniform(0,1), class = sdme), 
-                  prior(normal(0,1), class = Intercept))
+#bprior <- c(prior(normal(0,1), class = b),
+ #           prior(normal(0,1), class = meanme ),
+  #          prior(uniform(0,1), class = sdme), 
+   #               prior(normal(0,1), class = Intercept))
 
-FNAordz.error1<-brm(FLSnum~petal.z.mean+inflor.z.mean+
-                     meanpdsi.z+me(fruit.z.mean,fruit.z.sd),
-                   data=FNA ,save_mevars = TRUE,
-                   family=cumulative("logit"),warmup=3000,iter=4000 )
+#FNAordz.error1<-brm(FLSnum~petal.z.mean+inflor.z.mean+
+ #                    meanpdsi.z+me(fruit.z.mean,fruit.z.sd),
+  #                 data=FNA ,save_mevars = TRUE,
+   #                family=cumulative("logit"),warmup=3000,iter=4000 )
 
-launch_shinystan(FNAordz.error1)
+#launch_shinystan(FNAordz.error1)
 p1<-plot(conditional_effects(FNAordz, "meanpdsi.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-p2<-plot(conditional_effects(FNAordz, "petal.z.mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-p3<-plot(conditional_effects(FNAordz, "inflor.z.mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-p4<-plot(conditional_effects(FNAordz, "fruit.z.mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p5<-plot(conditional_effects(FNAordz, "cold.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p2<-plot(conditional_effects(FNAordz, "petal.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p3<-plot(conditional_effects(FNAordz, "inflor.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p4<-plot(conditional_effects(FNAordz, "fruit.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
 
 p1<-p1[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p3<-p3[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p4<-p4[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p5<-p5[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+
 
 jpeg("Plots/FNA_mean_ordinal.jpeg")
-ggpubr::ggarrange(p1,p2,p3,p4,common.legend = TRUE)
+ggpubr::ggarrange(p1,p5,p2,p3,p4,common.legend = TRUE)
 dev.off()
+#### run this just on prunocerasus
+pruno<-c("alleghaniensis","angustifolia","americana" ,"gracilis","geniculata","hortulana" ,"maritima",
+         "mexicana","murrayana","munsoniana","nigra","rivularis","umbellata","subcordata","texana" )
 
 
+FNA.pruno<-dplyr::filter(FNA, species %in% pruno)
 
-ggpubr::ggarrange(p11[[1]],p22[[1]],p33[[1]],p44[[1]],common.legend = TRUE)+ggthemes::theme_base()
+FNAordz.pruno<-brm(FLSnum~petal.z+fruit.z+cold.z+meanpdsi.z,
+             data=FNA.pruno,
+             family=cumulative("logit"),warmup=3000,iter=4000)
 
+fixef(FNAordz.pruno)
+
+
+p11<-plot(conditional_effects(FNAordz.pruno, "meanpdsi.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p55<-plot(conditional_effects(FNAordz.pruno, "cold.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p22<-plot(conditional_effects(FNAordz.pruno, "petal.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p44<-plot(conditional_effects(FNAordz.pruno, "fruit.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+
+p11<-p11[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p22<-p22[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p44<-p44[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p55<-p55[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+
+jpeg("Plots/FNA_mean_prunocerasus.jpeg")
+ggpubr::ggarrange(p11,p55,p22,p44,common.legend = TRUE)
+dev.off()
+fixef(FNAordz.pruno,probs = c(.25,.75))
 
 cor(FNA$petal_low,FNA$meanpdsi,use = "complete.obs")
 cor(FNA$minpdsi,FNA$meanpdsi,use = "complete.obs")
 
+cor(FNA.pruno$minpdsi,FNA.pruno$meanpdsi,use = "complete.obs")
+cor(FNA.pruno$meanT,FNA.pruno$meanpdsi,use = "complete.obs")
 
 ## make sure we can use the Zanne tree
 colnames(FNA)
@@ -254,3 +269,5 @@ which(names.intree%in%namelist)
 length(which(namelist%in%names.intree))
 length(which(!namelist%in%names.intree))
 save.image("FNA.Rda")
+
+

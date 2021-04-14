@@ -73,7 +73,8 @@ $^a$Corresponding author: 617.823.0687; dbuonaiuto@g.harvard.edu\\
 \subsection{relevant code}
 \begin{enumerate}
 \item FNA.R This code cleans and models and plots the FNA data for part I.
-
+\item input_clean folder has all the cleaned prunocerasus data and clean_all.R is the code that did it.
+\end{enumerate}
 
 
 
