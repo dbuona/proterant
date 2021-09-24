@@ -19,7 +19,7 @@ library("tidybayes")
 library(raster)
 
 setwd("~/Documents/git/proterant/investment/Input")
-
+load("plummy.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv")
 
@@ -161,7 +161,7 @@ jpeg("..//Plots/ord_quants.jpeg", width=11, height=8,unit="in",res=300)
 ggplot(data=result,aes(bbch,likelihood))+geom_point()+
   geom_ribbon(aes(x=int,ymin=0,ymax=likelihood,),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
-  geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0))+ggthemes::theme_base(base_size = 11)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))
+  geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0))+ggthemes::theme_clean(base_size = 11)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))
 dev.off()
 
 #always1
@@ -190,6 +190,7 @@ d.fruit<-filter(d.fruit,fruit_type=="fleshy")
 d.phen<-left_join(d.phen,hystscore)
 
 pdsi.mod<-brm(pdsi~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
+minpdsi.mod<-brm(pdsi.min~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
 petalmod<- brm(pental_lengh_mm~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
 fruitlmod<- brm(fruit_diam_mm~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
 phenlmod<- brm(doy~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
@@ -201,7 +202,7 @@ goober2<-pdsi.mod%>%
   tidyr::spread(term,r_specificEpithet) 
 colnames(goober2)
 
-
+fixef(pdsi.mod)
 flooby<-left_join(goober2,hystscore)
 flooby<-flooby%>% group_by(score)%>%
   mean_qi(Intercept,.width=0.5)
@@ -239,13 +240,34 @@ flooby4<-flooby4%>% group_by(score)%>%
 flooby4<-filter(flooby4,!is.na(flooby4))
 
 
-a<-ggplot(flooby,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("mean pdsi")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)
-b<-ggplot(flooby2,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("petal length")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)
-c<-ggplot(flooby3,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit diameter")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)
-d<-ggplot(flooby4,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit phenology")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)
+goobermin<-minpdsi.mod%>%
+  spread_draws(r_specificEpithet[specificEpithet,term])%>%
+  tidyr::spread(term,r_specificEpithet) 
+colnames(goobermin)
 
-ggpubr::ggarrange(a,b,c,d, ncol=2,nrow=2)
 
+floobymin<-left_join(goobermin,hystscore)
+floobymin<-floobymin%>% group_by(score)%>%
+  mean_qi(Intercept,.width=0.5)
+floobymin<-filter(floobymin,!is.na(floobymin))
+
+
+a<-ggplot(flooby,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
+  ylab("Mean 120 year PDSI at \n collection sites")+
+  scale_x_continuous(name ="Flowering-first grouping",
+                   labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))+ggthemes::theme_clean(base_size = 11)
+
+#ggplot(floobymin,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
+ # ylab("Min PDSI at collect sites")+
+  #scale_x_continuous(name ="Flowering-first grouping",
+   #                  labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))+ggthemes::theme_base(base_size = 11)
+
+b<-ggplot(flooby2,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("petal length")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
+c<-ggplot(flooby3,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit diameter")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
+d<-ggplot(flooby4,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit phenology")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
+
+e<-ggpubr::ggarrange(b,c,d, ncol=3,nrow=1)
+f<-ggpubr::ggarrange(a,e,ncol=1,nrow=2)
 
 ###plastic
 d.um<-d.flo
@@ -262,12 +284,113 @@ colnames(ext)<-(c(1899:2017))
 ext<-as.data.frame(ext)
 ext$lat<-latpoints
 ext$lon<-lonpoints
-goo<-tidyr::gather(ext,"year","pdsi",1:119)
-class(goo$year)
+pdsi.dater<-tidyr::gather(ext,"year","pdsi",1:119)
+class(pdsi.dater$year)
 
-goo$year<-as.integer(goo$year)
+pdsi.dater$year<-as.integer(pdsi.dater$year)
 
-d.um<-left_join(d.um,goo)
+head(pdsi.dater)
+head(pdsi.dater)
+joiner<-dplyr::select(d.flo,specificEpithet,lat,lon)
+
+pdsi.counter<-left_join(pdsi.dater,joiner)
+pdsi.counter$dry<-ifelse(pdsi.counter$pdsi<-2,1,0)  
+
+  
+pdsi.count<-pdsi.counter %>%group_by(specificEpithet)%>% summarize(obs = n(),
+                                                                   dry = sum(pdsi < -2,na.rm=TRUE)
+  
+                                                                  prop =dry / obs))
+
+brm(dry~(1|specificEpithet),data=pdsi.counter,family="bernoulli")
+
+d.um<-left_join(d.um,pdsi.dater)
+
+
+### a better way than mean
+
 
 moda<-brm(bbch.v.scale~pdsi+doy+(pdsi+doy|specificEpithet),data=d.um,family=cumulative("logit"))
 coef(moda,probs = c(.25,.75))
+goo<-as.data.frame(coef(moda))
+
+goo<-dplyr::select(goo,1:4)
+
+goo2<-as.data.frame(fixef(moda,probs =c(.25,.75)))
+goo2$species<-rownames(goo2)
+goo2<-filter(goo2,species=="pdsi")
+goo$species<-rownames(goo)
+colnames(goo)<-colnames(goo2)
+
+
+
+goo<-rbind(goo,goo2)
+goo$species<-ifelse(goo$species=="pdsi","Main Effect",goo$species)
+goo$species
+goo$Estimate2<-(-goo$Estimate)
+goo$Q252<-(-goo$Q25)
+goo$Q752<-(-goo$Q75)
+
+goo$effect<-ifelse(goo$species=="Main Effect","main","species")
+q<-ggplot(goo,aes(Estimate2,species))+geom_point(aes(size=effect))+
+  geom_errorbarh(aes(xmin=Q252,xmax=Q752,height=0))+scale_size_manual(values=c(4,2))+
+    geom_vline(xintercept = 0, color="red")+ggthemes::theme_clean(base_size = 11) + theme(axis.text.y = element_text(face=ifelse(goo$species=="Main Effect","bold","italic")))+
+  scale_y_discrete(name ="species", 
+                   limits=c("alleghaniensis", "americana"    ,  "angustifolia"  , "gracilis"   ,    "hortulana"    , 
+                           "maritima"  ,     "mexicana"    ,   "munsoniana"   ,  "nigra"     ,     "rivularis"   ,  
+                            "subcordata" ,    "texana"     ,    "umbellata", "Main Effect"))+theme(legend.position = "none")+xlab("Drought effect estimate")+
+  annotate(geom="text",color="gray39", x=-1, y=13.5,label="Increased aridity increases \n likelihood \nof flowering-first")+
+  annotate(geom="text",color="gray39", x=1, y=13.5,label="Increased aridity decreases \n likelihood \nof flowering-first")+xlim(-1.5,1.5)
+
+ggpubr::ggarrange(a,q,nrow=2,heights = c(.5,.7),labels = c("a)","b)"))
+
+####phylogeny
+tree<-read.tree("~/Desktop/restore_proterant/investment/prunophylo_nonultra.tre")
+is.ultrametric(tree)
+ ## make ultrametric
+
+names.intree<-tree$tip.label # names the names
+namelist<-unique(d.flo$specificEpithet)
+
+to.prune<-which(!names.intree%in%namelist) #prun the tree
+pruned.by1<-drop.tip(tree,to.prune)
+plotTree(pruned.by1)# this is the tree
+
+tree2<-chronoMPL(tree)
+pruned.by<-drop.tip(tree2,to.prune)
+plotTree(pruned.by)# 
+
+is.ultrametric(pruned.by)
+###what are the tip labels in pruned phylogeny?
+
+mytree.names<-pruned.by$tip.label # did i get them all
+intersect(namelist,mytree.names) #yes
+
+
+### Q1 DO we bother with phylogeny? Only 7 species, and as you can see, weak signal
+meanfls<-d.flo %>% dplyr::group_by(specificEpithet)%>% dplyr::summarise(meanFLS=mean(bbch.v.scale),sdFLS=sd(bbch.v.scale))##Take mean FLS values
+d.phylo<-filter(d.flo,specificEpithet %in% mytree.names)
+
+d.phylo<-left_join(d.phylo,meanfls)
+##quick phylo sig
+meanfls4phylo<-filter(meanfls,specificEpithet %in% mytree.names)
+meanfls4phylo<-left_join(meanfls4phylo,hystscore)
+phylosig(pruned.by,meanfls4phylo$meanFLS,method="lambda",nsim = 100, test=TRUE) ### 0.1r
+phylosig(pruned.by,meanfls4phylo$score,method="lambda",nsim = 100, test=TRUE) ### 0.1r
+
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+#install.packages("BiocManager")
+
+#BiocManager::install("ggtree")
+library(ggtree)
+meanfls4phylo$tip.labels<-meanfls4phylo$specificEpithet
+full_join(pruned.by,meanfls4phylo)
+p<-ggtree(pruned.by1,branch.length="none")
+
+jpeg("..//Plots/phylosig1", width=11, height=6,unit="in",res=300)
+p %<+% meanfls4phylo+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=meanFLS),size=5)+ xlim(0, 5)+geom_cladelabel(node=3, label="lambda=0.169", 0,offset=-3)+scale_color_viridis_b()
+dev.off()
+jpeg("..//Plots/phylosig2", width=11, height=6,unit="in",res=300)
+p %<+% meanfls4phylo+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=as.factor(score)),size=5)+ xlim(0, 5)+geom_cladelabel(node=3, label="lambda=7.02e-05", 0,offset=-3)
+dev.off()
+
