@@ -181,6 +181,8 @@ d.pdsi<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/pruno_c
 d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
 d.fruit<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruitsize_clean.csv")
 d.phen<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruit_phen.csv")
+d.cold<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/pruno_clean_pdsi_wint.csv")
+
 
 #mmacropatters
 d.pdsi<-left_join(d.pdsi,hystscore)
@@ -188,13 +190,14 @@ d.petal<-left_join(d.petal,hystscore)
 d.fruit<-left_join(d.fruit,hystscore)
 d.fruit<-filter(d.fruit,fruit_type=="fleshy")
 d.phen<-left_join(d.phen,hystscore)
+d.cold<-left_join(d.cold,hystscore)
 
 pdsi.mod<-brm(pdsi~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
 minpdsi.mod<-brm(pdsi.min~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
 petalmod<- brm(pental_lengh_mm~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
 fruitlmod<- brm(fruit_diam_mm~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
 phenlmod<- brm(doy~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
-
+cold.mod<-brm(wintert~(1|specificEpithet),data=d.cold,warmup=2500,iter=4000)
 
 ##extrac and group posteriors I think these are doing raneffs
 goober2<-pdsi.mod%>%
@@ -252,6 +255,17 @@ floobymin<-floobymin%>% group_by(score)%>%
 floobymin<-filter(floobymin,!is.na(floobymin))
 
 
+goobercold<-cold.mod%>%
+  spread_draws(r_specificEpithet[specificEpithet,term])%>%
+  tidyr::spread(term,r_specificEpithet) 
+colnames(goobercold)
+
+
+floobycold<-left_join(goobercold,hystscore)
+floobycold<-floobycold%>% group_by(score)%>%
+  mean_qi(Intercept,.width=0.5)
+floobycold<-filter(floobycold,!is.na(floobycold))
+
 a<-ggplot(flooby,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
   ylab("Mean 120 year PDSI at \n collection sites")+
   scale_x_continuous(name ="Flowering-first grouping",
@@ -265,9 +279,10 @@ a<-ggplot(flooby,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin
 b<-ggplot(flooby2,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("petal length")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
 c<-ggplot(flooby3,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit diameter")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
 d<-ggplot(flooby4,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit phenology")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
-
-e<-ggpubr::ggarrange(b,c,d, ncol=3,nrow=1)
-f<-ggpubr::ggarrange(a,e,ncol=1,nrow=2)
+ggplot(floobycold,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
+  ylab("min winter T")
+#e<-ggpubr::ggarrange(b,c,d, ncol=3,nrow=1)
+#f<-ggpubr::ggarrange(a,e,ncol=1,nrow=2)
 
 ###plastic
 d.um<-d.flo
@@ -300,9 +315,9 @@ pdsi.counter$dry<-ifelse(pdsi.counter$pdsi<-2,1,0)
 pdsi.count<-pdsi.counter %>%group_by(specificEpithet)%>% summarize(obs = n(),
                                                                    dry = sum(pdsi < -2,na.rm=TRUE)
   
-                                                                  prop =dry / obs))
+                                                                  prop =dry / obs)
 
-brm(dry~(1|specificEpithet),data=pdsi.counter,family="bernoulli")
+#brm(dry~(1|specificEpithet),data=pdsi.counter,family="bernoulli")
 
 d.um<-left_join(d.um,pdsi.dater)
 
@@ -342,10 +357,21 @@ q<-ggplot(goo,aes(Estimate2,species))+geom_point(aes(size=effect))+
   annotate(geom="text",color="gray39", x=-1, y=13.5,label="Increased aridity increases \n likelihood \nof flowering-first")+
   annotate(geom="text",color="gray39", x=1, y=13.5,label="Increased aridity decreases \n likelihood \nof flowering-first")+xlim(-1.5,1.5)
 
+jpeg("..//Plots/droughtstuff.jpg", width=11, height=9,unit="in",res=300)
 ggpubr::ggarrange(a,q,nrow=2,heights = c(.5,.7),labels = c("a)","b)"))
+dev.off()
 
+
+###quick model to see if pdsi impact day of flowering in general
+modcont<-brm(doy.cent~pdsi+lat+(1|specificEpithet),data=d.um)
+
+fixef(modcont,probs = c(.25,.75))
+
+jpeg("..//Plots/alt_hypothesis.jpg", width=11, height=6,unit="in",res=300)
+ggpubr::ggarrange(b,c,d,labels = c("a)","b)","c)"),ncol=3)
+dev.off()
 ####phylogeny
-tree<-read.tree("~/Desktop/restore_proterant/investment/prunophylo_nonultra.tre")
+tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre")
 is.ultrametric(tree)
  ## make ultrametric
 
@@ -353,14 +379,10 @@ names.intree<-tree$tip.label # names the names
 namelist<-unique(d.flo$specificEpithet)
 
 to.prune<-which(!names.intree%in%namelist) #prun the tree
-pruned.by1<-drop.tip(tree,to.prune)
-plotTree(pruned.by1)# this is the tree
+pruned.by<-drop.tip(tree,to.prune)
+plotTree(pruned.by)# this is the tree
 
-tree2<-chronoMPL(tree)
-pruned.by<-drop.tip(tree2,to.prune)
-plotTree(pruned.by)# 
 
-is.ultrametric(pruned.by)
 ###what are the tip labels in pruned phylogeny?
 
 mytree.names<-pruned.by$tip.label # did i get them all
@@ -393,4 +415,6 @@ dev.off()
 jpeg("..//Plots/phylosig2", width=11, height=6,unit="in",res=300)
 p %<+% meanfls4phylo+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=as.factor(score)),size=5)+ xlim(0, 5)+geom_cladelabel(node=3, label="lambda=7.02e-05", 0,offset=-3)
 dev.off()
+
+
 

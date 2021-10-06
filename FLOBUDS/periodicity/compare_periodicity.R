@@ -1,7 +1,6 @@
 ###compare_periodicity begun by Dan B. on Feb 7 2019
 #The goal of this file is to compare the effect of covarying photoperiodicity and thermoperiodcity by comparing dany flynn to Dan b's budburst experients
-
-##Ask Lizzie about the chilling.
+#### DAn should redo this anaysis
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
@@ -111,8 +110,14 @@ both.dat1$PHOTO<-ifelse(both.dat1$photo==8,0,1)
 both.dat1$warm.cent<-both.dat1$warm-mean(both.dat1$warm)
 both.dat1$photo.cent<-both.dat1$photo-mean(both.dat1$photo)
 
+##with forcing
+goobermody<-brm(bday~study*photo*warm+(study*photo*warm|GEN.SPA),data=both.dat1,iter=3000,warmup=2500)
+summary(goobermody)
+coef(photo.only.bb1)
+
 
 both.dat.sameforce1<-both.dat1 %>% filter(warm %in% c(20,18)) ## Filter just the studies with same forcing
+
 
 photo.only.bb1<-brm(bday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce1,iter=3000,warmup=2500)
 summary(photo.only.bb1)
