@@ -192,7 +192,7 @@ both.dat.match$PHOTO<-ifelse(both.dat.match$photo==8,0,1)
 
 
 both.dat.match$warm.cent<-both.dat.match$warm-mean(both.dat.match$warm)
-both.dat.match$photo.cent<-both.dat.match$photo-mean(both.dat.match$photo)
+both.dat.match$photo.cent<-both.dat.match$photo-mean(both.dat.match$photo) ## use this
 
 both.dat.sameforce.match<-both.dat.match %>% filter(warm %in% c(20,18)) ## Filter just the studies with same forcing
 
@@ -201,7 +201,9 @@ unique(both.dat.sameforce.match$GEN.SPA)
 photo.only.bb.match<-brm(bday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce.match,iter=3000,warmup=2500)
 photo.only.lo.match<-brm(lday~study*PHOTO+(study*PHOTO|GEN.SPA),data=both.dat.sameforce.match,iter=3000,warmup=2500)
 
-bb.output2<-rownames_to_column(as.data.frame(fixef(photo.only.bb.match,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
+ summary(photo.only.bb.match)
+ fixef(photo.only.lo.match,probs = c(.25,.75))
+ bb.output2<-rownames_to_column(as.data.frame(fixef(photo.only.bb.match,probs=c(0.1,0.9,0.25,0.75))),"Parameter")
 bb.output2$Phase<-"budburst"
 
 lo.output2<-rownames_to_column(as.data.frame(fixef(photo.only.lo.match,probs=c(0.1,0.9,0.25,0.75))),"Parameter")

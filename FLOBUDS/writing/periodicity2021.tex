@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 %Required: You must have these
 \usepackage{graphicx}
 \usepackage{tabularx}
@@ -15,7 +15,7 @@
  \oddsidemargin -0.04cm 
  \evensidemargin -0.04cm 
  \textwidth 16.59cm
- \textheight 21.94cm 
+ \textheight 23.94cm 
  \parskip 7.2pt 
 \renewcommand{\baselinestretch}{1.2} 	
 \parindent 0pt
@@ -26,10 +26,94 @@
 \usepackage{hyperref}
 \title{Thermoperiodicity}
 \begin{document}
-\begin{enumerate}
-Note could define: Full factorial, orthoginal, periodicity, intesity, forcing as a box maybe to shorten main text?\\
-
 \section{Introduction}
+Temerpature and light cue numerous biological processes including....\textit{list here}\citep{}. These cues often interact in complex ways and a major goal of biology is to quantify their both individual and interactive effects on biological activities \citep{}. This effort has only become more critical in recent decades as this such measurements have become essential for accurately predicting organisms' response to anthropogenic global change and informing numerous mitigation and adaptation stratigies \citep{}.\\
+
+It is extremely difficult to partition the individual effects of temperature and light cues and their interactions based on \textit{in situ} observational studies  because temperature and light variables tend to covary in nature \citep{}. However, well designed experiments in controlled environments (e.g. growth chambers, greenhouses, mesocosm) can be used to manipulate temperature and and light variable independently allowing for robust comparisions of their individual and interactive contributions to biological processes. Indeed this approach has provided many fruitful insights regarding temperature and light signaling over the last century \citep{} and has great potentially to continue to advance fundamental and applied biological inquiries in the decades to come \citep{}.\\
+
+However, controlled environment studies have their own challenges. Experimentalists must balance biological realism with statistical inference \citep{}, experimental effort with statistical power \citep{} and account for the effects of unmanipulated or unmeasured variables \citep{}. Below we highlight a particular challenge that can arise when experiments seeking to estimate the interactive effects of temperature and daylength on biological outcomes. Our example deals with the phenology (timing of recurring life cycle events, e.g. leaf budburst, flowering) in temperatue woody plants, but the issues and solutions we present should are broadly applicable to many other orgnaisms and biological processes that utalize temperature and daylength signals \citep{} (For a brief background overview of how temperature and light interact to influence the spring phenology of woody plants see box). \\
+
+We begin below by reviewing the minimim experimental elements required to robustly test interactiions between two or more variables. We then detail the problem of inference that can arise manipulating the both temperature and light in experiments and demonstrate the extent of this issue a mathmatical and experimental examples. Finally, we counclude by outlining several possible solutions for overcomming these issues. 
+
+\section{Testing interactions in contolled environmental}
+In order to have the stastical power to partition the individual and interactive effect of two or more variables in an experiment, one must:\\
+\begin{enumerate}
+\item Have at minimum two treatment levels of at least two variables of interest \citep{}.
+\item Treatment levels must be full factorial (Fig. \ref{examp}a.). Full factoiral design are balanced (Fig. \ref{examp}b.)  and orthoginal (Fig. \ref{examp}c.); which is to say that all possible treatment combinations are applie the treatments and the treatments are independent of each other \citep{}.   \ref{examp}.
+\end{enumerate}
+
+These two critical elements may seem obvious but can be conspiquously absent from many published studes. In the case of woody plant phenology, despite a well established understand that both temperature and light cues interatively influence phenological progress \citep{}, we found that in recently published database of Z  controlled environment studies \citep{}, only X of them manipulated both light and temperature cues in the same experimentm and only Y of those X did so with a design that was both balanced and orthoginal (see Suppliment for details). This notable dearth of robust tests of light and temperature interactions may be the related to the common limitations of time, space, and resources that expirimentalist face \citep{}, but it may equally relate to a fundemental issues that arises from these variables themselves comprising of multiple axes of variabily.
+
+\section{Axes of environmental variation in experiments and their implications}
+For most environmental variables, including light and temperature, there are two axes of variation that can be manipulated in an experiment.  
+\begin{enumerate}
+\item Intensity: The amount or quality of of a variable. We define temperature intensity as the amount of heat present in the system (measure in degrees).  In the phenology literature this measurement is generally refered to as forcing. We define light intesity as the luninosity or irradience present in the system (measured in lumens or watts). 
+\item Periodicity: The interval at which the intesity of the variable is applied. Hereafter, we refer to the periodcity of light as photoperiod (often used synonomously with `daylength") and the periodicity of temperature as theromoperiod. 
+\end{enumerate}
+
+For spring of woody plants phenology, it is generally accepted that photoperiodicity is the primarly light cue to which plants respond (\citep{} though see \citep{} regarding light intensity and phenology). For temperature, conventionally both intesity and periodicty drive phenological activity \citep{} and several metrics, (e.g. growing dgree hours, thermal sums, growing degree days)  that combine these two axes have been developed \citep{}. This assumption is well supported; under natural conditions diurnal temperature fluctuations temperate regions can be quite large in the field, and several studies have found that diurnal temperature varition tstrongly influences plant phenology \citep{}. In fact, several studies suggest that the even if theromoperiodicity is not an explicit treatment vairiable (mainipulated systematically), incorperating it in experiments is essential for translating experimental result into real world predictions \citep{}.
+
+It follows that a common approach in phenology experiments that seems to balance prior knowlege, biological realism and experimental inferences is to vary photoperiodcity, and thermal intensity and periodicty \citep{}. For example, a basic experiment might include a long (12 hours) and short (8 hours) photoperiod treatment
+and a high (30/20$\degree$ C day/night) and low (20/10 $\degree C$ day/night)temperature treatment. Note that in this case the thermoperiodicty in not an explicity treatment (both high and low temperature treatment employ a diurnal fluction of 10 $\degree$ C), and is simply incorperated to enhance biological realism. At first glance, this design appears to meet the criterial of full factorial design, multiple treatment levels that are balanced and orthoginal, with mean high/low temperature treatments (25 and 15 $\degree$ C respectively) and long/short photoperiod treatment applied in all possible combinations.
+
+Yet the orthogninality of this design is based on the assumption to a 12 hour thermoperiod. If, rather the thermoperiod is coupled with the photoperiod, orthogninality is violated, in that the daily mean temperature of the long/high treatment will be higher than that of the short/high treatment, and the long/low treatment slightly warmer than the short low (Fig \ref{ortho}.a), because the warmer day time temperature are applied for different durations across the high temperature treatments. Ultimately, this non-orthoginality introducing covariation amoung the photoperiod and temperature treatments, making it stasticially impossible to differentiate their independent and interactive effects.\\
+
+Of the X studies in the OSPREE database that manipuated both photoperiod and temperature, we found that at least  Y may have this issue, suggesting that the true interactive effects of these cues on spring phenology is still quite poorly characterized. This may be in part why the relatively contribution of temperature and photoperiod cues to spring phenology remains a contentious debate in the phenology literature \citep{}.
+
+\section*{Quantifying the uncertainty}
+To estimate the potential impact of this experimental artifact on estimations of cue effect sizes, we inteorgated the results of a large growth chamber phenology experiment by \citet{} that employed this coupled photo-thermoperiod design. We used the simple geomotry to a plane to calculate the approximate maximum amount of the forcing (temperature) and photoperiod effect estimates that could potentially be mis-attrubuted due to the latent non-orthoginality of this design. While the original model estimates of the forcing and photoperiod effects (units are ``phenological sensitivy" or $\Delta$ day of leaf out / $\Delta$ cue level) were estimate -9.5 and -4.5  caluted that as much about 3.0 units of of these effects could be miss attributed (for the full calculations see the Summliment.) Because  forcing is expected to be the more dominant cue, we would expect the covariation of the variables may result in an over-estimation of the photoperiod effect and a weaker interaction estimate. \\
+
+It is important to stress that this math is not meant to be rigid model correction. It is certainly possible that original model estimate approach the ``true" values,  but, due to the covariation of thermo and photoperiod there is no way of knowing for certain. (\textit{Probably should think about how to phase all this without making it seem like the Flynn paper is bad or wrong}).\\
+
+Our estimate of ``how much of each cue estimate could be misattributeddue to the covariation of thermo- and photoperiod" can be rephrased as a maximum prediction of the expected difference in effect size estimate from a coupled photo- and thermo-period experiment and an uncouple one in which diurnal photoperiod and thermoperiod are varied independently.
+
+While we are aware of no experiments that explicitly compare these different designs, another later study by \citet{Buonaiuto2020} utalized many overlapping treatment levels and species from the same sampling site and several treatment levels with the \citet{Flynn2018} study, but authors decoupled photo- and thermo-period,  allowing for a reasonable comparision. We subset each dataset (publically available at  HF and KNB ) to include only the  species shared amoung the two studies, and re-analyzed the data, to compare difference in the photoperiod and forcing effect estimates (see supplimental method). As we predicted the un-coupled design estimated a weaker (less negative) photoperiod effect, and stronger forcing and interaction effects than the coupled experimental design (\ref{fig:compy}). It is worth saything that there may be other factors driving the differences between these experiments as the we conducted in different years, used different methods for applying an addition temperature pre-treatment ,chilling (see Suppliment), but this comparision is well matched to our mathmatical predictions and prior knowledge about how temperature and photoperiod are expect to interacting in phenology.\\
+
+\section{Paths Forward}
+In the sections above we have systematically demonstrated that experiments which covary thermoperiod and photoperiod cannot robust differentiate the individual effect of temperature and photoperiod on a spring phenology (or any other biological process) or quantify their interactive influence. Given the paucity of interactive studies in the literature, it is clear that more well designed studies will be needed to better characterize the effect of these cues. Below we offer several generalized experiment designs that improve statistical orthoginality of controlled environmentl experiment that could be further developed and adjusted to fit the needs of expeimentalist across many subfield of biology.
+\begin{enumerate}
+\item \textbf{Manipulate photoperiod and temperature intesity with no thermoperiodicity}. This approach allows for the maintainence of statistical orthoginality across treatment combinations (\ref{fig:ortho}b.). The main drawback is that this design sacrifices the biological realism of diurnal temperature variation, which may make it more difficult to tranlate estimates from experiments to real world applications.
+
+ 
+\item \textbf{Compensitory diurnal temperature fluctions}. There are almost unlimited pairs of integers that can reduce to the same mean (e.g. $24+26/2 = 30+20 = 25$) and the non-orthoginality of the mean daily temperature that arises in a coupled photo-thermoperiod design could be corrected for by proportunatly increasing the dirunal temperature fluction of the short photoperiod treatment realtively to the long treatments  factor (\ref{fig:ortho}c.). However, if the differences between day and night temperature has a meanful biological effect \citep{}, this introduces another confonding, non-orthoginal factor for interpreting temperature and photoperiod effects.
+
+
+\item \textbf{Uncouple thermoperiod and photoperiod.} By varying thermoperiod and photoperiod independently (\ref{fig:ortho}d.), statistical orthoginality can be maintained accross treatment. However, this approach it may introduce new artifacts that occur from the biological rather than statistical interactions that occur between light and temperature. For example, there is evidence that increasing temperatures in the first two hours of the photoperiod can be almost as effective for stimulating shoot elongation as similar temperature increases for the whole photoperiod \citep{Erwin1998}, and that in phenology daytime warming can be as much as three times for effect that night time warming in cueing phenology \citep{}. With this design, treatments must inherantly differ in the amount of time the warmer daytime temperature extend into the dark nighttime light regime, introducing a new axes of non-orhtoginality.
+\end{enumerate}
+
+In correcting one problem, each on of these designs introduces another, which may in fact be an intrinsic property of any experimental manipulation. This fact should caution experimentalists to continue to think carefully about our designs and perhaps most importanlty, remind us to be humble in our inference, and think critically about what is, and isn't accounted for in our work. 
+
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=.9\textwidth]{..//Plots/periodicity_figures/orthog.jpeg}
+    \caption{Idealized experimental designs demonstrate three approaches for varying temperature and light treatment level in controlled environment experiments. Design \textbf{a)} is fully factorial in that treatments levels are balanced and orthoginal. This design is appropriate for testing interactions between two or more variables. In \textbf{b)} the design is balanced both not orthoginal. Non-orthoginality in experiments often arises in experiments when there is covariation amoung the test variables is unaccounted for. In \textbf{c)}, the experimental design is orthoginal but unbalanced. Lack of balance in experiments often arises due to time, space or resource limitations. }
+    \label{fig:examp}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//Plots/periodicity_figures/designs.jpeg}
+    \caption{Conceptualized experimental designs to test temperature and daylength interactions on a biological response. In \textbf{a)} the design incorperates a standardize diurnal temperature fluctuation across all treatment. Because this thermoperiod is coupled with the photoperiod, while the same day and night temperatures are applied for the high and low temperature treatments respectivly, the mean daily temperatures differ across each photoperiod treatment generating non-orthoginality. Designs \textbf{b)},\textbf{c)} and \textbf{d)} are all designs that can  correct this non-orthoginality. Design \textbf{b)}  manipulated temperature intesity only (no thermoperiodicity).% sacrificing some biological realism if the biological response in question requires dirunal temperature fluctions. 
+    In  \textbf{c)} photo- and thermo- periods are still are coupled but the orthoginality of mean daily temperature is maintained by proportionately varying the diurnal temperature fluctations across treatments. %However, if temperature and light intensity interact biologically, this approach introduce unbalance and non-orthoginality introducing a new latent difference among the treatments in the form of diurnal temperature range.
+    In design \textbf{d)} standard diurnal temperature fluctuations are maintained but, thermoperiod and photoperiod are decoupled and varied independently, maintaining orthoginality daily mean temperatures.}% but may introduce inferential bias as the periodicty of temperature relative to temperature will be non-orthoginal among treatment combination.} 
+    \label{fig:ortho}
+\end{figure}
+ 
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//Plots/periodicity_figures/modelcomps.jpeg}
+    \caption{Need a caption but basically, estimates differs in expected ways} 
+    \label{fig:compy}
+\end{figure}
+ 
+
+\end{document}
+
+
+
+
+\begin{enumerate}
 \item Temperature and light control and signal many biological processes.
 \item They often interact, substitute or compensate for each other.
 \item A major goal of biology is to quantify their effects and interactions
@@ -38,11 +122,11 @@ Note could define: Full factorial, orthoginal, periodicity, intesity, forcing as
 \item Experiments in controlled environments (growth chambers, greenhouses etc) can do this, using experimental treatment to partition the effects of this variables and their interactions.
 \item Indeed much progress has been made with this apporach
 \item But experiments must balance many competing factors in their designs, biological realism with statistical interence, the effect of unmeasure climate variable, blocking effects etc.
-\item In the sections below we highlight a particular problem that can arise when designing experiments to partition the effects of temperature and daylength and understand their interaction. Our example uses woody plant phenology as an example, but the approach we detail here is relevant for other organisms and biological process too.
+\item In the sections below we highlight a particular problem that can arise when designing experiments to partition the effects of temperature and daylength and understand their interaction. Our example uses woody plant phenology as an example, but the approach we detail here is relevant for other organisms and biological process too.  
 \end{enumerate}
 
 \section{Phenological response to Temperature and Light}
-Here a very brief (one paragraph) overview of how light and temperature influence spring phenology. Keep it basic (Warming accelerate phenology, photoperiod might be a threshhold), aknoledge chilling is important too, but our example won't really focus on it. Leave some open questions about their interactive nature
+Here a very brief (one paragraph) overview of how light and temperature influence spring phenology. Keep it basic (Warming accelerate phenology, photoperiod might be a threshhold), aknoledge chilling is important too, but our example won't really focus on it. Leave some open questions about their interactive nature.
 
 \section{Testing Interactions}
 \begin{enumerate}
@@ -90,35 +174,3 @@ Here a very brief (one paragraph) overview of how light and temperature influenc
 \end{enumerate}
 
 
-
-\begin{table}[h!]
-    \centering
-\begin{tabular}{|c|c|c|}
-\hline
-& predicted difference & observed difference (sd)\\
-\hline
-budburst sensitivty & 3.0 & -4.1575777(2.665567)\\
-\hline
-
-\end{tabular}
- \caption{Need a caption, and maybe a better way to show this, and to recheck the analyses}
-     \label{tab:compy}
-\end{table}
-
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//Plots/periodicity_figures/orthog.jpeg}
-    \caption{To partition the effects of light and temperature and their interactions in experiments,  treatments must  must apply at least two treatment levels of each variable and be full factorialAand orthoginal, that is all possible combination of treatments levels applied and each is independent of the other (blue rectagle). When a daily thermoperiod and photoperiods are coupled, a latent non-orthognality is introduce as the long photoperiod/ high temperature treatment combination will recieve more daily heat exposure (thermal sums) than the short photoperiod/high temperautre combination despite having the same temperature settings. }
-    \label{fig:examp}
-\end{figure}
-
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//Plots/periodicity_figures/designs.jpeg}
-    \caption{Conceptualized experimental designs to test temperature and daylength interactions on a biological response. All four designs apply two treatment levels of forcing temperatures and two treatment levels of photoperiod yet differences how the thermoperiods are varied relative to photoperiod in each scenario impact the orthoginality of the treatment spacies, compromsing its inference. Design \textbf{a)} is orthoginal in temperature and photoperiod, but lack thermoperiod, sacraficing biological realism and comprimising any responses that require durnal temperature fluctions. Design \textbf{b)} incorperates a standardize diurnal temperature fluctuation across all treatment, but because this thermoperiod is coupled with the photoperiod, the daily thermal sums across treatments are non-orthoginal. In \textbf{c)} the standard diurnal temperature fluctuation is maintained but thermoperiod and photoperiod are decoupled and varied independently, maintaining orthoginality in heat sums across treatment combinations. In design \textbf{d)} photo and thermo periods are coupled and orthoginality are maintained by proportionately varying the diurnal temperature fluctations across treatments, introducing a new latent difference among the treatments.}
-    \label{fig:ortho}
-\end{figure}
- 
- 
-
-\end{document}
