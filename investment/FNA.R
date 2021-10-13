@@ -7,6 +7,9 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 graphics.off()
+options(mc.cores = parallel::detectCores())
+
+
 library(dplyr)
 library("housingData")
 library(stringr)
@@ -17,7 +20,7 @@ library(patchwork)
 library(brms)
 library("grid")
 library(tidybayes)
-
+library(bayesplot)
 
 
 #-------------------------#
@@ -84,13 +87,14 @@ extract.pts <- cbind(lonpoints,latpoints)
 
 mean.prunus <-calc(palmer.b, fun = mean,na.rm=TRUE) #average palmer drought index acrosss time
 sd.prunus <-calc(palmer.b, fun = sd,na.rm=TRUE) #
-min.prunus <-calc(palmer.b, fun = min,na.rm=TRUE) 
+#min.prunus <-calc(palmer.b, fun = min,na.rm=TRUE) 
 ext<-raster::extract(mean.prunus,extract.pts,method="simple")
 ext2<-raster::extract(sd.prunus,extract.pts,method="simple")
 ext3<-raster::extract(min.prunus,extract.pts,method="simple")
 pruneo$pdsi<-ext
 pruneo$pdsi.sd<-ext2
 pruneo$pdsi.min<-ext3
+if (FALSE){
 ###now do winter T
 str_name<-'Data/Tavg_winter_historical.tif' 
 winter<-raster(str_name)
@@ -104,6 +108,8 @@ pruneo$winterT<-(extro-32)*(5/9)
 minT<- pruneo %>% dplyr::group_by(specificEpithet) %>% dplyr::summarise(meanT=mean(winterT,na.rm=TRUE),sdT=sd(winterT,na.rm=TRUE))
 colnames(minT)[1]<-"species"
 setdiff(FNA$species,pdsi$species) ## lose speciosa
+}
+
 
 pdsi<- pruneo %>% dplyr::group_by(specificEpithet) %>% dplyr::summarise(meanpdsi=mean(pdsi,na.rm=TRUE),sdmean=sd(pdsi,na.rm=TRUE),minpdsi=mean(pdsi.min,na.rm=TRUE),sdmin=sd(pdsi.min,na.rm=TRUE))
 colnames(pdsi)[1]<-"species"
@@ -112,7 +118,9 @@ setdiff(FNA$species,pdsi$species) ## lose speciosa
 
 ## combine data
 FNA<-left_join(FNA,pdsi)
-FNA<-left_join(FNA,minT)
+
+if (FALSE){
+FNA<-left_join(FNA,minT)}
 ##quick plots
 cor(FNA$petal_low,FNA$petal_high) # .88
 cor(FNA$inflor_low,FNA$inflor_high) #.86 can probably use jsut one or the other in the
@@ -161,17 +169,40 @@ FNA$minpdsi.z<-zscore(FNA$minpdsi)
 FNA$petal.z<-zscore(FNA$petal_high)
 FNA$inflor.z<-zscore(FNA$inflor_high)
 FNA$fruit.z<-zscore(FNA$fruit_high)
-FNA$cold.z<-zscore(FNA$meanT)
+#FNA$cold.z<-zscore(FNA$meanT)
 
 
 #get_prior(FLSnum~me(petalmean,petalsd)+me(meanpdsi,sdmean),data=FNA)
 
 
-FNAordz<-brm(FLSnum~petal.z+inflor.z+fruit.z+cold.z+meanpdsi.z,
+FNAordz<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
              data=FNA,
              family=cumulative("logit"),warmup=3000,iter=4000)
 
 fixef(FNAordz)
+
+posterior <- as.matrix(FNAordz)
+colnames(posterior)
+mcmc_areas(posterior,
+           pars = c("b_petal.z","b_inflor.z"  ,"b_fruit.z","b_meanpdsi.z","b_petal.z:inflor.z"),
+           prob = 0.5)
+
+
+get_variables(FNAordz)
+output<-FNAordz %>%
+   spread_draws(b_petal.z,b_inflor.z ,b_fruit.z,b_meanpdsi.z,`b_petal.z:inflor.z`)
+colnames(output)
+output <-output %>% tidyr::gather("var","estimate",4:8)
+
+jpeg("Plots/fullprunus_mus.jpeg",width=9, height=7, units = "in",res=300)
+ggplot(output,aes(y = var, x = estimate)) +
+   stat_eye()+ggthemes::theme_few()+
+   geom_vline(xintercept=0,linetype="dashed")+
+   xlim(-18,18)+
+   scale_y_discrete(limits = c("b_fruit.z","b_petal.z:inflor.z","b_inflor.z","b_petal.z","b_meanpdsi.z"),labels=c("fruit size","petal x inflorescence","inflorescence size","petal size","pdsi"))+
+   ylab("Variable")+xlab("Effect estimate")
+
+dev.off()
 #FNAord.traits<-brm(FLSnum~me(petalmean,petalsd)+me(inflormean,inflorsd)+
  #                    me(fruitmean,fruitsd),
   #                 data=FNA,

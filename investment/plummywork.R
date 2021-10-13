@@ -192,6 +192,27 @@ d.fruit<-filter(d.fruit,fruit_type=="fleshy")
 d.phen<-left_join(d.phen,hystscore)
 d.cold<-left_join(d.cold,hystscore)
 
+#z.score everything for future analyses
+zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
+d.pdsi$pdsi.z<-zscore(d.pdsi$pdsi)
+d.petal$petal.z<-zscore(d.petal$pental_lengh_mm)
+d.fruit$fruit.z<-zscore(d.fruit$fruit_diam_mm)
+d.phen$phen.z<-zscore(d.phen$doy)
+
+#### run zscore modele for measurement error model
+pdsi.mod.z<-brm(pdsi.z~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
+petalmod.z<- brm(petal.z~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
+fruitmod.z<- brm(fruit.z~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
+phenmod.z<- brm(phen.z~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
+
+pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod.z)),1:2)
+petalout<-as.data.frame(coef(petalmod.z$))
+
+
+
+
+
+####non zscored models for comparative analysis using grouping factors
 pdsi.mod<-brm(pdsi~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
 minpdsi.mod<-brm(pdsi.min~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
 petalmod<- brm(pental_lengh_mm~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
