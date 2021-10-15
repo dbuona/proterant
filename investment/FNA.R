@@ -78,6 +78,11 @@ pruno.unref$geoclass<-"county_centroid"
 pruno.unref<-filter(pruno.unref,!is.na(lon)) # select only entries with lat lon
 pruneo<-rbind(pruno.ref,pruno.unref)
 
+
+pruneo<-filter(pruneo,lat>0)
+pruneo<-filter(pruneo,lon<(-50))
+ggplot(pruneo,aes(lon,lat))+geom_point(aes(color=specificEpithet))
+
 ##now add pdsi data
 palmer.b <- brick("Data/lbda-v2_kddm_pmdi_2017.nc")
 

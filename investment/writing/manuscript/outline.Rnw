@@ -79,32 +79,57 @@ Methods for analysis\\
 \subsection{Section level analyes}
 Methods for herbaria measurements\\
 Methods for analysis\\
+\pagebreak
 
 \section*{Results}
+
+\section*{Discussion}
+There will probably be things about taxonomic scale. Ie attraction showing up at the genus but not section level. Major discussion of why. \\
+Pollinator attraction and drought tolerance are a suite of traits and we only measured one axis of them and even with character deconstruction this could matter\\
+Mechanistic experiments would still be useful, ie does water limitation influence FLS plasticity
+\newpage
+\section*{Figures}
+    \begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/map.jpeg}
+    \caption{Map to show where data come from and to point out the two never hysteranthy species are highly endemic}
+    \label{fig:mappy}
+\end{figure}
+
 \begin{figure}[h!]
     \centering
  \includegraphics[width=\textwidth]{..//..//Plots/fullprunus_mus.jpeg}
-    \caption{}
+    \caption{From the full genus analysis: Positive is less hysteranthus so aridity increases ihysteranthy, flower size decreases (ie smaller flowers- more hysteranthous) and no relationship with fruit size }
     \label{fig:cherries}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/phylosig1.jpeg}
+    \caption{place holder for the phylgenies }
+    \label{fig:phylo}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
  \includegraphics[width=\textwidth]{..//..//Plots/ord_quants.jpeg}
-    \caption{}
+    \caption{ Likelihood of hysteranthy throughout the flowering season for each species in prunocerasus}
     \label{fig:plums}
 \end{figure}
 
-Figures to make:
-\begin{enumerate}
-\item \textit{Mu plots of full genus model}
-\item Prediction of Prunocerasus FLSs
-\item Plots of Prunocerasus predictors (either from grouping posteriors or modeling)
-\end{enumerate}
-\section*{Discussion}
-There will probably be things about taxonomic scale. Ie attraction showing up at the genus but not section level. Major discussion of why. \\
-Pollinator attraction and drought tolerance are a suite of traits and we only measured one axis of them and even with character deconstruction this could matter\\
-Mechanistic experiments would still be useful, ie does water limitation influence FLS plasticity
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/cerasus_mus.jpeg}
+    \caption{Effect estimates. Why are they so different in prunucerasus? 1. measurement error model increases uncertainty. 2. outlyers have stronger influence. 3. Maybe too closely related (all flower to somedegree while leave are developing) }
+    \label{fig:prunes}
+\end{figure}
 
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/droughtstuff.jpg}
+    \caption{Hysteranthy more likely in drought years (negative values). Need to remake thsi figure in bayesplot}
+    \label{fig:plastic}
+\end{figure}
 
 \end{document}

@@ -18,6 +18,8 @@ library(stringr)
 library("tidybayes")
 library(raster)
 
+require(mapdata); require(maptools)
+
 setwd("~/Documents/git/proterant/investment/Input")
 load("plummy.Rda")
 ##read in cleaned data
@@ -199,6 +201,7 @@ d.petal$petal.z<-zscore(d.petal$pental_lengh_mm)
 d.fruit$fruit.z<-zscore(d.fruit$fruit_diam_mm)
 d.phen$phen.z<-zscore(d.phen$doy)
 
+pdsiraw<-dplyr::select(d.pdsi,lat,lon,pdsi.z)
 #### run zscore modele for measurement error model
 pdsi.mod.z<-brm(pdsi.z~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
 petalmod.z<- brm(petal.z~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
@@ -206,9 +209,61 @@ fruitmod.z<- brm(fruit.z~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,ite
 phenmod.z<- brm(phen.z~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
 
 pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod.z)),1:2)
-petalout<-as.data.frame(coef(petalmod.z$))
+petalout<-dplyr::select(as.data.frame(coef(petalmod.z)$specificEpithet),1:2)
+fruitout<-dplyr::select(as.data.frame(coef(fruitmod.z)$specificEpithet),1:2)
+phenout<-dplyr::select(as.data.frame(coef(phenmod.z)),1:2)
+
+colnames(pdsiout)<-c("pdsi_mean","pdsi_se")
+colnames(petalout)<-c("petal_mean","petal_se")
+colnames(fruitout)<-c("fruit_mean","fruit_se")
+colnames(phenout)<-c("phen_mean","phen_se")
+
+phenout$specificEpithet<-rownames(phenout)
+fruitout$specificEpithet<-rownames(fruitout)
+petalout$specificEpithet<-rownames(petalout)
+pdsiout$specificEpithet<-rownames(pdsiout)
+
+newdat<-left_join(fruitout,pdsiout)
+newdat<-left_join(newdat,petalout)
+newdat<-left_join(newdat,phenout)
+
+d.flo2<-left_join(d.flo,newdat)
+d.flo2$doy.z<-zscore(d.flo2$doy)
 
 
+d.flo3<-dplyr::left_join(d.flo2,pdsiraw)
+d.flo3<-d.flo3[!duplicated(d.flo3), ]
+
+###this is the prefered model maybe depending on error
+
+#mod.ord.wpreds1<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 2500,iter=4000)
+mod.ord.wpreds2<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
+
+###fit below over night
+#mod.ord.wpreds.woah<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+
+   #       me(pdsi_mean,pdsi_se):me(petal_mean,petal_se)+me(pdsi_mean,pdsi_se):me(fruit_mean,fruit_se)+me(fruit_mean,fruit_se):me(petal_mean,petal_se)+
+ #           (doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3000,iter=4000)
+
+mod.ord.wpreds3<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)*me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 3000,iter=5000)
+
+fixef(mod.ord.wpreds3,probs=c(.25,.75))
+
+get_variables(mod.ord.wpreds2)
+output2<-mod.ord.wpreds2 %>%
+  spread_draws(bsp_mepdsi_meanpdsi_se,bsp_mepetal_meanpetal_se,bsp_mefruit_meanfruit_se)
+colnames(output2)
+output2 <-output2 %>% tidyr::gather("var","estimate",4:6)
+library(bayesplot)
+
+aa<-ggplot(output2,aes(y = var, x = estimate)) +
+  tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
+  geom_vline(xintercept=0,linetype="dashed")+
+  scale_y_discrete(limits = c("bsp_mefruit_meanfruit_se","bsp_mepetal_meanpetal_se","bsp_mepdsi_meanpdsi_se"),labels=c("fruit size","petal size","pdsi"))+
+  ylab("Variable")+xlab("Effect estimate")
+
+jpeg("..//Plots/cerasus_mus.jpeg",width=12, height=7, units = "in",res=300)
+ggpubr::ggarrange(aa,d, labels = c("a)",""),heights=c(.6,.4),nrow=2,ncol=1)
+dev.off()
 
 
 
@@ -228,9 +283,15 @@ colnames(goober2)
 
 fixef(pdsi.mod)
 flooby<-left_join(goober2,hystscore)
-flooby<-flooby%>% group_by(score)%>%
+flooby<-flooby%>% group_by(score)
+
+
   mean_qi(Intercept,.width=0.5)
 flooby<-filter(flooby,!is.na(flooby))
+
+
+
+
 
 ###peta
 gooberp<-petalmod%>%
@@ -238,9 +299,7 @@ gooberp<-petalmod%>%
   tidyr::spread(term,r_specificEpithet) 
 
 flooby2<-left_join(gooberp,hystscore)
-flooby2<-flooby2%>% group_by(score)%>%
-  mean_qi(Intercept,.width=0.5)
-flooby2<-filter(flooby2,!is.na(flooby2))
+flooby2<-flooby2%>% group_by(score)
 
 ###fruit
 gooberf<-fruitlmod%>%
@@ -248,9 +307,7 @@ gooberf<-fruitlmod%>%
   tidyr::spread(term,r_specificEpithet) 
 
 flooby3<-left_join(gooberf,hystscore)
-flooby3<-flooby3%>% group_by(score)%>%
-  mean_qi(Intercept,.width=0.5)
-flooby3<-filter(flooby3,!is.na(flooby3))
+flooby3<-flooby3%>% group_by(score)
 
 gooberph<-phenlmod%>%
   spread_draws(r_specificEpithet[specificEpithet,term])%>%
@@ -259,9 +316,7 @@ colnames(gooberph)
 
 
 flooby4<-left_join(gooberph,hystscore)
-flooby4<-flooby4%>% group_by(score)%>%
-  mean_qi(Intercept,.width=0.5)
-flooby4<-filter(flooby4,!is.na(flooby4))
+flooby4<-flooby4%>% group_by(score)
 
 
 goobermin<-minpdsi.mod%>%
@@ -287,20 +342,28 @@ floobycold<-floobycold%>% group_by(score)%>%
   mean_qi(Intercept,.width=0.5)
 floobycold<-filter(floobycold,!is.na(floobycold))
 
-a<-ggplot(flooby,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
+a<-ggplot(flooby,aes(score,Intercept))+stat_eye()+
   ylab("Mean 120 year PDSI at \n collection sites")+
-  scale_x_continuous(name ="Flowering-first grouping",
-                   labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))+ggthemes::theme_clean(base_size = 11)
+  scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
+                   labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
 
 #ggplot(floobymin,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
  # ylab("Min PDSI at collect sites")+
   #scale_x_continuous(name ="Flowering-first grouping",
-   #                  labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))+ggthemes::theme_base(base_size = 11)
+   #                  labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_base(base_size = 11)
 
-b<-ggplot(flooby2,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("petal length")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
-c<-ggplot(flooby3,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit diameter")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
-d<-ggplot(flooby4,aes(score,Intercept))+geom_point()+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+ylab("fruit phenology")+xlab("FLS group")+ggthemes::theme_base(base_size = 11)+geom_hline(yintercept=0,color="red")
-ggplot(floobycold,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
+
+b<-ggplot(flooby2,aes(score,Intercept))+stat_eye()+ylab("petal length")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
+                                                                                                         labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+c<-ggplot(flooby3,aes(score,Intercept))+stat_eye()+ylab("fruit diameter")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
+                                                                                                            labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))+ggthemes::theme_few(base_size = 11)
+
+d<-ggpubr::ggarrange(a,b,c,nrow=1,labels=c("b)","c)","d)"))
+
+ggplot(flooby4,aes(score,Intercept))+stat_eye()+ylab("fruit phenology")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
+                                                                                                             labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+
+#ggplot(floobycold,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
   ylab("min winter T")
 #e<-ggpubr::ggarrange(b,c,d, ncol=3,nrow=1)
 #f<-ggpubr::ggarrange(a,e,ncol=1,nrow=2)
@@ -367,6 +430,13 @@ goo$Estimate2<-(-goo$Estimate)
 goo$Q252<-(-goo$Q25)
 goo$Q752<-(-goo$Q75)
 
+
+get_variables(moda)
+yaya<-moda%>%
+  spread_draws(b_pdsi,r_specificEpithet[specificEpithet,pdsi])
+tat<-filter()
+ggplot(yaya,aes())
+
 goo$effect<-ifelse(goo$species=="Main Effect","main","species")
 q<-ggplot(goo,aes(Estimate2,species))+geom_point(aes(size=effect))+
   geom_errorbarh(aes(xmin=Q252,xmax=Q752,height=0))+scale_size_manual(values=c(4,2))+
@@ -379,14 +449,17 @@ q<-ggplot(goo,aes(Estimate2,species))+geom_point(aes(size=effect))+
   annotate(geom="text",color="gray39", x=1, y=13.5,label="Increased aridity decreases \n likelihood \nof flowering-first")+xlim(-1.5,1.5)
 
 jpeg("..//Plots/droughtstuff.jpg", width=11, height=9,unit="in",res=300)
-ggpubr::ggarrange(a,q,nrow=2,heights = c(.5,.7),labels = c("a)","b)"))
+#ggpubr::ggarrange(a,q,nrow=2,heights = c(.5,.7),labels = c("a)","b)"))
+q
 dev.off()
 
 
 ###quick model to see if pdsi impact day of flowering in general
-modcont<-brm(doy.cent~pdsi+lat+(1|specificEpithet),data=d.um)
+modcont<-brm(doy.cent~pdsi+lat+(pdsi|specificEpithet),data=d.um)
+
 
 fixef(modcont,probs = c(.25,.75))
+coef(modcont,probs = c(.25,.75))
 
 jpeg("..//Plots/alt_hypothesis.jpg", width=11, height=6,unit="in",res=300)
 ggpubr::ggarrange(b,c,d,labels = c("a)","b)","c)"),ncol=3)
@@ -434,8 +507,69 @@ jpeg("..//Plots/phylosig1", width=11, height=6,unit="in",res=300)
 p %<+% meanfls4phylo+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=meanFLS),size=5)+ xlim(0, 5)+geom_cladelabel(node=3, label="lambda=0.169", 0,offset=-3)+scale_color_viridis_b()
 dev.off()
 jpeg("..//Plots/phylosig2", width=11, height=6,unit="in",res=300)
+
 p %<+% meanfls4phylo+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=as.factor(score)),size=5)+ xlim(0, 5)+geom_cladelabel(node=3, label="lambda=7.02e-05", 0,offset=-3)
 dev.off()
 
+###make a range map
 
+mid.herb<-read.csv("..//SymbOutput_2020-10-26_133412_DwC-A/occurrences.csv")
+pruno.ref<-filter(mid.herb,!is.na(decimalLatitude))
+table(pruno.ref$stateProvince)
+table(pruno.ref$specificEpithet)
+pruno.ref$lon<-pruno.ref$decimalLongitude
+pruno.ref$lat<-pruno.ref$decimalLatitude
+
+##now add county level coordiantes
+#### two without coordinates
+pruno.unref<-filter(mid.herb,is.na(decimalLatitude)) ## filter entries with no lat/lon
+### prep county data
+geoCounty$rMapState<-str_to_title(geoCounty$rMapState) ### centriod coordinates for all US counties
+colnames(geoCounty)[6]<-"stateProvince" 
+
+colnames(geoCounty)[c(2,7)]<-c("County_name","county") ## MATCH NAMES
+
+pruno.unref<-filter(pruno.unref,id!=17453277) #remvoe problematic canadian entry
+pruno.unref$county<-tolower(pruno.unref$county) ## make ours lower case
+
+
+
+pruno.unref$county<-gsub("county","",pruno.unref$county) ### get rid of extenious coounty info
+pruno.unref$county<-gsub("()","",pruno.unref$county) # ""
+pruno.unref$county<-gsub("co.","",pruno.unref$county,fixed = TRUE) # ""
+
+
+
+
+pruno.unref<-dplyr::left_join(pruno.unref,geoCounty,by=c("county","stateProvince"))
+pruno.unref<-dplyr::select(pruno.unref,-County_name,-fips, -state)
+intersect(colnames(pruno.unref),colnames(pruno.ref))
+
+pruno.ref$geoclass<-"geo_referenced"
+pruno.unref$geoclass<-"county_centroid"
+pruno.unref<-filter(pruno.unref,!is.na(lon)) # select only entries with lat lon
+pruneo<-rbind(pruno.ref,pruno.unref)
+
+
+
+pruneo<- pruneo %>%filter(specificEpithet %in% unique(d.flo$specificEpithet))
+pruneo<-filter(pruneo,lon<(-60))
+pruneo<-filter(pruneo,lon>(-150))
+
+hull_cyl <- pruneo %>%
+  group_by(specificEpithet) %>%
+  slice(chull(lon,lat))
+colnames(hull_cyl)
+
+hull_cyl<-filter(hull_cyl, specificEpithet %in% c("subcordata","texana")) 
+
+usa <- map_data("usa")
+
+
+jpeg("..//Plots/map.jpeg", width=11, height=7,unit="in",res=300)
+ggplot()+geom_polygon(data=usa,aes(long,lat,group=group),fill="white",color="black")+
+geom_point(data=pruneo,aes(lon,lat,color=specificEpithet,shape=specificEpithet),alpha=0.9)+ggthemes::theme_few()+
+scale_color_viridis_d(option="turbo")+
+  scale_shape_manual(values = rep(c(0,1,2,15,16,17), len = 14))
+dev.off()
 
