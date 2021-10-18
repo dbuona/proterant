@@ -1,6 +1,8 @@
 ####to make potential prunus manuscript figures
 
 #Note  I think there is something missing in how i extract the posteriors. iving the equivelent of ranef instead of coef
+
+#also thsi code time travels (things from below are used to make things above) so if i ever decide to re-run everything its going to need some tweaks
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 options(mc.cores = parallel::detectCores())
@@ -432,19 +434,38 @@ goo$Q752<-(-goo$Q75)
 
 
 get_variables(moda)
+coef(moda)
 yaya<-moda%>%
-  spread_draws(b_pdsi,r_specificEpithet[specificEpithet,pdsi])
-tat<-filter()
-ggplot(yaya,aes())
+  spread_draws(r_specificEpithet[specificEpithet,condition])
+yaya<-filter(yaya,condition=="pdsi")
+
+yaya2<-moda%>%
+  spread_draws(b_pdsi)
+yaya2$specificEpithet<-"Main effect"
+
+jpeg("..//Plots/droughtstuff.jpg", width=11, height=9,unit="in",res=300)
+ggplot()+
+  stat_eye(data=yaya,aes(r_specificEpithet,specificEpithet),alpha=.3)+
+  stat_eye(data=yaya2,aes(b_pdsi,specificEpithet))+
+  geom_vline(xintercept=0,linetype="dashed")+scale_y_discrete(name ="species", 
+                                                              limits=c("alleghaniensis", "americana"    ,  "angustifolia"  , "gracilis"   ,    "hortulana"    , 
+                                                                       "maritima"  ,     "mexicana"    ,   "munsoniana"   ,  "nigra"     ,     "rivularis"   ,  
+                                                                       "subcordata" ,    "texana"     ,    "umbellata", "Main effect")) +ggthemes::theme_few(base_size = 11)+
+  theme(axis.text.y = element_text(face=ifelse(goo$species=="Main Effect","bold","italic")))+xlab("Estimate")+
+  annotate(geom="text",color="black", x=-1, y=13.5,label="Increased aridity decreases \n likelihood \nof flowering-first")+
+  annotate(geom="text",color="black", x=1, y=13.5,label="Increased aridity increases \n likelihood \nof flowering-first")+
+  annotate("segment", x = .5, xend = 1.5, y = 14.3, yend = 14.3,
+           arrow = arrow(ends = "last" , length = unit(.2,"cm")))+
+  annotate("segment", x = -.5, xend = -1.5, y = 14.3, yend = 14.3,
+           arrow = arrow(ends = "last" , length = unit(.2,"cm")))
+dev.off()
+?arrow()
 
 goo$effect<-ifelse(goo$species=="Main Effect","main","species")
 q<-ggplot(goo,aes(Estimate2,species))+geom_point(aes(size=effect))+
   geom_errorbarh(aes(xmin=Q252,xmax=Q752,height=0))+scale_size_manual(values=c(4,2))+
     geom_vline(xintercept = 0, color="red")+ggthemes::theme_clean(base_size = 11) + theme(axis.text.y = element_text(face=ifelse(goo$species=="Main Effect","bold","italic")))+
-  scale_y_discrete(name ="species", 
-                   limits=c("alleghaniensis", "americana"    ,  "angustifolia"  , "gracilis"   ,    "hortulana"    , 
-                           "maritima"  ,     "mexicana"    ,   "munsoniana"   ,  "nigra"     ,     "rivularis"   ,  
-                            "subcordata" ,    "texana"     ,    "umbellata", "Main Effect"))+theme(legend.position = "none")+xlab("Drought effect estimate")+
+  +theme(legend.position = "none")+xlab("Drought effect estimate")+
   annotate(geom="text",color="gray39", x=-1, y=13.5,label="Increased aridity increases \n likelihood \nof flowering-first")+
   annotate(geom="text",color="gray39", x=1, y=13.5,label="Increased aridity decreases \n likelihood \nof flowering-first")+xlim(-1.5,1.5)
 

@@ -98,17 +98,18 @@ Mechanistic experiments would still be useful, ie does water limitation influenc
 
 \begin{figure}[h!]
     \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/phylosig1.jpeg}
+    \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
+    \label{fig:phylo}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
  \includegraphics[width=\textwidth]{..//..//Plots/fullprunus_mus.jpeg}
     \caption{From the full genus analysis: Positive is less hysteranthus so aridity increases ihysteranthy, flower size decreases (ie smaller flowers- more hysteranthous) and no relationship with fruit size }
     \label{fig:cherries}
 \end{figure}
 
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//..//Plots/phylosig1.jpeg}
-    \caption{place holder for the phylgenies }
-    \label{fig:phylo}
-\end{figure}
 
 \begin{figure}[h!]
     \centering
@@ -128,7 +129,7 @@ Mechanistic experiments would still be useful, ie does water limitation influenc
 \begin{figure}[h!]
     \centering
  \includegraphics[width=\textwidth]{..//..//Plots/droughtstuff.jpg}
-    \caption{Hysteranthy more likely in drought years (negative values). Need to remake thsi figure in bayesplot}
+    \caption{Hysteranthy more likely in drought years.}
     \label{fig:plastic}
 \end{figure}
 
