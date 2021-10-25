@@ -1,0 +1,48 @@
+Started 25 October 2021
+Periodicity MS notes
+By Lizzie
+
+Relevant old notes:
+2019Feb_notesPhotoThermo_Math_seePg4.pdf
+
+<><><><><><><><><><>
+<> On 25 Oct 2021 <>
+<><><><><><><><><><>
+
+Oh, nice opening sentence (and the next one)! I really like it. In general, I found the intro very strong and was very impressed by it. 
+
+You say you will, 'we discuss several common-use approaches to manipulating photoperiod and temperature treatments. Then using both theory and experimental evidence, we demonstrate how these subtle choices in experimental design can strongly impact modeling inferences. Finally, we provide a general framework for treatment decision making.' This seems good, but then you have to do it ... so you probably need to slim/move/adjust the 'Phenology, temperature and photoperiod' section (I think you could simplify the first paragraph in 1-2 sentence and more much of it the supp if you want to defend your focus). 
+
+You can manipulate a lot with light -- intensity, color, angle... you may want to nod to all this then focus on just intensity and duration. 
+
+Consider/discuss: Would it be better to frame the main types of experiments as what you see in OSPREE? Same types, you could then just say, 'we looked and these are the main types we see.'
+
+Can you make each of the sections for the three types experiments in a similar format? For example, first paragraph explains the design, and the next gives the pros, and the next the drawbacks?
+
+I think the assumptions could be longer ... or it could be longer in the discussion, but, either way, things like the linear discussion may need more discussion/text. 
+
+Misc comments:
+- Gets wordy in places, more active voice would also help.
+- For the sake of this paper, could we not assume photoperiod is weaker? 
+- I think we could save text on the experimental comparison and use it more as a 'to bolster this, a similar experiment but designed in this other way, found ...' (and move some of the current text, including methods, to supp). 
+- I think you could also make the argument to focus on phenology because we know so much about these interactions (like weird sunrise stuff) and so we have a better understanding there of how experimental design can impact outcomes. Such findings may translate to other processes, and we just don't know as we have not studied it. 
+- I need caption help to add thoughts on figures/table. 
+
+----------
+Email from Dan on 12 Oct 2021:
+
+I am attaching a very rough draft of a periodicity manuscript for your review and comments. I know there is still much work to be done on it, but I was hoping that (since it is short!) you would be willing to take a preliminary look and offer some guidance. Here are a few things on my mind:
+
+    With the paper as it stands, I want to walk the fine line between comparing the estimates from coupled and uncoupled photo-thermoperiodicity designs (ie your paper with Dan Flynn vs our cutting experiment)  without implying that the estimates from coupled designs (which as far as I can tell from ospree include all falusi studies, the Zohner paper and the Flynn paper but more on that later) are "wrong" per say.
+    I think it would be useful to try to summarize how many OSPREE studies manipulated photoperiod and forcing together, and how many of those may have this period covariation issue. I wrote some rudimentary code that starts to do this, but it occurs to me that you might have already done some of this for the limiting cues analysis which I know you worked on for so long.
+    Originally, you and Megan did some geometry to quantify this problem. You sent me a picture of your calculations which I've been trying to decipher, but having not been there for the discussion I'm finding it challenging. Would you be willing to take a stab at recreating this work, or would it be appropriate to loop Megan back in to do so?
+     It's currently 3 figs and about 1947 words. (I'm not sure why the intext figures references are broken) 
+     Some journal ideas:
+        J of Experimental botany: Viewpoint ~1500 world limit + up to 3 boxes (figures)
+        Perspective Methods in E and E
+        Perspective Journal of applied ecology
+        Opinion  Plant Cell and Environment
+        Perspective Ecology Letters
+
+I am attaching pdfs, but the associated tex files (including the original outline) are in the repo
+proterant/FLOBUDS/writing/

@@ -33,6 +33,57 @@ Here a very brief (one or two paragraph) overview of how light and temperature i
 Maybe there is some limiting cues code that can help me with this?
 \subsection{Math}
 Maybe Lizzie (or Megan) can write this part since they were the ones who did this math?
+
+% EMW: Putting this here for now, but can move some/all it to main text as needed. [] means I am not sure we need it, but I added it. 
+[See comments in tex file.] \\
+When experimental designs co-vary thermo- and photoperiodicity, they may incorrectly estimate effects of temperature, photoperiod and (for experiments with crossed designs) the interaction between photo and thermo-periodicity. While robustly testing the effect of this covariation requires additional experiments, you can solve for its potential effect based on the geometry of the experimental design given several assumptions.\\
+
+If we assume that the effects of photoperiod and forcing (alone) are linear and additive (no FxP interaction), then the treatmeants and their results occupy a three-dimensional plane with temperature on the $x$ axis, photoperiod on the $y$ axis and the response on the $z$ axis. Given our assumptions we can solve for the expected response if temperature and photoperiod were uncoupled. \\
+
+To show this, we follow the design of CITEFLYNN as an example. We used summed temperature (degree hours), to reflect the duration and intensity of temperature, on the $x$ axis, photoperiod (hours) on the $y$ axis and the response ($\delta$ days to budburst) on the $z$ axis. [The combination of the covaried treatments and responses produces a parallelogram in space, and we effectively solve for it as a rectangular---orthogonal---set of treatments.] Given the equation for a 3D plane and our knowledge of three sets of the coordinates:
+
+\begin{align}
+ax+by+cz+d & =0\\
+200a + 8b + 0 + d &= 0\\
+240a + 12b+4.5c + d &=0\\
+320a + 8b + 9c+ d &=0
+\end{align}
+
+A, we can solve for the effects if we had been able to decouple the treatments. In this example, given that we know the $\delta$ days to budburst for 200 degree hours (temperature) at 8 hours of photoperiod, as well as 240 degree hours (temperature) at 12 hours of photoperiod, we essentially solve for the $\delta$ days to budburst given orthogonal treatments (e.g., 200 degree hours (temperature) at 12 hours of photoperiod; 240 degree hours (temperature) at 8 hours of photoperiod). \\
+% Dan: Can you make the two figures on last page of PDF notes?
+% I would put this worked math below in the supp ...
+
+Algebraically, we simply solve for each unknown in turn. We begin by setting $z$ to zero:
+\begin{align}
+200a + 8b + 0 + d & = 0 \text{ and solving for d yields:} \\
+-200a - 8b = & d  % setting c to 0
+\end{align}
+Now, we can solve for $c$ (in terms of $a$ and $b$) using our solution for $d$:
+\begin{align}
+240a+12b+4.5c+(-200a - 8b) &=0\\
+-40/4.5a+4/4.5b & = c% simplified 
+\end{align}
+And similarly then solve for $a$ given our last set of coordinates and solutions for $d$ and $c$ (not shown). This yields:
+\begin{align}
+a & =\frac{1}{5}b\\
+c & =-\frac{8}{3}b\\
+d & =-48b\\
+\end{align}
+Putting these back into the equation for a plane yields an overall equation to estimate the response $z$ (days) for any combination of $x$ (temperature) and $y$ (photoperiod):
+\begin{align}
+\frac{1}{5}bx + by -\frac{8}{3}bz -48b&=0\\
+\frac{3}{40}x + \frac{3}{8}y-18 & = z\\
+\end{align}
+Comparing:
+\begin{align}
+\frac{3}{40}*(200) + \frac{3}{8}*(8)-18 &=0\\ 
+\frac{3}{40}*(200) + \frac{3}{8}*(12)-18 &=3\\ 
+\end{align}
+Shows that---given our assumptions---the estimated photoperiod effect that may be due to temperature is 3 days. 
+
+% Also show forcing? I did not finish this ... 
+% \frac{3}{40}*(360) + \frac{3}{8}*(8)-18 &=12 \text{ days}\\
+
 \subsection{Modeling methods}
 To do.\\
 Also maybe a table of model comparison to go along with the figure.
