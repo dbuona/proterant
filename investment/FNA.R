@@ -21,13 +21,16 @@ library(brms)
 library("grid")
 library(tidybayes)
 library(bayesplot)
+library("caper")
+library(phytools)
+library(geiger)
 
 
 #-------------------------#
 #------Part 1--------------#
 #--------------------------#
 setwd("~/Documents/git/proterant/investment")
-#load("FNA.Rda")
+load("FNA.Rda")
 FNA<-read.csv("Data/cherry_data.csv") ## measurement and FLS data from FNA
 ##clean specicies name
 
@@ -36,6 +39,8 @@ FNA$species<-ifelse(FNA$species=="gladulosa","glandulosa",FNA$species)
 FNA$species<-ifelse(FNA$species=="speciosa","speciosa",FNA$species)
 FNA$species<-ifelse(FNA$species=="fasiculata","fasciculata",FNA$species)
 
+
+sort(unique(FNA$species))
 #### get herbaria specimen coordinates
 mid.herb<-read.csv("SymbOutput_2020-10-26_133412_DwC-A/occurrences.csv")
 mid.herb<-filter(mid.herb,specificEpithet %in% unique(FNA$species)) ## filter to Species we have data 4
@@ -178,11 +183,45 @@ FNA$fruit.z<-zscore(FNA$fruit_high)
 
 
 #get_prior(FLSnum~me(petalmean,petalsd)+me(meanpdsi,sdmean),data=FNA)
-
-
 FNAordz<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
-             data=FNA,
+                   data=FNA,
+                   family=cumulative("logit"),warmup=3000,iter=4000)
+
+
+cherrytree<-read.tree("pruned_4_modeling.tre")
+FNA.small<-filter(FNA,species %in% cherrytree$tip.label)
+A <- ape::vcv.phylo(cherrytree)
+FNAordz.phylo<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
+             data=FNA.small,
+             family=cumulative("logit"),
+             data2 = list(A = A),
+             warmup=3000,iter=4000)
+
+FNAgaus.phylo<-brm(FLSnum~petal.z+inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
+                   data=FNA.small,
+                   data2 = list(A = A),
+                   warmup=3000,iter=4000)
+
+fixef(FNAordz)
+fixef(FNAordz.phylo)
+fixef(FNAordz.small)
+FNAordz.small<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
+             data=FNA.small,
              family=cumulative("logit"),warmup=3000,iter=4000)
+
+FNAgaus.small<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
+                   data=FNA.small,warmup=3000,iter=4000)
+
+fixef(FNAordz.phylo)
+fixef(FNAordz.small)
+fixef(FNAgaus.phylo)
+fixef(FNAgaus.small)
+
+hyp <- "sd_species__Intercept^2 / (sd_species__Intercept^2 + sigma^2) = 0"
+(hyp <- hypothesis(FNAgaus.phylo, hyp, class = NULL))
+
+
+
 
 fixef(FNAordz)
 
@@ -282,28 +321,17 @@ cor(FNA$minpdsi,FNA$meanpdsi,use = "complete.obs")
 cor(FNA.pruno$minpdsi,FNA.pruno$meanpdsi,use = "complete.obs")
 cor(FNA.pruno$meanT,FNA.pruno$meanpdsi,use = "complete.obs")
 
-## make sure we can use the Zanne tree
-colnames(FNA)
-FNA$name<-paste("Prunus",FNA$species, sep="_")
-
-library(ape)
-library(phytools)
-library(geiger)
-library(caper)
-library(picante)
-library(tidyverse)
-library(boot)
-library(phylolm)
 
 
 
-treee<-read.tree("..//input/Vascular_Plants_rooted.dated.tre")
-names.intree<-treee$tip.label
-namelist<-FNA$name
 
-which(names.intree%in%namelist)
-length(which(namelist%in%names.intree))
-length(which(!namelist%in%names.intree))
+#treee<-read.tree("..//input/Vascular_Plants_rooted.dated.tre")
+#names.intree<-treee$tip.label
+#namelist<-FNA$name
+
+#which(names.intree%in%namelist)
+#length(which(namelist%in%names.intree))
+#length(which(!namelist%in%names.intree))
+
 save.image("FNA.Rda")
-
 

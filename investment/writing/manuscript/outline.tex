@@ -80,44 +80,92 @@ Aridity and pollinator attraction drive hysteranthous flowering in the North Ame
 \begin{document}
 \maketitle
 
-\subsubsection*{To do:}
-\begin{enumerate}
-\item Full genus analyses with ordinal model (Got alot of the way there in FNA.R)
-\item check prunocerasus analyses
-\item Figure out phylogeny issues
-\item Quantify hysteranthy in biologically pollinated taxa or summarize families it is present in. Off the top of my head for N.A. taxa the Rosaceae, Magnoliaceae, Fabacieae, Cornaceae, Annonaceae, Ericaceae.
-\end{enumerate}
 
 \section*{Introduction}
-Generally speaking, hysteranthy is unique and common in temperate forest. Seems functionial. The most common, and well tested, explaination is that is hysteranthy evolved for wind-pollination. However that doesn't explain its prevalence in biotically pollinated taxa. Quote some statistic based new phyt paper. Tests of the function on hysteranthy in biotically pollinated taxa are exceedingly rare in the literature,, but may be critial for predicting species responses to global change.
+\noindent Woody perennials have the unique ability among plants to seasonally begin reproduction prior to vegetative growth \citep{}. This flowering-first phenological sequence known as hysteranthy, proteranthy or precocious flowering is particularly common in temperate forests around the globe \citep{}. A number of studies suggest that this flower-leaf sequences (FLSs) are under selection, and that flowering first has functional significance \citep{}.
 
-While direct tests are limited, investegation of hysteranthy beneifit from a rich theoretical literature and several hypotheses have emerge.
+\noindent The most common, and well-tested explanation for the evolution of hysteranthy is that it is adaptive for wind-pollination as leafless canopies increase wind speeds for pollen transport and reduce the likelihood of pollen interception on vegetation \citep{}. However, this hypothesis fails to address the prevalence of hysteranthous taxa that are biotically-pollinated. Approximately 30\% of species of Eastern temperate forests of North America flower before leafing out, and of those, approximately 20\% are biotically pollinated  \citep{}. Despite the pervasiveness of this phenological syndrome, direct tests of the function of hysteranthy in biotically pollinated taxa are exceedingly rare. \\
 
-Review them briefly and make predictions
-\begin{enumerate}
-\item Drought adaptation: (could be plastic or selected) aridity in range
-\item insect visaibility: floral morphology
-\item Null functionality early flowering. Fruit size or phenology
-\item Phylogeny may also matter
-\end{enumerate}
+Yetm two major hypotheses regarding the functionality of hysteranthy pollinated taxa can be found in the literature, and each is associated with logical predictions about how hysteranthous flowering should other plant traits should co-vary. These hypotheses and their predictions can be used to guide further inquiry into the adaptive significance of hysteranthy.\\
 
-While each hypothesis generates testible predictions there are several methodological challenges.
+The \textbf{water dynamics hypothesis} \citep{} suggests that hysteranthy is an adaptation to arid environments \citep{}, allowing for plant to partition the hydraulic demand of hydrated flowers and transpiring leaves across the growing season. If this is the case, this hypothesis predicts that hysteranthous species should be more commonly found in dry environments.  \\
+
+The \textbf{pollinator visibility hypothesis} \citep{} suggests that hysteranthy is an adaptation to attract visually-foraging pollinators. If this is the case, this hypothesis predicts that hysteranthous species should invest less along other axes of pollinator attracting such as size of floral display or chemical attraction. \\
+
+\noindent Others have suggested that hysteranthy is simply the by-product of selection for early flowering,and that variation in flower-leaf sequences among species is driven by developmental, physical or phylogenetic constraints than adaptive selection \citep{}. However, even this null hypothesis make testable predictions. If this is the case, hysteranthy should co-vary with other early-flowering associated traits like long fruit development periods or large fruit sizes \citep{} and the phylogenetic signal for hysteranthy should be strong.
+
+\noindent However, there are two major methodological challenges to testing these predictions:\\
+
+The first is that traits like aridity tolerance, pollinator attraction, and reproductive investment are the emergent product of a suite of biological traits \citep{}. Across the diversity of even just temperature woody plants, species may rely more or less heavily on any combination of these traits. For example, hysteranthy may contribute significantly to differences in aridity tolerance two species with similar root architecture, leaf characteristics and xylem anatomy, but matter much less when comparing deep rooted species to shallow rooted ones. Thus, in analyzing selective drivers of any trait at large taxonomic scales, unmeasured trait differences may obscure the estimated effects of the trait of interest.\\
+
+This is a common problem in trait-based ecology, and one of the most promising solutions for understanding the functional significance of hysteranthy in woody plants is through character deconstruction \citep{}; comparing flower-leaf sequences variation for only a subset of taxa of shared phylogenetic and morphological character.   
+
+
+The second challenge for robust testing of flower-first hypotheses is that most characterizations of flower-leaf phenological sequences are based on expert-opinion verbal descriptions(e.g. ``flowers before leaves" or ``flower before/with leaves"), which make comparisons across taxa, time and space difficult sensitive to observer bias (see, \citep{}). 
+
+This problem can be overcome by adopting standardized quantitative measures of plant phenology for observational studies and applying them to historic data records. Herbarium records are an excellent source of data that can be leveraged for quantitative phenological measurements \citep{}, but have not be used widely to investigate variability of flower-leaf sequences variation among and within species.
+
+
+
+
+
+
+
+there are several methodological challenges.
+
+
 \begin{enumerate}
 \item Unmeasured species difference compensate for measure traits
 \item data quality based on expert opinion
 \end{enumerate}
 
-These issues could be over come with:
-\begin{enumerate}
-\item character deconstruction
-\item detailed quantitative measurements of flower leaf sequence phenology
-\end{enumerate}
 
-We do this:
-\begin{enumerate}
-\item Coarse analyses of the flower-leaf sequences of North American \textit{Prunus} species and their hypothesis relevant traits based on published data
-\item Higher resolution inquiry of the fLower-leaf sequences and associated character traits based on our own measurements from a century worth of herbaria samples on a section of the Prunus subgenus Prunocerasus the American plums
-\end{enumerate}
+
+
+
+
+%<<>>=
+%mich.data<-read.csv("..//..//sub_projs/MTSV_USFS/michdata_final.csv")
+%table(mich.data$pro2,mich.data$Pollination)
+
+%table(mich.data$pro)
+%42/147
+%table(mich.data$pro2)
+%82/147
+
+@
+
+
+
+%Generally speaking, hysteranthy is unique and common in temperate forest. Seems functionial. The most common, and well tested, explaination is that is hysteranthy evolved for wind-pollination. However that doesn't explain its prevalence in biotically pollinated taxa. Quote some statistic based new phyt paper. Tests of the function on hysteranthy in biotically pollinated taxa are exceedingly rare in the literature,, but may be critial for predicting species responses to global change.
+
+%While direct tests are limited, investegation of hysteranthy beneifit from a rich theoretical literature and several hypotheses have emerge.
+
+%Review them briefly and make predictions
+%\begin{enumerate}
+%\item Drought adaptation: (could be plastic or selected) aridity in range
+%\item insect visaibility: floral morphology
+%\item Null functionality early flowering. Fruit size or phenology
+%\item Phylogeny may also matter
+%\end{enumerate}
+
+%While each hypothesis generates testible predictions there are several methodological challenges.
+%\begin{enumerate}
+%\item Unmeasured species difference compensate for measure traits
+%\item data quality based on expert opinion
+%\end{enumerate}
+
+%These issues could be over come with:
+%\begin{enumerate}
+%\item character deconstruction
+%\item detailed quantitative measurements of flower leaf sequence phenology
+%\end{enumerate}
+
+%We do this:
+%\begin{enumerate}
+%\item Coarse analyses of the flower-leaf sequences of North American \textit{Prunus} species and their hypothesis relevant traits based on published data
+%\item Higher resolution inquiry of the fLower-leaf sequences and associated character traits based on our own measurements from a century worth of herbaria samples on a section of the Prunus subgenus Prunocerasus the American plums
+%\end{enumerate}
 
 \section*{Methods}
 \subsection{Descriptions of the genus, and section}

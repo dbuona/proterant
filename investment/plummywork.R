@@ -161,7 +161,7 @@ result<-filter(result,quant!="100%")
 
 
 season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
-jpeg("..//Plots/ord_quants.jpeg", width=11, height=8,unit="in",res=300)
+jpeg("..//Plots/ord_quants.jpeg", width=7, height=5,unit="in",res=300)
 ggplot(data=result,aes(bbch,likelihood))+geom_point()+
   geom_ribbon(aes(x=int,ymin=0,ymax=likelihood,),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
@@ -237,34 +237,54 @@ d.flo3<-dplyr::left_join(d.flo2,pdsiraw)
 d.flo3<-d.flo3[!duplicated(d.flo3), ]
 
 ###this is the prefered model maybe depending on error
+cor(d,flo)
 
 #mod.ord.wpreds1<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 2500,iter=4000)
 mod.ord.wpreds2<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
+mod.ord.wpreds2.noME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+phen_mean+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
 
 ###fit below over night
 #mod.ord.wpreds.woah<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+
    #       me(pdsi_mean,pdsi_se):me(petal_mean,petal_se)+me(pdsi_mean,pdsi_se):me(fruit_mean,fruit_se)+me(fruit_mean,fruit_se):me(petal_mean,petal_se)+
  #           (doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3000,iter=4000)
 
-mod.ord.wpreds3<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)*me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 3000,iter=5000)
+#mod.ord.wpreds3<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)*me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 3000,iter=5000)
 
-fixef(mod.ord.wpreds3,probs=c(.25,.75))
+fixef(mod.ord.wpreds2.noME,probs=c(.25,.75))
+fixef(mod.ord.wpreds2,probs=c(.25,.75))
+
 
 get_variables(mod.ord.wpreds2)
 output2<-mod.ord.wpreds2 %>%
-  spread_draws(bsp_mepdsi_meanpdsi_se,bsp_mepetal_meanpetal_se,bsp_mefruit_meanfruit_se)
+  spread_draws(bsp_mepdsi_meanpdsi_se,bsp_mepetal_meanpetal_se,bsp_mefruit_meanfruit_se,bsp_mephen_meanphen_se)
 colnames(output2)
-output2 <-output2 %>% tidyr::gather("var","estimate",4:6)
+output2 <-output2 %>% tidyr::gather("var","estimate",4:7)
 library(bayesplot)
+
+
+get_variables(mod.ord.wpreds2.noME)
+output2.noME<-mod.ord.wpreds2.noME %>%
+  spread_draws(b_pdsi_mean,b_petal_mean,b_fruit_mean,b_phen_mean)
+colnames(output2.noME)
+output2.noME <-output2.noME %>% tidyr::gather("var","estimate",4:7)
 
 aa<-ggplot(output2,aes(y = var, x = estimate)) +
   tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
   geom_vline(xintercept=0,linetype="dashed")+
-  scale_y_discrete(limits = c("bsp_mefruit_meanfruit_se","bsp_mepetal_meanpetal_se","bsp_mepdsi_meanpdsi_se"),labels=c("fruit size","petal size","pdsi"))+
+  scale_y_discrete(limits = c("bsp_mephen_meanphen_se","bsp_mefruit_meanfruit_se","bsp_mepetal_meanpetal_se","bsp_mepdsi_meanpdsi_se"),labels=c("fruit phenology","fruit size","petal size","pdsi"))+
   ylab("Variable")+xlab("Effect estimate")
 
-jpeg("..//Plots/cerasus_mus.jpeg",width=12, height=7, units = "in",res=300)
-ggpubr::ggarrange(aa,d, labels = c("a)",""),heights=c(.6,.4),nrow=2,ncol=1)
+aaa<-ggplot(output2.noME,aes(y = var, x = estimate)) +
+  tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
+  geom_vline(xintercept=0,linetype="dashed")+
+  scale_y_discrete(limits = c("b_phen_mean","b_fruit_mean","b_petal_mean","b_pdsi_mean"),labels=c("fruit phenology","fruit size","petal size","pdsi"))+
+  ylab("Variable")+xlab("Effect estimate")+xlim(-7,7)
+
+ggpubr::ggarrange(aa,aaa)
+
+
+jpeg("..//Plots/cerasus_mus.jpeg",width=8, height=9, units = "in",res=300)
+ggpubr::ggarrange(aa,d, labels = c("a)",""),nrow=2,ncol=1)
 dev.off()
 
 
@@ -286,14 +306,6 @@ colnames(goober2)
 fixef(pdsi.mod)
 flooby<-left_join(goober2,hystscore)
 flooby<-flooby%>% group_by(score)
-
-
-  mean_qi(Intercept,.width=0.5)
-flooby<-filter(flooby,!is.na(flooby))
-
-
-
-
 
 ###peta
 gooberp<-petalmod%>%
@@ -321,33 +333,15 @@ flooby4<-left_join(gooberph,hystscore)
 flooby4<-flooby4%>% group_by(score)
 
 
-goobermin<-minpdsi.mod%>%
-  spread_draws(r_specificEpithet[specificEpithet,term])%>%
-  tidyr::spread(term,r_specificEpithet) 
-colnames(goobermin)
 
 
-floobymin<-left_join(goobermin,hystscore)
-floobymin<-floobymin%>% group_by(score)%>%
-  mean_qi(Intercept,.width=0.5)
-floobymin<-filter(floobymin,!is.na(floobymin))
 
 
-goobercold<-cold.mod%>%
-  spread_draws(r_specificEpithet[specificEpithet,term])%>%
-  tidyr::spread(term,r_specificEpithet) 
-colnames(goobercold)
-
-
-floobycold<-left_join(goobercold,hystscore)
-floobycold<-floobycold%>% group_by(score)%>%
-  mean_qi(Intercept,.width=0.5)
-floobycold<-filter(floobycold,!is.na(floobycold))
 
 a<-ggplot(flooby,aes(score,Intercept))+stat_eye()+
-  ylab("Mean 120 year PDSI at \n collection sites")+
+  ylab("Mean \nPDSI at \n collection sites")+
   scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                   labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+                   labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
 
 #ggplot(floobymin,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
  # ylab("Min PDSI at collect sites")+
@@ -355,16 +349,40 @@ a<-ggplot(flooby,aes(score,Intercept))+stat_eye()+
    #                  labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_base(base_size = 11)
 
 
-b<-ggplot(flooby2,aes(score,Intercept))+stat_eye()+ylab("petal length")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                                                                                                         labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
-c<-ggplot(flooby3,aes(score,Intercept))+stat_eye()+ylab("fruit diameter")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                                                                                                            labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))+ggthemes::theme_few(base_size = 11)
+b<-ggplot(flooby2,aes(score,Intercept))+stat_eye()+ylab("Mean \npetal length")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
+                                                                                                         labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
+c<-ggplot(flooby3,aes(score,Intercept))+stat_eye()+ylab("Mean \nfruit diameter")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
+                                                                                                                    labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
+cc<-ggplot(flooby4,aes(score,Intercept))+stat_eye()+ylab("Mean \nfruit phenology")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
+                                                                                                                      labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
 
-d<-ggpubr::ggarrange(a,b,c,nrow=1,labels=c("b)","c)","d)"))
+d<-ggpubr::ggarrange(a,b,c,cc,nrow=2,ncol=2,labels=c("b)","c)","d)","e)"))
 
-ggplot(flooby4,aes(score,Intercept))+stat_eye()+ylab("fruit phenology")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                                                                                                             labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
 
+
+
+
+
+
+
+
+
+#Should we try conditional mean plots
+
+plot(conditional_effects(mod.ord.wpreds2, "pdsi_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+plot(conditional_effects(mod.ord.wpreds2.noME, "pdsi_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+plot(conditional_effects(mod.ord.wpreds2.noME, "petal_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+plot(conditional_effects(mod.ord.wpreds2, "fruit_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+plot(conditional_effects(mod.ord.wpreds2, "phen_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+
+p1<-p1[[1]]+ggthemes::theme_few()+scale_color_viridis_d()+scale_fill_viridis_d(alpha=0.2)
+p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p3<-p3[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p4<-p4[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p5<-p5[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+
+
+stop()
 #ggplot(floobycold,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
   ylab("min winter T")
 #e<-ggpubr::ggarrange(b,c,d, ncol=3,nrow=1)
