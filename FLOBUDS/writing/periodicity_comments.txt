@@ -5,6 +5,31 @@ By Lizzie
 Relevant old notes:
 2019Feb_notesPhotoThermo_Math_seePg4.pdf
 
+
+<><><><><><><><><><>
+<> On 4 Nov 2021 <>
+<><><><><><><><><><>
+Quick review of periodicity2021.pdf ... compared to periodicity.pdf (yes, that's what I reviewed before).
+
+A few things I actually missed from the old paper:
+- The intro now feels a little less compelling to me (I think we're too short now). Here's some bits I liked and missed from the old paper:
+	i. Much of the old first and second paragraphs though I like the simplicity of your new first intro, I feel it misses some punch. Take a look and see what you think please!
+	ii. Your last paragraph of the intro ('Even with these limitations, growth chamber studies remain a powerful tool...') I like a little more than your new one. Again, see what you think.
+	iii. I liked the introduction of your case study right after the intro. The old one is a little long and too detailed, but I think jumping in with your case study before getting to "In order to have the statistical power to partition the individual and interactive effects of two or more variables in an experiment, one must..." will reach many more readers. Biologists love a biological example, and you're writing for the experimentalists, not the math-folk.
+
+I think I like subsections of the different types of designs (Coupled photo- and thermo-periodicity, decoupled) ... Maybe introduce them then give a subsection that briefly reviews how common each is in OSPREE?
+
+Quantifying the uncertainty (not sure of this title)
+- I liked how your old version seemed to introduce several separate lines of evidence. I would like this section more if it read that way. 
+- I thus wondered if this section should be a couple section, with just one part being the case study of the two experiments (and the math)? 
+
+I think your '3. Uncouple thermoperiod and photoperiod' is hard to grasp ... I knew what you meant but do you introduce it above as a new idea or? I wonder if figure 2 should be TWO figures -- one showing the types of designs generally seen and then a similar figure (but separate) showing suggested NEW designs? 
+
+General language: I would try to come at this in a headspace of 'this co-variation makes it hard to disentangle the cues, but it's also realistic' ... meaning, sound a little more open and fine with the coupled experiments and your message may read as more balanced, objective and obvious. It actually reads quite well in this regard in 
+Paths Forward, so I would just bring that tone throughout (should be small tweaks and relatively straight-forward). 
+
+A 3d version of your old Figure 2 (with GDH) would be very valuable to the current version of the paper! Try to make one and perhaps if it's a pain we can ask Megan to do it in Matlab. 
+
 <><><><><><><><><><>
 <> On 25 Oct 2021 <>
 <><><><><><><><><><>
