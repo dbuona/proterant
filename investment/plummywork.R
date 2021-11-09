@@ -506,6 +506,7 @@ dev.off()
 ####phylogeny
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre")
 is.ultrametric(tree)
+tree<-compute.brlen(tree, method = "Grafen")
  ## make ultrametric
 
 names.intree<-tree$tip.label # names the names
@@ -530,6 +531,9 @@ d.phylo<-left_join(d.phylo,meanfls)
 ##quick phylo sig
 meanfls4phylo<-filter(meanfls,specificEpithet %in% mytree.names)
 meanfls4phylo<-left_join(meanfls4phylo,hystscore)
+
+class(meanfls4phylo$score)
+
 phylosig(pruned.by,meanfls4phylo$meanFLS,method="lambda",nsim = 100, test=TRUE) ### 0.1r
 phylosig(pruned.by,meanfls4phylo$score,method="lambda",nsim = 100, test=TRUE) ### 0.1r
 
@@ -540,14 +544,12 @@ phylosig(pruned.by,meanfls4phylo$score,method="lambda",nsim = 100, test=TRUE) ##
 library(ggtree)
 meanfls4phylo$tip.labels<-meanfls4phylo$specificEpithet
 full_join(pruned.by,meanfls4phylo)
-p<-ggtree(pruned.by1,branch.length="none")
+#p<-ggtree(pruned.by,branch.length="none")
 
-jpeg("..//Plots/phylosig1", width=11, height=6,unit="in",res=300)
-p %<+% meanfls4phylo+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=meanFLS),size=5)+ xlim(0, 5)+geom_cladelabel(node=3, label="lambda=0.169", 0,offset=-3)+scale_color_viridis_b()
-dev.off()
-jpeg("..//Plots/phylosig2", width=11, height=6,unit="in",res=300)
-
-p %<+% meanfls4phylo+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=as.factor(score)),size=5)+ xlim(0, 5)+geom_cladelabel(node=3, label="lambda=7.02e-05", 0,offset=-3)
+meanfls4phylo$score2<-as.factor(meanfls4phylo$score)
+jpeg("..//Plots/phylosig2.jpeg", width=6, height=6,unit="in",res=300)
+p<-ggtree(pruned.by)
+p %<+% meanfls4phylo+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=score2),size=5)+ xlim(0, 3)+geom_cladelabel(node=3,offset=.5, label=" lambda= 0.00")+scale_color_viridis_d(option="plasma",name="Flowering-first",  labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))
 dev.off()
 
 ###make a range map

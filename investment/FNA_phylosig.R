@@ -39,7 +39,7 @@ FNA$FLSnum[FNA$FLS=="after"]<-4
 FNA$FLSnum<-as.integer(FNA$FLSnum)
 
 ##read in tree, root it and give it branch lengths
-mytree<-read.tree(file = "cherrytree2.tre")
+mytree<-read.tree(file = "cherrytree.tre")
 plotTree(mytree)
 mytree<-root(mytree,outgroup = "Physocarpus")
 mytree2<-compute.brlen(mytree, method = "Grafen")
@@ -90,10 +90,14 @@ phylosig(pruned.by,final.df$FLSnum,method="lambda",nsim = 100, test=TRUE)
 library(ggtree)
 mytree2$tip.labels<-final.df$species
 full_join(mytree2,final.df)
+final.df$FLSfact<-as.factor(final.df$FLSnum)
+
+
+jpeg("Plots/phylosig1.jpeg",height=6,width=6,units='in',res=300)
 p<-ggtree(pruned.by)
-
-p %<+% final.df+geom_tiplab(hjust=-.5)+geom_tippoint(aes(color=FLSnum),size=5)+ xlim(0, 2)+geom_cladelabel(node=3,offset=-1, label=" lambda= 0.49")+scale_color_viridis_c(option="plasma")
-
+p %<+% final.df+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=FLSfact),size=5)+ xlim(0, 2)+geom_cladelabel(node=4,offset=-.7, label=" lambda= 0.34")+scale_color_viridis_d(option="plasma",name="Flower-leaf sequence",labels=c("before","before/with","with","after"))
+dev.off()
+?scale_color_viridis_d()
 fitLambda<-function(tree,x,model="ER"){
   lik<-function(lambda,tree,x,model)
     logLik(ace(x,rescale(tree,model="lambda",lambda),

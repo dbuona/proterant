@@ -148,7 +148,14 @@ Mechanistic experiments would still be useful, ie does water limitation influenc
     \centering
  \includegraphics[width=\textwidth]{..//..//Plots/phylosig1.jpeg}
     \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
-    \label{fig:phylo}
+    \label{fig:phylo1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/phylosig2.jpeg}
+    \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
+    \label{fig:phylo2}
 \end{figure}
 
 \begin{figure}[h!]
