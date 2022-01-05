@@ -1,0 +1,42 @@
+\documentclass{article}[11pt]
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+
+\usepackage{array}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\setkeys{Gin}{width=0.8\textwidth}
+%\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+\topmargin -1.5cm 
+\oddsidemargin -0.04cm 
+\evensidemargin -0.04cm 
+\textwidth 16.59cm
+\textheight 23.94cm 
+\parskip 7.2pt 
+\renewcommand{\baselinestretch}{1.2} 	
+\parindent 0pt
+
+
+\bibliographystyle{..//refs/styles/besjournals.bst}
+%\usepackage{xr-hyper}
+\usepackage{hyperref}
+\title{Supporting Information for: Aridity and floral architecture drive hysteranthous flowering in the North American cherries (\textit{Prunus spp.})}
+
+\begin{document}
+\maketitle
+
+\section*{Figures} 
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/ord_quants.jpeg}
+    \caption{ Likelihood of hysteranthy throughout the flowering season for each species in prunocerasus}
+    \label{fig:plums}
+\end{figure}
+
+
+
+\end{document}

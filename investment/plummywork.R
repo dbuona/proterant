@@ -22,11 +22,14 @@ library(raster)
 
 require(mapdata); require(maptools)
 
+#install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+
 setwd("~/Documents/git/proterant/investment/Input")
 load("plummy.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv")
 
+table(d.flo$specificEpithet)
 ###############################
 #1) Characterize species FLSs
 #2) Test historic drought (macro-ecological patterns)
@@ -34,8 +37,27 @@ d.flo<-read.csv("input_clean/FLS_clean.csv")
 
 #1 I think this is the best model because it "controls" for day of year of obs (earlier observations more likely be to hysternathough)
 mod.ord.scale<-brm(bbch.v.scale~doy+(doy|specificEpithet),data=d.flo,family=cumulative("logit"), warmup = 2500,iter=4000)
-#mod.ord.short<-brm(bbch.short~doy+(doy|specificEpithet),data=d.flo,family=cumulative("logit"), warmup = 2500,iter=4000)
 
+ggplot(d.flo, aes(bbch.v.scale))+geom_histogram()
+
+#mod.ord.short<-brm(bbch.short~doy+(doy|specificEpithet),data=d.flo,family=cumulative("logit"), warmup = 2500,iter=4000)
+priorz<-get_prior(bbch.v.scale~doy+(doy|specificEpithet),data=d.flo)
+
+priorz$prior[5]<-set_prior("uniform(0,6)")
+
+
+
+mod.gaus.scale<-brm(bbch.v.scale~doy+(doy|specificEpithet),data=d.flo,family=gaussian,prior=priorz, control= list(adapt_delta=0.95),warmup = 3000,iter=4000)
+coef(mod.gaus.scale)
+get_variables(mod.gaus.scale)
+
+plot1<-mod.gaus.scale %>%
+  spread_draws(b_Intercept)
+
+plot1<-mod.gaus.scale%>%
+  spread_draws(r_specificEpithet[specificEpithet,condition])
+
+yaya<-filter(yaya,condition=="pdsi")
 
 save.image("plummy.Rda")
 
@@ -203,31 +225,71 @@ d.petal$petal.z<-zscore(d.petal$pental_lengh_mm)
 d.fruit$fruit.z<-zscore(d.fruit$fruit_diam_mm)
 d.phen$phen.z<-zscore(d.phen$doy)
 
+
+
 pdsiraw<-dplyr::select(d.pdsi,lat,lon,pdsi.z)
 #### run zscore modele for measurement error model
-pdsi.mod.z<-brm(pdsi.z~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
-petalmod.z<- brm(petal.z~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
-fruitmod.z<- brm(fruit.z~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
-phenmod.z<- brm(phen.z~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
 
-pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod.z)),1:2)
-petalout<-dplyr::select(as.data.frame(coef(petalmod.z)$specificEpithet),1:2)
-fruitout<-dplyr::select(as.data.frame(coef(fruitmod.z)$specificEpithet),1:2)
-phenout<-dplyr::select(as.data.frame(coef(phenmod.z)),1:2)
+### also incorperate phylogeny?
+###phylogeny
+tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre")
+is.ultrametric(tree)
+tree<-compute.brlen(tree, method = "Grafen")
+## make ultrametric
+
+names.intree<-tree$tip.label # names the names
+namelist<-unique(d.flo$specificEpithet)
+
+to.prune<-which(!names.intree%in%namelist) #prun the tree
+pruned.by<-drop.tip(tree,to.prune)
+plotTree(pruned.by)# this is the tree
+
+
+###what are the tip labels in pruned phylogeny?
+
+mytree.names<-pruned.by$tip.label # did i get them all
+intersect(namelist,mytree.names) #yes
+
+
+
+A <- ape::vcv.phylo(tree)
+
+d.pdsi<-filter(d.pdsi,specificEpithet %in% tree$tip.label)
+pdsi.mod.z<-brm(pdsi.z~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
+pdsi.mod.z.phylo<-brm(pdsi.z~(1|gr(specificEpithet, cov = A)),data=d.pdsi,data2=list(A=A),warmup=2500,iter=4000)
+coef(pdsi.mod.z)
+coef(pdsi.mod.z.phylo)
+petalmod.z<- brm(petal.z~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
+petalmod.z.phylo<- brm(petal.z~(1|id)+(1|gr(specificEpithet, cov = A)),data=d.petal,data2=list(A=A),warmup=2500,iter=4000)
+
+coef(petalmod.z)
+coef(petalmod.z.phylo)
+fruitmod.z<- brm(fruit.z~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
+fruitmod.z.phylo<- brm(fruit.z~(1|id)+(1|gr(specificEpithet, cov = A)),data=d.fruit,data2=list(A=A),warmup=2500,iter=4000)
+coef(fruitmod.z)
+coef(fruitmod.z.phylo)
+
+
+#phenmod.z<- brm(phen.z~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
+
+pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod.z.phylo)),1:2)
+petalout<-dplyr::select(as.data.frame(coef(petalmod.z.phylo)$specificEpithet),1:2)
+fruitout<-dplyr::select(as.data.frame(coef(fruitmod.z.phylo)$specificEpithet),1:2)
+#phenout<-dplyr::select(as.data.frame(coef(phenmod.z)),1:2)
 
 colnames(pdsiout)<-c("pdsi_mean","pdsi_se")
 colnames(petalout)<-c("petal_mean","petal_se")
 colnames(fruitout)<-c("fruit_mean","fruit_se")
-colnames(phenout)<-c("phen_mean","phen_se")
+#colnames(phenout)<-c("phen_mean","phen_se")
 
-phenout$specificEpithet<-rownames(phenout)
+#phenout$specificEpithet<-rownames(phenout)
 fruitout$specificEpithet<-rownames(fruitout)
 petalout$specificEpithet<-rownames(petalout)
 pdsiout$specificEpithet<-rownames(pdsiout)
 
 newdat<-left_join(fruitout,pdsiout)
 newdat<-left_join(newdat,petalout)
-newdat<-left_join(newdat,phenout)
+#newdat<-left_join(newdat,phenout)
 
 d.flo2<-left_join(d.flo,newdat)
 d.flo2$doy.z<-zscore(d.flo2$doy)
@@ -236,12 +298,47 @@ d.flo2$doy.z<-zscore(d.flo2$doy)
 d.flo3<-dplyr::left_join(d.flo2,pdsiraw)
 d.flo3<-d.flo3[!duplicated(d.flo3), ]
 
+cor(d.flo2$pdsi_mean,d.flo2$petal_mean, use="pairwise.complete.obs")
+cor(d.flo2$fruit_mean,d.flo2$petal_mean, use="pairwise.complete.obs")
+cor(d.flo2$fruit_mean,d.flo2$pdsi_mean, use="pairwise.complete.obs")
+###can we justify running them seperately
+
 ###this is the prefered model maybe depending on error
-cor(d,flo)
+
+
+
+
+### shit I just realized below is fundamentall wrong.
 
 #mod.ord.wpreds1<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 2500,iter=4000)
 mod.ord.wpreds2<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
-mod.ord.wpreds2.noME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+phen_mean+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
+mod.ord.wpreds2.noME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
+
+d.flo2$phylo<-d.flo2$specificEpithet
+mod.ord.wpreds.phylo.ME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+(1|gr(phylo, cov = A))+(1|specificEpithet),data=d.flo2,data2=list(A = A),family=cumulative("logit"), warmup = 3500,iter=5000)
+#5 divergent transitions
+fixef(mod.ord.wpreds.phylo.noME)
+
+fixef(mod.ord.wpreds2.noME,probs = c(0.25,.75))
+fixef(mod.ord.wpreds.phylo.noME,probs = c(0.25,.75))
+
+pdsi.ord.wpreds.phylo.ME<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+(1|gr(phylo, cov = A))+(1|specificEpithet),data=d.flo2,data2=list(A = A),family=cumulative("logit"), warmup = 4000,iter=5000)
+
+pdsi.gaus.wpreds.phylo.ME<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+(1|specificEpithet),data=d.flo2, warmup = 4000,iter=5000)
+
+summary(pdsi.ord.wpreds.phylo.ME)
+
+
+
+mod.gaus.wpreds2.noME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+phen_mean+(doy.z|specificEpithet),data=d.flo2, warmup = 4000,iter=6000)
+### compare it to linear in case we need to do a phylogenetic analysis
+mod.gaus.wpreds2<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo2,control=list(adapt_delta=0.95), warmup = 4000,iter=6000)
+###
+coef(mod.gaus.wpreds2)
+
+#choochoo<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+me(phen_mean,phen_se)+(doy.z|specificEpithet),data=choo,family=cumulative("logit"), warmup = 4000,iter=6000)
+
+
 
 ###fit below over night
 #mod.ord.wpreds.woah<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+
@@ -252,9 +349,21 @@ mod.ord.wpreds2.noME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+phe
 
 fixef(mod.ord.wpreds2.noME,probs=c(.25,.75))
 fixef(mod.ord.wpreds2,probs=c(.25,.75))
+fixef(mod.gaus.wpreds2,probs=c(.25,.75))
+fixef(mod.gaus.wpreds2.noME,probs=c(.25,.75))
 
+get_variables(mod.ord.wpreds.phylo.noME)
 
-get_variables(mod.ord.wpreds2)
+output.phylo<-mod.ord.wpreds.phylo.noME %>%
+  spread_draws(b_pdsi_mean,b_fruit_mean,b_petal_mean)
+colnames(output.phylo)
+output.phylo <-output.phylo %>% tidyr::gather("var","estimate",4:6)
+library(bayesplot)
+
+ggplot(output.phylo,aes(y = var, x = estimate)) +
+  tidybayes::stat_halfeye(fill="darkorchid1")+ggthemes::theme_few()+
+  geom_vline(xintercept=0,linetype="dashed")
+
 output2<-mod.ord.wpreds2 %>%
   spread_draws(bsp_mepdsi_meanpdsi_se,bsp_mepetal_meanpetal_se,bsp_mefruit_meanfruit_se,bsp_mephen_meanphen_se)
 colnames(output2)
@@ -262,11 +371,11 @@ output2 <-output2 %>% tidyr::gather("var","estimate",4:7)
 library(bayesplot)
 
 
-get_variables(mod.ord.wpreds2.noME)
-output2.noME<-mod.ord.wpreds2.noME %>%
-  spread_draws(b_pdsi_mean,b_petal_mean,b_fruit_mean,b_phen_mean)
-colnames(output2.noME)
-output2.noME <-output2.noME %>% tidyr::gather("var","estimate",4:7)
+#get_variables(mod.ord.wpreds2.noME)
+#output2.noME<-mod.ord.wpreds2.noME %>%
+#  spread_draws(b_pdsi_mean,b_petal_mean,b_fruit_mean,b_phen_mean)
+#colnames(output2.noME)
+#output2.noME <-output2.noME %>% tidyr::gather("var","estimate",4:7)
 
 aa<-ggplot(output2,aes(y = var, x = estimate)) +
   tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
@@ -274,11 +383,11 @@ aa<-ggplot(output2,aes(y = var, x = estimate)) +
   scale_y_discrete(limits = c("bsp_mephen_meanphen_se","bsp_mefruit_meanfruit_se","bsp_mepetal_meanpetal_se","bsp_mepdsi_meanpdsi_se"),labels=c("fruit phenology","fruit size","petal size","pdsi"))+
   ylab("Variable")+xlab("Effect estimate")
 
-aaa<-ggplot(output2.noME,aes(y = var, x = estimate)) +
-  tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
-  geom_vline(xintercept=0,linetype="dashed")+
-  scale_y_discrete(limits = c("b_phen_mean","b_fruit_mean","b_petal_mean","b_pdsi_mean"),labels=c("fruit phenology","fruit size","petal size","pdsi"))+
-  ylab("Variable")+xlab("Effect estimate")+xlim(-7,7)
+#aaa<-ggplot(output2.noME,aes(y = var, x = estimate)) +
+ # tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
+#  geom_vline(xintercept=0,linetype="dashed")+
+ # scale_y_discrete(limits = c("b_phen_mean","b_fruit_mean","b_petal_mean","b_pdsi_mean"),labels=c("fruit phenology","fruit size","petal size","pdsi"))+
+  #ylab("Variable")+xlab("Effect estimate")+xlim(-7,7)
 
 ggpubr::ggarrange(aa,aaa)
 
@@ -521,6 +630,11 @@ plotTree(pruned.by)# this is the tree
 
 mytree.names<-pruned.by$tip.label # did i get them all
 intersect(namelist,mytree.names) #yes
+
+
+
+
+
 
 
 ### Q1 DO we bother with phylogeny? Only 7 species, and as you can see, weak signal

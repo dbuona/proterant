@@ -104,21 +104,6 @@ ext3<-raster::extract(min.prunus,extract.pts,method="simple")
 pruneo$pdsi<-ext
 pruneo$pdsi.sd<-ext2
 pruneo$pdsi.min<-ext3
-if (FALSE){
-###now do winter T
-str_name<-'Data/Tavg_winter_historical.tif' 
-winter<-raster(str_name)
-
-
-
-extro<-raster::extract(winter,extract.pts,method="simple")
-pruneo$winterT<-(extro-32)*(5/9)
-
-#pdsi summary data
-minT<- pruneo %>% dplyr::group_by(specificEpithet) %>% dplyr::summarise(meanT=mean(winterT,na.rm=TRUE),sdT=sd(winterT,na.rm=TRUE))
-colnames(minT)[1]<-"species"
-setdiff(FNA$species,pdsi$species) ## lose speciosa
-}
 
 
 pdsi<- pruneo %>% dplyr::group_by(specificEpithet) %>% dplyr::summarise(meanpdsi=mean(pdsi,na.rm=TRUE),sdmean=sd(pdsi,na.rm=TRUE),minpdsi=mean(pdsi.min,na.rm=TRUE),sdmin=sd(pdsi.min,na.rm=TRUE))
@@ -128,9 +113,6 @@ setdiff(FNA$species,pdsi$species) ## lose speciosa
 
 ## combine data
 FNA<-left_join(FNA,pdsi)
-
-if (FALSE){
-FNA<-left_join(FNA,minT)}
 ##quick plots
 cor(FNA$petal_low,FNA$petal_high) # .88
 cor(FNA$inflor_low,FNA$inflor_high) #.86 can probably use jsut one or the other in the
@@ -181,44 +163,109 @@ FNA$inflor.z<-zscore(FNA$inflor_high)
 FNA$fruit.z<-zscore(FNA$fruit_high)
 #FNA$cold.z<-zscore(FNA$meanT)
 
+#########################################################################
+#######Gaussian models with and without phylogenies#####################
+#########################################Note: they dont converge with phylos
+FNAgaus<-brm(FLSnum~petal_high*inflor_high+fruit_high+meanpdsi,
+               data=FNA,warmup=3000,iter=4000)
 
-#get_prior(FLSnum~me(petalmean,petalsd)+me(meanpdsi,sdmean),data=FNA)
+FNAgaus.z<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
+             data=FNA,warmup=3000,iter=4000)
+
+cherrytree<-read.tree("pruned_4_modeling.tre")
+FNA.small<-filter(FNA,species %in% cherrytree$tip.label)
+A <- ape::vcv.phylo(cherrytree)
+
+FNAgaus.z.small<-brm(FLSnum~meanpdsi.z,
+                   data=FNA.small,warmup=3000,iter=4000)
+
+fixef(FNAgaus.z)
+
+fixef(FNAgaus.z.small,probs = c(0.25,.75))
+summary()
+
+fixef(FNAgaus.phylo,probs = c(0.25,.75))
+
+priorz<-get_prior(FLSnum~petal.z+inflor.z+meanpdsi.z + (1|gr(species, cov = A)),
+          data=FNA.small,
+          data2 = list(A = A))
+
+priorz$prior[5]<-set_prior("student_t(3, 3, 1.5)")
+
+FNAgaus.phylo<-brm(FLSnum~meanpdsi.z + (1|gr(species, cov = A)),
+                   data=FNA.small,
+                   data2 = list(A = A),
+                   warmup=6500,iter=8000,control=list(adapt_delta=.995))
+
+pp_check(FNAgaus.phylo)
+
+summary(FNAgaus.phylo)
+### try it in phylolm
+mytree.names<-cherrytree$tip.label
+
+
+###format the data in the same order as the tree
+final.df<-FNA.small[match(mytree.names, FNA.small$species),]
+namelist2<-final.df$species
+namelist2==mytree.names
+final.df$species== mytree.names
+final.df<-  final.df %>% remove_rownames() %>% column_to_rownames(var="species")
+
+library("phylolm")
+
+
+FNAgaus.phylo.lm<-phylolm(FLSnum~petal.z+inflor.z+fruit.z+meanpdsi.z,data=final.df,phy=cherrytree)
+simplelm<-lm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,data=final.df)
+
+
+summary(FNAgaus.phylo.lm)
+summary(simplelm)
+fixef(FNAgaus.z)
+
+
+
+####################################################################################################
+#########################################################################
+#######Oridinal models with and without phylogenies#####################
+#########################################Note:
+
+##########
 FNAordz<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
                    data=FNA,
                    family=cumulative("logit"),warmup=3000,iter=4000)
 
 
-cherrytree<-read.tree("pruned_4_modeling.tre")
-FNA.small<-filter(FNA,species %in% cherrytree$tip.label)
-A <- ape::vcv.phylo(cherrytree)
+get_variables(FNAordz)
+output<-FNAordz %>%
+   spread_draws(b_petal.z,b_inflor.z ,b_fruit.z,b_meanpdsi.z,`b_petal.z:inflor.z`)
+colnames(output)
+output <-output %>% tidyr::gather("var","estimate",4:8)
+
+
 FNAordz.phylo<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
              data=FNA.small,
              family=cumulative("logit"),
              data2 = list(A = A),
              warmup=3000,iter=4000)
 
-FNAgaus.phylo<-brm(FLSnum~petal.z+inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
-                   data=FNA.small,
-                   data2 = list(A = A),
-                   warmup=3000,iter=4000)
 
-fixef(FNAordz)
-fixef(FNAordz.phylo)
-fixef(FNAordz.small)
+
+
 FNAordz.small<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
              data=FNA.small,
              family=cumulative("logit"),warmup=3000,iter=4000)
 
 FNAgaus.small<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
                    data=FNA.small,warmup=3000,iter=4000)
+#HERE
+fixef(FNAordz.phylo, probs = c(.25,0.75))
+fixef(FNAordz.small,probs = c(.25,0.75))
+fixef(FNAordz,probs = c(.25,0.75))
 
-fixef(FNAordz.phylo)
-fixef(FNAordz.small)
+
 fixef(FNAgaus.phylo)
 fixef(FNAgaus.small)
 
-hyp <- "sd_species__Intercept^2 / (sd_species__Intercept^2 + sigma^2) = 0"
-(hyp <- hypothesis(FNAgaus.phylo, hyp, class = NULL))
 
 
 
