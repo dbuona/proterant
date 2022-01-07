@@ -166,22 +166,55 @@ FNA$fruit.z<-zscore(FNA$fruit_high)
 #########################################################################
 #######Gaussian models with and without phylogenies#####################
 #########################################Note: they dont converge with phylos
-FNAgaus<-brm(FLSnum~petal_high*inflor_high+fruit_high+meanpdsi,
+#check colinearity
+cor(FNA$petal.z,FNA$inflor.z)
+cor(FNA$fruit.z,FNA$inflor.z)
+cor(FNA$fruit.z,FNA$meanpdsi.z,use="complete.obs")
+cor(FNA$petal.z,FNA$meanpdsi.z,use="complete.obs")
+cor(FNA$inflor.z,FNA$meanpdsi.z,use="complete.obs")
+
+FNA$logFLS<-log(FNA$FLSnum)
+
+FNAgaus<-brm(logFLS~petal_high*inflor_high+fruit_high+meanpdsi,
                data=FNA,warmup=3000,iter=4000)
 
-FNAgaus.z<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,
+FNAgaus.z<-brm(logFLS~petal.z*inflor.z+fruit.z+meanpdsi.z,
              data=FNA,warmup=3000,iter=4000)
 
 cherrytree<-read.tree("pruned_4_modeling.tre")
+is.ultrametric(cherrytree)
 FNA.small<-filter(FNA,species %in% cherrytree$tip.label)
 A <- ape::vcv.phylo(cherrytree)
 
-FNAgaus.z.small<-brm(FLSnum~meanpdsi.z,
-                   data=FNA.small,warmup=3000,iter=4000)
+FNAgaus.z.small<-brm(logFLS~petal.z*inflor.z+fruit.z+meanpdsi.z,
+               data=FNA.small,warmup=3000,iter=4000)
 
+get_prior(logFLS~meanpdsi.z+petal.z+fruit.z +inflor.z+ (1|gr(species, cov = A)),
+          data=FNA.small,
+          data2 = list(A = A))
+
+priorz<-c(prior_string("student_t(3,1,4)",class="b"),
+          prior_string("student_t(3,0,3)",class="Intercept"),
+          prior_string("student_t(3,0,2.5)",class="sd"),
+          prior_string("student_t(3,0,3)",class="sigma"))
+plot(FNA.small$fruit.z)
+
+FNAgaus.phylo<-brm(logFLS~meanpdsi.z+petal.z+fruit.z +inflor.z+ (1|gr(species, cov = A)),
+                   data=FNA.small,prior=priorz,
+                   data2 = list(A = A),control=list(adapt_delta=0.95),
+                   warmup=5000,iter=6000)
+
+FNAgaus.phylo2<-brm(logFLS~inflor_high+fruit_high+meanpdsi+ (1|gr(species, cov = A)),
+                   data=FNA.small,
+                   data2 = list(A = A),control=list(adapt_delta=0.99),
+                   warmup=3000,iter=4000)
+
+launch_shinystan(FNAgaus.phylo)
 fixef(FNAgaus.z)
-
+fixef(FNAgaus.z,probs = c(0.25,.75))
 fixef(FNAgaus.z.small,probs = c(0.25,.75))
+fixef(FNAgaus.phylo,probs = c(0.25,.75))
+fixef(FNAgaus.phylo2,probs = c(0.25,.75))
 summary()
 
 fixef(FNAgaus.phylo,probs = c(0.25,.75))
@@ -209,14 +242,16 @@ final.df<-FNA.small[match(mytree.names, FNA.small$species),]
 namelist2<-final.df$species
 namelist2==mytree.names
 final.df$species== mytree.names
-final.df<-  final.df %>% remove_rownames() %>% column_to_rownames(var="species")
 
+final.df<-  final.df %>% remove_rownames() %>% column_to_rownames(var="species")
+library(tibble)
 library("phylolm")
 
 
-FNAgaus.phylo.lm<-phylolm(FLSnum~petal.z+inflor.z+fruit.z+meanpdsi.z,data=final.df,phy=cherrytree)
-simplelm<-lm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z,data=final.df)
-
+FNAgaus.phylo.lm<-phylolm(logFLS~petal.z+inflor.z+fruit.z+meanpdsi.z,data=final.df,phy=cherrytree,boot = 6000)
+summary(FNAgaus.phylo.lm)
+simplelm<-lm(logFLS~petal.z+inflor.z+fruit.z+meanpdsi.z,data=final.df)
+summary(simplelm)
 
 summary(FNAgaus.phylo.lm)
 summary(simplelm)
@@ -265,12 +300,9 @@ fixef(FNAordz,probs = c(.25,0.75))
 
 fixef(FNAgaus.phylo)
 fixef(FNAgaus.small)
-
-
-
-
-
 fixef(FNAordz)
+
+
 
 posterior <- as.matrix(FNAordz)
 colnames(posterior)
