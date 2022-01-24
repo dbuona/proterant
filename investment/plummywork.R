@@ -27,77 +27,155 @@ require(mapdata); require(maptools)
 setwd("~/Documents/git/proterant/investment/Input")
 load("plummy.Rda")
 ##read in cleaned data
-d.flo<-read.csv("input_clean/FLS_clean.csv")
-tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre")
-is.ultrametric(tree)
-tree<-compute.brlen(tree, method = "Grafen")
-## make ultrametric
+d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
+tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
 
+##### give tree branch lengths
+is.ultrametric(tree)
+tree<-compute.brlen(tree, method = "Grafen")## make ultrametric
+#check names
 names.intree<-tree$tip.label # names the names
 namelist<-unique(d.flo$specificEpithet)
-
-to.prune<-which(!names.intree%in%namelist) #prun the tree
+to.prune<-which(!names.intree%in%namelist) #prune the tree
 pruned.by<-drop.tip(tree,to.prune)
 plotTree(pruned.by)# this is the tree
-
 
 ###what are the tip labels in pruned phylogeny?
 
 mytree.names<-pruned.by$tip.label # did i get them all
 intersect(namelist,mytree.names) #yes
 
+A <- ape::vcv.phylo(pruned.by) ## make acovarience matrix for brms models
+
+d.flo$id<-d.flo$specificEpithet ## whoops over wrote the id column here but we dont need if
+d.flo$logFLS<-log(d.flo$bbch.v.scale) ## make FLS linear
+
+###Part 1: Turns out phylogeny might matter, or not when we use SE instead of SD
+
+d.sig<-d.flo %>% group_by(specificEpithet) %>% summarise(meanFLS=mean(logFLS),sdFLS=sd(logFLS),nFLS=n(),seFLS=sdFLS / sqrt(nFLS))
+
+###line everthing up for phylosig###
+final.df<-d.sig[match(mytree.names, d.sig$specificEpithet),]
+namelist2<-final.df$specificEpithet
+namelist2==mytree.names
+final.df$specificEpithet== mytree.names
+#####
+
+phylosig(pruned.by,final.df$meanFLS,se=final.df$seFLS,method="lambda",nsim = 1000, test=TRUE) #lambda 7.47299e-05 
+phylosig(pruned.by,final.df$meanFLS,se=final.df$seFLS,method="K",nsim = 1000, test=TRUE) #K 0.23 
+
+####just to be safe we run a phylo mixed modesl
+mod.gaus.scale<-brm(logFLS~doy+(doy|id),data=d.flo,data=d.flo,family=gaussian, control= list(adapt_delta=0.95),warmup = 3000,iter=4000)
+mod.gaus.scale.phylo<-brm(logFLS~doy+(doy|id)+(1|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=gaussian, control= list(adapt_delta=0.95),warmup = 3000,iter=4000)
+
+mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|id)+(1|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 2500,iter=4000)
+
+#### now run models for each variable
+d.pdsi<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/pruno_clean_pdsi.csv")
+d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
+d.fruit<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruitsize_clean.csv")
+d.phen<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruit_phen.csv")
+#d.cold<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/pruno_clean_pdsi_wint.csv")
+d.fruit<-filter(d.fruit,fruit_type=="fleshy")
 
 
-A <- ape::vcv.phylo(tree)
-plot(tree)
-table(d.flo$specificEpithet)
-###############################
-#1) Characterize species FLSs
-#2) Test historic drought (macro-ecological patterns)
-#3) Test plasticity
-
-#1 I think this is the best model because it "controls" for day of year of obs (earlier observations more likely be to hysternathough)
-mod.ord.scale<-brm(bbch.v.scale~doy+(doy|specificEpithet),data=d.flo,family=cumulative("logit"), warmup = 2500,iter=4000)
-
-ggplot(d.flo, aes(bbch.v.scale))+geom_histogram()
-
-#mod.ord.short<-brm(bbch.short~doy+(doy|specificEpithet),data=d.flo,family=cumulative("logit"), warmup = 2500,iter=4000)
-priorz<-get_prior(bbch.v.scale~doy+(doy|specificEpithet),data=d.flo)
-
-priorz$prior[5]<-set_prior("uniform(0,6)")
+#z.score everything for future analyses
+zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
+d.pdsi$pdsi.z<-zscore(d.pdsi$pdsi)
+d.petal$petal.z<-zscore(d.petal$pental_lengh_mm)
+d.fruit$fruit.z<-zscore(d.fruit$fruit_diam_mm)
+d.phen$phen.z<-zscore(d.phen$doy)
 
 
-d.flo$logFLS<-log(d.flo$bbch.v.scale)
-mod.gaus.scale<-brm(logFLS~doy+(doy|specificEpithet),data=d.flo,family=gaussian,, control= list(adapt_delta=0.95),warmup = 3000,iter=4000)
-coef(mod.gaus.scale)
-get_variables(mod.gaus.scale)
+### get ready to play with phylogeny
+d.pdsi<-dplyr::filter(d.pdsi,specificEpithet %in% pruned.by$tip.label)
+d.pdsi$ID<-d.pdsi$specificEpithet
 
-plot1<-mod.gaus.scale %>%
-  spread_draws(b_Intercept)
+d.petal$ID<-d.petal$specificEpithet
+d.fruit$ID<-d.fruit$specificEpithet
 
-plot1<-mod.gaus.scale%>%
-  spread_draws(r_specificEpithet[specificEpithet,condition])
+if (FALSE){ ## if you decide there is too much colinearity you can use these
+  pdsi.mod.z<-brm(pdsi.z~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
+  petal.mod.z<- brm(petal.z~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
+  fruit.mod.z<- brm(fruit.z~(1|id)+(1|specificEpithet),data=d.fruit,warmup=3000,iter=4000)
+pdsi.mod.phylo<-brm(pdsi~(1|ID)+(1|gr(specificEpithet, cov = A)),data=d.pdsi,data2=list(A=A),warmup=4500,iter=6000,control=list(adapt_delta=0.98))
+petalmod.phylo<- brm(pental_lengh_mm~(1|ID)+(1|id)+(1|gr(specificEpithet, cov = A)),data=d.petal,data2=list(A=A),warmup=4500,iter=6000,control=list(adapt_delta=0.98))
+fruitmod.phylo<- brm(fruit_diam_mm~(1|ID)+(1|id)+(1|gr(specificEpithet, cov = A)),data=d.fruit,data2=list(A=A),warmup=4500,iter=6000,control=list(adapt_delta=0.98)) # 4 divergent transitions
+
+}
+
+
+pdsi.mod<-brm(pdsi~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
+petal.mod<- brm(pental_lengh_mm~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
+fruit.mod<- brm(fruit_diam_mm~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
+
+if (FALSE){
+pdsi.mod.z.phylo<-brm(pdsi.z~(1|ID)+(1|gr(specificEpithet, cov = A)),data=d.pdsi,data2=list(A=A),warmup=4000,iter=5000,control=list(adapt_delta=0.98))
+petalmod.z.phylo<- brm(petal.z~(1|ID)+(1|id)+(1|gr(specificEpithet, cov = A)),data=d.petal,data2=list(A=A),warmup=4000,iter=5000,control=list(adapt_delta=0.99)) # 1 dierget transition
+fruitmod.z.phylo<- brm(fruit.z~(1|ID)+(1|id)+(1|gr(specificEpithet, cov = A)),data=d.fruit,data2=list(A=A),warmup=4000,iter=5000,control=list(adapt_delta=0.99))
+}
+summary(petalmod.z.phylo)
+
+
+pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod)),1:2)
+petalout<-dplyr::select(as.data.frame(coef(petal.mod)$specificEpithet),1:2)
+fruitout<-dplyr::select(as.data.frame(coef(fruit.mod)$specificEpithet),1:2)
+FLSout<-dplyr::select(as.data.frame(coef(mod.gaus.scale.phylo)$specificEpithet),1:2)
+#phenout<-dplyr::select(as.data.frame(coef(phenmod.z)),1:2)
+
+colnames(pdsiout)<-c("pdsi_mean","pdsi_se")
+colnames(petalout)<-c("petal_mean","petal_se")
+colnames(fruitout)<-c("fruit_mean","fruit_se")
+colnames(FLSout)<-c("FLS_mean","FLS_se")
+#colnames(phenout)<-c("phen_mean","phen_se")
+
+#phenout$specificEpithet<-rownames(phenout)
+fruitout$specificEpithet<-rownames(fruitout)
+petalout$specificEpithet<-rownames(petalout)
+pdsiout$specificEpithet<-rownames(pdsiout)
+FLSout$specificEpithet<-rownames(FLSout)
+
+newdat<-left_join(fruitout,pdsiout)
+newdat<-left_join(newdat,petalout)
+newdat<-left_join(newdat,FLSout)
+
+cor(newdat$pdsi_mean,newdat$petal_mean, use="pairwise.complete.obs") #0.542
+cor(newdat$fruit_mean,newdat$petal_mean, use="pairwise.complete.obs") #0.493
+cor(newdat$fruit_mean,newdat$pdsi_mean, use="pairwise.complete.obs") # 0.547
+
 
 
 save.image("plummy.Rda")
 
-#new.data<-data.frame(d.flo%>% group_by(specificEpithet)%>% summarise(doy=median(doy)))
-#new.data<-data.frame(specificEpithet=unique(d.flo$specificEpithet),doy=rep(median(d.flo$doy),13))
-#new.data<-data.frame(specificEpithet=unique(d.flo$specificEpithet))
 
+##predict the ordinal
 new.data<-data.frame(quant=rep(c( "0%" , "25%",  "50%",  "75%" ,"100%"),13),d.flo%>% group_by(specificEpithet)%>% summarise(doy=quantile(doy)))
+new.data$id<-new.data$specificEpithet
 
 
-#predy<-fitted(mod.ord.short,newdata = new.data,probs = c(.25,.75))
-predy<-fitted(mod.ord.scale,newdata = new.data,probs = c(.25,.75))
+predy<-fitted(mod.gaus.scale.phylo,newdata = new.data,probs = c(.25,.75))
 predy<-cbind(new.data,predy)
 
-predy2<-fitted(mod.gaus.scale,newdata = new.data,probs = c(.25,.75))
+season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
+
+predy<-filter(predy,quant!="100%")
+predy$FLS.scale<-exp(predy$Estimate)
+predy$Q.25<-exp(predy$Q25)
+predy$Q.75<-exp(predy$Q75)
+season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
+ggplot(data=predy,aes(quant,FLS.scale))+geom_point(aes(color=id))+
+  geom_errorbar(aes(ymin=Q.25,ymax=Q.75,width=0,color=id))+ggthemes::theme_clean(base_size = 11)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+
+  theme(strip.text = element_text(face = "italic"))+
+  scale_y_continuous(breaks=c(1,2,3,4,5),labels = c("BBCH 0","BBCH 09","BBCH 11","BBCH 15","BBCH 17"),name = "BBCH")
+
+dev.off()
+
+predy2<-fitted(mod.ord.scale.phlyo,newdata = new.data,probs = c(.25,.75))
 predy2<-cbind(new.data,predy2)
-#predy<-fitted(mod.ord.nodoy,newdata = new.data,probs = c(.25,.75))
 
 
-predy3<-predy %>%tidyr::gather("phase","likelihood",4:27)
+
+predy3<-predy2 %>%tidyr::gather("phase","likelihood",4:28)
 predy3$species2<-predy3$specificEpithet
 
 predy.est<-filter(predy3,str_detect(phase, "^Estimate"))
@@ -105,7 +183,7 @@ predy.error<-filter(predy3,str_detect(phase, "^Q25"))
 predy.error2<-filter(predy3,str_detect(phase, "^Q75"))
 
 errorlow <- predy.error %>% 
-  group_by(species2,quant) %>%
+ group_by(species2,quant) %>%
   filter(likelihood == max(likelihood)) %>%
   arrange(species2)
 
@@ -121,7 +199,6 @@ result <- predy.est %>%
 
 colnames(errorlow)[3]<-"Q25"
 colnames(errorhigh)[3]<-"Q75"
-
 
 result$Q25<-errorlow$Q25
 result$Q75<-errorhigh$Q75
@@ -149,8 +226,8 @@ colnames(errorhigh)[5]<-"Q75"
 result$Q25<-errorlow$Q25
 result$Q75<-errorhigh$Q75
 result
-result1$goo<-paste(result1$species,result1$phase)
-result$goo<-paste(result$species,result$phase)
+result1$goo<-paste(result1$specificEpithet,result1$phase)
+result$goo<-paste(result$specificEpithet,result$phase)
 
 result$most<-NA
 result$most<-ifelse(result$goo %in% c(result1$goo),"Y","N")
@@ -163,9 +240,6 @@ result$bbch[which(result$phase=="Estimate.P(Y = 4)" )]<- "BBCH 15"
 result$bbch[which(result$phase=="Estimate.P(Y = 5)" )]<- "BBCH 17"
 result$bbch[which(result$phase=="Estimate.P(Y = 6)" )]<- "BBCH 19"
 
-
-
-
 result$int<-NA
 result$int[which(result$phase=="Estimate.P(Y = 1)" )]<- 1
 result$int[which(result$phase=="Estimate.P(Y = 2)" )]<- 2
@@ -174,282 +248,112 @@ result$int[which(result$phase=="Estimate.P(Y = 4)" )]<- 4
 result$int[which(result$phase=="Estimate.P(Y = 5)" )]<- 5
 result$int[which(result$phase=="Estimate.P(Y = 6)" )]<- 6
 
-
-
-jpeg("..//Plots/ord_grandmedian.jpeg", width=11, height=4,unit="in",res=300)
-ggplot(data=result,aes(bbch,likelihood))+geom_point()+
-  geom_ribbon(aes(x=int,ymin=0,ymax=likelihood),fill="lightgray",alpha=0.6)+facet_wrap(~species2,nrow=2)+
-  geom_errorbar(aes(ymin=Q25,ymax=Q75),width=0)+ggthemes::theme_clean()+
-  theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
-  ggtitle("Median of Dataset")
-dev.off()
-
-jpeg("..//Plots/ord_spmedian.jpeg", width=11, height=4,unit="in",res=300)
-ggplot(data=result,aes(bbch,likelihood))+geom_point()+
-  geom_ribbon(aes(x=int,ymin=0,ymax=likelihood),fill="lightgray",alpha=0.6)+facet_wrap(~species2,nrow=2)+
-  geom_errorbar(aes(ymin=Q25,ymax=Q75),width=0)+ggthemes::theme_clean()+
-  theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
-  ggtitle("Median for each species")
-dev.off()
-
-jpeg("..//Plots/ord_ginteronly.jpeg", width=11, height=4,unit="in",res=300)
-ggplot(data=result,aes(bbch,likelihood))+geom_point()+
-  geom_ribbon(aes(x=int,ymin=0,ymax=likelihood),fill="lightgray",alpha=0.6)+facet_wrap(~species2,nrow=2)+
-  geom_errorbar(aes(ymin=Q25,ymax=Q75),width=0)+ggthemes::theme_clean()+
-  theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
-  ggtitle("Intercept only")
-dev.off()
-
 result<-filter(result,quant!="100%")
 #result<-filter(result,quant!="0%")
 
-
-
-
-
-
-### quatify FLS
-
-makeit<-filter(result,bbch%in% c("BBCH 0","BBCH 09","BBCH 11"))
+### quatify FLS########
+makeit<-filter(result,bbch%in% c("BBCH 0","BBCH 09"))
 makeit<-makeit[, c('specificEpithet','quant','bbch','likelihood')]
 
-
 makeit<-tidyr::spread(makeit,bbch,likelihood)
-makeit
-makeit$probs<-makeit$`BBCH 0`+makeit$`BBCH 09`+makeit$`BBCH 11`
+makeit$probs<-makeit$`BBCH 0`#+makeit$`BBCH 09`
 
-
-makeit$cat<-ifelse(makeit$probs>=0.,1,0)
+makeit$cat<-ifelse(makeit$probs>=0.25,"hyserantous","seranthous")
 #makeit$cat2<-ifelse(makeit$probs>=0.5,1,0)
 #makeit2<-makeit[, c('specificEpithet','quant','cat','cat2')]
 result2<-left_join(result,makeit)
-
+result2$likelihood2<-as.numeric(result2$likelihood)
 
 season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
 jpeg("..//Plots/ord_quants.jpeg", width=7, height=5,unit="in",res=300)
-ggplot(data=result2,aes(bbch,likelihood))+geom_point()+
-  geom_ribbon(aes(x=int,ymin=0,ymax=likelihood,fill=as.factor(cat)),alpha=0.3)+
+ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=as.factor(cat)),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
-  geom_errorbar(aes(ymin=Q25,ymax=Q75,width=0))+ggthemes::theme_clean(base_size = 11)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))
+  geom_errorbar(aes(ymin=as.numeric(Q25),ymax=as.numeric(Q75),width=0))+
+ggthemes::theme_clean(base_size = 11)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
+  scale_fill_viridis_d()
 dev.off()
 
-
 #always1
-sos<-c(1,1,1,1,1,1,1,1,1,1,0,0,1)
-es<-c(0,0,1,1,0,1,1,1,0,0,0,0,1)
+sos<-c(1,1,1,1,1,1,1,1,1,0,0,0,1)
+es<-c(0,0,1,1,0,1,1,0,0,0,0,0,1)
 ms<-c(0,0,1,0,0,1,1,0,0,0,0,0,1)
-ls<-c(0,0,1,0,0,1,1,0,0,0,0,0,1)
+ls<-c(0,0,0,0,0,0,1,0,0,0,0,0,1)
 
 
 hystscore<-data.frame(specificEpithet=sort(unique(d.flo$specificEpithet)),sos,es,ms,ls)
 hystscore$score <- rowSums(hystscore[2:5])
 
-### now pdsi
-
-#### can do this one for 
-d.pdsi<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/pruno_clean_pdsi.csv")
-d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
-d.fruit<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruitsize_clean.csv")
-d.phen<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruit_phen.csv")
-d.cold<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/pruno_clean_pdsi_wint.csv")
-
-
-#mmacropatters
-d.pdsi<-left_join(d.pdsi,hystscore)
-d.petal<-left_join(d.petal,hystscore)
-d.fruit<-left_join(d.fruit,hystscore)
-d.fruit<-filter(d.fruit,fruit_type=="fleshy")
-d.phen<-left_join(d.phen,hystscore)
-d.cold<-left_join(d.cold,hystscore)
-
-#z.score everything for future analyses
-zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
-d.pdsi$pdsi.z<-zscore(d.pdsi$pdsi)
-d.petal$petal.z<-zscore(d.petal$pental_lengh_mm)
-d.fruit$fruit.z<-zscore(d.fruit$fruit_diam_mm)
-d.phen$phen.z<-zscore(d.phen$doy)
-
-
-
-pdsiraw<-dplyr::select(d.pdsi,lat,lon,pdsi.z)
-#### run zscore modele for measurement error model
-
-
-
-
-d.pdsi<-filter(d.pdsi,specificEpithet %in% tree$tip.label)
-pdsi.mod.z<-brm(pdsi.z~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
-pdsi.mod.z.phylo<-brm(pdsi.z~(1|gr(specificEpithet, cov = A)),data=d.pdsi,data2=list(A=A),warmup=2500,iter=4000)
-coef(pdsi.mod.z)
-coef(pdsi.mod.z.phylo)
-petalmod.z<- brm(petal.z~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
-petalmod.z.phylo<- brm(petal.z~(1|id)+(1|gr(specificEpithet, cov = A)),data=d.petal,data2=list(A=A),warmup=2500,iter=4000)
-
-coef(petalmod.z)
-coef(petalmod.z.phylo)
-fruitmod.z<- brm(fruit.z~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
-fruitmod.z.phylo<- brm(fruit.z~(1|id)+(1|gr(specificEpithet, cov = A)),data=d.fruit,data2=list(A=A),warmup=2500,iter=4000)
-coef(fruitmod.z)
-coef(fruitmod.z.phylo)
-
-
-#phenmod.z<- brm(phen.z~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
-
-pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod.z.phylo)),1:2)
-petalout<-dplyr::select(as.data.frame(coef(petalmod.z.phylo)$specificEpithet),1:2)
-fruitout<-dplyr::select(as.data.frame(coef(fruitmod.z.phylo)$specificEpithet),1:2)
-FLSout<-dplyr::select(as.data.frame(coef(mod.gaus.scale)$specificEpithet),1:2)
-#phenout<-dplyr::select(as.data.frame(coef(phenmod.z)),1:2)
-
-colnames(pdsiout)<-c("pdsi_mean","pdsi_se")
-colnames(petalout)<-c("petal_mean","petal_se")
-colnames(fruitout)<-c("fruit_mean","fruit_se")
-colnames(FLSout)<-c("FLS_mean","FLS_se")
-#colnames(phenout)<-c("phen_mean","phen_se")
-
-#phenout$specificEpithet<-rownames(phenout)
-fruitout$specificEpithet<-rownames(fruitout)
-petalout$specificEpithet<-rownames(petalout)
-pdsiout$specificEpithet<-rownames(pdsiout)
-FLSout$specificEpithet<-rownames(FLSout)
-
-newdat<-left_join(fruitout,pdsiout)
-newdat<-left_join(newdat,petalout)
-newdat<-left_join(newdat,FLSout)
-#newdat<-left_join(newdat,phenout)
-mod.gaus.fullME<-brm(FLS_mean|mi(FLS_se)~me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se),data=newdat, warmup = 300,iter=4000,control=list(adapt_delta=0.95))
-mod.gaus.MEFLS<-brm(FLS_mean|mi(FLS_se)~pdsi_mean+petal_mean+fruit_mean,data=newdat, warmup = 300,iter=4000,control=list(adapt_delta=0.95))
-
-
-
+### make tree
 newdat<-left_join(newdat,hystscore)
-newdat$score<-newdat$score+1
-newdat$score<-as.integer(newdat$score)
-mod.ord.hystscore<-brm(score~me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se),data=newdat, warmup = 3000,iter=4000,family=cumulative("logit"),control=list(adapt_delta=0.95))
 
-d.flo2<-left_join(d.flo,newdat)
-d.flo2$doy.z<-zscore(d.flo2$doy)
+tree2<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre")
 
 
-d.flo3<-dplyr::left_join(d.flo2,pdsiraw)
-d.flo3<-d.flo3[!duplicated(d.flo3), ]
+names.intree<-tree2$tip.label # names the names
+namelist<-unique(d.flo$specificEpithet)
 
-cor(d.flo2$pdsi_mean,d.flo2$petal_mean, use="pairwise.complete.obs")
-cor(d.flo2$fruit_mean,d.flo2$petal_mean, use="pairwise.complete.obs")
-cor(d.flo2$fruit_mean,d.flo2$pdsi_mean, use="pairwise.complete.obs")
-###can we justify running them seperately
+to.prune<-which(!names.intree%in%namelist) #prun the tree
+pruned.by2<-drop.tip(tree,to.prune)
+plotTree(pruned.by2)# this is the tree
 
-###this is the prefered model maybe depending on error
 
+###what are the tip labels in pruned phylogeny?
+
+mytree.names<-pruned.by2$tip.label # did i get them all
+intersect(namelist,mytree.names) #yes
 
 
 
-### shit I just realized below is fundamentall wrong.
-d.flo2$FLSbin<-ifelse(d.flo2$bbch.f<11,0,1)
-#mod.ord.wpreds1<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 2500,iter=4000)
-mod.ord.wpreds2<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
-mod.ord.wpreds2.noME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+(doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3500,iter=5000)
-mod.bern.wpreds2.noME<-brm(FLSbin~doy.z+pdsi_mean+petal_mean+fruit_mean+(doy.z|specificEpithet),data=d.flo2,family=bernoulli(), warmup = 3500,iter=5000)
-
-d.flo2$phylo<-d.flo2$specificEpithet
-
-d.flo2$logFLS<-log(d.flo2$bbch.v.scale)
-
-
-mod.log.gaus.wpreds.phylo.noME<-brm(logFLS~doy.z+pdsi_mean+petal_mean+fruit_mean+(1|gr(phylo, cov = A))+(doy.z|specificEpithet),data=d.flo2,data2=list(A = A), warmup = 3500,iter=5000,control=list(adapt_delta=0.95))
-mod.log.gaus.wpreds.noME<-brm(logFLS~doy.z+pdsi_mean+petal_mean+fruit_mean+(doy.z|specificEpithet),data=d.flo2, warmup = 3500,iter=5000,control=list(adapt_delta=0.95))
-mod.log.gaus.wpreds.ME<-brm(logFLS~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+(doy.z|specificEpithet),data=d.flo2, warmup = 3500,iter=5000,control=list(adapt_delta=0.95))
-
-fixef(mod.log.gaus.wpreds.phylo.noME)
-fixef(mod.log.gaus.wpreds.noME)
-
-fixef(mod.ord.wpreds2.noME,probs = c(0.25,.75))
-fixef(mod.ord.wpreds.phylo.noME,probs = c(0.25,.75))
-
-pdsi.ord.wpreds.phylo.ME<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+(1|gr(phylo, cov = A))+(1|specificEpithet),data=d.flo2,data2=list(A = A),family=cumulative("logit"), warmup = 4000,iter=5000)
-petal.ord.wpreds.phylo.ME<-brm(bbch.v.scale~doy.z+me(petal_mean,petal_se)+(1|gr(phylo, cov = A))+(doy.z|specificEpithet),data=d.flo2,data2=list(A = A),family=cumulative("logit"), warmup = 4000,iter=5000)
-
-pdsi.gaus.wpreds.phylo.ME<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+(1|specificEpithet),data=d.flo2, warmup = 4000,iter=5000)
-
-summary(pdsi.ord.wpreds.phylo.ME)
 
 
 
-mod.gaus.wpreds2.noME<-brm(bbch.v.scale~doy.z+pdsi_mean+petal_mean+fruit_mean+phen_mean+(doy.z|specificEpithet),data=d.flo2, warmup = 4000,iter=6000)
-### compare it to linear in case we need to do a phylogenetic analysis
 
-###
-coef(mod.gaus.wpreds2)
+### Q1 DO we bother with phylogeny? Only 7 species, and as you can see, weak signal
+meanfls<-d.flo %>% dplyr::group_by(specificEpithet)%>% dplyr::summarise(meanFLS=mean(bbch.v.scale),sdFLS=sd(bbch.v.scale))##Take mean FLS values
+d.phylo<-filter(d.flo,specificEpithet %in% mytree.names)
 
-#choochoo<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+me(phen_mean,phen_se)+(doy.z|specificEpithet),data=choo,family=cumulative("logit"), warmup = 4000,iter=6000)
-
-
-
-###fit below over night
-#mod.ord.wpreds.woah<-brm(bbch.v.scale~doy.z+me(pdsi_mean,pdsi_se)+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)+
-   #       me(pdsi_mean,pdsi_se):me(petal_mean,petal_se)+me(pdsi_mean,pdsi_se):me(fruit_mean,fruit_se)+me(fruit_mean,fruit_se):me(petal_mean,petal_se)+
- #           (doy.z|specificEpithet),data=d.flo2,family=cumulative("logit"), warmup = 3000,iter=4000)
-
-#mod.ord.wpreds3<-brm(bbch.v.scale~doy.z+pdsi.z+me(petal_mean,petal_se)+me(fruit_mean,fruit_se)*me(phen_mean,phen_se)+(doy.z|specificEpithet),data=d.flo3,family=cumulative("logit"), warmup = 3000,iter=5000)
-
-fixef(mod.ord.wpreds2.noME,probs=c(.25,.75))
-fixef(mod.ord.wpreds2,probs=c(.25,.75))
-fixef(mod.gaus.wpreds2,probs=c(.25,.75))
-fixef(mod.gaus.wpreds2.noME,probs=c(.25,.75))
-
-get_variables(mod.ord.wpreds.phylo.noME)
-
-output.phylo<-mod.ord.wpreds.phylo.noME %>%
-  spread_draws(b_pdsi_mean,b_fruit_mean,b_petal_mean)
-colnames(output.phylo)
-output.phylo <-output.phylo %>% tidyr::gather("var","estimate",4:6)
-library(bayesplot)
-
-ggplot(output.phylo,aes(y = var, x = estimate)) +
-  tidybayes::stat_halfeye(fill="darkorchid1")+ggthemes::theme_few()+
-  geom_vline(xintercept=0,linetype="dashed")
-
-output2<-mod.ord.wpreds2 %>%
-  spread_draws(bsp_mepdsi_meanpdsi_se,bsp_mepetal_meanpetal_se,bsp_mefruit_meanfruit_se,bsp_mephen_meanphen_se)
-colnames(output2)
-output2 <-output2 %>% tidyr::gather("var","estimate",4:7)
-library(bayesplot)
+d.phylo<-left_join(d.phylo,meanfls)
+##quick phylo sig
+meanfls4phylo<-filter(meanfls,specificEpithet %in% mytree.names)
+meanfls4phylo<-left_join(meanfls4phylo,hystscore)
 
 
-#get_variables(mod.ord.wpreds2.noME)
-#output2.noME<-mod.ord.wpreds2.noME %>%
-#  spread_draws(b_pdsi_mean,b_petal_mean,b_fruit_mean,b_phen_mean)
-#colnames(output2.noME)
-#output2.noME <-output2.noME %>% tidyr::gather("var","estimate",4:7)
-
-aa<-ggplot(output2,aes(y = var, x = estimate)) +
-  tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
-  geom_vline(xintercept=0,linetype="dashed")+
-  scale_y_discrete(limits = c("bsp_mephen_meanphen_se","bsp_mefruit_meanfruit_se","bsp_mepetal_meanpetal_se","bsp_mepdsi_meanpdsi_se"),labels=c("fruit phenology","fruit size","petal size","pdsi"))+
-  ylab("Variable")+xlab("Effect estimate")
-
-#aaa<-ggplot(output2.noME,aes(y = var, x = estimate)) +
- # tidybayes::stat_eye(fill="darkorchid1")+ggthemes::theme_few()+
-#  geom_vline(xintercept=0,linetype="dashed")+
- # scale_y_discrete(limits = c("b_phen_mean","b_fruit_mean","b_petal_mean","b_pdsi_mean"),labels=c("fruit phenology","fruit size","petal size","pdsi"))+
-  #ylab("Variable")+xlab("Effect estimate")+xlim(-7,7)
-
-ggpubr::ggarrange(aa,aaa)
 
 
-jpeg("..//Plots/cerasus_mus.jpeg",width=8, height=9, units = "in",res=300)
-ggpubr::ggarrange(aa,d, labels = c("a)",""),nrow=2,ncol=1)
+library(ggtree)
+
+meanfls4phylo$score2<-as.factor(meanfls4phylo$score)
+jpeg("..//Plots/phylosig2.jpeg", width=4, height=4,unit="in",res=300)
+p<-ggtree(pruned.by2,layout = "roundrect")
+p %<+% meanfls4phylo+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=score2),size=5,shape=15)+ xlim(0, 3)+scale_color_viridis_d(option="turbo",name="Hysteranthy",  labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))
 dev.off()
 
 
 
-####non zscored models for comparative analysis using grouping factors
-pdsi.mod<-brm(pdsi~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
-minpdsi.mod<-brm(pdsi.min~(1|specificEpithet),data=d.pdsi,warmup=2500,iter=4000)
-petalmod<- brm(pental_lengh_mm~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
-fruitlmod<- brm(fruit_diam_mm~(1|id)+(1|specificEpithet),data=d.fruit,warmup=2500,iter=4000)
-phenlmod<- brm(doy~(1|specificEpithet),data=d.phen,warmup=2500,iter=4000)
-cold.mod<-brm(wintert~(1|specificEpithet),data=d.cold,warmup=2500,iter=4000)
+####model each
+catgaus.pdsi<-brm(pdsi_mean|mi(pdsi_se)~score,data=newdat,family=gaussian(),control = list(adapt_delta=.99),warmup=5000,iter=6000)
+fixef(catgaus.pdsi)
+
+fixef(catgaus.pdsi)
+get_variables(catgaus.pdsi)
+lines<-catgaus.pdsi%>%
+  spread_draws(b_Intercept,  b_score )
+
+catgaus.fruit<-brm(fruit_mean|mi(fruit_se)~score,data=newdat,family=gaussian(),control = list(adapt_delta=.99),warmup=5000,iter=6000)
+fixef(catgaus.fruit)
+catgaus.fruit<-add_criterion(catgaus.fruit,"loo")
+
+lines2<-catgaus.fruit%>%
+  spread_draws(b_Intercept,  b_score )
+
+catgaus.petal<-brm(petal_mean|mi(petal_se)~score,data=newdat,family=gaussian(),control = list(adapt_delta=.99),warmup=5000,iter=6000)
+fixef(catgaus.petal)
+catgaus.petal<-add_criterion(catgaus.petal,"loo")
+
+loo_compare(catgaus.petal,catgaus.fruit)
+
+lines3<-catgaus.petal%>%
+  spread_draws(b_Intercept,  b_score )
 
 ##extrac and group posteriors I think these are doing raneffs
 goober2<-pdsi.mod%>%
@@ -457,92 +361,62 @@ goober2<-pdsi.mod%>%
   tidyr::spread(term,r_specificEpithet) 
 colnames(goober2)
 
-fixef(pdsi.mod)
 flooby<-left_join(goober2,hystscore)
 flooby<-flooby%>% group_by(score)
+flooby$Intercept<-flooby$Intercept+0.16936260
 
 ###peta
-gooberp<-petalmod%>%
+gooberp<-petal.mod%>%
   spread_draws(r_specificEpithet[specificEpithet,term])%>%
   tidyr::spread(term,r_specificEpithet) 
 
 flooby2<-left_join(gooberp,hystscore)
 flooby2<-flooby2%>% group_by(score)
+flooby2$Intercept<-flooby2$Intercept+5.0609407
 
 ###fruit
-gooberf<-fruitlmod%>%
+gooberf<-fruit.mod%>%
   spread_draws(r_specificEpithet[specificEpithet,term])%>%
   tidyr::spread(term,r_specificEpithet) 
 
 flooby3<-left_join(gooberf,hystscore)
 flooby3<-flooby3%>% group_by(score)
-
-gooberph<-phenlmod%>%
-  spread_draws(r_specificEpithet[specificEpithet,term])%>%
-  tidyr::spread(term,r_specificEpithet) 
-colnames(gooberph)
+flooby3$Intercept<-flooby3$Intercept+19.22416
 
 
-flooby4<-left_join(gooberph,hystscore)
-flooby4<-flooby4%>% group_by(score)
-
-
-
+a<-ggplot()+
+  geom_abline(data=lines,aes(intercept=b_Intercept,slope=b_score),alpha=0.009,color="navy")+
+  geom_abline(data=lines,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="black")+
+  stat_eye(data=flooby,aes(score,Intercept),alpha=0.6,fill="grey50")+
+ ylab("Mean \nPDSI at \n collection sites")+
+  scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
+                   labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
 
 
 
+b<-ggplot()+
+  geom_abline(data=lines2,aes(intercept=b_Intercept,slope=b_score),alpha=0.009,color="navy")+
+  geom_abline(data=lines2,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="black")+
+  stat_eye(data=flooby3,aes(score,Intercept),alpha=0.6,fill="grey50")+
 
-a<-ggplot(flooby,aes(score,Intercept))+stat_eye()+
-  ylab("Mean \nPDSI at \n collection sites")+
-  scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                   labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
-
-#ggplot(floobymin,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
- # ylab("Min PDSI at collect sites")+
-  #scale_x_continuous(name ="Flowering-first grouping",
-   #                  labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_base(base_size = 11)
-
-
-b<-ggplot(flooby2,aes(score,Intercept))+stat_eye()+ylab("Mean \npetal length")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                                                                                                         labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
-c<-ggplot(flooby3,aes(score,Intercept))+stat_eye()+ylab("Mean \nfruit diameter")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                                                                                                                    labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
-cc<-ggplot(flooby4,aes(score,Intercept))+stat_eye()+ylab("Mean \nfruit phenology")+xlab("FLS group")+scale_x_continuous(name ="Flowering-first grouping",breaks=c(0,1,2,3,4),
-                                                                                                                      labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)+geom_hline(yintercept=0)
-
-d<-ggpubr::ggarrange(a,b,c,cc,nrow=2,ncol=2,labels=c("b)","c)","d)","e)"))
+ylab("Mean \nfruit diameter")+xlab("FLS group")+scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
+                                                                                                         labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+c<-ggplot()+
+  geom_abline(data=lines3,aes(intercept=b_Intercept,slope=b_score),alpha=0.009,color="navy")+
+geom_abline(data=lines3,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="black")+
+stat_eye(data=flooby2,aes(score,Intercept),alpha=0.6,fill="grey50")+
+ylab("Mean \npetal length")+xlab("FLS group")+scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
+                                                                                                                    labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
 
 
 
 
+d<-ggpubr::ggarrange(b,c,nrow=1,ncol=2,labels=c("b)","c)"))
+e<-ggpubr::ggarrange(a,d,nrow=2,ncol=1,labels=c("a)",""))
 
-
-
-
-
-
-#Should we try conditional mean plots
-
-plot(conditional_effects(mod.ord.wpreds2, "pdsi_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-plot(conditional_effects(mod.ord.wpreds2.noME, "pdsi_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-plot(conditional_effects(mod.ord.short, "pdsi_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-
-plot(conditional_effects(mod.ord.wpreds2.noME, "petal_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-plot(conditional_effects(mod.ord.wpreds2, "fruit_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-plot(conditional_effects(mod.ord.wpreds2, "phen_mean", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-
-p1<-p1[[1]]+ggthemes::theme_few()+scale_color_viridis_d()+scale_fill_viridis_d(alpha=0.2)
-p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-p3<-p3[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-p4<-p4[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-p5<-p5[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-
-
-stop()
-#ggplot(floobycold,aes(score,Intercept))+geom_point(size=3)+geom_errorbar(aes(ymin=.lower,ymax=.upper,width=0))+
-  ylab("min winter T")
-#e<-ggpubr::ggarrange(b,c,d, ncol=3,nrow=1)
-#f<-ggpubr::ggarrange(a,e,ncol=1,nrow=2)
+jpeg("..//Plots/dataplots.jpeg", width=7, height=5,unit="in",res=300)
+e
+dev.off()
 
 ###plastic
 d.um<-d.flo
@@ -552,40 +426,36 @@ lonpoints<-d.um$lon # make vector of prunus coordinates
 latpoints<-d.um$lat #
 extract.pts <- cbind(lonpoints,latpoints)
 palmer.b
-palmer.b2 <-palmer.b[[1900:2018]]## subset to pnly last century
+palmer.b2 <-palmer.b[[1800:2018]]## subset to pnly last century
 palmer.b2<-brick(palmer.b2)
 ext<-raster::extract(palmer.b2,extract.pts,method="simple")
-colnames(ext)<-(c(1899:2017))
+colnames(ext)<-(c(1799:2017))
 ext<-as.data.frame(ext)
 ext$lat<-latpoints
 ext$lon<-lonpoints
-pdsi.dater<-tidyr::gather(ext,"year","pdsi",1:119)
+colnames(ext)
+pdsi.dater<-tidyr::gather(ext,"year","pdsi",1:219)
 class(pdsi.dater$year)
 
 pdsi.dater$year<-as.integer(pdsi.dater$year)
 
 head(pdsi.dater)
 head(pdsi.dater)
-joiner<-dplyr::select(d.flo,specificEpithet,lat,lon)
-
-pdsi.counter<-left_join(pdsi.dater,joiner)
-pdsi.counter$dry<-ifelse(pdsi.counter$pdsi<-2,1,0)  
-
-  
-pdsi.count<-pdsi.counter %>%group_by(specificEpithet)%>% summarize(obs = n(),
-                                                                   dry = sum(pdsi < -2,na.rm=TRUE)
-  
-                                                                  prop =dry / obs)
-
+joiner<-dplyr::select(d.um,specificEpithet,lat,year,lon,bbch.v.scale,doy)
+head(joiner)
+head(pdsi.dater)
+pdsi.dater2<-dplyr::left_join(joiner,pdsi.dater)
+pdsi.dater2<-pdsi.dater2 %>% distinct()
 #brm(dry~(1|specificEpithet),data=pdsi.counter,family="bernoulli")
 
-d.um<-left_join(d.um,pdsi.dater)
+pdsi.dater2$pdsi.z<-zscore(pdsi.dater2$pdsi)
+pdsi.dater2$doy.z<-zscore(pdsi.dater2$doy)
 
-
-### a better way than mean
-
-
-moda<-brm(bbch.v.scale~pdsi+doy+(pdsi+doy|specificEpithet),data=d.um,family=cumulative("logit"))
+moda<-brm(bbch.v.scale~pdsi.z+doy.z+(pdsi.z+doy.z|specificEpithet),data=pdsi.dater2,family=cumulative("logit"),control = list(adapt_delta=.98))
+summary(moda)
++(1|gr(specificEpithet, cov = A)),data=d.um, data2=list(A = A),family=cumulative("logit"))
+(doy|ID)+(1|gr(specificEpithet, cov = A)),data=d.flo,
+fixef(moda,probs = c(.25,.75))
 coef(moda,probs = c(.25,.75))
 goo<-as.data.frame(coef(moda))
 
@@ -611,16 +481,17 @@ get_variables(moda)
 coef(moda)
 yaya<-moda%>%
   spread_draws(r_specificEpithet[specificEpithet,condition])
-yaya<-filter(yaya,condition=="pdsi")
+yaya<-filter(yaya,condition=="pdsi.z")
 
 yaya2<-moda%>%
-  spread_draws(b_pdsi)
+  spread_draws(b_pdsi.z)
 yaya2$specificEpithet<-"Main effect"
 
 jpeg("..//Plots/droughtstuff.jpg", width=11, height=9,unit="in",res=300)
 ggplot()+
-  stat_eye(data=yaya,aes(r_specificEpithet,specificEpithet),alpha=.3)+
-  stat_eye(data=yaya2,aes(b_pdsi,specificEpithet))+
+  stat_eye(data=yaya,aes(r_specificEpithet,specificEpithet),alpha=.3)
++
+  stat_eye(data=yaya2,aes(b_pdsi.z,specificEpithet))
   geom_vline(xintercept=0,linetype="dashed")+scale_y_discrete(name ="species", 
                                                               limits=c("alleghaniensis", "americana"    ,  "angustifolia"  , "gracilis"   ,    "hortulana"    , 
                                                                        "maritima"  ,     "mexicana"    ,   "munsoniana"   ,  "nigra"     ,     "rivularis"   ,  
@@ -660,58 +531,7 @@ jpeg("..//Plots/alt_hypothesis.jpg", width=11, height=6,unit="in",res=300)
 ggpubr::ggarrange(b,c,d,labels = c("a)","b)","c)"),ncol=3)
 dev.off()
 ####phylogeny
-tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre")
-is.ultrametric(tree)
-tree<-compute.brlen(tree, method = "Grafen")
- ## make ultrametric
 
-names.intree<-tree$tip.label # names the names
-namelist<-unique(d.flo$specificEpithet)
-
-to.prune<-which(!names.intree%in%namelist) #prun the tree
-pruned.by<-drop.tip(tree,to.prune)
-plotTree(pruned.by)# this is the tree
-
-
-###what are the tip labels in pruned phylogeny?
-
-mytree.names<-pruned.by$tip.label # did i get them all
-intersect(namelist,mytree.names) #yes
-
-
-
-
-
-
-
-### Q1 DO we bother with phylogeny? Only 7 species, and as you can see, weak signal
-meanfls<-d.flo %>% dplyr::group_by(specificEpithet)%>% dplyr::summarise(meanFLS=mean(bbch.v.scale),sdFLS=sd(bbch.v.scale))##Take mean FLS values
-d.phylo<-filter(d.flo,specificEpithet %in% mytree.names)
-
-d.phylo<-left_join(d.phylo,meanfls)
-##quick phylo sig
-meanfls4phylo<-filter(meanfls,specificEpithet %in% mytree.names)
-meanfls4phylo<-left_join(meanfls4phylo,hystscore)
-
-class(meanfls4phylo$score)
-
-phylosig(pruned.by,meanfls4phylo$meanFLS,method="lambda",nsim = 100, test=TRUE) ### 0.1r
-phylosig(pruned.by,meanfls4phylo$score,method="lambda",nsim = 100, test=TRUE) ### 0.1r
-
-#if (!requireNamespace("BiocManager", quietly = TRUE))
-#install.packages("BiocManager")
-
-#BiocManager::install("ggtree")
-library(ggtree)
-meanfls4phylo$tip.labels<-meanfls4phylo$specificEpithet
-full_join(pruned.by,meanfls4phylo)
-#p<-ggtree(pruned.by,branch.length="none")
-
-meanfls4phylo$score2<-as.factor(meanfls4phylo$score)
-jpeg("..//Plots/phylosig2.jpeg", width=6, height=6,unit="in",res=300)
-p<-ggtree(pruned.by)
-p %<+% meanfls4phylo+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=score2),size=5)+ xlim(0, 3)+geom_cladelabel(node=3,offset=.5, label=" lambda= 0.00")+scale_color_viridis_d(option="plasma",name="Flowering-first",  labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))
-dev.off()
 
 ###make a range map
 

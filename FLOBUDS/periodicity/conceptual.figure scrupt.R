@@ -8,6 +8,8 @@ library(gridExtra)
 library(grid)
 library(gtable)
 library(ggthemes)
+library(gg3D)
+library(tidyverse)
 
 
 
@@ -40,20 +42,30 @@ three<-ggplot(noint,aes(Photoperiod,Temperature))+geom_rect(xmin=8,xmax=12,ymin=
   geom_point(aes(shape=Treatments),size=3)+
   ylim(15,35)+xlim(6,14)+scale_shape_manual(values=c(0,1,2))+theme_few()
 
-jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/orthog.jpeg",width = 6,height=8,unit="in",res=300)
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/factorial.jpeg",width = 6,height=8,unit="in",res=300)
 ggarrange(one,two,three,labels=c("a)","b)","c)"),ncol=1,nrow=3,common.legend = TRUE,legend= "right")
 dev.off()
 
-GDH<-c(376,408,504,472,384,480,480,384)
+GDH<-c(7.5,12.5,20,22.5,10,20,20,10)
 
-photo<-c(11,15,15,11,11,11,15,15)
+photo<-c(11,11,15,15,11,11,15,15)
 design<-c("non-orthoginal","non-orthoginal","non-orthoginal","non-orthoginal","orthoginal","orthoginal","orthoginal","orthoginal") 
 
 dat<-data.frame(GDH,photo,design)
+dat$phen<--1.9*dat$GDH-1.2*dat$photo +1000
+
 x<-c(10.8,10.8,15.2,15.2) 
 y<-c(382,482,382,482)
 
+dat.jr<-filter(dat,design=="non-orthoginal")
+
+ggplot(dat.jr,aes(x=photo,y=GDH,z=phen))+theme_void()+axes_3D()+
+  stat_wireframe(alpha=.5,phi=30)
+
 xy<-data.frame(x,y)
+
+
+
 
 
 ploty<-ggplot(dat,(aes(x=photo)))+geom_point(aes(y=GDH,color=design),size=4)+xlim(8,18)+ylim(350,520)+theme_bw()+geom_polygon(aes(x=photo,y=GDH,fill=design),alpha=0.5)+scale_fill_manual(values=c("tomato1","royalblue2"))
@@ -64,6 +76,55 @@ jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/orthog.jpeg",w
 plotty2+geom_point(xy,mapping=aes(x,y),shape=8,size=4)+theme(legend.position = "left")+ylab("Temperature (thermal sums")+xlab("Photoperiod")
 dev.off()
 
+
+###try 3d
+
+
+ggplot(dat,aes(x=photo,y=GDH,z=phen,color=design,,fill=design))+theme_void()+axes_3D()+
+  stat_wireframe(alpha=.5,phi=30)
+ #+stat_3D(geom="path")
+
+
+
+photoperiod<-rep(seq(8,17, by=0.1),10)
+forcing<-rep(seq(0,9,by=0.1),each=10)
+
+
+dat2<-data.frame(photoperiod=photoperiod,forcing=forcing)
+
+
+
+
+
+
+  
+  
+dat2$phen<--2.5*dat2$forcing-1.5*dat2$photoperiod+100
+dat3<-dat2
+
+dat3$forcing<-rep(c(seq(-2,7,by=0.1),seq(2,11,by=0.1)),each=5)
+
+dat3$phen<--2.5*dat3$forcing-1.5*dat3$photoperiod+0.2+100
+dat2$design<-"non-covarying"
+dat3$design<-"covarying"
+dat4<-rbind(dat3,dat2)
+
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/orthog.jpeg",width = 8,height=8,unit="in",res=200)
+ggplot(dat4, aes(photoperiod,forcing,z=phen)) +
+  axes_3D() + theme_void()+
+  labs_3D(labs=c("photoperiod", "forcing", "Phenological event"))+scale_color_viridis_d()+
+
+stat_wireframe(alpha=0.6,aes(color=design))
+dev.off()
+
+
+ggplot(dat3, aes(photoperiod,forcing,z=phen)) +theme_void()+
+  axes_3D(phi=30) +  stat_wireframe(alpha=.5,phi=30)
+
+
+  theme_void()
+
+?(gg3d)
 ########
 temp<-c(12,12,12,12)
 light<-c(11,11,15,15)

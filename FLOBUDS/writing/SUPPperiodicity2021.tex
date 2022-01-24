@@ -22,25 +22,32 @@
 
 
 \bibliographystyle{..//refs/styles/besjournals.bst}
-%\usepackage{xr-hyper}
-\usepackage{hyperref}
-\title{Supporting Information: Experimental designs for testing the interactive effects of temperature and light in biology(ecology) and the problem of periodicity }
+\usepackage{xr-hyper}
+\externaldocument{periodicity2021}
+
+%\usepackage{hyperref}
+\title{Supporting Information: Experimental designs for testing the interactive effects of temperature and light in ecology and the problem of periodicity }
 \begin{document}
 \maketitle
-\subsection{Light and temperatre and spring phenology}
-Here a very brief (one or two paragraph) overview of how light and temperature influence spring phenology. Keep it basic (Warming accelerate phenology, photoperiod might be a threshold), aknoledge chilling is important too, but our example won't really focus on it. Leave some open questions about their interactive nature.
+%\subsection{Light and temperatre and spring phenology}
+%Here a very brief (one or two paragraph) overview of how light and temperature influence spring phenology. Keep it basic (Warming accelerate phenology, photoperiod might be a threshold), acknowledge %chilling is important too, but our example won't really focus on it. Leave some open questions about their interactive nature.
 \subsection{OSPREE table of interactive studies}
-Maybe there is some limiting cues code that can help me with this?
-\subsection{Math}
-Maybe Lizzie (or Megan) can write this part since they were the ones who did this math?
+Lizzie, I need help checking this.\\
+I ran countintxns.R, now on main ospree branch.\\
+I think line 78 tells me how many studies could test forcing x photoperiod interactions (15)\\
+Line 92-94 tells me how many might have periodicity issues (4 datasets or 7 experiments)\\
 
+That seems to small. Why do I think this? this variation is an issue even if you don't care about forcing. e.g. must falusi papers are interested in photoperiod effect, and while they do not use forcing as a treatment, they vary day and night temperature, so any photoperiod effect the estimate could be a secret forcing effect. I Think the big zohner study would have this problem too. Basically, anytime you are testing the effect of photoperiod and varying thermoperiod you have a problem. I am a bit overwhelmed by the countintxns.R script. Can this be investigate easily based on pre existing script. bbstan_allsppmodel_countinxns.csv say there are 21 studies that vary thermoperiodicity with some other treatment. 
+
+\subsection{Estimating the effects of periodicitity co-varience}
+%Maybe Lizzie (or Megan) can write this part since they were the ones who did this math?
 % EMW: Putting this here for now, but can move some/all it to main text as needed. [] means I am not sure we need it, but I added it. 
 [See comments in tex file.] \\
 When experimental designs co-vary thermo- and photoperiodicity, they may incorrectly estimate effects of temperature, photoperiod and (for experiments with crossed designs) the interaction between photo and thermo-periodicity. While robustly testing the effect of this covariation requires additional experiments, you can solve for its potential effect based on the geometry of the experimental design given several assumptions.\\
 
-If we assume that the effects of photoperiod and forcing (alone) are linear and additive (no FxP interaction), then the treatmeants and their results occupy a three-dimensional plane with temperature on the $x$ axis, photoperiod on the $y$ axis and the response on the $z$ axis. Given our assumptions we can solve for the expected response if temperature and photoperiod were uncoupled. \\
+If we assume that the effects of photoperiod and forcing (alone) are linear and additive (no FxP interaction), then the treatments and their results occupy a three-dimensional plane with temperature on the $x$ axis, photoperiod on the $y$ axis and the response on the $z$ axis. Given our assumptions we can solve for the expected response if temperature and photoperiod were uncoupled. \\
 
-To show this, we follow the design of CITEFLYNN as an example. We used summed temperature (degree hours), to reflect the duration and intensity of temperature, on the $x$ axis, photoperiod (hours) on the $y$ axis and the response ($\delta$ days to budburst) on the $z$ axis. [The combination of the covaried treatments and responses produces a parallelogram in space, and we effectively solve for it as a rectangular---orthogonal---set of treatments.] Given the equation for a 3D plane and our knowledge of three sets of the coordinates:
+To show this, we follow the design of \citet{Flynn2018] as an example. We used summed temperature (degree hours), to reflect the duration and intensity of temperature, on the $x$ axis, photoperiod (hours) on the $y$ axis and the response ($\delta$ days to budburst) on the $z$ axis. [The combination of the co-varied treatments and responses produces a parallelogram in space, and we effectively solve for it as a rectangular---orthogonal---set of treatments.] Given the equation for a 3D plane and our knowledge of three sets of the coordinates:
 
 \begin{align}
 ax+by+cz+d & =0\\
@@ -85,7 +92,37 @@ Shows that---given our assumptions---the estimated photoperiod effect that may b
 % \frac{3}{40}*(360) + \frac{3}{8}*(8)-18 &=12 \text{ days}\\
 
 \subsection{Modeling methods}
-To do.\\
-Also maybe a table of model comparison to go along with the figure.
-\maketitle
+To estimate the effects of impact of photo-thermo period co-variance we obtain two data files from two published phenology studies \citet{Flynn2018} and \citet{Buonaiuto:2021:]. Both studies used dormant twigs collected from Harvard Forest in Petersham, MA, USA (42.5314\degree N, 72.1900\degree W)  and exposed them to comparable treatments levels (12 vs. 8 hrs photoperiod, 20/10 vs. 15/5 day/night T (Flynn) 24/18 vs. 18 vs, 12 (Buonaiuto) in full factorial growth chamber treatments. We subset each date set to include only matching phenological observations (``leaf expansion" or BBCH 11 \citep{Finn2007}), species. This data subset included 713 observations (n_{\citet{Flynn2018}=384, n_{\citet{Buonaiuto:2021ug}=329}, n_{species}=7).
+
+We estimated the effect of study design on parameter with a Bayesian hierarchical mixed effect model using weakly informative priors. While both experiments were designed to test for interactions between photoperiod and forcing, we did not include this interaction term in our model in order to match the assumption of non-interactivity in the math. We included forcing, photoperiod, study and their interactions as main effects, and species as a random effect. We ran the model using the R package ``brms" \citep{} on 4 chains with 2000 iterations and warmup of 1000 iterations for a total of 4000 posterior per parameter. The model is written below.
+
+$leafexpansion_{[i]} \sim N(\alpha_{sp_{[i]}}+\beta_{forcing_{sp[i]}}+\beta_{study_{sp[i]}}+\beta_{photoperiod_{sp[i]}}+\beta_{forcing x study_{sp[i]}}+\beta_{photoperiod x study_{sp[i]}}, \sigma_y^2)$\\
+
+ We modeled the intercept ($\alpha$) at the species level using the formula:\\
+
+$\alpha_{x_{sp}} \sim N(\mu_x,\sigma^2_x)$\\
+
+We note that the because the subset of overlapping data between the two studies is considerably smaller than it is not surprising that the relative effect sizes of photoperiod and forcing estimated here differ from those reported in the full, published studies.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & Estimate & Est.Error & Q2.5 & Q25 & Q75 & Q97.5 \\ 
+  \hline
+Intercept & 57.35 & 4.98 & 47.40 & 54.25 & 60.46 & 67.39 \\ 
+  PHOTO & -3.28 & 0.38 & -4.03 & -3.54 & -3.03 & -2.51 \\ 
+  FORCE & -1.32 & 0.15 & -1.61 & -1.42 & -1.21 & -1.02 \\ 
+  study & 12.22 & 2.49 & 7.47 & 10.50 & 13.96 & 17.02 \\ 
+  PHOTO:study & 2.27 & 0.66 & 1.02 & 1.82 & 2.73 & 3.57 \\ 
+  FORCE:study & -1.74 & 0.39 & -2.49 & -2.00 & -1.47 & -1.00 \\ 
+   \hline
+\end{tabular}
+\label{tab:esty}
+\caption{Main effect estimates from a Bayesian hierarchical model comparing coupled and uncouple experimental design. In this case, interactions with study represent the uncoupled estimates.}
+\end{table}
+
+
+\bibliography{..///refs/periodicity.bib}
+
 \end{document}

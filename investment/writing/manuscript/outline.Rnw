@@ -31,6 +31,8 @@
 
 
 \section*{Introduction}
+Notes: Make intro mostly about water dynamics.
+
 \noindent Woody perennials have a unique ability among plants to seasonally begin reproduction prior to vegetative growth \citep{}. This flowering-first phenological sequence known as hysteranthy, proteranthy or precocious flowering is particularly common in temperate forests around the globe \citep{}. A number of studies suggest that this flower-leaf sequences (FLSs) are under selection, and that flowering first has functional significance \citep{}.
 
 \noindent The most common, and well-tested explanation for the evolution of hysteranthy is that it is adaptive for wind-pollination as leafless canopies increase wind speeds for pollen transport and reduce the likelihood of pollen interception on vegetation \citep{}. However, this hypothesis fails to address the prevalence of hysteranthous taxa that are biotically-pollinated. Approximately 30\% of species of Eastern temperate forests of North America flower before leafing out, and of those, approximately 20\% are biotically pollinated  \citep{}. Despite the pervasiveness of this phenological syndrome, direct tests of the function of hysteranthy in biotically pollinated taxa are exceedingly rare.
@@ -104,28 +106,38 @@ This is a common problem in trait-based ecology, and one of the most promising s
 
 \section*{Methods}
 \subsection{Study system}
-\noindent The genus \texit{Prunus} comprises approximately 200 species distributed across the globe \citep{}. Of 40-50 species native to or naturalized in North America, \textit{Prunus}species display the full spectrum of variation in flower-leaf sequences \citep{} and show marked inter-specific variation in habitat requirements and functional traits making them an ideal system in which to investigate the inter-relationship between hysteranthy and traits predicted by the two major hysteranthy hypotheses.
+%\noindent The genus \texit{Prunus} comprises approximately 200 species distributed across the globe \citep{}. Of 40-50 species native to or naturalized in North America, \textit{Prunus}species display the full spectrum of variation in flower-leaf sequences \citep{} and show marked inter-specific variation in habitat requirements and functional traits making them an ideal system in which to investigate the inter-relationship between hysteranthy and traits predicted by the two major hysteranthy hypotheses.
 
-\noindent Within the genus, The American plums (\textit{Prunus} subsp. \textit{Prunus} sect. \textit{Prunocerasus}) offer potential for an additional, higher resolution investigation of drivers of hysteranthous flowering. Like the genus at large, the 16 species that make up the section are distributed across North America and show pronounced inter-specific variation in flower leaf sequences. While within the larger genus species can be separated into three distinct morphological clades by inflorescence architecture (solitary, corymbose or racemose) all members of the section have solitary inflorescences \citep{} allowing for even more refined character deconstruction. Species in this section are well represented in herbaria records, making them a tractable group to measure and assess intra-specific variation in flower-leaf sequences as well as other ecological and morphological characteristics related to the hysteranthy hypotheses described above. 
+\noindent The genus \texit{Prunus} comprises approximately 200 species distributed across the globe \citep{}, Within the genus, The American plums (\textit{Prunus} subsp. \textit{Prunus} sect. \textit{Prunocerasus}) offer potential for a higher resolution investigation of drivers of hysteranthous flowering. Like the genus at large, the 16 species that make up the section are distributed across North America and show pronounced inter-specific variation in flower-leaf sequences. While within the larger genus species can be separated into three distinct morphological clades by inflorescence architecture (solitary, corymbose or racemose) all members of the section have solitary inflorescences \citep{} allowing for  refined character deconstruction. Species in this section are well represented in herbaria records, making them a tractable group to measure and assess intra-specific variation in flower-leaf sequences as well as other ecological and morphological characteristics related to the hysteranthy hypotheses described above. 
 
-\subsection{Genus level analyses}
-To assess the relationship between hysteranthous flowering and morphological and ecological traits related to the hysteranthous hypothesis we obtained flower-leaf sequence descriptions and mean estimates of flower petal length, flowers per inflorescence, and fruit diameter for 44 \textit{Prunus} species from the Flora of North America. As a measure of aridity tolerance, we obtained the coordinates of herbaria occurrence records of all 44 species from the Consortium of Midwest Herbaria digital Archeives (n=23,272). For records that we not geo-referenced was assigned coordinates to the county centroid in which the specimen was observed. We than extracted the average value of Palmer Modified Drought Index from at each local from the North America Drought Atlas \citep{} averaging these values across all occurrence per species for a coarse estimate of species level aridity tolerance. 
+%\subsection{Genus level analyses}
+%To assess the relationship between hysteranthous flowering and morphological and ecological traits related to the hysteranthous hypothesis we obtained flower-leaf sequence descriptions and mean estimates of flower petal length, flowers per inflorescence, and fruit diameter for 44 \textit{Prunus} species from the Flora of North America. As a measure of aridity tolerance, we obtained the coordinates of herbaria occurrence records of all 44 species from the Consortium of Midwest Herbaria digital Archeives (n=23,272). For records that we not geo-referenced was assigned coordinates to the county centroid in which the specimen was observed. We than extracted the average value of Palmer Modified Drought Index from at each local from the North America Drought Atlas \citep{} averaging these values across all occurrence per species for a coarse estimate of species level aridity tolerance. 
 
-\noindent To assess the relationship between inter-specific flower-leaf sequences variation and the traits predicted by the two hysteranthy hypotheses we fit a Bayesian ordinal regression model with each measured trait (mean pdsi, fruit diameter, flower petal length and flowers per inflorescence) as main effects. In this model, we included an interaction term between flower petal length and number of flowers per inflorescence to account for a well established trade off between these two elements of floral displays \citep{}.
-To be able to directly compare the effects of the of our multi-scale trait and environmental variables, we standardized all predictors in the model through z-scoring \citep{}. We fit all models using the R package ``brms" \citep{Burkner2018} on four chains with 4000 iterations and a 3000 iteration warm up for a total of 4000 posterior draws for each parameter. We used weakly informative priors, and assessed model performance through ensuring $\hat{R}$s were between 1 and 1.01 and bulk and tail effective sample sizes were high (1800-2800 for most parameters, but as low as  800-900 for some).
+%\noindent To assess the relationship between inter-specific flower-leaf sequences variation and the traits predicted by the two hysteranthy hypotheses we fit a Bayesian ordinal regression model with each measured trait (mean pdsi, fruit diameter, flower petal length and flowers per inflorescence) as main effects. In this model, we included an interaction term between flower petal length and number of flowers per inflorescence to account for a well established trade off between these two elements of floral displays \citep{}.
+%To be able to directly compare the effects of the of our multi-scale trait and environmental variables, we standardized all predictors in the model through z-scoring \citep{}. We fit all models using the R package ``brms" \citep{Burkner2018} on four chains with 4000 iterations and a 3000 iteration warm up for a total of 4000 posterior draws for each parameter. We used weakly informative priors, and assessed model performance through ensuring $\hat{R}$s were between 1 and 1.01 and bulk and tail effective sample sizes were high (1800-2800 for most parameters, but as low as  800-900 for some).
 
 
-\subsection{Section level analyes}
-For our analysis of the section \textit{Prunocerasus} we obtained digital herbarium species for all member of the section from the Consortium of Midwest Herbaria Database. For this analysis, we measured FLS sequence variation, petal length, fruit diameter and mean pdsi. We did not include flowers/inflorescence  in this analysis because all members of the section \textit{Prunocerasus} have solitary flowers \citep{}.
+\subsection{Quantifying FLS variation}
+We obtained digital herbarium specimens for all member of the section \textit{Prunocerasus} from the Consortium of Midwest Herbaria Database. To evaluate the FLS sequence variation within and across species we randomly sample 200 specimens for each species and scored the phenological development of flower and leaves in accordance with using a modified BBCH scale for woody plants \citep{Finn2007}. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flower were included in this analysis (n=1009). We reconstructed the phylogenetic relationships among species in this group based on the tree topology in \citet{}. Follwing the methods of \citet{Granfen1989} we computed branch lengths for this phylogeny by assigning each node a height and computing the distance between upper and lower nodes using the function compute.brlen() in the R package ``ape" \citep{}.
 
-\noindent To evaluate the FLS sequence variation within and across species we randomly sample 200 specimens for each species and scored the phenological development of flower and leaves in accordance with using a modified BBCH scale for woody plants \citep{Finn2007}. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flower were included in this analysis (n=1009). We sampled an additional 321 specimens measured the petal length of up to 10 randomly selected petals per specimen (n=2757) using ImageJ image processing software. We also used ImageJ to measure the diameter of fruits on an additional 316 specimens, measuring up to 5 fruit per specimen (n=224). %To quantify fruit phenology, we recorded the collection dates of any specimens containing fruit (n=443). 
+To quantify FLS variation, we fit an ordinal, hierarchical, Bayesian, phylogenetic mixed model (that's a mouthful) to assess the likelihood an individual would be at any given vegetative bbch phase given it is flowering. Because we expect that hysteranthous may be more likely to occur earlier in the flowering period and species differ in their flowering periods, we included the day of the observation as a varying slope, main effect in the model and species and phylogeny as random effects. The model is written below:\\
+
+
+ We fit the model in the R package ``brms" \citep{} usinf weakly informative priors, and ran the model on four chains with a warmup of 2,500 iterations and 4000 sampling iterations for a total of 6,000 sampling iterations. Model fit was assessed with Rhats <1.01 and high effective sample sizes.
+ 
+Because we found the sampling date to strongly impact the likelihood distributions of 
+
+
+petal length, fruit diameter directly from herbarium specimens and estimates mean Palmer Modified Drought Index at the sampling site, extracted from the North America Drought Atlas \citep{}. 
+
+\noindent T We sampled an additional 321 specimens measured the petal length of up to 10 randomly selected petals per specimen (n=2757) using ImageJ image processing software. We also used ImageJ to measure the diameter of fruits on an additional 316 specimens, measuring up to 5 fruit per specimen (n=224). %To quantify fruit phenology, we recorded the collection dates of any specimens containing fruit (n=443). 
 As in our previous genus level analyses, we computed the average Palmer Modified Drought Index for every \textit{Prunocerasus} specimen in the database (n=2305) from the North America Drought Atlas \citep{}.
 
 \noindent Because our data dependent and independent were collect we employed a sequential modeling approach to first estimate the mean and standard error of the posterior distribution of trait values for each species then model the relationship between these estimate and the likelihood of hysteranthy using Bayesian measurement error models. This approach propagates the error in the initial estimates of trait values into the our final model, yielding a more accurate evaluation than using mean trait values alone \citep{}. For each parameter of interest, we ran Bayesian phylogenetic mixed-effects models with our measured traits as the response variable and species as the random effect. For traits like flower petal length and fruit diameters than included multiple measurements per specimen, we included specimen ID as an additional random effect. The model structure is written below:
 
 \noindent Then using each of these trait mean estimates as predictors, we modeled their associations with flower leaf sequences OF using a repeat measure phylogenetic mixed ordinal regression in brms \citep{}. Because we found the three predictors of interested to be highly colinear (pariwise correlations >0.5), we ran one regression model per predictor trait to avoid skewing our model inference due to multi-collinearity \citep{MacElreath, Nations}.
 
-For all models in the sequences, we use weakly informative priors and ran the models of four chans with a warmup of 2,500 iterations and 4000 sampling iteratiions for a total of 6,000 sampling iterations.
+For all models in the sequences,
 
 
 \section*{Results}
@@ -173,42 +185,42 @@ It is not terribly surprising that the association between hysteranthy and flowe
     \label{fig:mappy}
 \end{figure}
 
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//..//Plots/phylosig1.jpeg}
-    \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
-    \label{fig:phylo1}
-\end{figure}
+%\begin{figure}[h!]
+%    \centering
+% \includegraphics[width=\textwidth]{..//..//Plots/phylosig1.jpeg}
+%    \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
+%    \label{fig:phylo1}
+%\end{figure}
 
 \begin{figure}[h!]
     \centering
- \includegraphics[width=\textwidth]{..//..//Plots/phylosig2.jpeg}
+ \includegraphics[width=.6\textwidth]{..//..//Plots/phylosig2.jpeg}
     \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
     \label{fig:phylo2}
 \end{figure}
 
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//..//Plots/fullprunus_mus.jpeg}
-    \caption{From the full genus analysis: Positive is less hysteranthus so aridity increases ihysteranthy, flower size decreases (ie smaller flowers- more hysteranthous) and no relationship with fruit size }
-    \label{fig:cherries}
-\end{figure}
+%\begin{figure}[h!]
+ %   \centering
+ %\includegraphics[width=\textwidth]{..//..//Plots/fullprunus_mus.jpeg}
+ %   \caption{From the full genus analysis: Positive is less hysteranthus so aridity increases ihysteranthy, flower size decreases (ie smaller flowers- more hysteranthous) and no relationship with fruit size }
+  %  \label{fig:cherries}
+%\end{figure}
 
 
 
 \begin{figure}[h!]
     \centering
- \includegraphics[width=\textwidth]{..//..//Plots/cerasus_mus.jpeg}
-    \caption{Effect estimates. Why are they so different in prunucerasus? 1. measurement error model increases uncertainty. 2. outlyers have stronger influence. 3. Maybe too closely related (all flower to somedegree while leave are developing) }
+ \includegraphics[width=\textwidth]{..//..//Plots/dataplots.jpeg}
+    \caption{Relationships between the duration of hysteranthy across the flowering period and environmental and biological traits  } }
     \label{fig:prunes}
 \end{figure}
 
 
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//..//Plots/droughtstuff.jpg}
-    \caption{Hysteranthy more likely in drought years.}
-    \label{fig:plastic}
-\end{figure}
+%\begin{figure}[h!]
+ %   \centering
+ %\includegraphics[width=\textwidth]{..//..//Plots/droughtstuff.jpg}
+  %  \caption{Hysteranthy more likely in drought years.}
+   % \label{fig:plastic}
+%\end{figure}
 
 \end{document}
