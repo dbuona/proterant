@@ -17,19 +17,6 @@ setwd("~/Documents/git/proterant/investment/")
 spi <- brick("Data/470067.spi12.spi3_6_12_1deg_cru_ts_3_21_1949_2012.nc")
 spi
 
-d<-read.csv("Input/input_clean/FLS_clean.csv") # active datasheet
-d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
-d.fruit<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruitsize_clean.csv")
-d.fruit<-filter(d.fruit,fruit_type=="fleshy")
-d.phen<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruit_phen.csv")
-
-
-zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
-
-d.petal$petal.z<-zscore(d.petal$pental_lengh_mm)
-d.fruit$fruit.z<-zscore(d.fruit$fruit_diam_mm)
-d.phen$phen.z<-zscore(d.phen$doy)
-
 
 
 
@@ -39,17 +26,21 @@ indices <- as.numeric(indices)
 n<-names(spi)
 nn <- as.integer(substr(n,7,8))
 
-subj <-raster::subset(spi, which(nn %in% c(3,4,5)))
+subj <-raster::subset(spi, which(nn %in% c(1,2,3,4,5,6)))
+subj2 <-raster::subset(spi, which(nn %in% c(7,8,9,10,11,12)))
 names(subj)
 Monthspi<- stackApply(spi, indices, fun = mean)
 
 minyear <-calc(spi, fun = min,na.rm=TRUE) 
 minspring <-calc(subj, fun = min,na.rm=TRUE) 
+minsummer <-calc(subj2, fun = min,na.rm=TRUE) 
 
 meanyear <-calc(spi, fun = mean,na.rm=TRUE) 
 meanspring <-calc(subj, fun = mean,na.rm=TRUE)
+meansummer <-calc(subj2, fun = mean,na.rm=TRUE)
 
 
+d<-read.csv("Input/input_clean/pruno_clean_pdsi.csv")
 
 lonpoints<-d$lon # make vector of prunus coordinates
 latpoints<-d$lat #
@@ -60,16 +51,23 @@ extract.pts <- cbind(lonpoints,latpoints)
 
 ext<-raster::extract(minyear,extract.pts,method="simple")
 ext2<-raster::extract(minspring,extract.pts,method="simple")
+ext2a<-raster::extract(minsummer,extract.pts,method="simple")
 
 ext3<-raster::extract(meanyear,extract.pts,method="simple")
 ext4<-raster::extract(meanspring,extract.pts,method="simple")
+ext4a<-raster::extract(meanspring,extract.pts,method="simple")
+
 
 d$spiyear.min<-ext
 d$spispring.min<-ext2
+d$spisummer.min<-ext2a
+
 d$spiyear.mean<-ext3
 d$spispring.mean<-ext4
+d$spisummer.mean<-ext4a
 
 
+write.csv(d,"Input/input_clean/pdsi_spi.csv")
 
 spi.means<-d %>%dplyr::group_by(specificEpithet) %>% dplyr::summarise(minspi=mean(spiyear.min,na.rm=TRUE),sdspi=sd(spiyear.min,na.rm=TRUE))
 spispring.means<-d %>%group_by(specificEpithet) %>% summarise(minspi=mean(spispring.min,na.rm=TRUE),sdspi=sd(spispring.min,na.rm=TRUE))
