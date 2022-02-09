@@ -10,10 +10,45 @@ library(gtable)
 library(ggthemes)
 library(gg3D)
 library(tidyverse)
+library(rayshader)
+##### Dan's 3D figure
+Temperature<- c(0,1,0,1)
+Photoperiod<-c(0,0,1,1)
+dat<-data.frame(Temperature,Photoperiod)
+dat$phen<--2*dat$Temperature-1*dat$Photoperiod+5
+
+library(plotly)
+
+x <- c(8,16,8,16,8,16,8,16)
+y <-  c(13.3,16.6,18.3,21.6,15,15,20,20)
+cats<-c("independent","independent","independent","independent","covarying","covarying","covarying","covarying")
 
 
 
-##FIg1
+
+z <- y*-.5+x*-.25+100
+
+
+fig <- plot_ly(x = ~x, y = ~y, z = ~z,color=~rev(cats), colors = c( '#0C4B8E','#BF382A'), type = 'mesh3d',size=0.001)
+
+
+fig <- fig %>% add_markers()
+fig <- fig %>% layout(scene = list(xaxis = list(title = 'Photoperiod'),
+                                   yaxis = list(title = 'Forcing'),
+                                   zaxis = list(title = 'Day of Budburst')))
+
+fig
+
+
+
+
+
+
+
+
+
+
+
 Temperature<- c(30,20,30,20)
 Photoperiod<-c(8,8,12,12)
 Treatments<-c("short/high","short/low","long/high","long/low")
