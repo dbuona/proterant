@@ -15,18 +15,19 @@ library(rayshader)
 Temperature<- c(0,1,0,1)
 Photoperiod<-c(0,0,1,1)
 dat<-data.frame(Temperature,Photoperiod)
-dat$phen<--2*dat$Temperature-1*dat$Photoperiod+5
+dat$phen<--2*dat$Temperature-0*dat$Photoperiod+5
 
 library(plotly)
 
 x <- c(8,16,8,16,8,16,8,16)
 y <-  c(13.3,16.6,18.3,21.6,15,15,20,20)
 cats<-c("independent","independent","independent","independent","covarying","covarying","covarying","covarying")
+photoperiod<-c(0,1,0,1,0,1,0,1)
+z <- y*-2+x*-1+30
+forcing<-c(0,0,1,1,0,0,1,1)
+dat<-data.frame(x,y,z,cats,photoperiod,forcing)
 
-
-
-
-z <- y*-.5+x*-.25+100
+ggplot(dat,aes(forcing,z))+stat_smooth(meth="lm",aes(color=as.factor(photoperiod)))
 
 
 fig <- plot_ly(x = ~x, y = ~y, z = ~z,color=~rev(cats), colors = c( '#0C4B8E','#BF382A'), type = 'mesh3d',size=0.001)
