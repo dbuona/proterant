@@ -19,7 +19,8 @@
 \parskip 7.2pt 
 \renewcommand{\baselinestretch}{1.2} 	
 \parindent 0pt
-
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
 
 \bibliographystyle{..//refs/styles/besjournals.bst}
 \usepackage{xr-hyper}
@@ -32,13 +33,13 @@
 %\subsection{Light and temperatre and spring phenology}
 %Here a very brief (one or two paragraph) overview of how light and temperature influence spring phenology. Keep it basic (Warming accelerate phenology, photoperiod might be a threshold), acknowledge %chilling is important too, but our example won't really focus on it. Leave some open questions about their interactive nature.
 \subsection*{OSPREE table of interactive studies}
+TO DO
+%Lizzie, I need help  making/checking this.\\
+%I ran countintxns.R, now on main ospree branch.\\
+%I think line 78 tells me how many studies could test forcing x photoperiod interactions (15)\\
+%Line 92-94 tells me how many might have periodicity issues (4 datasets or 7 experiments)\\
 
-Lizzie, I need help  making/checking this.\\
-I ran countintxns.R, now on main ospree branch.\\
-I think line 78 tells me how many studies could test forcing x photoperiod interactions (15)\\
-Line 92-94 tells me how many might have periodicity issues (4 datasets or 7 experiments)\\
-
-That seems too small. Why do I think this?  Co-variation is an issue even if you don't care about forcing (e.g. most falusi papers are interested in photoperiod effect, and while they do not use forcing as a treatment, they vary day and night temperature, so any photoperiod effect the estimate could be a secret forcing effect). I think the big Zohner study would have this problem too. Basically, anytime you are testing the effect of photperiod and varying thermoperiod you have a problem. I am a bit overwhelmed by the countintxns.R code. Can this be investigate easily based on pre-existing script? bbstanallsppmodelcountinxns.csv say there are 21 studies that vary thermoperiodicity with some other treatment.
+%That seems too small. Why do I think this?  Co-variation is an issue even if you don't care about forcing (e.g. most falusi papers are interested in photoperiod effect, and while they do not use forcing as a treatment, they vary day and night temperature, so any photoperiod effect the estimate could be a secret forcing effect). I think the big Zohner study would have this problem too. Basically, anytime you are testing the effect of photperiod and varying thermoperiod you have a problem. I am a bit overwhelmed by the countintxns.R code. Can this be investigate easily based on pre-existing script? bbstanallsppmodelcountinxns.csv say there are 21 studies that vary thermoperiodicity with some other treatment.
 
 \subsection*{Estimating the effects of periodicitity co-varience mathmatically}
 %Maybe Lizzie (or Megan) can write this part since they were the ones who did this math?
@@ -93,7 +94,7 @@ Shows that---given our assumptions---the estimated photoperiod effect that may b
 % \frac{3}{40}*(360) + \frac{3}{8}*(8)-18 &=12 \text{ days}\\
 
 \subsection*{Modeling methods}
-To estimate the effects of impact of photo-thermo period co-variance we obtain two data files from two published phenology studies \cite{Flynn2018} and \cite{Buonaiuto:2021ug}. Both studies used dormant twigs collected from Harvard Forest in Petersham, MA, USA (42.5314\degree N, 72.1900\degree W)  and exposed them to comparable treatments levels (12 vs. 8 hrs photoperiod, 20/10 vs. 15/5 day/night T (Flynn) 24/18 vs. 18 vs, 12 (Buonaiuto) in full factorial growth chamber treatments. We subset each date set to include only matching phenological observations (``leaf expansion" or BBCH 11 \citep{Finn2007}), species. This data subset included 713 observations (n_{\cite{Flynn2018}}=384, n_{\cite{Buonaiuto:2021ug}}=32, n_{species}=7).
+To estimate the effects of impact of photo-thermo period co-variance we obtain two data files from two published phenology studies \cite{Flynn2018} and \cite{Buonaiuto:2021ug}. Both studies used dormant twigs collected from Harvard Forest in Petersham, MA, USA (42.5314\degree N, 72.1900\degree W)  and exposed them to comparable treatments levels (12 vs. 8 hrs photoperiod, 20/10 vs. 15/5 day/night T \citep{Flynn2018} 24/18 vs. 18 vs, 12 \citep{Buonaiuto:2021ug} in full factorial growth chamber treatments. We subset each date set to include only matching phenological observations (``leaf expansion" or BBCH 11 \citep{Finn2007}), species. This data subset included 713 observations (n_{\cite{Flynn2018}}=384, n_{\cite{Buonaiuto:2021ug}}=329, n_{species}=7).
 
 We estimated the effect of study design on parameter with a Bayesian hierarchical mixed effect model using weakly informative priors. While both experiments were designed to test for interactions between photoperiod and forcing, we did not include this interaction term in our model in order to match the assumption of non-interactivity in the math. We included forcing, photoperiod, study and their interactions as main effects, and species as a random effect. We ran the model using the R package ``brms" \citep{Burkner2018} on 4 chains with 2000 iterations and warmup of 1000 iterations for a total of 4000 posterior per parameter. The model is written below.
 

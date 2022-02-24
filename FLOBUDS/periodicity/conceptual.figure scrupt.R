@@ -11,24 +11,41 @@ library(ggthemes)
 library(gg3D)
 library(tidyverse)
 library(rayshader)
-##### Dan's 3D figure
-Temperature<- c(0,1,0,1)
-Photoperiod<-c(0,0,1,1)
-dat<-data.frame(Temperature,Photoperiod)
-dat$phen<--2*dat$Temperature-0*dat$Photoperiod+5
 
-library(plotly)
 
-x <- c(8,16,8,16,8,16,8,16)
-y <-  c(13.3,16.6,18.3,21.6,15,15,20,20)
-cats<-c("independent","independent","independent","independent","covarying","covarying","covarying","covarying")
-photoperiod<-c(0,1,0,1,0,1,0,1)
-z <- y*-2+x*-1+30
-forcing<-c(0,0,1,1,0,0,1,1)
-dat<-data.frame(x,y,z,cats,photoperiod,forcing)
 
-ggplot(dat,aes(forcing,z))+stat_smooth(meth="lm",aes(color=as.factor(photoperiod)))
 
+x <- c(0,1,0,1)
+y <-  c(1,1.33,1.66,2)
+ 
+photoperiod<-c("low","high","low","high")
+z <- y*-1+x*-2+50
+forcing<-c(0,0,1,1)
+dat<-data.frame(x,y,z,photoperiod,forcing)
+
+ploa<-ggplot(dat,aes(y*12,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
+  xlab("Mean forcing temperature")#+ylim(34,48)
+
+
+
+plob<-ggplot(dat,aes(forcing,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
+  scale_x_continuous(breaks=0:1,labels=c("low","high"))+xlab("Forcing treatment")#+ylim(34,48)
+ggpubr::ggarrange(ploa,plob)
+
+z2 <- y*-4+x*-1+x*y*-2+50
+dat$z2<-z2
+
+ploc<-ggplot(dat,aes(y*12,z2))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
+  xlab("Mean forcing temperature")+ylim(34,48)
+
+plod<-ggplot(dat,aes(forcing,z2))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
+  scale_x_continuous(breaks=0:1,labels=c("low","high"))+xlab("Forcing treatment")+ylim(34,48)
+
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/apparent.jpeg",width = 8,height=6,unit="in",res=300)
+ggpubr::ggarrange(ploa,plob,ploc,plod,common.legend = TRUE,legend = "right",labels  = c("a)","b)","c)","d)"))
+dev.off()
+
+dat1<-filter
 
 fig <- plot_ly(x = ~x, y = ~y, z = ~z,color=~rev(cats), colors = c( '#0C4B8E','#BF382A'), type = 'mesh3d',size=0.001)
 

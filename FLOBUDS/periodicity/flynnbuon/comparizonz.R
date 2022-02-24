@@ -51,8 +51,8 @@ colnames(db)[5]<-"dayuse" ##leaf exansion bb ch 11
 #db<-filter(db,Chill==0)
 
 ###first lets see what happens if we just dont account for chilling
-df<-select(df,GEN.SPA,dayuse,FORCE,PHOTO)
-db<-select(db,GEN.SPA,dayuse,FORCE,PHOTO)
+df<-dplyr::select(df,GEN.SPA,dayuse,FORCE,PHOTO)
+db<-dplyr::select(db,GEN.SPA,dayuse,FORCE,PHOTO)
 
 ##dummy variable study
 df$study<-0
