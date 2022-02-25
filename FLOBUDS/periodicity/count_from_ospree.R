@@ -1,5 +1,5 @@
 ## Started 2 March 2019 ##
-## By Lizzie ##
+## By Lizzie ## and Dan
 
 # Start your own R file to make a f(x) to count interactive experiments, ideally for all possible intxns across photoperiod, chilling, forcing, and field sample date (maybe provenance) treatments! #
 
