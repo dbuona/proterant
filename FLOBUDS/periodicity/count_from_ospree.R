@@ -8,6 +8,7 @@
 # housekeeping
 rm(list=ls()) # remove everything currently held in the R memory
 options(stringsAsFactors=FALSE)
+library(dplyr)
 
 # Setting working directory. Add in your own path in an if statement for your file structure
 if(length(grep("Lizzie", getwd())>0)) { 
@@ -42,10 +43,13 @@ dat <- read.csv("output/ospree_clean.csv", header = TRUE)
 dat <- dat[dat$woody=="yes",]
 dat$fieldsample.date <- as.Date(dat$fieldsample.date, format="%d-%b-%Y")
 dat$doy <- format(dat$fieldsample.date, "%j")
+########################################################################
+####Q1### How many studies are in this version of ospree#################
+#########################################################################
+unique(dat$datasetID)A1a ### 94 datasets in this version of ospeee
+nrow(dat %>% group_by(datasetID,study) %>% count()) ###A1b 152 experiments
 
 
-unique(dat$datasetID)### 94 datasets in this version of ospeee
-nrow(dat %>% group_by(datasetID,study) %>% count()) ### 152 experiments
 
 # Get the number of field sampling dates that are 14 or more weeks apart, first for each datasetIDx study ...
 ddatefx.all <- subset(dat, select=c("datasetID", "study", "fieldsample.date"))
@@ -62,7 +66,8 @@ datsm <- subset(dat, select=c("datasetID", "study", "genus", "species", "forcete
                               "fieldsample.date", "chilltemp", "chillphotoperiod", "chilldays"))
 datsm$study
 head(datsm)
-
+ ### DAN sould source the cleaning code countinrtsvyion from count interavtionds source("limitingcues/source/countintxns_cleanosp.R")
+source("~/Documents/git/proterant/FLOBUDS/periodicity/countintxns_cleanosp.R")
 ## Okay, formatting to look at intxns
 datsm$force <- as.numeric(datsm$forcetemp)
 datsm$forcenight<-as.numeric(datsm$forcetemp_night)
@@ -70,15 +75,24 @@ datsm$photo <- as.numeric(datsm$photoperiod_day)
 
 datsm.noNA <- subset(datsm, is.na(force)==FALSE & is.na(photo)==FALSE & is.na(forcenight)==FALSE)
 
+
+########################################################################
+####Q2### How many studies manipulate photoperiod#################
+#########################################################################
+
 photodats<-datsm.noNA %>%                    
    group_by(datasetID,study) %>%         
   summarise(photoperiods = n_distinct(photo))
 
 
 photodats<-filter(photodats,photoperiods>=2)
-nrow(photodats) #31 studies manipulate photoperiod (ie multiple treatments of photoperiod)
+nrow(photodats) #A2 51 studies manipulate photoperiod (ie multiple treatments of photoperiod)
 
-#how many of those have periodicity in thermoperiod
+
+########################################################################
+####Q2a### How many studies manipulate photoperiod and many covary it with thermo period #################
+#########################################################################
+
 photodots<-left_join(photodats,datsm.noNA)
 
 photodots$thermop<-ifelse(photodots$forcetemp==photodots$forcetemp_night,"no","yes")
@@ -86,28 +100,27 @@ photodots$thermop<-ifelse(photodots$forcetemp==photodots$forcetemp_night,"no","y
 thermoprd<-dplyr::select(photodots,datasetID,study,thermop)
 thermoprd<-distinct(thermoprd)
 table(thermoprd$thermop) ##8 covary
-8/31 ## 25% (. have the issue
+22/51 ########A2a  have the issue
+
+
+
+
 ###
-### now try studies iwth interactions
 
 
+########################################################################
+####Q3a### How many studies interactively manipulate forcing and photoperiod #################
+#########################################################################
 #lizzie's way
 osp.fp <- get.treatdists(datsm.noNA, "photo", "force")
 osp.fpintxn <- subset(osp.fp, intxn>=2)
 osp.fpintxn[order(osp.fpintxn$datasetID),]
 
-nrow(osp.fpintxn) #10
+nrow(osp.fpintxn) #A 3a 18
 
-##Dan's way
-interdats<-datsm.noNA %>%                    
-  group_by(datasetID,study) %>%         
-  summarise(photoperiods = n_distinct(photo),forcings= n_distinct(force))
 
-interdats<-filter(interdats,photoperiods>=2 &forcings>=2)
-nrow(interdats) #13
 
-#### They are different, probably cause Dan's inst checking for factorality, just multiple
-
+####side bar#####
 lookatunique <- get.uniquetreats(datsm.noNA, "photo", "force")
 
 # Now (not pretty part) we'll take all NA dates ...
@@ -127,7 +140,7 @@ photodats2<-datsm14d.noNA %>%
   summarise(photoperiods = n_distinct(photo))
 
 photodats2<-filter(photodats2,photoperiods>=2)
-nrow(photodats2) #40
+nrow(photodats2) #50
 
 photodots2<-left_join(photodats2,datsm14d.noNA)
 
@@ -135,41 +148,38 @@ photodots2$thermop<-ifelse(photodots2$forcetemp==photodots2$forcetemp_night,"no"
 
 thermoprd2<-dplyr::select(photodots2,datasetID,study,thermop)
 thermoprd2<-distinct(thermoprd2)
-table(thermoprd2$thermop)
+table(thermoprd2$thermop) ###### same answer is with other data
 
 
 
 
 
-# Repeat of the above but correcting for field sampling date repetition
-osp14d.fp <- get.treatdists(datsm14d.noNA, "photo", "force")
-nrow(osp14d.fp) #107 experiments from
-unique(osp14d.fp$datasetID) ### 64 studies manipulate photo and force
 
-osp14d.fpintxn <- subset(osp14d.fp, intxn>=2) # 15experiments from 
-osp14d.fpintxn[order(osp14d.fpintxn$datasetID),]
-nrow(osp14d.fpintxn) ## 15 studies have interactions
-unique(osp14d.fpintxn$datasetID) #from 10 studies
+#osp14d.fp <- get.treatdists(datsm14d.noNA, "photo", "force")
+#nrow(osp14d.fp) 
+#unique(osp14d.fp$datasetID) 
+
+#osp14d.fpintxn <- subset(osp14d.fp, intxn>=2) # 18experiments from 
+#osp14d.fpintxn[order(osp14d.fpintxn$datasetID),]
+#nrow(osp14d.fpintxn) ## 18 studies have interactions
+#unique(osp14d.fpintxn$datasetID) #from 13 studies
+
+#####ignore above becuse its the same answer as osp.fpin
+
+#####END SIDE BAR################
 
 ###now indentfy which of the above might have periodicity issues
-thermop<-dplyr::filter(datsm14d, datasetID %in%unique(osp14d.fpintxn$datasetID))
+thermop<-dplyr::filter(datsm.noNA, datasetID %in%unique(osp.fpintxn$datasetID))
 
 moreforcinginfo <- get.treatdists.daynight(thermop, "forcetemp", "forcetemp_night")
 
 
-
+########################################################################
+####Q3b### How many studies interactively manipulate forcing and photoperiod and have periodicity problems #################
+#########################################################################
 forcingvaried <- subset(moreforcinginfo, treatinfo!="forcing does not vary")
 studiesinclconstantforce <- subset(forcingvaried, numconstantforce>0) # some studies have both
 studiesinclforceperiodicity <- subset(forcingvaried, numdiffforce>0) 
-nrow(studiesinclforceperiodicity) #7 out of 15 might have this issue
-unique(studiesinclforceperiodicity$datasetID) #4
+nrow(studiesinclforceperiodicity) #10 out of 18 might have this issue
+unique(studiesinclforceperiodicity$datasetID) #6
 
-## maybe there is periodicity issues even without interactions
-thermop2<-dplyr::filter(datsm14d, datasetID %in%unique(osp14d.fp$datasetID))
-moreforcinginfo2 <- get.treatdists.daynight(thermop2, "forcetemp", "forcetemp_night")
-forcingvaried2 <- subset(moreforcinginfo2, treatinfo!="forcing does not vary")
-studiesinclconstantforce2 <- subset(forcingvaried2, numconstantforce>0) # some studies have both
-studiesinclforceperiodicity2 <- subset(forcingvaried2, numdiffforce>0) 
-
-nrow(studiesinclforceperiodicity2) #25 our of 107
-unique(studiesinclforceperiodicity2$datasetID) #19
