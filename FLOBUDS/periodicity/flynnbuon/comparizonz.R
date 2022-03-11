@@ -104,11 +104,12 @@ output$variable<-ifelse(grepl("PHOTO:FORCE", output$var),"interaction",output$va
 
 output$study<-ifelse(grepl("study", output$var),"uncoupled","coupled")
 
-
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/modelcomps_winter.jpeg",width = 7,height=8,unit="in",res=300)
 ggplot(output,aes(y = variable, x = estimate)) +
-  stat_halfeye(aes(fill=study,color=study),alpha=.7)+
+  stat_halfeye(aes(group=study,shape=study),.width=c(.9),alpha=0.75,size=4)+scale_shape_manual(values=c(19,0))+
   geom_vline(xintercept=0,linetype="dotted")+scale_y_discrete(limits = c("interaction", "photoperiod", "forcing"))+
-  scale_fill_viridis_d()+scale_color_viridis_d()+ggthemes::theme_few()+xlab("Phenological sensitivity")+ylab("")
+  scale_fill_viridis_d(begin = .4,end = .9)+scale_color_viridis_d(begin = .35,end = .85)+ggthemes::theme_few()+xlab("Phenological sensitivity")+ylab("")+
+  xlim(-6,3)
 
 dev.off()
 
