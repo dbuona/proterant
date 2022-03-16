@@ -15,35 +15,75 @@ library(rayshader)
 
 
 
-x <- c(0,1,0,1)
-y <-  c(1,1.33,1.66,2)
+x<-c(320,400,440,520)
+y<-c(8,8,16,16)
  
-photoperiod<-c("low","high","low","high")
-z <- y*-1+x*-2+50
-forcing<-c(0,0,1,1)
+photoperiod<-c("low","low","high","high")
+z <- (y*-.2)+(x*-.04)+50
+forcing<-c(0,1,0,1)
 dat<-data.frame(x,y,z,photoperiod,forcing)
 
-ploa<-ggplot(dat,aes(y*12,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  xlab("Mean forcing temperature")#+ylim(34,48)
+ploa<-ggplot(dat,aes(x,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
+  xlab("Thermal sums")#+ylim(34,48)
 
 
 
 plob<-ggplot(dat,aes(forcing,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  scale_x_continuous(breaks=0:1,labels=c("low","high"))+xlab("Forcing treatment")#+ylim(34,48)
+  scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(labels=c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")
 ggpubr::ggarrange(ploa,plob)
 
-z2 <- y*-4+x*-1+x*y*-2+50
-dat$z2<-z2
+z2 <- y*-.2+x*-.04+(x*y*.001)+80
 
-ploc<-ggplot(dat,aes(y*12,z2))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  xlab("Mean forcing temperature")+ylim(34,48)
+
+ploc<-ggplot(dat,aes(x,z2))+stat_smooth(method="lm",aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+
+  scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
+  xlab("Thermal sums")
 
 plod<-ggplot(dat,aes(forcing,z2))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  scale_x_continuous(breaks=0:1,labels=c("low","high"))+xlab("Forcing treatment")+ylim(34,48)
+  scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")
 
-jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/apparent.jpeg",width = 8,height=6,unit="in",res=300)
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/apparent.jpeg",width = 8,height=6,unit="in",res=200)
 ggpubr::ggarrange(ploa,plob,ploc,plod,common.legend = TRUE,legend = "right",labels  = c("a)","b)","c)","d)"))
 dev.off()
+
+
+(25*8)+(15*16)
+(20*8)+(10*16)
+
+force<-c(360,480,360,480,320,400,440,520)
+photo<-c(8,8,16,16,8,8,16,16)
+photoperiod<-c("low","low","high","high","low","low","high","high")
+
+
+dat2<-data.frame(force,photo,photoperiod)
+
+dat2$budburst<-(force*-.07)+(photo*-.04)+100
+dat2$forcing<-c(0,1,0,1,0,1,0,1)
+
+dat2$design<-c("orthoginal","orthoginal","orthoginal","orthoginal","exp. covariation","exp. covariation","exp. covariation","exp. covariation")
+
+ggplot(dat2,aes(force,budburst,color=photoperiod,linetype=design))+geom_smooth(method="lm")+
+  ggthemes::theme_few()+scale_color_viridis_d(begin = .1,end = .5,direction = -1)+
+  ylab("day of budburst")+scale_linetype_manual(values =c("dotdash","solid"))+facet_wrap(~design)
+
+ploty1<-ggplot(dat2,aes(forcing,budburst,color=photoperiod,linetype=design))+geom_smooth(method="lm")+
+  ggthemes::theme_few()+scale_x_continuous(breaks=c(0,1),labels = c("low","high"))+scale_color_viridis_d(begin = .1,end = .5,direction = -1)+
+  ylab("day of budburst")+scale_linetype_manual(values =c("dotdash","solid"))
+
+dat2$budburst2<-(force*-.07)+(photo*-.04)+(force*photo*-.0007)+100
+dat2$budburst3<-(force*-.07)+(photo*-.04)+(force*photo*.0007)+100
+ploty2<-ggplot(dat2,aes(forcing,budburst2,color=photoperiod,linetype=design))+geom_smooth(method="lm")+
+  ggthemes::theme_few()+scale_x_continuous(breaks=c(0,1),labels = c("low","high"))+
+  scale_color_viridis_d(begin = .1,end = .5,direction = -1)+ylab("day of budburst")+
+  scale_linetype_manual(values =c("dotdash","solid"))+theme(legend.position = "none")
+
+ploty3<-ggplot(dat2,aes(forcing,budburst3,color=photoperiod,linetype=design))+geom_smooth(method="lm")+
+  ggthemes::theme_few()+scale_x_continuous(breaks=c(0,1),labels = c("low","high"))+
+  scale_color_viridis_d(begin = .1,end = .5,direction = -1)+ylab("day of budburst")+
+  scale_linetype_manual(values =c("dotdash","solid"))+theme(legend.position = "none")
+
+inters<-ggpubr::ggarrange(ploty2,ploty3,labels=c("b)","c)"))
+ggpubr::ggarrange(ploty1,inters,ncol=1,nrow=2,common.legend=TRUE,labels=c("a)"))
 
 dat1<-filter
 
@@ -230,10 +270,11 @@ ccccc<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xma
 ddddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=31),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=31),fill="gray")+theme_bw()+geom_line(aes(xx,jj),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30,35))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T= 15 \n diurnal differnce= 2")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 noncovarying2<-ggarrange(aaaaa, bbbbb,ccccc, ddddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
 
-plot.list <- lapply(list(covarying,flat,noncovarying2,noncovarying), 
+plot.list <- lapply(list(flat,noncovarying2,noncovarying), 
                     function(p) p + theme(plot.background = element_rect(color = "black")))
-jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/designs.jpeg",width = 8,height=8,unit="in",res=300)
-ggarrange(plotlist = plot.list,ncol=2,nrow=2,labels = c("a)","b)","c)","d)"))
+
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/designs.jpeg",width = 11,height=4,unit="in",res=200)
+ggarrange(plotlist = plot.list,ncol=3,nrow=1,labels = c("a)","b)","c)"))
 dev.off()
 grid.rect(width = 1, height = 0,.5, gp = gpar(lwd = 2, col = "black", fill = NA,hjust="left",vjust="topleft"))
 grid.rect(width = 0,.5, height = 1, gp = gpar(lwd = 2, col = "black", fill = NA))
