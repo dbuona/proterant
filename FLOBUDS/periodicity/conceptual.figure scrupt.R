@@ -8,9 +8,9 @@ library(gridExtra)
 library(grid)
 library(gtable)
 library(ggthemes)
-library(gg3D)
+
 library(tidyverse)
-library(rayshader)
+
 
 
 
@@ -255,7 +255,14 @@ aaa<-ggplot(dat.simple,aes(xx,aa))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=
 bbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,bb),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T = 25 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 ccc<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,cc),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/short \n daily mean T= 13.3 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 ddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,dd),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T=15 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-covarying<-ggarrange(aaa, bbb,ccc, ddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
+
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/basic2.jpeg",width = 8,height=8,unit="in",res=200)
+ggarrange(aaa, bbb,ccc, ddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
+dev.off()
+
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/basic.jpeg",width = 8,height=8,unit="in",res=200)
+ggarrange(ccc, ddd, ncol=2, nrow=1, common.legend = TRUE, legend="bottom")
+dev.off()
 
 aaaa<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 25 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 bbbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T= 25 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
