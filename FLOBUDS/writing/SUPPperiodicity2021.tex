@@ -101,7 +101,7 @@ Finally, we can calculate the response for high forcing/long day, given the assu
 
 
 \section*{Modeling methods}
-To investigate the impact of experimental photo- and thermo- period covariance on the estimated effects of photoperiod and forcing cues on spring phenology,  we obtained data files from two published phenology studies: \cite{Flynn2018} and \cite{Buonaiuto:2021ug}. Both studies used dormant twigs collected from Harvard Forest in Petersham, MA, USA (42.5314$^{\circ}$N, 72.1900$^{\circ}$W)  and exposed them to comparable photoperiod and forcing treatments levels---photoperiod for both studies: 12 vs. 8 hours; forcing: 20/10$^{\circ}$C vs. 15/5$^{\circ}$C day/night for \citet{Flynn2018}; 24/18$^{\circ}$C vs. 18/12$^{\circ}$C day/night for \citet{Buonaiuto:2021ug}---in full factorial growth chamber treatments. We subset each datqset to include only matching phenological observations, termed ``leaf expansion" or BBCH 11 \citep{Finn2007}, and species. This data subset included 713 observations (n_{\cite{Flynn2018}}=384, n_{\cite{Buonaiuto:2021ug}}=329, n_{species}=7).
+To investigate the impact of experimental photo- and thermo- period covariance on the estimated effects of photoperiod and forcing cues on spring phenology, we obtained data files from two published phenology studies: \cite{Flynn2018} and \cite{Buonaiuto:2021ug}. Both studies used dormant twigs collected from Harvard Forest in Petersham, MA, USA (42.5314$^{\circ}$N, 72.1900$^{\circ}$W)  and exposed them to comparable photoperiod and forcing treatments levels---photoperiod for both studies: 12 vs. 8 hours; forcing: 20/10$^{\circ}$C vs. 15/5$^{\circ}$C day/night for \citet{Flynn2018}; 24/18$^{\circ}$C vs. 18/12$^{\circ}$C day/night for \citet{Buonaiuto:2021ug}---in full factorial growth chamber treatments. We subset each dataset to include only matching phenological observations, termed ``leaf expansion" or BBCH 11 \citep{Finn2007}, and species. This data subset included 713 observations (n_{\cite{Flynn2018}}=384, n_{\cite{Buonaiuto:2021ug}}=329, n_{species}=7).
 
 We estimated the effect of study design on parameter estimates with a Bayesian hierarchical mixed effect model with weakly informative priors. %While both experiments were designed to test for interactions between photoperiod and forcing, we did not include this interaction term in our model in order to match the assumption of non-interactivity in the math. 
 We included forcing, photoperiod, study and their interactions as main effects, and species as a random effect. We ran the model using the R package ``brms" \citep{Burkner2018} on 4 chains with 2000 iterations and warmup of 1000 iterations for a total of 4000 posterior samples per parameter. The model is written below.
@@ -110,7 +110,7 @@ $leafexpansion_{[i]} \sim N(\alpha_{sp_{[i]}}+\beta_{study} $\times$ \beta_{forc
 
  We modeled the intercept ($\alpha$) at the species level using the formula:\\
 
-$\alpha_{x_{sp}} \sim N(\mu_x,\sigma^2_x)$\\
+$\alpha_{sp} \sim N(\mu,\sigma^2)$\\
 
 %We note that the because the subset of overlapping data between the two studies is considerably smaller than it is not surprising that the relative effect sizes of photoperiod and forcing estimated here differ from those reported in the full, published studies.
 
