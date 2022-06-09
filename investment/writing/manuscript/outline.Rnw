@@ -188,6 +188,11 @@ We found no relationship between the likelihood of hysteranthy and pdsi.
 %Within the section \textit{Prunocerasus}, hysteranthy was associated with smaller fruit (). There was no relationship between flower size, fruit phenology, or mean pdsi and the phylogenetic signal of hysteranthy was virtually non-existent within this sub-clade. When we investigated
 
 \section*{Discussion}
+Things to add:\\
+\begin{enumerate}
+\item Include plasticity null results, and discuss how the while FLSs plastically adjust (within species variation), they aren't adjusting to drought. Temperature and photoperiod.
+\item Other evolutionary drivers could produce the same patterns. enerjetic constraints: small flowers and fruits. Pollinator visibility: small flowers.
+\end{enumerate}
 \subsection*{Aridity tolerance and inter-specific flower-leaf sequence variation}
 
 Our analyses suggest that within the American plums, hysteranthous taxa occur in more arid environments and are associated with drought-tolerant reproductive traits like reduced flower and fruit size. These associations support the hydraulic demand hypothesis of hysteranthous flowering. These results suggest that even though water limitation less common during the flowering season in temperate trees, the temporal segregation of flowering and leaf phenology can still impact whole plant water status later in the season.
