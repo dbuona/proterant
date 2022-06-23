@@ -23,13 +23,18 @@ z <- (y*-.2)+(x*-.04)+50
 forcing<-c(0,1,0,1)
 dat<-data.frame(x,y,z,photoperiod,forcing)
 
-ploa<-ggplot(dat,aes(x,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  xlab("Thermal sums")#+ylim(34,48)
+ploa<-ggplot(dat,aes(x,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod,linetype="estimated effect"),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,size=0.5,aes(color=photoperiod,linetype="true effect"))+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
+  xlab("Thermal sums")+#+ylim(34,48)+
+scale_linetype_manual(name = "effect",
+                   values = c( "estimated effect" = "solid", "true effect" = "dotted"))+
 
+ annotate("text", x = 450, y = 35, label = "no interaction")
 
 
 plob<-ggplot(dat,aes(forcing,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(labels=c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")
+  annotate("text", x = .8, y = 35, label = "no interaction")+
+  scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(labels=c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")#+
+  
 ggpubr::ggarrange(ploa,plob)
 
 z2 <- y*-.2+x*-.04+(x*y*.001)+80
@@ -37,10 +42,11 @@ z2 <- y*-.2+x*-.04+(x*y*.001)+80
 
 ploc<-ggplot(dat,aes(x,z2))+stat_smooth(method="lm",aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+
   scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  xlab("Thermal sums")
+  xlab("Thermal sums")+ annotate("text", x = 450, y = 70, label = "with interaction")
 
 plod<-ggplot(dat,aes(forcing,z2))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")
+  scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")+
+  annotate("text", x = .8, y = 68, label = "with interaction")
 
 jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/apparent.jpeg",width = 8,height=6,unit="in",res=200)
 ggpubr::ggarrange(ploa,plob,ploc,plod,common.legend = TRUE,legend = "right",labels  = c("a)","b)","c)","d)"))
