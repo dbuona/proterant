@@ -28,11 +28,11 @@ ploa<-ggplot(dat,aes(x,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=p
 scale_linetype_manual(name = "effect",
                    values = c( "estimated effect" = "solid", "true effect" = "dotted"))+
 
- annotate("text", x = 450, y = 35, label = "no interaction")
+ annotate("text", x = 470, y = 36, label = "no interaction")
 
 
 plob<-ggplot(dat,aes(forcing,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  annotate("text", x = .8, y = 35, label = "no interaction")+
+  annotate("text", x = .9, y = 36, label = "no interaction")+
   scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(labels=c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")#+
   
 ggpubr::ggarrange(ploa,plob)
@@ -42,13 +42,14 @@ z2 <- y*-.2+x*-.04+(x*y*.001)+80
 
 ploc<-ggplot(dat,aes(x,z2))+stat_smooth(method="lm",aes(color=photoperiod),size=1.5)+stat_smooth(method="lm",fullrange = TRUE,linetype="dotted",size=0.5,aes(color=photoperiod))+
   scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
-  xlab("Thermal sums")+ annotate("text", x = 450, y = 70, label = "with interaction")
+  xlab("Thermal sums")+ annotate("text", x = 470, y = 70, label = "with interaction")
 
 plod<-ggplot(dat,aes(forcing,z2))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
   scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")+
-  annotate("text", x = .8, y = 68, label = "with interaction")
+  annotate("text", x = .9, y = 69, label = "with interaction")
 
-jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/apparent.jpeg",width = 8,height=6,unit="in",res=200)
+?jpeg()
+jpeg("~/git/proterant/FLOBUDS/Plots/periodicity_figures/apparent.jpeg",width = 8,height=6,unit="in",res=200)
 ggpubr::ggarrange(ploa,plob,ploc,plod,common.legend = TRUE,legend = "right",labels  = c("a)","b)","c)","d)"))
 dev.off()
 
@@ -262,13 +263,15 @@ bbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=
 ccc<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,cc),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/short \n daily mean T= 13.3 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 ddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,dd),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T=15 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 
-jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/basic2.jpeg",width = 8,height=8,unit="in",res=200)
-ggarrange(aaa, bbb,ccc, ddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
-dev.off()
+
+fully<-ggarrange(aaa,a, bbb,b,ccc, c,ddd,d, ncol=4, nrow=2, common.legend = TRUE, legend="bottom") 
+
 
 jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/basic.jpeg",width = 8,height=8,unit="in",res=200)
 ggarrange(ccc, ddd, ncol=2, nrow=1, common.legend = TRUE, legend="bottom")
 dev.off()
+
+
 
 aaaa<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 25 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 bbbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T= 25 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
@@ -283,13 +286,18 @@ ccccc<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xma
 ddddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=31),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=31),fill="gray")+theme_bw()+geom_line(aes(xx,jj),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30,35))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T= 15 \n diurnal differnce= 2")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 noncovarying2<-ggarrange(aaaaa, bbbbb,ccccc, ddddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
 
-plot.list <- lapply(list(flat,noncovarying2,noncovarying), 
+chico<-ggarrange(flat,noncovarying,labels=c("a)","b)"))
+
+plot.list <- lapply(list(chico,fully), 
                     function(p) p + theme(plot.background = element_rect(color = "black")))
 
-jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/designs.jpeg",width = 11,height=4,unit="in",res=200)
-ggarrange(plotlist = plot.list,ncol=3,nrow=1,labels = c("a)","b)","c)"))
-dev.off()
+jpeg("~/git/proterant/FLOBUDS/Plots/periodicity_figures/designs.jpeg",width = 11,height=11,unit="in",res=200)
+
+ggarrange(plotlist = plot.list,ncol=1,nrow=2,labels = c("","c)"))
+
 grid.rect(width = 1, height = 0,.5, gp = gpar(lwd = 2, col = "black", fill = NA,hjust="left",vjust="topleft"))
-grid.rect(width = 0,.5, height = 1, gp = gpar(lwd = 2, col = "black", fill = NA))
+
+grid.rect(width = 0,.5, height = 1, gp = gpar(lwd = 2, col = "black", fill = NA),y =1 )
 annotate_figure()
+dev.off()
 
