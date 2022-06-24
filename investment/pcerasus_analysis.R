@@ -1,13 +1,14 @@
-####FINAL PRUNUS ANAYSIS: see plummywork for scratch
+####FINAL PRUNUS ANAYSIS: see plummywork for scratch and hydraulic demand
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 options(mc.cores = parallel::detectCores())
-
+rstan_options(auto_write = TRUE)
 graphics.off()
 library(dplyr)
 library(ggplot2)
-library(brms)
 library("rstan")
+library(brms)
+
 
 library(phytools)
 library(ape)
@@ -21,7 +22,7 @@ require(mapdata); require(maptools)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-#load("plummy.Rda")
+load("pcerasus.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
@@ -77,12 +78,9 @@ season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid sea
 predy2<-fitted(mod.ord.scale.phlyo,newdata = new.data,probs = c(.025,.25,.75,.975))
 predy2<-cbind(new.data,predy2)
 
-predy2<-filter(predy2,quant!="100%")
-predy2$FLS.scale<-exp(predy2$Estimate)
-predy2$Q.25<-exp(predy2$Q25)
-predy2$Q.75<-exp(predy2$Q75)
 
-predy3<-predy2 %>%tidyr::gather("phase","likelihood",4:28)
+
+predy3<-predy2 %>%tidyr::gather("phase","likelihood",4:40)
 predy3$species2<-predy3$specificEpithet
 
 predy.est<-filter(predy3,str_detect(phase, "^Estimate"))
@@ -167,30 +165,213 @@ makeit<-tidyr::spread(makeit,bbch,likelihood)
 ###neeed to do a few alternative descriptors of this for suppliment
 makeit$probs<-makeit$`BBCH 0`#+makeit$`BBCH 09`
 
-makeit$cat<-ifelse(makeit$probs>=0.25,"hyserantous","seranthous")
-#makeit$cat2<-ifelse(makeit$probs>=0.5,1,0)
-#makeit2<-makeit[, c('specificEpithet','quant','cat','cat2')]
+makeit$probs2<-as.numeric(makeit$`BBCH 0`)+ as.numeric(makeit$`BBCH 09`)
+
+makeit$cat<-ifelse(makeit$probs>=0.25,"hysteranthous","seranthous")
+makeit$cat2<-ifelse(makeit$probs2>=0.5,"hysteranthous","seranthous")
+makeit$cat3<-ifelse(makeit$probs2>=0.4,"hysteranthous","seranthous")
+
+makeit$classificationA<-ifelse(makeit$cat=="hysteranthous",1,0)
+makeit$classificationB<-ifelse(makeit$cat2=="hysteranthous",1,0)
+makeit$classificationC<-ifelse(makeit$cat3=="hysteranthous",1,0)
+
+
+
 result2<-left_join(result,makeit)
 result2$likelihood2<-as.numeric(result2$likelihood)
 
 season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
-jpeg("..//Plots/ord_quants_nophylo.jpeg", width=11, height=5,unit="in",res=200)
-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat),alpha=0.3)+
+jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=5,unit="in",res=200)
+ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat2),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
   geom_errorbar(aes(ymin=as.numeric(Q2.5),ymax=as.numeric(Q97.5),width=0))+
   ggthemes::theme_clean(base_size = 10)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
-  scale_fill_viridis_d()
+  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")
 dev.off()
 
 
-examplesp<-filter(result2,species2 %in% c("americana","gracilis","maritima","mexicana","subcordata"))
+examplesp<-filter(result2,species2 %in% c("americana","angustifolia","maritima","mexicana","subcordata"))
 
 jpeg("..//Plots/ord_quants_exmpsps.jpeg", width=11, height=5,unit="in",res=200)
-ggplot(data=examplesp,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat),alpha=0.3)+
+ggplot(data=examplesp,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat2),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
   geom_errorbar(aes(ymin=as.numeric(Q2.5),ymax=as.numeric(Q97.5),width=0))+
   ggthemes::theme_clean(base_size = 10)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
-  scale_fill_viridis_d()
+  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")
 dev.off()
+
+
+####now model associations
+FLSindexA<-dplyr::select(makeit,specificEpithet,quant,classificationA)
+FLSindexB<-dplyr::select(makeit,specificEpithet,quant,classificationB)
+FLSindexC<-dplyr::select(makeit,specificEpithet,quant,classificationC)
+
+FLSindexA<-tidyr::spread(FLSindexA,quant,classificationA)
+FLSindexB<-tidyr::spread(FLSindexB,quant,classificationB)
+FLSindexC<-tidyr::spread(FLSindexC,quant,classificationC)
+
+FLSindexA$hystscoreA<-(FLSindexA$`0%`+FLSindexA$`25%`+FLSindexA$`50%`+FLSindexA$`75%`)
+FLSindexB$hystscoreB<-(FLSindexB$`0%`+FLSindexB$`25%`+FLSindexB$`50%`+FLSindexB$`75%`)
+FLSindexC$hystscoreC<-(FLSindexC$`0%`+FLSindexC$`25%`+FLSindexC$`50%`+FLSindexC$`75%`)
+
+
+FLSindexA<-dplyr::select(FLSindexA,specificEpithet,hystscoreA)
+FLSindexB<-dplyr::select(FLSindexB,specificEpithet,hystscoreB)
+FLSindexC<-dplyr::select(FLSindexC,specificEpithet,hystscoreC)
+
+FLSindex<-left_join(FLSindexA,FLSindexB)
+FLSindex<-left_join(FLSindex,FLSindexC)
+
+
+####pdsi model
+d<-read.csv("input_clean/pdsi_spi.csv")
+d<-dplyr::select(d,-X)
+d<-left_join(d,FLSindex)
+d$species<-d$specificEpithet
+
+mod.pdsi.phylo<-brm(pdsi~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+mod.pdsi.phyloB<-brm(pdsi~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+mod.pdsi.phyloC<-brm(pdsi~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
+##for pdsi, remove phylo since its a species trait not an enviromental trail
+mod.pdsi.nophylo<-brm(pdsi~hystscoreA+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+mod.pdsi.nophyloB<-brm(pdsi~hystscoreB+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+mod.pdsi.nophyloC<-brm(pdsi~hystscoreC+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+
+
+mod.pdsi.nopool<-brm(pdsi~hystscoreA,data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+
+summary(mod.pdsi.nophylo)
+summary(mod.pdsi.nophyloB)
+summary(mod.pdsi.nophyloC)
+summary(mod.pdsi.nopool)
+
+
+###other covariates
+d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
+d.fruit<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruitsize_clean.csv")
+
+d.fruit<-filter(d.fruit,fruit_type=="fleshy")
+
+d.petal<-dplyr::select(d.petal,-X)
+d.fruit<-dplyr::select(d.fruit,-X)
+
+d.petal<-left_join(d.petal,FLSindex)
+d.fruit<-left_join(d.fruit,FLSindex)
+
+d.petal$species<-d.petal$specificEpithet
+d.fruit$species<-d.fruit$specificEpithet
+
+
+mod.petal.phylo<-brm(pental_lengh_mm~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
+mod.petal.phyloB<-brm(pental_lengh_mm~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99))
+mod.petal.phyloC<-brm(pental_lengh_mm~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99))
+
+fixef(mod.petal.phylo,probs = c(.25,.75))
+fixef(mod.petal.phyloB,probs = c(.25,.75))
+fixef(mod.petal.phyloC,probs = c(.25,.75))
+
+mod.fruit.phylo<-brm(fruit_diam_mm~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.fruit,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
+mod.fruit.phyloB<-brm(fruit_diam_mm~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.fruit,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
+mod.fruit.phyloC<-brm(fruit_diam_mm~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.fruit,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
+
+fixef(mod.fruit.phylo,probs = c(.25,.75))
+fixef(mod.fruit.phyloB,probs = c(.25,.75))
+fixef(mod.fruit.phyloC,probs = c(.25,.75))
+
+
+###plot all that We're choosing scenario B as the best measure of hysteranthy
+lines.nophylo<-mod.pdsi.nophyloB%>%
+  spread_draws(b_Intercept,  b_hystscoreB )
+
+a<-ggplot()+
+  geom_jitter(data=d,aes(hystscoreB,pdsi),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48)+
+  #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
+  geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
+  geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
+  #geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
+  #geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
+  ylab("Mean \nPDSI at \n collection sites")+
+  scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
+                     labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+
+
+linespetal<-mod.petal.phyloB%>%
+  spread_draws(b_Intercept,  b_hystscoreB )
+
+linesfruit<-mod.fruit.phyloB%>%
+  spread_draws(b_Intercept,  b_hystscoreB )
+b<-ggplot()+
+  geom_jitter(data=d.fruit,aes(hystscoreB,fruit_diam_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48)+
+  #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
+  geom_abline(data=linesfruit,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
+  geom_abline(data=linesfruit,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
+  #geom_abline(data=linesfruit.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
+  #geom_abline(data=linesfruit.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
+  ylab("Mean \nFruit diameter")+
+  scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
+                     labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+
+
+c<-ggplot()+
+  geom_jitter(data=d.petal,aes(hystscoreB,pental_lengh_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48)+
+  #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
+  geom_abline(data=linespetal,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
+  geom_abline(data=linespetal,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
+  # geom_abline(data=linespetal.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
+  #  geom_abline(data=linespetal.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
+  ylab("Mean \nPetal Length")+
+  scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
+                     labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+
+e<-ggpubr::ggarrange(b,c,labels=c("b)","c)"))
+
+
+jpeg("..//Plots/dataplots.jpeg", width=7, height=5,unit="in",res=300)
+ggpubr::ggarrange(a,e,nrow=2,ncol=1,labels =c("a)" ))
+dev.off()
+
+
+
+
+###do species respond plastically?
+
+####plasticity
+d.um<-read.csv("input_clean/FLS_clean.csv") ##data
+palmer.b <- brick("..//Data/lbda-v2_kddm_pmdi_2017.nc")
+
+lonpoints<-d.um$lon # make vector of prunus coordinates
+latpoints<-d.um$lat #
+extract.pts <- cbind(lonpoints,latpoints)
+palmer.b
+palmer.b2 <-palmer.b[[1900:2018]]## subset to pnly last century
+palmer.b2<-brick(palmer.b2)
+ext<-raster::extract(palmer.b2,extract.pts,method="simple")
+colnames(ext)<-(c(1899:2017))
+ext<-as.data.frame(ext)
+ext$lat<-latpoints
+ext$lon<-lonpoints
+colnames(ext)
+pdsi.dater<-tidyr::gather(ext,"year","pdsi",1:119)
+class(pdsi.dater$year)
+pdsi.dater$year<-as.integer(pdsi.dater$year)
+
+joiner<-dplyr::select(d.um,specificEpithet,lat,year,lon,bbch.v.scale,doy)
+
+pdsi.dater2<-dplyr::left_join(joiner,pdsi.dater)
+pdsi.dater2<-pdsi.dater2 %>% distinct()
+
+zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
+
+pdsi.dater2$pdsi.z<-zscore(pdsi.dater2$pdsi)
+pdsi.dater2$doy.z<-zscore(pdsi.dater2$doy)
+pdsi.dater2$species<-pdsi.dater2$specificEpithet
+table(pdsi.dater2$species)
+pdsi.dater2 %>%group_by(species) %>%summarize(mean(pdsi,na.rm=TRUE),sd(pdsi,na.rm=TRUE))
+
+plastic.mod<-brm(bbch.v.scale~doy.z+pdsi.z+(pdsi.z|specificEpithet)+(1|gr(species, cov = A)),data=pdsi.dater2,data2=list(A=A),family=cumulative("logit"),control = list(adapt_delta=.99),warmup=3000,iter=4000)
+plastic.mod.noslp<-brm(bbch.v.scale~doy.z+pdsi.z+(1|specificEpithet)+(1|gr(species, cov = A)),data=pdsi.dater2,data2=list(A=A),family=cumulative("logit"),control = list(adapt_delta=.99),warmup=3000,iter=4000)
+
+fixef(plastic.mod,probs = c(.25,.75))
+fixef(plastic.mod.noslp,probs = c(.25,.75))
 
 save.image("pcerasus.Rda")

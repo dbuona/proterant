@@ -128,7 +128,7 @@ grouppetal<-d.petal %>% group_by(id,specificEpithet,species) %>% summarise(meani
 grouppetal<-left_join(grouppetal,hystscore)
 
 
-mod.petal.phylo<-brm(pental_lengh_mm~score+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) # 59 divergent transitions
+mod.petal.phylo<-brm(pental_lengh_mm~score+(1|id)+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) # 59 divergent transitions
 mod.petalgr.phylo<-brm(meanind~score+(1|specificEpithet)+(1|gr(species, cov = A)),data=grouppetal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) # 8 divergent transitions
 
 
