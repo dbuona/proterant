@@ -20,11 +20,12 @@
 \renewcommand{\baselinestretch}{1.2} 	
 \parindent 0pt
 
-
 \bibliographystyle{..//..//refs/styles/besjournals.bst}
-%\usepackage{xr-hyper}
-\usepackage{hyperref}
-\title{Aridity drives interspecific flower-leaf phenological sequence variation in the American Plums (\textit{Prunus} sect. \textit{Prunocerasus})}
+\usepackage{xr-hyper}
+%\usepackage{hyperref}
+\usepackage{lineo}
+\linenumbers
+\title{Flower-leaf phenological sequence variation in the American Plums (\textit{Prunus} sect. \textit{Prunocerasus}) reflects adaption to aridity}
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -32,6 +33,16 @@
 
 
 \section*{Introduction}
+%<<label=numbers, echo=FALSE, results=hide, message=FALSE>>=
+%rm(list=ls()) 
+%options(stringsAsFactors = FALSE)
+%require(brms,quietly = TRUE)
+%setwd("~/Documents/git/proterant/investment/Input")
+%load("pcerasus.Rda")
+%doyeff<-round(fixef(mod.ord.scale.phlyo)[6],digits=2)
+%doyints<-round(fixef(mod.ord.scale.phlyo)[6,3:4],digits=3)
+@
+
 
 \noindent Woody perennials have a unique ability among plants to seasonally begin reproduction prior to vegetative growth. This flowering-first phenological sequence known as hysteranthy, proteranthy or precocious flowering is particularly common in temperate forests around the globe \citep{Rathcke_1985}. A number of studies suggest that this flower-leaf sequences (FLSs) are under selection, and that hysteranthy has functional significance \citep{Gougherty2018,Buonaiuto2020,Guo2014}.
 
@@ -46,25 +57,15 @@ Yet the hypothesis yields several predictions that can be tested to evaluate whe
 \item Hysteranthy may be linked to other reproductive traits associated with dry environments such as reduced flower and fruit size \citep{Herrera:2009aa,Liu:2013ua}.
 %\item Additionally, flower-leaf sequences can be highly variable within individuals across time \citep{Buonaiuto2020}, and if hysteranthy contributes to aridity tolerance, climate variability may be positively correlated with variability in hysteranthy.
 \end{enumerate}
-%\noindent Yet, based on decades of natural history accounts of hysteranthous species around th globe, we present two hypotheses regarding the function of hysteranthy in biotically-pollinated taxa. Each hypothesis makes logical predictions about how hysteranthous flowering should other plant traits should co-vary, and these hypotheses and their predictions can be used to guide further inquiry into the adaptive significance of hysteranthy.
-
-%The \textbf{water dynamics hypothesis} suggests that hysteranthy is an adaptation to arid environments, allowing for plant to partition the hydraulic demand of hydrated flowers and transpiring leaves across the growing season \citep{}. If this is the case, this hypothesis predicts that hysteranthous species should be more commonly found in dry environments.  
-
-%The \textbf{pollinator visibility hypothesis} suggests that hysteranthy is an adaptation to attract visually-foraging pollinators \citep{}. If this is the case, this hypothesis predicts that hysteranthous species may invest less in other floral traits for pollinator attraction such as size of floral display or chemical attraction. 
-
-%\noindent Still others have suggested that hysteranthy is simply the by-product of selection for early flowering \citep{},and that variation in flower-leaf sequences among species is driven by developmental, physical or phylogenetic constraints than adaptive selection \citep{}. However, even this null hypothesis make testable predictions. If this is the case, hysteranthy should co-vary with other early-flowering associated traits like long fruit development periods or large fruit sizes \citep{} and the phylogenetic signal for hysteranthy should be strong.
-
 \noindent With mounting evidence anthropogenic climate change is both driving shifts in flower-leaf sequences \citep{Ma2020:aa} and changing geographic patterns of water availability \citep{Overpeck11856}, understanding the functional significance of hysteranthy is vital to forecasting the demography and performance of forest communities in an era of global climate change. However, there are two major methodological challenges to testing the hydraulic demand hypothesis:
 
-\noindent First, characteristics like aridity tolerance, are the emergent product of a suite of biological traits \citep{Simova:2017vk}. Thus, when analyzing selective drivers of any particular trait at large taxonomic scales, unmeasured trait differences may obscure the estimated effects of the trait of interest, biasing results. %For example, hysteranthy may contribute significantly to differences in aridity tolerance between two species with similar root architecture, leaf characteristics and xylem anatomy, but matter much less when comparing deep rooted species to shallow rooted ones. 
-This is a common problem in trait-based ecology, and one of the most promising solutions for understanding the functional significance of hysteranthy in woody plants is through character deconstruction \citep{Terribile2009}; comparing flower-leaf sequences variation for only a subset of taxa of shared phylogenetic and morphological character.   
+\noindent First, characteristics like aridity tolerance, are the emergent product of a suite of biological traits \citep{Simova:2017vk}. Thus, when analyzing selective drivers of any particular trait at large taxonomic scales, unmeasured trait differences may obscure the estimated effects of the trait of interest, biasing results. This is a common problem in trait-based ecology, and one of the most promising solutions for understanding the functional significance of hysteranthy in woody plants is through character deconstruction \citep{Terribile2009}; comparing flower-leaf sequences variation for only a subset of taxa of shared phylogenetic and morphological character.   
 
 \noindent A second challenge for robust testing of hysteranthy hypotheses is that most characterizations of flower-leaf phenological sequences are based on expert-opinion verbal descriptions (e.g. ``flowers before leaves" or ``flower before/with leaves"), which make comparisons across taxa, time and space difficult and sensitive to observer bias  \citep[see;][]{Buonaiuto2020}. 
 
 \noindent This problem can be overcome by adopting standardized quantitative measures of plant phenology for observational studies and applying them to historic data records. Herbarium records are an excellent source of data that can be leveraged for quantitative phenological measurements \citep{Willis2017}, but have not be used widely to investigate variability of flower-leaf sequences variation among and within species.
 
-\noindent In this study, %we begin by combining a large data set of occurrence records with published descriptions of flower-leaf sequences and plant traits for North American species in the genus \textit{Prunus} to test the predicted trait associations of the major hysteranthy hypotheses at the genus level. We then shift our focus to one sub-clade within the genus, the American plums, (subsp \textit{Prunus}, sect. \textit{Prunocerasus}. 
-we used herbaria records to to quantify flower-leaf sequences both within and among species in the American plums, (subspecies  \textit{prunus}, sect. \textit{prunocerasus}. We then evaluated the association between hysteranthy and several ecological and morphological traits to test the predictions of the hydraulic demand hypothesis of hysteranthy. Our findings both clarify the hypothesized function of flower-leaf sequence variation in biotically-pollinated taxa, and offer insights into how flower-leaf sequences may impact species distributions as climate continues to change.
+\noindent In this study,we used herbaria records to to quantify flower-leaf sequences both within and among species in the American plums, (subspecies  \textit{prunus}, sect. \textit{prunocerasus}. We then evaluated the association between hysteranthy and several ecological and morphological traits to test the predictions of the hydraulic demand hypothesis of hysteranthy. Our findings both clarify the hypothesized function of flower-leaf sequence variation in biotically-pollinated taxa, and offer insights into how flower-leaf sequences may impact species distributions as climate continues to change.
 
 
 %<<>>=
@@ -78,55 +79,16 @@ we used herbaria records to to quantify flower-leaf sequences both within and am
 
 @
 
-%Generally speaking, hysteranthy is unique and common in temperate forest. Seems functionial. The most common, and well tested, explaination is that is hysteranthy evolved for wind-pollination. However that doesn't explain its prevalence in biotically pollinated taxa. Quote some statistic based new phyt paper. Tests of the function on hysteranthy in biotically pollinated taxa are exceedingly rare in the literature,, but may be critial for predicting species responses to global change.
-
-%While direct tests are limited, investegation of hysteranthy beneifit from a rich theoretical literature and several hypotheses have emerge.
-
-%Review them briefly and make predictions
-%\begin{enumerate}
-%\item Drought adaptation: (could be plastic or selected) aridity in range
-%\item insect visaibility: floral morphology
-%\item Null functionality early flowering. Fruit size or phenology
-%\item Phylogeny may also matter
-%\end{enumerate}
-
-%While each hypothesis generates testible predictions there are several methodological challenges.
-%\begin{enumerate}
-%\item Unmeasured species difference compensate for measure traits
-%\item data quality based on expert opinion
-%\end{enumerate}
-
-%These issues could be over come with:
-%\begin{enumerate}
-%\item character deconstruction
-%\item detailed quantitative measurements of flower leaf sequence phenology
-%\end{enumerate}
-
-%We do this:
-%\begin{enumerate}
-%\item Coarse analyses of the flower-leaf sequences of North American \textit{Prunus} species and their hypothesis relevant traits based on published data
-%\item Higher resolution inquiry of the fLower-leaf sequences and associated character traits based on our own measurements from a century worth of herbaria samples on a section of the Prunus subgenus Prunocerasus the American plums
-%\end{enumerate}
 
 \section*{Methods}
 \subsection{Study system}
-%\noindent The genus \texit{Prunus} comprises approximately 200 species distributed across the globe \citep{}. Of 40-50 species native to or naturalized in North America, \textit{Prunus}species display the full spectrum of variation in flower-leaf sequences \citep{} and show marked inter-specific variation in habitat requirements and functional traits making them an ideal system in which to investigate the inter-relationship between hysteranthy and traits predicted by the two major hysteranthy hypotheses.
-
 \noindent The genus \texit{Prunus} comprises approximately 200 species distributed across the globe \citep{Chin:2014wu}, Within the genus, The American plums (\textit{Prunus} subspp. \textit{prunus} sect. \textit{prunocerasus}) offer potential for a higher resolution investigation of drivers of hysteranthous flowering. The 16 species that make up the section are distributed across North America and, like the genus \textit{Prunus} at large, show pronounced inter-specific variation in flower-leaf sequences. While within the larger genus species can be separated into three distinct morphological clades by inflorescence architecture (solitary, corymbose or racemose) all members of the section share solitary inflorescences \citep{Shaw:2004aa} allowing for  refined character deconstruction. Species in this section are well represented in herbaria records (Fig. \ref{fig:mappy}), making them a tractable group to measure and assess variation in flower-leaf sequences as well as other ecological and morphological characteristics related to the hydraulic demand hypothesis. 
 
-%\subsection{Genus level analyses}
-%To assess the relationship between hysteranthous flowering and morphological and ecological traits related to the hysteranthous hypothesis we obtained flower-leaf sequence descriptions and mean estimates of flower petal length, flowers per inflorescence, and fruit diameter for 44 \textit{Prunus} species from the Flora of North America. As a measure of aridity tolerance, we obtained the coordinates of herbaria occurrence records of all 44 species from the Consortium of Midwest Herbaria digital Archeives (n=23,272). For records that we not geo-referenced was assigned coordinates to the county centroid in which the specimen was observed. We than extracted the average value of Palmer Modified Drought Index from at each local from the North America Drought Atlas \citep{} averaging these values across all occurrence per species for a coarse estimate of species level aridity tolerance. 
-
-%\noindent To assess the relationship between inter-specific flower-leaf sequences variation and the traits predicted by the two hysteranthy hypotheses we fit a Bayesian ordinal regression model with each measured trait (mean pdsi, fruit diameter, flower petal length and flowers per inflorescence) as main effects. In this model, we included an interaction term between flower petal length and number of flowers per inflorescence to account for a well established trade off between these two elements of floral displays \citep{}.
-%To be able to directly compare the effects of the of our multi-scale trait and environmental variables, we standardized all predictors in the model through z-scoring \citep{}. We fit all models using the R package ``brms" \citep{Burkner2018} on four chains with 4000 iterations and a 3000 iteration warm up for a total of 4000 posterior draws for each parameter. We used weakly informative priors, and assessed model performance through ensuring $\hat{R}$s were between 1 and 1.01 and bulk and tail effective sample sizes were high (1800-2800 for most parameters, but as low as  800-900 for some).
-
 \subsection{Quantifying flower-leaf sequence variation}
-We obtained digital herbarium specimens for all member of the section \textit{Prunocerasus} from the Consortium of Midwest Herbaria Database. To quantify the flower-leaf sequence sequence variation within and across species we randomly sample 200 specimens for each species and scored the phenological development of flower and leaves in accordance with using a modified BBCH scale for woody plants \citep{Finn2007}. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flower were included in this analysis (n=1009). We reconstructed the phylogenetic relationships among species in this group based on the tree topology in \citet{Shaw:2004aa}. Follwing the methods of \citet{Granfen1989} we computed branch lengths for this phylogeny by assigning each node a height and computing the distance between upper and lower nodes using the R package ``ape" \citep{}.
+We obtained digital herbarium specimens for all member of the section \textit{Prunocerasus} from the Consortium of Midwest Herbaria Database. To quantify the flower-leaf sequence sequence variation within and across species we randomly sample 200 specimens for each species and scored the phenological development of flower and leaves in accordance with using a modified BBCH scale for woody plants \citep{Finn2007}. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flower were included in this analysis (n=1009). We reconstructed the phylogenetic relationships among species in this group based on the tree topology in \citet{Shaw:2004aa}. Following the methods of \citet{Granfen1989} we computed branch lengths for this phylogeny by assigning each node a height and computing the distance between upper and lower nodes using the R package ``ape" \citep{}.
 
 To quantify FLS variation, we fit an ordinal, hierarchical, Bayesian, phylogenetic mixed model \citep{Garamszegi2014} to assess the likelihood an individual would be at any given vegetative BBCH phase while flowering. Because we expect that hysteranthy is more likely to occur earlier in the flowering period and species differ in their flowering periods, we included the day of the observation as a varying slope, main covariate effect in the model and species and phylogeny as random effects. The model is written below:\\
 
-  %Pr(y_i &=1) &= logit^{-1} \alpha_{j0sp[i]} + \alpha_{phylo[i]} + \beta_{day of year}X_1_[_i_] 
-  
 $logit(P(Y \leq j)) &= \beta_{[j]sp[i]}+ \beta_{[j]sp[i]}+ \beta_{day of year[sp[i]]}*X_1+ \epsilon_{i}$\\
   
    \epsilon_i & \sim N(0,\sigma^2_y) \\ 
@@ -139,7 +101,7 @@ $logit(P(Y \leq j)) &= \beta_{[j]sp[i]}+ \beta_{[j]sp[i]}+ \beta_{day of year[sp
   \noindent THe $\alpha$ for species effects independent of the phylogeny was modeled as follows:\\
   \alpha_{sp} & \sim N(\mu_{\alpha}, \sigma^2_{species}) \\
 
- We fit the model in the R package ``brms" \citep{} using weakly informative priors, and ran the model on four chains with a warmup of 3,000 iterations and 4,000 sampling iterations for a total of 4,000 sampling iterations. Model fit was assessed with Rhats <1.01 and high effective sample sizes and no divergent transitions.
+ We fit the model in the R package ``brms" \citep{Burkner2018} using weakly informative priors, and ran the model on four chains with a warmup of 3,000 iterations and 4,000 sampling iterations for a total of 4,000 sampling iterations. Model fit was assessed with Rhats <1.01 and high effective sample sizes and no divergent transitions.
  
 Because the day of observation strongly influenced the BBCH stage likelihood, quantifying flower-leaf sequences among species was intractable without accounting for this temporal trend. To address this issues, we used our model to predict the likelihood each species would be observed at a given vegetative BBCH stage during flowering at the 0\%, 25\% 50\% and 75\% quartiles of their flowering period. We then developed a flower-leaf sequence index, by assigning a numerical score to each species per seasonal quantile, and summing over the full flowering season. In each seasonal quantile, species received a 1 if more that 50\% of their probability distribution occurred at BBCH 0 and BBCH 09 and a 0 if not. These values were summed across the season generating an index from 0 (never hysteranthous) to 4 (hysteranthous through late season (Q75)), where 1&= hysteranthous at start of season, 2&= hysteranthous through early season  (Q25) and 3 &= hysteranthous  through mid season (Q50). We also used two alternative indexing schemes ($>$25\% of the probability distribution occured at BBCH 0 and $>$40\% of the probability distribution occurred at BBCH 0 and BBCH 09). 
 
@@ -150,8 +112,9 @@ To test the predictions of the hydralic demand hypothesis of hysteranthy we obta
 \noindent For our morphological measurements, we sampled an additional 321 specimens measured the petal length of up to 10 randomly selected petals per specimen (n=2757) using ImageJ image processing software. We also used ImageJ to measure the diameter of fruits on an additional 316 specimens, measuring up to 5 fruit per specimen (n=224).
 We computed the average Palmer Modified Drought Index score from 1900-2017 for every \textit{Prunocerasus} specimen in the database (n=2305) from the North America Drought Atlas \citep{Cook2004}.
 
-We than used Bayesian phylogenetic mixed models to test the relationship between flower-leaf sequence index scores and each of the variables. In these models, we included species and phylogeny as the random effect. For our PDSI model, we did not include phylogeny as a random effect as PDSI is a environmental trait rather than a biological one The model structure is written below: 
+We than used Bayesian phylogenetic mixed models to test the relationship between flower-leaf sequence index scores and each of the variables. In these models, we included species and phylogeny as the random effect. For our PDSI model, we did not include phylogeny as a random effect as PDSI is a environmental trait rather than a biological one. \textit{Question for Jonathan: Does this check out?}
 
+The model structure is written below: 
 
   y_i &= \alpha_{ind/sp[i]} +\alpha_{phylo[i]} + \beta_{hyst.index}*X_{hyst.index} + \epsilon_i\\
   
@@ -160,7 +123,7 @@ We than used Bayesian phylogenetic mixed models to test the relationship between
   \noindent The effect of the phylogeny was model as above.% and here, the individual effects within species were modeled:\\
   %alpha_{ind/sp} & \sim N(\mu_{\alpha}, \sigma^2_{ind/sp}) \\
   
-Like above, we fit these models in the R package ``brms" \citep{} using weakly informative priors, and ran the model on four chains with a warmup of 3,500 iterations and 4,500 sampling iterations for a total of 4,000 sampling iterations. Model fit was assessed with Rhats <1.01 and high effective sample sizes and no divergent transitions. We also ran each model using our two alternative FLS indexing approaches to make sure our particular indexing approach was not influencing our results (see Suppliment for details).
+Like above, we fit these models in the R package ``brms" \citep{Burkner2018} using weakly informative priors, and ran the model on four chains with a warmup of 3,500 iterations and 4,500 sampling iterations for a total of 4,000 sampling iterations. Model fit was assessed with Rhats <1.01 and high effective sample sizes and no divergent transitions. We also ran each model using our two alternative FLS indexing approaches to make sure our particular indexing approach was not influencing our results (see Suppliment for details).
 
 %\noindent Because our data dependent and independent were collect we employed a sequential modeling approach to first estimate the mean and standard error of the posterior distribution of trait values for each species then model the relationship between these estimate and the likelihood of hysteranthy using Bayesian measurement error models. This approach propagates the error in the initial estimates of trait values into the our final model, yielding a more accurate evaluation than using mean trait values alone \citep{}. For each parameter of interest, we ran Bayesian phylogenetic mixed-effects models with our measured traits as the response variable and species as the random effect. For traits like flower petal length and fruit diameters than included multiple measurements per specimen, we included specimen ID as an additional random effect. The model structure is written below:
 
@@ -171,96 +134,27 @@ Like above, we fit these models in the R package ``brms" \citep{} using weakly i
 
 \section*{Results}
 \subsection*{Quantifying flower leaf sequences in the American plums}
-We found substantial inter-specific differences in flower-leaf sequences within the American plums, and that patterns were strongly dependent on the day of observations, with observations later in the the flowering season of each species decreasing the likely hood of finding flowers open during early vegetative BBCH phases ($\beta_{doy}$: 0.0278 SE:0.0059, Fig.\ref{}). Based on our flower leaf sequence index, two species (\textit{P. umbellata},\text{P. mexicana}) were likely to be hysteranthous regardless of the time of observation and three species (\textit{P. rivularis},\texit{P. subcordata}, and \textit{P. texana}) were always most likely to flower after level expansion began (Fig. \ref{Fig.}). All other species displayed intermediate phenotypes with five species mostly likely to hysteranthous at the start of the season (\textit{P. alleghaniensis},\texit{P. americana},\textit{P. hortulana},\textit{P. munsoniana} and \texit{P. nigra}), one species through early season (\textit{P gracilis}) and two species through mid season (\textit{P. angustifolia}, \textit{P. maritima}) (Fig \ref{}). %% check this based on the figure
+We found substantial inter-specific differences in flower-leaf sequences within the American plums, and that patterns were strongly dependent on the day of observations, with observations later in the the flowering season of each species decreasing the likely hood of finding flowers open during early vegetative BBCH phases ($\beta_{doy}$ 0.03, $CI_{50}$ [0.02,0.03] ). Based on our flower leaf sequence index, two species (\textit{P. umbellata},\text{P. mexicana}) were likely to be hysteranthous regardless of the time of observation and three species (\textit{P. rivularis},\texit{P. subcordata}, and \textit{P. texana}) were always most likely to flower after level expansion began (Fig. \ref{fig:phylo2}). All other species displayed intermediate phenotypes with five species mostly likely to hysteranthous at the start of the season (\textit{P. alleghaniensis},\texit{P. americana},\textit{P. hortulana},\textit{P. munsoniana} and \texit{P. nigra}), one species through early season (\textit{P gracilis}) and two species through mid season (\textit{P. angustifolia}, \textit{P. maritima}) (Fig \ref{fig:phylo2}). %% check this based on the figure
 
 \subsection*{Evaluating the Hydraulic demand hypothesis}
-We found a negative association between flower-leaf sequence index and mean pdsi (Fig. \ref{fig:Prunes}a.), suggesting that species that displayed hysteranthous flowering later into their flowering season were found in dryer locations. 
+We found a negative association between flower-leaf sequence index and mean pdsi ($\beta$: -0.03 ,$CI_{50}$[-0.05,  0.02] ,Fig. \ref{fig:prunes}a.), suggesting that species that displayed hysteranthous flowering later into their flowering season were found in dryer locations. 
 
-We found a negative association between flower-leaf sequence index and both  petal length and fruit diameter (X,Y respectively), though the relationship between FLS index and fruit size was much stronger (Fig. \ref{fig:Prunes}b.,c.).
-
-
-%\subsection*{Drivers of hysteranthy in\textit{Prunus spp.} of North America}
-%Increased likelihood of hysteranthy was associated increasing aridity, flowering and inflorescence size and their interaction. Fruit size had little effect of the likelihood of hysteranthy and at the genus level, the phylogenetic signal in hysteranthy was X suggesting weak to moderate phylogeny structure.
-
-
-%\subsection*{Drivers of hysteranthy in sect. \textit{Prunocerasus} }
-%Within the section \textit{Prunocerasus}, hysteranthy was associated with smaller fruit (). There was no relationship between flower size, fruit phenology, or mean pdsi and the phylogenetic signal of hysteranthy was virtually non-existent within this sub-clade. When we investigated
+We found a negative association between flower-leaf sequence index and both  petal length and fruit diameter (-.21, $CI_{50}$"[-0.38 -0.04],-1.40, $CI_{50}$[-1.97 -0.82] respectively), though the relationship between FLS index and fruit size was much stronger (Fig. \ref{fig:prunes}b.,c.).
 
 \section*{Discussion}
-Things to add:\\
-\begin{enumerate}
-\item Include plasticity null results, and discuss how the while FLSs plastically adjust (within species variation), they aren't adjusting to drought. Temperature and photoperiod.
-\item Other evolutionary drivers could produce the same patterns. enerjetic constraints: small flowers and fruits. Pollinator visibility: small flowers.
-\end{enumerate}
-\subsection*{Aridity tolerance and inter-specific flower-leaf sequence variation}
+
+\subsection*{Aridity tolerance and flower-leaf sequence variation}
 
 Our analyses suggest that within the American plums, hysteranthous taxa occur in more arid environments and are associated with drought-tolerant reproductive traits like reduced flower and fruit size. These associations support the hydraulic demand hypothesis of hysteranthous flowering. These results suggest that even though water limitation less common during the flowering season in temperate trees, the temporal segregation of flowering and leaf phenology can still impact whole plant water status later in the season.
 
-Our results generally reflect the physiology of flower and leaves. BOoh are hydrated by xylem, though flower can also draw from phloem. Studies comparing water loss between these organs suggest that water loss from flowers can be any where from X - Y percent that of leaves, this is highly depended on species.
-A recent study by \citet{} included mesurements comparing the xylem cunductivity on spring floral branches and sumemr vegetiative ones fund that floral branch was abour 10-20\% that of vegetative ones. 
-This could be enough to matter, or it could explain why this is a low hysteranthy species that is often found at wetter locations.
+Studies that have compared the transpiration rates among flowers and leaves that occur together provide insights to the potential importance of this seasonal partitioning for maintaining water status. These studies report floral transpiration rates can range from 20\%-60\% of leaves under comparable conditions \citep{Whiley:1988uf,Roddy:2012wn} which can drive loss of stomatal conductance and low photosythetic rates \citep{Galen:1999vr}. A recent study \citet{Liu:2017wg} comparing hydraulic properties of flowers and leaves in two hysteranthous Magnolias, found that sap flow to flowers was 22-55\% that of leaves. When considering species in or study specifically, the xylem conductivity of spring floral branches of  \textit{Prunus americana} is reported to be ~20\% of summer foliage branches \citep{McMann:2022ww}.Together these magnitudes of water loss through flowers suggested support our hypothesis (say better).
 
-Consider the physiological implications
-The relationships between flower and fruit size and flower leaf sequences complicate
+The relationship between flower and fruit size and hysteranthy needs some thinking about. It is well established that larger flowers demand more resources to maintain turgor and reproductive function \citep{Galen:1999vr,Lambrecht:2007ur}. Therefore a classic ecological tradeoff might predict hysteranthy compensates for larger flowers and fruits in dry environments. The fact that we found the opposite suggest rather, that these drought adaptations might be part of a suite of traits that operate to increase the aridity tolerance of a species.
 
-
-Notes from savage 2021. Larger flowers have more water loss, One might have expected large flowers to be more hysteranthous. Suggesting at least at this high taxomomic resolution scale it could be aprt of 
-
-
-
-Studies that have compared the transpiration rates among flowers and leaves provide inight to the potential importance of this seasonal partitioning for maintaining water status. \citep{Liu:2017wg,Whiley:1988uf,Galen:1999vr,Lambrecht:2007ur,Roddy:2019wb} and read roddy citations
-
-This source sink dyrnamics.
-
-
-
-While our findings indicate that hysteranthous flowering can be an important compenent of aridity tolerance
-
-While focusing on a small subset of closely realted species allowed
-
-
-Yet it is important to consider these finding in the context of
-
-
-
-
-\subsection*{Aridity tolerance and intra-specific flower-leaf sequence variation}
-We say no evidence that intra-specific varaition in FLS
+Of course, selection on both phenology and floral traits is driven by a number of other factors than just plant hydraulics. The support we found for the hydraic demand hypothesis does not rule out other eco-evo drivers shaping the flower-leaf sequences of insect-pollinated. In fact, the relationship we observed bwetween hysteranthy with flowering and fruit size could also be evidence to alternative hypotheses for FLS.
 
 \subsection*{Alternative hypotheses of flower-leaf sequence variation in biotically-pollinated woody plants}
-
-In our analyses we found that hysteranthous flowering was associated with smaller flowers and fruits (Fig. \ref{}). While these patterns match the predictions of the hydraulic demand hypothesis, are the are certainly other mechanisms than aridity tolerance that could generate these patterns. 
-
-Evidence they are compatable. see broddy citatiosn
-
-Traits can serve multiple function
-
-
-We found hysteranthy is associated with drier average conditions. We also found its associated with small flowers and fruits. Support the hypothesis.
-We did not find it for the plasticity piece.
-
-Compare this to the relative physiology of flower and frutis.
-
-Observe that two of the three no hysteranthy species are phylogentically and geographically distinct
-
-Talk about how this analysis is outside of the Eastern temperature forests that most have studied. 
-
-Other clades
-
-Make the point that while
-
-%The associations between the likelihood of hysteranthy flower/inflorescence size and aridity between we detected at the genus suggests tacit support for both the insect visibility hypothesis and the water dynamics hypothesis. However we must emphasize that our analysis detected an association between hysteranthous phenology and reduced floral displays, but we cannot empirically identify the evoloutionary mechanisms driving this relationship. While the relationship certainly may indicate a trade-off between the apparent visibility of flowers and investment in the floral structures that is predicted by the insect visibility hypothses, there are numerous other evolutionary or developmental forces that could drive this relationship. For example, species with large inflorescence may not be able to store enough carbohydrates to produce and maintain these structure before leaf emergence, and the relationship we detected could a readily be evidence of a developmental constraint on hysteranthous flowering as evidence of adaptive selection.  Sespite the strong relationship between flower display size and hysteranthy we detected in our study that follows the predicted pattern of insect-visibility hypothesis, we cannot unequivocally assert that hysteranthy is an adaptation for pollinator attraction. What can we say? I think that the relationship suggests this is an avenue to pursue and here is a place we could talk about mechanisnistic experiments.
-
-%\noindent In contrast to the strong associations we detected at the genus level, within the section of \text{Prunocerasus}, fruit size was the only trait significantly associated with increased likelihood of hysteranthy. However, the estimated effect was relatively weak, and the positive relationship between fruit size and FLS catagory (suggestion that hysteranthy is associated with smaller fruit), is counter to the expectation about the relationship between fruit size and flowering time \citep{}.
-
-%\noindent The dissimilarity in the relationships between the likelihood of hysteranthy and predicted traits we observed at the genus and section level could describe a biological phenomenon indicating at what phylogenetic scale the evolution of hysteranthous flowering may be adaptive. Alternatively, because our analyses at the genus and section level leveraged different kinds of phenological and trait data, and differed in their ability to account for intra-specific variation and  measurement error, the differences we observed among taxonomic scales may be a statistical issues rather than a biological one. While we cannot definitively separate the effects of biology and methodology on the outcomes of this study (), following each line of reason provides important paths forward for future studies of hysteranthy flowering and trait-based evolutionary ecology in general.
-
-
-
-
-%At the genus level we identified a strong negative relationship between the likelihood a species is hysteranthous and flower size, inflorescence size and aridity (). Fruit size appeared to have little influence on hysteranthy () and the phylogenetic signal for in the evolution of flower-leaf sequences was weak-moderate (). Phylogenetic structure in flower-leaf sequences was moderate within the genus. By contrast, with in the section of \text{Prunocerasus}, fruit size was the only trait significantly associated with increased likelihood relationship. However, the estimated effect was relatively weak, and the positive relationship between fruit size and FLS catagory (suggestion that hysteranthy is associated with smaller fruit), is counter to the expectation about the relationship between fruit size and flowering time\ \citep{}. Looking at this subclade, the phylogenetic signal for flower-leaf sequence patterns was negligible.
-
-\noindent  
+The negative relationship between hysteranthy and flower size we observed in our analyses reflects a tradeoff predicted by the insect visibility hypthothesis of hysteranthous flower. This hypothesis suggests that flow
 
 
 \bibliography{..//..//..//sub_projs/refs/hyst_outline.bib} 
@@ -272,38 +166,25 @@ Make the point that while
 \section*{Figures}
     \begin{figure}[h!]
     \centering
- \includegraphics[width=\textwidth]{..//..//Plots/map.jpeg}
-    \caption{Map to show where data come from and to point out the two never hysteranthy species are highly endemic}
+ \includegraphics[width=\textwidth]{..//..//Plots/Prunus-Map-raster-plasma.jpeg}
+    \caption{}
     \label{fig:mappy}
 \end{figure}
 
-%\begin{figure}[h!]
-%    \centering
-% \includegraphics[width=\textwidth]{..//..//Plots/phylosig1.jpeg}
-%    \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
-%    \label{fig:phylo1}
-%\end{figure}
+
 
 \begin{figure}[h!]
     \centering
  \includegraphics[width=.6\textwidth]{..//..//Plots/phylosig2.jpeg}
-    \caption{place holder for the phylgenies: Ideally will have all N.A. Prunus \texit{and} Prunocerasus }
+    \caption{}
     \label{fig:phylo2}
 \end{figure}
-
-%\begin{figure}[h!]
- %   \centering
- %\includegraphics[width=\textwidth]{..//..//Plots/fullprunus_mus.jpeg}
- %   \caption{From the full genus analysis: Positive is less hysteranthus so aridity increases ihysteranthy, flower size decreases (ie smaller flowers- more hysteranthous) and no relationship with fruit size }
-  %  \label{fig:cherries}
-%\end{figure}
-
 
 
 \begin{figure}[h!]
     \centering
  \includegraphics[width=\textwidth]{..//..//Plots/dataplots.jpeg}
-    \caption{Relationships between the duration of hysteranthy across the flowering period and environmental and biological traits  } }
+    \caption{Relationships between the duration of hysteranthy across the flowering period and environmental and biological traits  }
     \label{fig:prunes}
 \end{figure}
 

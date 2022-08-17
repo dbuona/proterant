@@ -242,9 +242,11 @@ mod.pdsi.nopool<-brm(pdsi~hystscoreA,data=d,family=gaussian(),warmup=3500,iter=4
 
 summary(mod.pdsi.nophylo)
 summary(mod.pdsi.nophyloB)
+
 summary(mod.pdsi.nophyloC)
 summary(mod.pdsi.nopool)
 
+fixef(mod.pdsi.nophyloB,prob=c(.25,.75))
 
 ###other covariates
 d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
@@ -307,9 +309,9 @@ b<-ggplot()+
   geom_abline(data=linesfruit,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
   #geom_abline(data=linesfruit.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
   #geom_abline(data=linesfruit.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
-  ylab("Mean \nFruit diameter")+
+  ylab("Fruit diameter")+
   scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
-                     labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+                     labels=c("Never","At start \nof season","Through \nearly \nseason","Through \nmid \nseason","Through \nlate \nseason"))+ggthemes::theme_few(base_size = 11)
 
 
 c<-ggplot()+
@@ -319,14 +321,14 @@ c<-ggplot()+
   geom_abline(data=linespetal,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
   # geom_abline(data=linespetal.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
   #  geom_abline(data=linespetal.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
-  ylab("Mean \nPetal Length")+
+  ylab("Petal Length")+
   scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
-                     labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+                     labels=c("Never","At start \nof season","Through \nearly \nseason","Through \nmid \nseason","Through \nlate \nseason"))+ggthemes::theme_few(base_size = 11)
 
 e<-ggpubr::ggarrange(b,c,labels=c("b)","c)"))
 
 
-jpeg("..//Plots/dataplots.jpeg", width=7, height=5,unit="in",res=300)
+jpeg("..//Plots/dataplots.jpeg", width=8, height=6,unit="in",res=200)
 ggpubr::ggarrange(a,e,nrow=2,ncol=1,labels =c("a)" ))
 dev.off()
 
