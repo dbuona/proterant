@@ -181,23 +181,39 @@ result2<-left_join(result,makeit)
 result2$likelihood2<-as.numeric(result2$likelihood)
 
 season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
-jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=5,unit="in",res=200)
-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat2),alpha=0.3)+
+jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=11,unit="in",res=200)
+main<-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat2),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
   geom_errorbar(aes(ymin=as.numeric(Q2.5),ymax=as.numeric(Q97.5),width=0))+
   ggthemes::theme_clean(base_size = 10)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
-  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")
+  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")+theme(legend.title=element_blank())
 dev.off()
 
+alt1<-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat),alpha=0.3)+
+  facet_grid(quant~species2,labeller=labeller(quant=season))+
+  geom_errorbar(aes(ymin=as.numeric(Q2.5),ymax=as.numeric(Q97.5),width=0))+
+  ggthemes::theme_clean(base_size = 10)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
+  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")+theme(legend.title=element_blank())
+
+alt2<-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat3),alpha=0.3)+
+  facet_grid(quant~species2,labeller=labeller(quant=season))+
+  geom_errorbar(aes(ymin=as.numeric(Q2.5),ymax=as.numeric(Q97.5),width=0))+
+  ggthemes::theme_clean(base_size = 10)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
+  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")+theme(legend.title=element_blank())
+
+
+jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=13,unit="in",res=250)
+ggpubr::ggarrange(main,alt1,alt2,ncol=1,nrow=3,common.legend = TRUE,labels=c("a)","b)","c"))
+dev.off()
 
 examplesp<-filter(result2,species2 %in% c("americana","angustifolia","maritima","mexicana","subcordata"))
 
-jpeg("..//Plots/ord_quants_exmpsps.jpeg", width=11, height=5,unit="in",res=200)
+jpeg("..//Plots/ord_quants_exmpsps.jpeg", width=11, height=8,unit="in",res=200)
 ggplot(data=examplesp,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat2),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
   geom_errorbar(aes(ymin=as.numeric(Q2.5),ymax=as.numeric(Q97.5),width=0))+
   ggthemes::theme_clean(base_size = 10)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
-  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")
+  scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")+theme(legend.title=element_blank())
 dev.off()
 
 
@@ -246,7 +262,42 @@ summary(mod.pdsi.nophyloB)
 summary(mod.pdsi.nophyloC)
 summary(mod.pdsi.nopool)
 
-fixef(mod.pdsi.nophyloB,prob=c(.25,.75))
+
+fixef(mod.pdsi.phyloB,prob=c(.025,.25,.75,.975))[2,]
+
+tab<-data.frame(t(round(fixef(mod.pdsi.nophyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tab2<-data.frame(t(round(fixef(mod.pdsi.nophylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tab3<-data.frame(t(round(fixef(mod.pdsi.nophyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+
+tab<-rbind(tab,tab2,tab3)
+tab$classification<-c("main analaysis","alternate 1","alternate 2")
+tab$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood with BBCH 0","40% fl. likelihood with BBCH 0 & 09")
+tab$mod_variable<-"mean pdsi"
+
+
+tabfl<-data.frame(t(round(fixef(mod.petal.phyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfl2<-data.frame(t(round(fixef(mod.petal.phylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfl3<-data.frame(t(round(fixef(mod.petal.phyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+
+tabfl<-rbind(tabfl,tabfl2,tabfl3)
+tabfl$classification<-c("main analaysis","alternate 1","alternate 2")
+tabfl$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood with BBCH 0","40% fl. likelihood with BBCH 0 & 09")
+tabfl$mod_variable<-"petal length"
+
+tabfr<-data.frame(t(round(fixef(mod.fruit.phyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfr2<-data.frame(t(round(fixef(mod.fruit.phylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfr3<-data.frame(t(round(fixef(mod.fruit.phyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfr<-rbind(tabfr,tabfr2,tabfr3)
+tabfr$classification<-c("main analaysis","alternate 1","alternate 2")
+tabfr$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood with BBCH 0","40% fl. likelihood with BBCH 0 & 09")
+tabfr$mod_variable<-"fruit diameter"
+
+
+suptab<-rbind(tab,tabfl,tabfr)
+colnames(suptab)
+suptab<-suptab[, c(9, 7, 8, 1,2,3,4,5,6)]
+xtable::xtable(suptab)
+
 
 ###other covariates
 d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
@@ -279,6 +330,7 @@ mod.fruit.phyloC<-brm(fruit_diam_mm~hystscoreC+(1|specificEpithet)+(1|gr(species
 fixef(mod.fruit.phylo,probs = c(.25,.75))
 fixef(mod.fruit.phyloB,probs = c(.25,.75))
 fixef(mod.fruit.phyloC,probs = c(.25,.75))
+##B
 
 
 ###plot all that We're choosing scenario B as the best measure of hysteranthy
