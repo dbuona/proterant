@@ -200,7 +200,7 @@ priorz<-c(prior_string("student_t(3,1,4)",class="b"),
 plot(FNA.small$fruit.z)
 
 FNAgaus.phylo<-brm(logFLS~meanpdsi.z+petal.z+fruit.z +inflor.z+ (1|gr(species, cov = A)),
-                   data=FNA.small,prior=priorz,
+                   data=FNA.small,
                    data2 = list(A = A),control=list(adapt_delta=0.95),
                    warmup=5000,iter=6000)
 
@@ -248,7 +248,15 @@ library(tibble)
 library("phylolm")
 
 
-FNAgaus.phylo.lm<-phylolm(logFLS~petal.z+inflor.z+fruit.z+meanpdsi.z,data=final.df,phy=cherrytree,boot = 6000)
+FNAgaus.phylo.lm<-phylolm(logFLS~petal.z*inflor.z+fruit.z+meanpdsi.z,data=final.df,phy=cherrytree,boot = 9999)
+
+final.df2<-FNA.small[match(mytree.names, FNA.small$species),]
+FNAgaus.phylo.brm<-brm(logFLS~petal.z*inflor.z+fruit.z+meanpdsi.z+(1|gr(species, cov = A)),
+                    data=final.df2,
+                    data2 = list(A = A),control=list(adapt_delta=0.99),
+                    warmup=3000,iter=4000)
+
+
 summary(FNAgaus.phylo.lm)
 simplelm<-lm(logFLS~petal.z+inflor.z+fruit.z+meanpdsi.z,data=final.df)
 summary(simplelm)
@@ -280,8 +288,10 @@ output <-output %>% tidyr::gather("var","estimate",4:8)
 FNAordz.phylo<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
              data=FNA.small,
              family=cumulative("logit"),
-             data2 = list(A = A),
-             warmup=3000,iter=4000)
+             data2 = list(A = A),control=list(adapt_delta=0.9),
+             warmup=5000,iter=6000)
+
+
 
 
 
