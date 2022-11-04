@@ -22,7 +22,7 @@ require(mapdata); require(maptools)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-load("pcerasus.Rda")
+#load("pcerasus.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
@@ -62,15 +62,16 @@ final.df$specificEpithet== mytree.names
 
 phylosig(pruned.by,final.df$meanFLS,se=final.df$seFLS,method="lambda",nsim = 1000, test=TRUE) #lambda 7.47299e-05 
 phylosig(pruned.by,final.df$meanFLS,se=final.df$seFLS,method="K",nsim = 1000, test=TRUE) #K 0.23 
-
+pic(final.df$meanFLS,pruned.by,var.contrasts = TRUE,rescaled.tree = TRUE)###
 
 ####ordinal model is most descriptive of actual data, so we are going with it here
-mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|species)+(1|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99)) ##
+mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|species)+(doy|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99)) ##
 
 ##predict the ordinal
-new.data<-data.frame(quant=rep(c( "0%" , "25%",  "50%",  "75%" ,"100%"),13),d.flo%>% group_by(specificEpithet)%>% summarise(doy=quantile(doy)))
-new.data$species<-new.data$specificEpithet
+new.data<-data.frame(quant=rep(c( "0%" , "25%",  "50%",  "75%" ,"100%"),13),doy=d.flo%>% dplyr::group_by(specificEpithet)%>% dplyr::summarise(doy=quantile(doy)))
 
+new.data$species<-unique(d.flo$specificEpithet)
+new.data$specificEpithet<-unique(d.flo$specificEpithet)
 season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
 
 
@@ -80,12 +81,14 @@ predy2<-cbind(new.data,predy2)
 
 
 
-predy3<-predy2 %>%tidyr::gather("phase","likelihood",4:40)
+predy3<-predy2 %>%tidyr::gather("phase","likelihood",5:40)
 predy3$species2<-predy3$specificEpithet
 
 predy.est<-filter(predy3,str_detect(phase, "^Estimate"))
 predy.error<-filter(predy3,str_detect(phase, "^Q2.5"))
 predy.error2<-filter(predy3,str_detect(phase, "^Q97.5"))
+
+
 
 errorlow <- predy.error %>% 
   group_by(species2,quant) %>%
@@ -101,6 +104,8 @@ result <- predy.est %>%
   group_by(species2,quant) %>%
   filter(likelihood == max(likelihood)) %>%
   arrange(species2)
+
+
 
 colnames(errorlow)[3]<-"Q2.5"
 colnames(errorhigh)[3]<-"Q97.5"
@@ -249,18 +254,18 @@ mod.pdsi.phylo<-brm(pdsi~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A))
 mod.pdsi.phyloB<-brm(pdsi~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 mod.pdsi.phyloC<-brm(pdsi~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
 ##for pdsi, remove phylo since its a species trait not an enviromental trail
-mod.pdsi.nophylo<-brm(pdsi~hystscoreA+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
-mod.pdsi.nophyloB<-brm(pdsi~hystscoreB+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
-mod.pdsi.nophyloC<-brm(pdsi~hystscoreC+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+#mod.pdsi.nophylo<-brm(pdsi~hystscoreA+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+#mod.pdsi.nophyloB<-brm(pdsi~hystscoreB+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+#mod.pdsi.nophyloC<-brm(pdsi~hystscoreC+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 
 
-mod.pdsi.nopool<-brm(pdsi~hystscoreA,data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+#mod.pdsi.nopool<-brm(pdsi~hystscoreA,data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 
-summary(mod.pdsi.nophylo)
-summary(mod.pdsi.nophyloB)
+#summary(mod.pdsi.nophylo)
+#summary(mod.pdsi.nophyloB)
 
-summary(mod.pdsi.nophyloC)
-summary(mod.pdsi.nopool)
+#summary(mod.pdsi.nophyloC)
+#summary(mod.pdsi.nopool)
 
 
 fixef(mod.pdsi.phyloB,prob=c(.025,.25,.75,.975))[2,]

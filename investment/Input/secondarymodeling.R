@@ -85,6 +85,8 @@ d.fruit$species<-d.fruit$specificEpithet
   petal.mod.z<- brm(petal.z~(1|id)+(1|specificEpithet),data=d.petal,warmup=2500,iter=4000)
   fruit.mod.z<- brm(fruit.z~(1|id)+(1|specificEpithet),data=d.fruit,warmup=3000,iter=4000) #2 divergent
  
+  FLS.mod.phylo<-brm(logFLS~doy.cent+(doy.cent|species)+(doy.cent|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A=A),warmup=4500,iter=6000,control=list(adapt_delta=0.99))
+  
   pdsi.mod.phylo<-brm(pdsi~(1|species)+(1|gr(specificEpithet, cov = A)),data=d.pdsi,data2=list(A=A),warmup=4500,iter=6000,control=list(adapt_delta=0.99))
   petalmod.phylo<- brm(pental_lengh_mm~(1|species)+(1|id)+(1|gr(specificEpithet, cov = A)),data=d.petal,data2=list(A=A),warmup=4500,iter=6000,control=list(adapt_delta=0.99))
   fruitmod.phylo<- brm(fruit_diam_mm~(1|species)+(1|id)+(1|gr(specificEpithet, cov = A)),data=d.fruit,data2=list(A=A),warmup=4500,iter=6000,control=list(adapt_delta=0.99))  
@@ -100,12 +102,42 @@ fruit.mod<- brm(fruit_diam_mm~(1|id)+(1|specificEpithet),data=d.fruit,warmup=250
   fruitmod.z.phylo<- brm(fruit.z~(1|species)+(1|id)+(1|gr(specificEpithet, cov = A)),data=d.fruit,data2=list(A=A),warmup=4000,iter=5000,control=list(adapt_delta=0.99)) # 2 divergent transition
 
 save.image("predictory.Rda")
-summary(petalmod.z.phylo)
 
 
-pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod)),1:2)
-petalout<-dplyr::select(as.data.frame(coef(petal.mod)$specificEpithet),1:2)
-fruitout<-dplyr::select(as.data.frame(coef(fruit.mod)$specificEpithet),1:2)
+pdsiout<-dplyr::select(as.data.frame(coef(pdsi.mod.phylo)),1:2)
+petalout<-dplyr::select(as.data.frame(coef(petalmod.phylo)$specificEpithet),1:2)
+fruitout<-dplyr::select(as.data.frame(coef(fruitmod.phylo)$specificEpithet),1:2)
+
+FLSout<-dplyr::select(as.data.frame(coef(FLS.mod.phylo)),1:2)
+
+
+
+
+
+colnames(pdsiout)<-c("pdsi_mean","pdsi_se")
+colnames(petalout)<-c("petal_mean","petal_se")
+colnames(fruitout)<-c("fruit_mean","fruit_se")
+colnames(FLSout)<-c("FLS_mean","FLS_se")
+
+
+#colnames(FLSout)<-c("FLS_mean","FLS_se")
+#colnames(phenout)<-c("phen_mean","phen_se")
+
+#phenout$specificEpithet<-rownames(phenout)
+fruitout$specificEpithet<-rownames(fruitout)
+petalout$specificEpithet<-rownames(petalout)
+pdsiout$specificEpithet<-rownames(pdsiout)
+FLSout$specificEpithet<-rownames(FLSout)
+
+newdat<-left_join(fruitout,pdsiout,by="specificEpithet")
+newdat<-left_join(newdat,petalout,by="specificEpithet")
+newdat<-left_join(newdat,FLSout,by="specificEpithet")
+
+meanmod<-brm(FLS_mean~petal_mean+pdsi_mean+fruit_mean, data= newdat)
+
+fixef(meanmod,probs = c(.05,.95))
+
+
 
 
 
@@ -177,23 +209,3 @@ frud<-ggplot(fruit.z.plot.phylo,aes(reorder(specificEpithet, -r_specificEpithet)
 
 
 ggpubr::ggarrange(frua,frub,fruc,frud)
-
-
-colnames(pdsiout)<-c("pdsi_mean","pdsi_se")
-colnames(pdsiminout)<-c("pdsimin_mean","pdsimin_se")
-colnames(petalout)<-c("petal_mean","petal_se")
-colnames(fruitout)<-c("fruit_mean","fruit_se")
-colnames(FLSout)<-c("FLS_mean","FLS_se")
-#colnames(phenout)<-c("phen_mean","phen_se")
-
-#phenout$specificEpithet<-rownames(phenout)
-fruitout$specificEpithet<-rownames(fruitout)
-petalout$specificEpithet<-rownames(petalout)
-pdsiout$specificEpithet<-rownames(pdsiout)
-pdsiminout$specificEpithet<-rownames(pdsiminout)
-FLSout$specificEpithet<-rownames(FLSout)
-
-newdat<-left_join(fruitout,pdsiout)
-newdat<-left_join(newdat,petalout)
-newdat<-left_join(newdat,FLSout)
-

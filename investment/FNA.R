@@ -199,11 +199,14 @@ priorz<-c(prior_string("student_t(3,1,4)",class="b"),
           prior_string("student_t(3,0,3)",class="sigma"))
 plot(FNA.small$fruit.z)
 
-FNAgaus.phylo<-brm(logFLS~meanpdsi.z+petal.z+fruit.z +inflor.z+ (1|gr(species, cov = A)),
+FNAgaus.phylo<-brm(logFLS~meanpdsi+petal_high+fruit_high+ (1|gr(species, cov = A)),
                    data=FNA.small,
-                   data2 = list(A = A),control=list(adapt_delta=0.95),
+                   data2 = list(A = A),control=list(adapt_delta=0.99),
                    warmup=5000,iter=6000)
-
+fixef(FNAgaus.phylo,probs=c(.025,0.25,.75,.975))
+tidybayes::get_variables(FNAgaus.phylo)
+goo<-spread_draws(FNAgaus.phylo,b_meanpdsi, b_petal_high,b_fruit_high[condition,term])
+head(goo)
 FNAgaus.phylo2<-brm(logFLS~inflor_high+fruit_high+meanpdsi+ (1|gr(species, cov = A)),
                    data=FNA.small,
                    data2 = list(A = A),control=list(adapt_delta=0.99),
@@ -285,14 +288,22 @@ colnames(output)
 output <-output %>% tidyr::gather("var","estimate",4:8)
 
 
-FNAordz.phylo<-brm(FLSnum~petal.z*inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
+FNAordz.phylo<-brm(FLSnum~petal.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
              data=FNA.small,
              family=cumulative("logit"),
              data2 = list(A = A),control=list(adapt_delta=0.9),
              warmup=5000,iter=6000)
+fixef(FNAordz.phylo,probs = c(.025,.25,.75,.975))
+FNAordz.phylo2<-brm(FLSnum~inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
+                   data=FNA.small,
+                   family=cumulative("logit"),
+                   data2 = list(A = A),control=list(adapt_delta=0.9),
+                   warmup=5000,iter=6000)
 
-
-
+fixef(FNAordz.phylo,probs = c(.25,.75))
+fixef(FNAordz.phylo2,probs = c(.025,.25,.75,.975))
+conditional_effects(FNAordz.phylo,prob = .5,categorical=TRUE)
+conditional_effects(FNAgaus.phylo,prob = .5)
 
 
 

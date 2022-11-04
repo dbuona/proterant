@@ -23,6 +23,9 @@ pdsi<-read.csv("pruno_clean_pdsi_wint.csv")
 pdsi<-dplyr::filter(pdsi,specificEpithet %in% sps)
 
 
+
+
+
 fruit.mod<-brm(fruit_diam_mm~1+(1|specificEpithet),data=fruity)
 coef(fruit.mod)
 
@@ -55,9 +58,13 @@ FLS$fruit.z<-zscore(FLS$meanfruit)
 FLS$pdsi.z<-zscore(FLS$meanpdsi)
 FLS$cold.z<-zscore(FLS$meancold)
 FLS$doy.z<-zscore(FLS$doy)
-prunomean.ordz<-brm(bbch.v.scale~doy.z+flo.z+fruit.z+cold.z+pdsi.z+(1|specificEpithet),
+prunomean.ordz<-brm(bbch.v.scale~doy.z+flo.z+fruit.z+pdsi.z+(1|specificEpithet),
                    data=FLS,
                    family=cumulative("logit"),warmup=3000,iter=4000)
+
+fixef(prunomean.ordz, probs = c(.25,.75))
+
+
 
 prunomean.3cats<-brm(bbch.short~doy+flo.z+fruit.z+cold.z+pdsi.z+(1|specificEpithet),
                     data=FLS,
