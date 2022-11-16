@@ -47,6 +47,7 @@ A <- ape::vcv.phylo(pruned.by) ## make acovarience matrix for brms models
 d.flo$species<-d.flo$specificEpithet ## whoops over wrote the id column here but we dont need if
 d.flo$logFLS<-log(d.flo$bbch.v.scale) ## make FLS linear
 
+if(FALSE){
 ###Part 1: Turns out phylogeny might matter, or not when we use SE instead of SD
 
 d.sig<-d.flo %>% group_by(specificEpithet) %>% summarise(meanFLS=mean(logFLS),sdFLS=sd(logFLS),nFLS=n(),seFLS=sdFLS / sqrt(nFLS))
@@ -63,15 +64,14 @@ final.df$specificEpithet== mytree.names
 phylosig(pruned.by,final.df$meanFLS,se=final.df$seFLS,method="lambda",nsim = 1000, test=TRUE) #lambda 7.47299e-05 
 phylosig(pruned.by,final.df$meanFLS,se=final.df$seFLS,method="K",nsim = 1000, test=TRUE) #K 0.23 
 pic(final.df$meanFLS,pruned.by,var.contrasts = TRUE,rescaled.tree = TRUE)###
-
+}
 ####ordinal model is most descriptive of actual data, so we are going with it here
-mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|species)+(doy|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99)) ##
+mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|species)+(doy|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.95,max_treedepth=20)) ##
 
 ##predict the ordinal
-new.data<-data.frame(quant=rep(c( "0%" , "25%",  "50%",  "75%" ,"100%"),13),doy=d.flo%>% dplyr::group_by(specificEpithet)%>% dplyr::summarise(doy=quantile(doy)))
+new.data<-data.frame(quant=rep(c( "0%" , "25%",  "50%",  "75%" ,"100%"),13),d.flo%>% dplyr::group_by(specificEpithet,species)%>% dplyr::summarise(doy=quantile(doy)))
 
-new.data$species<-unique(d.flo$specificEpithet)
-new.data$specificEpithet<-unique(d.flo$specificEpithet)
+
 season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
 
 
@@ -253,6 +253,8 @@ d$species<-d$specificEpithet
 mod.pdsi.phylo<-brm(pdsi~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 mod.pdsi.phyloB<-brm(pdsi~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 mod.pdsi.phyloC<-brm(pdsi~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
+
+
 ##for pdsi, remove phylo since its a species trait not an enviromental trail
 #mod.pdsi.nophylo<-brm(pdsi~hystscoreA+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 #mod.pdsi.nophyloB<-brm(pdsi~hystscoreB+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
@@ -268,11 +270,11 @@ mod.pdsi.phyloC<-brm(pdsi~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)
 #summary(mod.pdsi.nopool)
 
 
-fixef(mod.pdsi.phyloB,prob=c(.025,.25,.75,.975))[2,]
+fixef(mod.pdsi.phyloC,prob=c(.025,.25,.75,.975))[2,]
 
-tab<-data.frame(t(round(fixef(mod.pdsi.nophyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-tab2<-data.frame(t(round(fixef(mod.pdsi.nophylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-tab3<-data.frame(t(round(fixef(mod.pdsi.nophyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tab<-data.frame(t(round(fixef(mod.pdsi.phyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tab2<-data.frame(t(round(fixef(mod.pdsi.phylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tab3<-data.frame(t(round(fixef(mod.pdsi.phyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
 
 tab<-rbind(tab,tab2,tab3)
 tab$classification<-c("main analaysis","alternate 1","alternate 2")
