@@ -113,37 +113,37 @@ fig
 
 
 
-
-Temperature<- c(30,20,30,20)
-Photoperiod<-c(8,8,12,12)
+library(ggplot2)
+Temperature<- c(25,15,25,15)
+Photoperiod<-c(8,8,16,16)
 Treatments<-c("short/high","short/low","long/high","long/low")
 ortho<-data.frame(Temperature,Photoperiod,Treatments)
 
-one<-ggplot(ortho,aes(Photoperiod,Temperature))+geom_rect(xmin=8,xmax=12,ymin=20,ymax=30,alpha=0.1,fill="royalblue2")+
-  geom_point(aes(shape=Treatments),size=3)+ylim(15,35)+xlim(6,14)+
-  scale_shape_manual(values=c(0,1,2,5))+theme_few()
+one<-ggplot(ortho,aes(Photoperiod,Temperature))+geom_rect(xmin=8,xmax=16,ymin=15,ymax=25,alpha=0.1,fill="royalblue2")+
+  geom_point(aes(shape=Treatments),size=3)+ylim(10,30)+xlim(6,18)+
+  scale_shape_manual(values=c(0,1,2,5))+ggthemes::theme_few()
 
 ?scale_shape_manual()
-Temperature<- c(30,17,33,20)
-Photoperiod<-c(8,8,12,12)
-
+Temperature<- c(25,13,28,15)
+Photoperiod<-c(8,8,16,16)
+Treatments<-c("short/high","short/low","long/high","long/low")
 
 noortho<-data.frame(Temperature,Photoperiod,Treatments)
-two<-ggplot(noortho,aes(Photoperiod,Temperature))+geom_rect(xmin=8,xmax=12,ymin=20,ymax=30,alpha=0.1,fill="royalblue2")+
+two<-ggplot(noortho,aes(Photoperiod,Temperature))+geom_rect(xmin=8,xmax=16,ymin=15,ymax=25,alpha=0.1,fill="royalblue2")+
   geom_point(aes(shape=Treatments),size=3)+
-  ylim(15,35)+xlim(6,14)+scale_shape_manual(values=c(0,1,2,5))+theme_few()
+  ylim(10,30)+xlim(6,18)+scale_shape_manual(values=c(0,1,2,5))+ggthemes::theme_few()
 
 
-Temperature<- c(30,20,30)
-Photoperiod<-c(8,8,12)
+Temperature<- c(25,15,25)
+Photoperiod<-c(8,8,16)
 Treatments<-c("short/high","short/low","long/high")
 noint<-data.frame(Temperature,Photoperiod,Treatments)
-three<-ggplot(noint,aes(Photoperiod,Temperature))+geom_rect(xmin=8,xmax=12,ymin=20,ymax=30,alpha=0.1,fill="royalblue2")+
+three<-ggplot(noint,aes(Photoperiod,Temperature))+geom_rect(xmin=8,xmax=16,ymin=15,ymax=25,alpha=0.1,fill="royalblue2")+
   geom_point(aes(shape=Treatments),size=3)+
-  ylim(15,35)+xlim(6,14)+scale_shape_manual(values=c(0,1,2))+theme_few()
+  ylim(10,30)+xlim(6,18)+scale_shape_manual(values=c(0,1,2))+ggthemes::theme_few()
 
 jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/factorial.jpeg",width = 6,height=8,unit="in",res=300)
-ggarrange(one,two,three,labels=c("a)","b)","c)"),ncol=1,nrow=3,common.legend = TRUE,legend= "right")
+ggpubr::ggarrange(one,two,three,labels=c("a)","b)","c)"),ncol=1,nrow=3,common.legend = TRUE,legend= "right")
 dev.off()
 
 GDH<-c(7.5,12.5,20,22.5,10,20,20,10)
@@ -234,16 +234,16 @@ dawn$dawn.offset<-dawn$temp-dawn$light
 
 
 
-xx<-c(1:24)
-yy<-rep(25,24)
-zz<-rep(15,24)
-aa<-c(20,20,20,20,20,20,20,20,30,30,30,30,30,30,30,30,20,20,20,20,20,20,20,20)
-bb<-c(20,20,20,20,20,20,30,30,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20)
-cc<-c(10,10,10,10,10,10,10,10,20,20,20,20,20,20,20,20,10,10,10,10,10,10,10,10)
-dd<-c(10,10,10,10,10,10,20,20,20,20,20,20,20,20,20,20,20,20,10,10,10,10,10,10)
+xx<-seq(0,24,by=0.1)
+yy<-rep(20,241)
+zz<-rep(15,241)
+aa<-c(rep(c(15,15,15,15,15,15,15,15),each=10),rep(c(25,25,25,25,25,25,25,25),each=10),rep(c(15,15,15,15,15,15,15,15),each=10),15)
+bb<-c(rep(c(15,15,15,15,15,15),each=10),rep(c(25,25,25,25,25,25,25,25,25,25,25,25),each=10),rep(c(15,15,15,15,15,15),each=10),15)
+cc<-c(rep(c(10,10,10,10,10,10,10,10),each=10),rep(c(20,20,20,20,20,20,20,20),each=10),rep(c(10,10,10,10,10,10,10,10),each=10),10)
+dd<-c(rep(c(10,10,10,10,10,10),each=10),rep(c(20,20,20,20,20,20,20,20,20,20,20,20),each=10),rep(c(10,10,10,10,10,10),each=10),10)
 
-ee<-c(20,20,20,20,20,20,20,30,30,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20)
-ff<-c(10,10,10,10,10,10,10,20,20,20,20,20,20,20,20,20,20,20,20,10,10,10,10,10)
+ee<-c(rep(c(15,15,15,15,15,15,15),each=10),rep(c(25,25,25,25,25,25,25,25,25,25,25,25),each=10),rep(c(15,15,15,15,15),each=10),15)
+ff<-c(rep(c(10,10,10,10,10,10,10),each=10),rep(c(20,20,20,20,20,20,20,20,20,20,20,20),each=10),rep(c(10,10,10,10,10),each=10),10)
 
 
 gg<-c(22,22,22,22,22,22,22,22,31,31,31,31,31,31,31,22,22,22,22,22,22,22,22,22)
@@ -251,20 +251,19 @@ hh<-c(24,24,24,24,24,24,26,26,26,26,26,26,26,26,26,26,26,26,24,24,24,24,24,24)
 ii<-c(17,17,17,17,17,17,17,17,26,26,26,26,26,26,26,26,17,17,17,17,17,17,17,17)
 jj<-c(19,19,19,19,19,19,21,21,21,21,21,21,21,21,21,21,21,21,19,19,19,19,19,19)
 
-dat.simple<-data.frame(xx,yy,zz,aa,bb,cc,dd,ee,ff,gg,hh,ii)
-a<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,yy),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 25 \n, diurnal differnce= NA")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-b<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,yy),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T= 25 \n diurnal differnce= NA")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+dat.simple<-data.frame(xx,yy,zz,aa,bb,cc,dd,ee,ff)#,gg,hh,ii)
+a<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,yy),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 20 \n, diurnal differnce= NA")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+b<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=4,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=20,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,yy),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T= 20 \n diurnal differnce= NA")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 c<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,zz),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/short\n daily mean T= 15 \n diurnal differnce= NA")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-d<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,zz),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T= 15 \n diurnal differnce= NA")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-flat<-ggarrange(a, b,c, d, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
+d<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=4,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=20,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,zz),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T= 15 \n diurnal differnce= NA")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+flat<-ggpubr::ggarrange(a, b,c, d, ncol=2, nrow=2, common.legend = TRUE, legend="bottom")
 
 aaa<-ggplot(dat.simple,aes(xx,aa))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,aa),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 23.3 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-bbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,bb),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T = 25 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+bbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=4,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=20,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,bb),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T = 25 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 ccc<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,cc),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/short \n daily mean T= 13.3 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-ddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,dd),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T=15 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+ddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=4,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=20,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,dd),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T=15 \n diurnal differnce= 10 C")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 
 
-fully<-ggarrange(aaa,a, bbb,b,ccc, c,ddd,d, ncol=4, nrow=2, common.legend = TRUE, legend="bottom") 
 
 
 jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/basic.jpeg",width = 8,height=8,unit="in",res=200)
@@ -273,12 +272,14 @@ dev.off()
 
 
 
-aaaa<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 25 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-bbbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T= 25 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+aaaa<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 20 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+bbbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=4,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=20,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ee),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T= 20 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 cccc<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ff),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/short \n daily mean T= 15 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-dddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ff),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T= 15 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
-noncovarying<-ggarrange(aaaa, bbbb,cccc, dddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
+dddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=4,ymin=0,ymax=30),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=20,xmax=24,ymin=0,ymax=30),fill="gray")+theme_bw()+geom_line(aes(xx,ff),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T= 15 \n diurnal differnce= 10")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
+noncovarying<-ggpubr::ggarrange(aaaa, bbbb,cccc, dddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
 
+
+fully<-ggpubr::ggarrange(aaaa,a, bbbb,b,cccc, c,dddd,d, ncol=4, nrow=2, common.legend = TRUE, legend="bottom") 
 
 aaaaa<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=8,ymin=0,ymax=31),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=16,xmax=24,ymin=0,ymax=31),fill="gray")+theme_bw()+geom_line(aes(xx,gg),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30,35))+ labs(y = "temperature",x = "hours")+ggtitle("warm/short \n daily mean T= 25 \n diurnal differnce= 9")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 bbbbb<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=31),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=31),fill="gray")+theme_bw()+geom_line(aes(xx,hh),color="red")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30,35))+ labs(y = "temperature",x = "hours")+ggtitle("warm/long \n daily mean T= 25 \n diurnal differnce= 2")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
@@ -286,14 +287,14 @@ ccccc<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xma
 ddddd<-ggplot(dat.simple,aes(xx,yy))+geom_rect(dat.simple,mapping=aes(xmin=0,xmax=6,ymin=0,ymax=31),fill="gray")+geom_rect(dat.simple,mapping=aes(xmin=18,xmax=24,ymin=0,ymax=31),fill="gray")+theme_bw()+geom_line(aes(xx,jj),color="blue")+scale_x_continuous(breaks=c(4,8,12,16,20,24))+scale_y_continuous(breaks=c(0,5,10,15,20,25,30,35))+ labs(y = "temperature",x = "hours")+ggtitle("cool/long \n daily mean T= 15 \n diurnal differnce= 2")+theme(plot.title=element_text( hjust=0.5, vjust=0.5))+theme(plot.title = element_text(face="italic", size=10))
 noncovarying2<-ggarrange(aaaaa, bbbbb,ccccc, ddddd, ncol=2, nrow=2, common.legend = TRUE, legend="bottom") 
 
-chico<-ggarrange(flat,noncovarying,labels=c("a)","b)"))
+chico<-ggpubr::ggarrange(flat,noncovarying,labels=c("a)","b)"))
 
 plot.list <- lapply(list(chico,fully), 
                     function(p) p + theme(plot.background = element_rect(color = "black")))
 
-jpeg("~/git/proterant/FLOBUDS/Plots/periodicity_figures/designs.jpeg",width = 11,height=11,unit="in",res=200)
+jpeg("~/Documents/git/proterant/FLOBUDS/Plots/periodicity_figures/designs.jpeg",width = 11,height=11,unit="in",res=200)
 
-ggarrange(plotlist = plot.list,ncol=1,nrow=2,labels = c("","c)"))
+ggpubr::ggarrange(plotlist = plot.list,ncol=1,nrow=2,labels = c("","c)"))
 
 grid.rect(width = 1, height = 0,.5, gp = gpar(lwd = 2, col = "black", fill = NA,hjust="left",vjust="topleft"))
 
