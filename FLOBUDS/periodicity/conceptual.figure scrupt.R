@@ -31,6 +31,7 @@ scale_linetype_manual(name = "effect",
  annotate("text", x = 470, y = 36, label = "no interaction")
 
 
+
 plob<-ggplot(dat,aes(forcing,z))+stat_smooth(method="lm",fullrange = FALSE,aes(color=photoperiod),size=1.5)+scale_color_viridis_d(option="turbo")+ggthemes::theme_few()+ylab("Day of budburst")+
   annotate("text", x = .9, y = 36, label = "no interaction")+
   scale_x_continuous(limits = c(-.25,1.25),breaks=0:1,labels=c(labels=c(expression(""*20/10~degree*C)),expression(""*25/15~degree*C)))+xlab("Forcing treatment")#+

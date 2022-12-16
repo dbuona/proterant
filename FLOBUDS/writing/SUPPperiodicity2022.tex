@@ -11,7 +11,7 @@
 %\setlength{\captionmargin}{30pt}
 \setlength{\abovecaptionskip}{10pt}
 \setlength{\belowcaptionskip}{10pt}
-\topmargin -1.5cm 
+\topmargin -2.5cm 
 \oddsidemargin -0.04cm 
 \evensidemargin -0.04cm 
 \textwidth 16.59cm
@@ -40,6 +40,14 @@
 %Line 92-94 tells me how many might have periodicity issues (4 datasets or 7 experiments)\\
 
 %That seems too small. Why do I think this?  Co-variation is an issue even if you don't care about forcing (e.g. most falusi papers are interested in photoperiod effect, and while they do not use forcing as a treatment, they vary day and night temperature, so any photoperiod effect the estimate could be a secret forcing effect). I think the big Zohner study would have this problem too. Basically, anytime you are testing the effect of photperiod and varying thermoperiod you have a problem. I am a bit overwhelmed by the countintxns.R code. Can this be investigate easily based on pre-existing script? bbstanallsppmodelcountinxns.csv say there are 21 studies that vary thermoperiodicity with some other treatment.
+\section*{Figures:}
+ \begin{figure}[h!]
+    \centering
+ \includegraphics[width=.6\textwidth]{..//Plots/periodicity_figures/apparent4spp.jpeg}
+    \caption{Estimated effects of photoperiod and forcing on spring phenology based on a simulated experiment in which the coupling of photoperiod and thermoperiod introduce an experimental covariation between three levels of temperature and light treatments. The dotted lines in \textbf{a)} depict the true effects of forcing at each photoperiod level, and the solid lines depict the estimated effects. \textbf{b)} depicts the estimated effects of forcing and photoperiod if the experimental covariation due to periodicity coupling in \textbf{a)} is unacknowledged.}
+    \label{fig:suplines}
+\end{figure}
+
 \section*{Estimating the effects of experimental periodicity covariance mathmatically}
 %Maybe Lizzie (or Megan) can write this part since they were the ones who did this math?
   % EMW: Putting this here for now, but can move some/all it to main text as needed. [] means I am not sure we need it, but I added it. 
