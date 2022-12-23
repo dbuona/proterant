@@ -294,15 +294,26 @@ FNAordz.phylo<-brm(FLSnum~petal.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
              data2 = list(A = A),control=list(adapt_delta=0.9),
              warmup=5000,iter=6000)
 fixef(FNAordz.phylo,probs = c(.025,.25,.75,.975))
-FNAordz.phylo2<-brm(FLSnum~inflor.z+fruit.z+meanpdsi.z + (1|gr(species, cov = A)),
+FNA.small$specificEpithet<-FNA.small$species
+
+FNA.small$meanpdsi.z<-zscore(FNA.small$meanpdsi)
+FNA.small$inflor.z<-zscore(FNA.small$inflor_high)
+FNA.small$fruit.z<-zscore(FNA.small$fruit_high)
+
+
+FNAordz.phylo2<-brm(FLSnum~inflor.z+fruit.z+meanpdsi.z +(1|specificEpithet)+(1|gr(species, cov = A)),
                    data=FNA.small,
                    family=cumulative("logit"),
-                   data2 = list(A = A),control=list(adapt_delta=0.9),
-                   warmup=5000,iter=6000)
+                   data2 = list(A = A),control=list(adapt_delta=0.99),
+                   warmup=6000,iter=8000)
+
+
+
+
 
 fixef(FNAordz.phylo,probs = c(.25,.75))
-fixef(FNAordz.phylo2,probs = c(.025,.25,.75,.975))
-conditional_effects(FNAordz.phylo,prob = .5,categorical=TRUE)
+fixef(FNAordz.phylo2,probs = c(.05,.25,.75,.95))
+conditional_effects(FNAordz.phylo2,prob = .5,categorical=F)
 conditional_effects(FNAgaus.phylo,prob = .5)
 
 
@@ -333,18 +344,18 @@ mcmc_areas(posterior,
 
 
 get_variables(FNAordz)
-output<-FNAordz %>%
-   spread_draws(b_petal.z,b_inflor.z ,b_fruit.z,b_meanpdsi.z,`b_petal.z:inflor.z`)
+output<-FNAordz.phylo2 %>%
+   spread_draws(b_inflor.z ,b_fruit.z,b_meanpdsi.z)
 colnames(output)
-output <-output %>% tidyr::gather("var","estimate",4:8)
+output <-output %>% tidyr::gather("var","estimate",4:6)
 
 jpeg("Plots/fullprunus_mus.jpeg",width=9, height=7, units = "in",res=300)
-ggplot(output,aes(y = var, x = estimate)) +
+pottymu<-ggplot(output,aes(y = var, x = estimate)) +
    stat_eye()+ggthemes::theme_few()+
    geom_vline(xintercept=0,linetype="dashed")+
    xlim(-18,18)+
-   scale_y_discrete(limits = c("b_fruit.z","b_petal.z:inflor.z","b_inflor.z","b_petal.z","b_meanpdsi.z"),labels=c("fruit size","petal x inflorescence","inflorescence size","petal size","pdsi"))+
-   ylab("Variable")+xlab("Effect estimate")
+   scale_y_discrete(limits = c("b_fruit.z","b_inflor.z","b_meanpdsi.z"),labels=c("fruit size","inflorescence size","mean pdsi"))+
+   ylab("")+xlab("standardized effect size estimate")
 
 dev.off()
 #FNAord.traits<-brm(FLSnum~me(petalmean,petalsd)+me(inflormean,inflorsd)+
@@ -370,21 +381,21 @@ launch_shinystan(FNAordz.error)
    #                family=cumulative("logit"),warmup=3000,iter=4000 )
 
 #launch_shinystan(FNAordz.error1)
-p1<-plot(conditional_effects(FNAordz, "meanpdsi.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-p5<-plot(conditional_effects(FNAordz, "cold.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-p2<-plot(conditional_effects(FNAordz, "petal.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-p3<-plot(conditional_effects(FNAordz, "inflor.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
-p4<-plot(conditional_effects(FNAordz, "fruit.z", categorical = TRUE,probs = c(.25,.75),plot=FALSE))
+p1<-plot(conditional_effects(FNAordz.phylo2, "meanpdsi.z", categorical = TRUE,prob = .5,plot=FALSE))
+p3<-plot(conditional_effects(FNAordz.phylo2, "inflor.z", categorical = TRUE,prob=.5,plot=FALSE))
+p4<-plot(conditional_effects(FNAordz.phylo2, "fruit.z", categorical = TRUE,prob=.5),plot=FALSE))
 
 p1<-p1[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+#p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p3<-p3[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p4<-p4[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-p5<-p5[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+#p5<-p5[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 
 
-jpeg("Plots/FNA_mean_ordinal.jpeg")
-ggpubr::ggarrange(p1,p5,p2,p3,p4,common.legend = TRUE)
+potty<-ggpubr::ggarrange(p1,p3,p4,common.legend = TRUE,ncol=3,legend="bottom")
+
+jpeg("Plots/fullprunus_4manu.jpeg",width=9, height=8, units = "in",res=300)
+ggpubr::ggarrange(pottymu,potty,nrow=2,labels=c("a)","b)"))
 dev.off()
 #### run this just on prunocerasus
 pruno<-c("alleghaniensis","angustifolia","americana" ,"gracilis","geniculata","hortulana" ,"maritima",
@@ -434,4 +445,5 @@ cor(FNA.pruno$meanT,FNA.pruno$meanpdsi,use = "complete.obs")
 #length(which(!namelist%in%names.intree))
 
 save.image("FNA.Rda")
+
 

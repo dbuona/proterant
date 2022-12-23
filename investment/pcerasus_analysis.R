@@ -22,7 +22,7 @@ require(mapdata); require(maptools)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-#load("pcerasus.Rda")
+load("pcerasus.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
@@ -341,11 +341,11 @@ fixef(mod.fruit.phyloC,probs = c(.25,.75))
 
 
 ###plot all that We're choosing scenario B as the best measure of hysteranthy
-lines.nophylo<-mod.pdsi.nophyloB%>%
+lines.nophylo<-mod.pdsi.phyloB%>%
   spread_draws(b_Intercept,  b_hystscoreB )
 
 a<-ggplot()+
-  geom_jitter(data=d,aes(hystscoreB,pdsi),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48)+
+  geom_jitter(data=d,aes(hystscoreB,pdsi),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48,height=0)+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
   geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
@@ -362,7 +362,7 @@ linespetal<-mod.petal.phyloB%>%
 linesfruit<-mod.fruit.phyloB%>%
   spread_draws(b_Intercept,  b_hystscoreB )
 b<-ggplot()+
-  geom_jitter(data=d.fruit,aes(hystscoreB,fruit_diam_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48)+
+  geom_jitter(data=d.fruit,aes(hystscoreB,fruit_diam_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48,height=0)+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=linesfruit,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
   geom_abline(data=linesfruit,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
@@ -374,7 +374,7 @@ b<-ggplot()+
 
 
 c<-ggplot()+
-  geom_jitter(data=d.petal,aes(hystscoreB,pental_lengh_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48)+
+  geom_jitter(data=d.petal,aes(hystscoreB,pental_lengh_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48,height=0)+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=linespetal,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
   geom_abline(data=linespetal,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+

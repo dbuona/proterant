@@ -74,8 +74,6 @@ The American plums (\textit{Prunus} subspp. \textit{prunus} sect. \textit{prunoc
 
 \noindent In this study,we used herbaria records to to quantify flower-leaf sequence patterns in the American plums, (subspecies  \textit{Prunus}, sect. \textit{prunocerasus}). We then evaluated the association between hysteranthy and several ecological and morphological traits to interrogate the functional hypotheses for hysteranthous flowering described above. We then compare our findings in this clade to associations between hysteranthy and traits in the larger genus obtained from published accounts in flora to better understand how these dynamics vary over taxonmic scales. Our findings both clarify the hypothesized function of flower-leaf sequence variation in biotically-pollinated taxa, and offer insights into how shifting flower-leaf sequences may impact species demography and distributions as climate continues to change.
 
-\bibliography{..//..//..//sub_projs/refs/hyst_outline.bib} 
-\end{document}
 %However, there are two major methodological challenges to testing the hydraulic demand hypothesis: First, characteristics like aridity tolerance, are the emergent product of a suite of biological traits \citep{Simova:2017vk}. Thus, when analyzing selective drivers of any particular trait at large taxonomic scales, unmeasured trait differences may obscure the estimated effects of the trait of interest, biasing results. This is a common problem in trait-based ecology, and one of the most promising solutions for understanding the functional significance of hysteranthy in woody plants is through character deconstruction \citep{Terribile2009}; comparing flower-leaf sequences variation for only a subset of taxa of shared phylogenetic and morphological character.   
 
 %\noindent A second challenge for robust testing of hysteranthy hypotheses is that most characterizations of flower-leaf phenological sequences are based on expert-opinion verbal descriptions (e.g. ``flowers before leaves" or ``flower before/with leaves"), which make comparisons across taxa, time and space difficult and sensitive to observer bias  \citep[see;][]{Buonaiuto2020}. This problem can be overcome by adopting standardized quantitative measures of plant phenology for observational studies and applying them to historic data records. Herbarium records are an excellent source of data that can be leveraged for quantitative phenological measurements \citep{Willis2017}, but have not be used widely to investigate variability of flower-leaf sequences variation among and within species.
@@ -148,14 +146,14 @@ $logit(P(Y \leq j)) &= \beta_{[j]sp[i]}+ \beta_{[j]sp[i]}+ \beta_{day of year[sp
  
 Because the day of observation strongly influenced the BBCH stage likelihood, quantifying flower-leaf sequences among species was intractable without accounting for this temporal trend. To address this issues, we used our model to predict the likelihood each species would be observed at a given vegetative BBCH stage during flowering at the 0\%, 25\% 50\% and 75\% quantiles of their flowering period. We then developed a flower-leaf sequence index, by assigning a numerical score to each species per seasonal quantile, and summing over the full flowering season. In each seasonal quantile, species received a 1 if more that 50\% of their probability distribution occurred at BBCH 0 and BBCH 09 and a 0 if not. These values were summed across the season generating an index from 0 (never hysteranthous) to 4 (hysteranthous through late season (Q75)), where 1&= hysteranthous at start of season, 2&= hysteranthous through early season  (Q25) and 3 &= hysteranthous  through mid season (Q50). We also used two alternative indexing schemes ($>$25\% of the probability distribution occured at BBCH 0 and $>$40\% of the probability distribution occurred at BBCH 0 and BBCH 09).
 
-\subsection{Evaluating the hydralic demand hypothesis}
+\subsection{Evaluating hysternanthy hypotheses}
 
-To test the predictions of the hydralic demand hypothesis of hysteranthy we obtained data on petal length, fruit diameter and directly from herbarium specimens and characterized the aridity of the sites specimens were collected from using the Palmer Modified Drought Index (PDSI).
+To test the predictions of the hypotheses of hysteranthy we obtained data on petal length, fruit diameter and directly from herbarium specimens and characterized the aridity of the sites specimens were collected from using the Palmer Modified Drought Index (PDSI).
 
 \noindent For our morphological measurements, we sampled an additional 321 specimens measured the petal length of up to 10 randomly selected petals per specimen (n=2757) using ImageJ image processing software. We also used ImageJ to measure the diameter of fruits on an additional 316 specimens, measuring up to 5 fruit per specimen (n=224).
 We computed the average Palmer Modified Drought Index score from 1900-2017 for every \textit{Prunocerasus} specimen in the database (n=2305) from the North America Drought Atlas \citep{Cook2004}.
 
-We than used Bayesian phylogenetic mixed models to test the relationship between flower-leaf sequence index scores and each of the variables. In these models, we included species and phylogeny as the random effect. For our PDSI model, we did not include phylogeny as a random effect as PDSI is a environmental trait rather than a biological one. \textit{Question for Jonathan: Does this check out?}
+We than used Bayesian phylogenetic mixed models to test the relationship between flower-leaf sequence index scores and each of the variables. In these models, we included species and phylogeny as the random effect. 
 
 The model structure is written below: 
 
@@ -174,12 +172,11 @@ Like above, we fit these models in the R package ``brms" \citep{Burkner2018} usi
 
 %For all models in the sequences,
 
-
 \section*{Results}
 \subsection*{Quantifying flower leaf sequences in the American plums}
 We found substantial inter-specific differences in flower-leaf sequences within the American plums (Fig. \ref{fig:ordinals}, \ref{fig:plums}). The phylogenetic signal was relatively weak (Phylogenetic signal K : 0.28), and flower-leaf sequences patterns were strongly dependent on the day of observations, with observations later in the the flowering season of each species decreasing the likely hood of finding flowers open during early vegetative BBCH phases ($\beta_{doy}$ 0.03, $CI_{50}$ [0.02,0.03] ). Based on our flower leaf sequence index, two species (\textit{P. umbellata},\text{P. mexicana}) were likely to be hysteranthous regardless of the time of observation and three species (\textit{P. rivularis},\texit{P. subcordata}, and \textit{P. texana}) were always most likely to flower after level expansion began (Fig. \ref{fig:phylo2}). All other species displayed intermediate phenotypes with five species mostly likely to hysteranthous at the start of the season (\textit{P. alleghaniensis},\texit{P. americana},\textit{P. hortulana},\textit{P. munsoniana} and \texit{P. nigra}), one species through early season (\textit{P gracilis}) and two species through mid season (\textit{P. angustifolia}, \textit{P. maritima}) (Fig \ref{fig:phylo2}).
 
-\subsection*{Evaluating the Hydraulic Demand hypothesis}
+\subsection*{Associations between hysteranthy and environmental and morphological traits}
 We found a negative association between flower-leaf sequence index and mean pdsi ($\beta$: -0.03 ,$CI_{50}$[-0.05,  0.02] ,Fig. \ref{fig:prunes}a.), suggesting that species that displayed hysteranthous flowering later into their flowering season were found in dryer locations. 
 
 We found a negative association between flower-leaf sequence index and both  petal length and fruit diameter (-.21, $CI_{50}$"[-0.38 -0.04],-1.40, $CI_{50}$[-1.97 -0.82] respectively), though the relationship between FLS index and fruit size was much stronger (Fig. \ref{fig:prunes}b.,c.).
@@ -244,6 +241,13 @@ Flower-leaf sequences patterns can vary substantially on an interannual basis wi
     \label{fig:prunes}
 \end{figure}
 
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/fullprunus_4manu.jpeg}
+    \caption{}
+    \label{fig:genus}
+\end{figure}
 
 %\begin{figure}[h!]
  %   \centering
