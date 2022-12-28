@@ -349,7 +349,9 @@ output<-FNAordz.phylo2 %>%
 colnames(output)
 output <-output %>% tidyr::gather("var","estimate",4:6)
 
-jpeg("Plots/fullprunus_mus.jpeg",width=9, height=7, units = "in",res=300)
+
+
+#jpeg("Plots/fullprunus_mus.jpeg",width=9, height=7, units = "in",res=300)
 pottymu<-ggplot(output,aes(y = var, x = estimate)) +
    stat_eye()+ggthemes::theme_few()+
    geom_vline(xintercept=0,linetype="dashed")+
@@ -357,7 +359,7 @@ pottymu<-ggplot(output,aes(y = var, x = estimate)) +
    scale_y_discrete(limits = c("b_fruit.z","b_inflor.z","b_meanpdsi.z"),labels=c("fruit size","inflorescence size","mean pdsi"))+
    ylab("")+xlab("standardized effect size estimate")
 
-dev.off()
+#dev.off()
 #FNAord.traits<-brm(FLSnum~me(petalmean,petalsd)+me(inflormean,inflorsd)+
  #                    me(fruitmean,fruitsd),
   #                 data=FNA,
@@ -383,14 +385,19 @@ launch_shinystan(FNAordz.error)
 #launch_shinystan(FNAordz.error1)
 p1<-plot(conditional_effects(FNAordz.phylo2, "meanpdsi.z", categorical = TRUE,prob = .5,plot=FALSE))
 p3<-plot(conditional_effects(FNAordz.phylo2, "inflor.z", categorical = TRUE,prob=.5,plot=FALSE))
-p4<-plot(conditional_effects(FNAordz.phylo2, "fruit.z", categorical = TRUE,prob=.5),plot=FALSE))
+p4<-plot(conditional_effects(FNAordz.phylo2, "fruit.z", categorical = TRUE,prob=.5,plot=FALSE))
 
-p1<-p1[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+
+
+p1<-p1[[1]]+ggthemes::theme_few()+scale_color_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
+   scale_fill_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab(" mean pdsi")
+
 #p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-p3<-p3[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-p4<-p4[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
-#p5<-p5[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p3<-p3[[1]]+ggthemes::theme_few()+scale_color_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
+   scale_fill_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab("inflorescence size")
 
+p4<-p4[[1]]+ggthemes::theme_few()+scale_color_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
+   scale_fill_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab("fruit size")
 
 potty<-ggpubr::ggarrange(p1,p3,p4,common.legend = TRUE,ncol=3,legend="bottom")
 
