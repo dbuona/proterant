@@ -254,7 +254,17 @@ mod.pdsi.phylo<-brm(pdsi~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A))
 mod.pdsi.phyloB<-brm(pdsi~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 mod.pdsi.phyloC<-brm(pdsi~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
 
+chico<-d %>% group_by(specificEpithet) %>% summarise(mean(pdsi,na.rm=TRUE))
 
+exreme<-filter(d, hystscoreB %in% c(0,4))
+
+
+
+ggplot(exreme,aes(as.factor(hystscoreB),pdsi))+geom_boxplot()
+ggplot(exreme,aes(as.factor(hystscoreB),))+geom_boxplot()
+geom_point(aes(color=specificEpithet))
+range(d$pdsi,na.rm=TRUE)
+mod.min.pdsi.phylo<-brm(pdsi.min~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 ##for pdsi, remove phylo since its a species trait not an enviromental trail
 #mod.pdsi.nophylo<-brm(pdsi~hystscoreA+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 #mod.pdsi.nophyloB<-brm(pdsi~hystscoreB+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
