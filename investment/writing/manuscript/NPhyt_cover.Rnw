@@ -37,7 +37,7 @@
 \noindent \emph{What hypotheses or questions does this work address?}
 % Nice opener!
 
-\noindent In biotically-pollinated species, flower-first may be an adaptation for reducing water stress \citep{Gougherty2018}, or pollinator attraction \citep{Janzen1967}. We quantified flower-leaf sequence variation in a clade of insect-pollinated trees, using herbaria specimens and Bayesian hierarchical modeling to test these hypotheses by modeling the associations between hysteranthy and environmental or biological traits.
+\noindent In biotically-pollinated species, flower-first may be an adaptation for reducing water stress \citep[\textbf{Water limitation hypothesis};][]{Gougherty2018,Buonaiuto2020}, or pollinator attraction \citep[\textbf{Insect visibility hypothesis};][]{Janzen1967}. We quantified flower-leaf sequence variation in a clade of insect-pollinated trees, using herbaria specimens and Bayesian hierarchical modeling to test these hypotheses by modeling the associations between hysteranthy and environmental or biological traits.
 
 \noindent \emph{How does this work advance our current understanding of plant science?}
 
