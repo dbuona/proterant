@@ -2,7 +2,7 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 options(mc.cores = parallel::detectCores())
-rstan_options(auto_write = TRUE)
+#rstan_options(auto_write = TRUE)
 graphics.off()
 library(dplyr)
 library(ggplot2)
@@ -107,8 +107,8 @@ result <- predy.est %>%
 
 
 
-colnames(errorlow)[3]<-"Q2.5"
-colnames(errorhigh)[3]<-"Q97.5"
+colnames(errorlow)[6]<-"Q2.5"
+colnames(errorhigh)[6]<-"Q97.5"
 
 result$Q2.5<-errorlow$Q2.5
 result$Q97.5<-errorhigh$Q97.5
@@ -129,8 +129,8 @@ result <- predy.est %>%
   filter(likelihood == max(likelihood)) %>%
   arrange(species2)
 
-colnames(errorlow)[5]<-"Q2.5"
-colnames(errorhigh)[5]<-"Q97.5"
+colnames(errorlow)[6]<-"Q2.5"
+colnames(errorhigh)[6]<-"Q97.5"
 
 
 result$Q2.5<-errorlow$Q2.5

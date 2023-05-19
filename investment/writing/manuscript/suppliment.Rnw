@@ -17,7 +17,7 @@
 \textwidth 16.59cm
 \textheight 23.94cm 
 \parskip 7.2pt 
-\renewcommand{\baselinestretch}{1.2} 	
+\renewcommand{\baselinestretch}{1} 	
 \parindent 0pt
 
 
@@ -28,22 +28,14 @@
 %\usepackage{hyperref}
 \usepackage{xr-hyper}
 \usepackage{hyperref}
-\externaldocument{outline}
+\externaldocument{plum_manuscript}
 
 
-\title{Supporting Information for: Flower-leaf phenological sequences in the American Plums (\textit{Prunus} sect. \textit{Prunocerasus}) reflect adaption to aridity}
-
+\title{Supporting Information for: Aridity and pollination success contribute to flowering-first phenological sequences in a major North American temperate tree clade}
+\date{}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 \maketitle
-
-\section*{Figures} 
-\begin{figure}[h!]
-    \centering
- \includegraphics[width=\textwidth]{..//..//Plots/ord_quants_phylo.jpeg}
-    \caption{Say better: The likihood a species will be at a given vegetative bbch stage during flowering at 4 different time point across their flowering season. Colors indicate whethere a species what classified as hysteranthous or not. a) b) and c) are the products of the different schemes.}
-    \label{fig:plums}
-\end{figure}
 
 \section*{Tables}
 \begin{table}[ht]
@@ -52,22 +44,29 @@
   \hline
   mod\_variable & classification & Hystanthous\_if & Estimate & Error & Q2.5 & Q25 & Q75 & Q97.5 \\ 
   \hline
- mean pdsi & main & 50\% fl. likelihood with BBCH 0 \& 09 & -0.03 & 0.02 & -0.08 & -0.05 & -0.02 & 0.01 \\ 
-   mean pdsi & alternate 1 & 25\% fl. likelihood with BBCH 0 & -0.03 & 0.03 & -0.08 & -0.04 & -0.01 & 0.02 \\ 
-  mean pdsi & alternate 2 & 40\% fl. likelihood with BBCH 0 \& 09 & -0.03 & 0.03 & -0.08 & -0.04 & -0.01 & 0.02 \\ 
+ mean PDSI & main & 50\% fl. lik. w/ BBCH 0 \& 09 & -0.03 & 0.02 & -0.08 & -0.05 & -0.02 & 0.01 \\ 
+   mean PDSI & alternate 1 & 25\% fl. lik. w/ BBCH 0 & -0.03 & 0.03 & -0.08 & -0.04 & -0.01 & 0.02 \\ 
+  mean PDSI & alternate 2 & 40\% fl. lik. w/ BBCH 0 \& 09 & -0.03 & 0.03 & -0.08 & -0.04 & -0.01 & 0.02 \\ 
   \hline
-   petal length & main & 50\% fl. likelihood  with BBCH 0 \& 09 & -0.21 & 0.28 & -0.74 & -0.38 & -0.04 & 0.34 \\ 
-  petal length & alternate 1 & 25\% fl. likelihood with BBCH 0 & -0.16 & 0.29 & -0.74 & -0.34 & 0.02 & 0.43 \\ 
-  petal length & alternate 2 & 40\% fl. likelihood with BBCH 0 \& 09 & -0.26 & 0.27 & -0.80 & -0.43 & -0.09 & 0.30 \\ 
+   petal length & main & 50\% fl. lik.  w/ BBCH 0 \& 09 & -0.21 & 0.28 & -0.74 & -0.38 & -0.04 & 0.34 \\ 
+  petal length & alternate 1 & 25\% fl. lik. w/ BBCH 0 & -0.16 & 0.29 & -0.74 & -0.34 & 0.02 & 0.43 \\ 
+  petal length & alternate 2 & 40\% fl. lik. w/ BBCH 0 \& 09 & -0.26 & 0.27 & -0.80 & -0.43 & -0.09 & 0.30 \\ 
  \hline
- fruit diameter & main & 50\% fl. likelihood  with BBCH 0 \& 09 & -1.40 & 0.90 & -3.17 & -1.97 & -0.82 & 0.40 \\ 
-  fruit diameter & alternate 1 & 25\% fl. likelihood with BBCH 0 & -1.77 & 0.93 & -3.59 & -2.35 & -1.20 & 0.09 \\ 
-  fruit diameter & alternate 2 & 40\% fl. likelihood with BBCH 0 \& 09 & -1.83 & 0.89 & -3.60 & -2.36 & -1.28 & -0.09 \\ 
+ fruit diameter & main & 50\% fl. lik.  w/ BBCH 0 \& 09 & -1.40 & 0.90 & -3.17 & -1.97 & -0.82 & 0.40 \\ 
+  fruit diameter & alternate 1 & 25\% fl. lik. w/ BBCH 0 & -1.77 & 0.93 & -3.59 & -2.35 & -1.20 & 0.09 \\ 
+  fruit diameter & alternate 2 & 40\% fl. lik. w/ BBCH 0 \& 09 & -1.83 & 0.89 & -3.60 & -2.36 & -1.28 & -0.09 \\ 
    \hline
 \end{tabular}
 \caption{Estimates of the relation ship betwen hysteranthy index and traits for our main model and alternative models based on different classification schemes of the hysteranthy index. All models give similar answers so yay.}
 \label{tab:modput}
 \end{table}
-
+\pagebreak
+\section*{Figures} 
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=.9\textwidth]{..//..//Plots/ord_quants_phylo.jpeg}
+    \caption{Predicted likelihood that a species would be in flower during each vegetative BBCH phase. Points are the mean likelihood and bar the 95\% uncertainty intervals. In a), species were classified as hysteranthous if greater than 50\% probability flowering occurred in BBCH 0 and BBCH 09 (colors) for each part of the flowering season. In b), species were classified as hysteranthous if greater than 25\% probability flowering occurred in BBCH 0 for each part of the flowering season. In c) ppecies were classified as hysteranthous if greater than 40\% probability flowering occurred in BBCH 0 and BBCH 09 for each part of the flowering season.}
+    \label{fig:plums}
+\end{figure}
 
 \end{document}

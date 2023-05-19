@@ -1,0 +1,61 @@
+\documentclass{article}[12pt]
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\setkeys{Gin}{width=0.8\textwidth}
+%\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+\topmargin -1.5cm 
+\oddsidemargin -0.04cm 
+\evensidemargin -0.04cm 
+\textwidth 16.59cm
+\textheight 23.94cm 
+\parskip 7.2pt 
+\renewcommand{\baselinestretch}{1.1} 	
+\parindent 0pt
+
+\bibliographystyle{refs/styles/newphyto.bst}
+\pagenumbering{gobble}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\noindent\includegraphics[width=0.2\textwidth]{umasslogo}\\\\
+
+\noindent{Dear Dr. Hetherington,}\\
+
+
+\noindent Please consider this manuscript ``Aridity and pollination success contribute to flowering-first phenological sequences in a major North American temperate tree clade" as a ``Full paper" in \textit{New Phytologist}.
+
+\noindent Many tree and shrub species in temperate forests produce flowers before their leaves emerge each season. This flower-leaf sequence, known as hysteranthy, proteranthy or precocious flowering is generally described as an adaptation to faciliate wind-pollination \citep{Rathcke_1985}. However, this explanation does not address the widespread prevalence of hysteranthy in biotically-pollinated taxa, which comprise a substantial portion of the hysteranthous species in some temperate forests \citep{Buonaiuto2020}. 
+
+\noindent \emph{What hypotheses or questions does this work address?}
+% Nice opener!
+
+\noindent In biotically-pollinated species, flower-first may be an adaptation for reducing water stress \citep{Gougherty2018}, or pollinator attraction \citep{Janzen1967}. We quantified flower-leaf sequence variation in a clade of insect-pollinated trees, using herbaria specimens and Bayesian hierarchical modeling to test these hypotheses by modeling the associations between hysteranthy and environmental or biological traits.
+
+\noindent \emph{How does this work advance our current understanding of plant science?}
+
+\noindent We show that flowering-first is associated with aridity and reduced flower size as predicted by the water limitation and insect visibility hypotheses. We present a novel modeling approach to quantify phenological variation that can be implemented in both experimental and observational studies to better integrate observations of broad ecological patterns with targeted experiments in the future.
+
+\noindent \emph{Why is this work important and timely?}
+
+\noindent Climate change is already altering the flower-leaf sequences of woody plants \citep{Ma:2021tf,Wang:2022wt}. Our finding that flower-leaf sequences may be important adaptations for environmental tolerance and pollination success suggest that they are critical to forecasting the demography and performance of forest communities in an era of global climate change.
+
+
+\noindent The main text of this manuscript is 3832 words in length, it contains 4 figures. It is co-authored by T.J. Davies, S. Collins and E.M. Wolkovich and is not under consideration elsewhere. We hope that you will find it suitable for publication in \textit{New Phytologist}, and look forward to hearing from you.\\\\
+\\Sincerely,\\\\\\\\\\
+
+\noindent Daniel Buonaiuto\\
+
+\pagebreak
+
+
+\bibliography{refs/hyst_outline.bib} 
+
+\end{document}

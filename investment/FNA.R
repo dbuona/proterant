@@ -356,7 +356,7 @@ pottymu<-ggplot(output,aes(y = var, x = estimate)) +
    stat_eye()+ggthemes::theme_few()+
    geom_vline(xintercept=0,linetype="dashed")+
    xlim(-18,18)+
-   scale_y_discrete(limits = c("b_fruit.z","b_inflor.z","b_meanpdsi.z"),labels=c("fruit size","inflorescence size","mean pdsi"))+
+   scale_y_discrete(limits = c("b_fruit.z","b_inflor.z","b_meanpdsi.z"),labels=c("fruit size","inflorescence size","mean PDSI"))+
    ylab("")+xlab("standardized effect size estimate")
 
 #dev.off()
@@ -390,7 +390,7 @@ p4<-plot(conditional_effects(FNAordz.phylo2, "fruit.z", categorical = TRUE,prob=
 
 
 p1<-p1[[1]]+ggthemes::theme_few()+scale_color_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
-   scale_fill_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab(" mean pdsi")
+   scale_fill_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab(" mean PDSI")
 
 #p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p3<-p3[[1]]+ggthemes::theme_few()+scale_color_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
