@@ -31,7 +31,7 @@
 \externaldocument{plum_manuscript}
 
 
-\title{Supporting Information for: Aridity and pollination success contribute to flowering-first phenological sequences in a major North American temperate tree clade}
+\title{Supporting Information for: Aridity and pollination success contribute to flowering-first phenological sequences in a major North American temperate tree clade} %emw: check title if you change it
 \date{}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -65,7 +65,7 @@
 \begin{figure}[h!]
     \centering
  \includegraphics[width=.9\textwidth]{..//..//Plots/ord_quants_phylo.jpeg}
-    \caption{Predicted likelihood that a species would be in flower during each vegetative BBCH phase. Points are the mean likelihood and bar the 95\% uncertainty intervals. In a), species were classified as hysteranthous if greater than 50\% probability flowering occurred in BBCH 0 and BBCH 09 (colors) for each part of the flowering season. In b), species were classified as hysteranthous if greater than 25\% probability flowering occurred in BBCH 0 for each part of the flowering season. In c) ppecies were classified as hysteranthous if greater than 40\% probability flowering occurred in BBCH 0 and BBCH 09 for each part of the flowering season.}
+    \caption{Predicted likelihood that a species would be in flower during each vegetative BBCH phase. Points show the mean likelihood while the bar represents the 95\% uncertainty intervals. In a) species were classified as hysteranthous if greater than 50\% probability flowering occurred in BBCH 0 and BBCH 09 (colors) for each part of the flowering season. In b) species were classified as hysteranthous if greater than 25\% probability flowering occurred in BBCH 0 for each part of the flowering season. In c) species were classified as hysteranthous if greater than 40\% probability flowering occurred in BBCH 0 and BBCH 09 for each part of the flowering season.}
     \label{fig:plums}
 \end{figure}
 
