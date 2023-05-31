@@ -22,7 +22,7 @@ require(mapdata); require(maptools)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-load("pcerasus.Rda")
+#load("pcerasus.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
@@ -66,7 +66,8 @@ phylosig(pruned.by,final.df$meanFLS,se=final.df$seFLS,method="K",nsim = 1000, te
 pic(final.df$meanFLS,pruned.by,var.contrasts = TRUE,rescaled.tree = TRUE)###
 }
 ####ordinal model is most descriptive of actual data, so we are going with it here
-mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|species)+(doy|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.95,max_treedepth=20)) ##
+#mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|species)+(doy|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.95,max_treedepth=20)) ##
+mod.ord.scale.phlyo.a<-brm(bbch.v.scale~doy+(doy|species)+(1|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.95,max_treedepth=15)) ##
 
 ##predict the ordinal
 new.data<-data.frame(quant=rep(c( "0%" , "25%",  "50%",  "75%" ,"100%"),13),d.flo%>% dplyr::group_by(specificEpithet,species)%>% dplyr::summarise(doy=quantile(doy)))
@@ -76,7 +77,7 @@ season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid sea
 
 
 
-predy2<-fitted(mod.ord.scale.phlyo,newdata = new.data,probs = c(.025,.25,.75,.975))
+predy2<-fitted(mod.ord.scale.phlyo.a,newdata = new.data,probs = c(.025,.25,.75,.975))
 predy2<-cbind(new.data,predy2)
 
 
@@ -186,7 +187,7 @@ result2<-left_join(result,makeit)
 result2$likelihood2<-as.numeric(result2$likelihood)
 
 season<-as_labeller(c('0%'="Start of season",'25%'="Early season",'50%'="Mid season",'75%'="Late season"))
-jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=11,unit="in",res=200)
+#jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=11,unit="in",res=200)
 main<-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=int,ymin=0,ymax=likelihood2,fill=cat2),alpha=0.3)+
   facet_grid(quant~species2,labeller=labeller(quant=season))+
   geom_errorbar(aes(ymin=as.numeric(Q2.5),ymax=as.numeric(Q97.5),width=0))+
@@ -206,6 +207,11 @@ alt2<-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=
   ggthemes::theme_clean(base_size = 10)+theme(axis.text.x = element_text(angle = 300,hjust=-0.1))+ theme(strip.text = element_text(face = "italic"))+
   scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")+theme(legend.title=element_blank())
 
+library(ggtree)
+jpeg("..//Plots/phylosig2.jpeg", width=4, height=4,unit="in",res=300)
+p<-ggtree(pruned.by,layout = "roundrect")
+p %<+% FLSindexB+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=as.factor(hystscoreB)),size=5,shape=15)+ xlim(0, 3)+scale_color_viridis_d(option="turbo",name="Hysteranthy",  labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))
+dev.off()
 
 jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=13,unit="in",res=250)
 ggpubr::ggarrange(main,alt1,alt2,ncol=1,nrow=3,common.legend = TRUE,labels=c("a)","b)","c"))
@@ -264,7 +270,7 @@ ggplot(exreme,aes(as.factor(hystscoreB),pdsi))+geom_boxplot()
 ggplot(exreme,aes(as.factor(hystscoreB),))+geom_boxplot()
 geom_point(aes(color=specificEpithet))
 range(d$pdsi,na.rm=TRUE)
-mod.min.pdsi.phylo<-brm(pdsi.min~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
+#mod.min.pdsi.phylo<-brm(pdsi.min~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 ##for pdsi, remove phylo since its a species trait not an enviromental trail
 #mod.pdsi.nophylo<-brm(pdsi~hystscoreA+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
 #mod.pdsi.nophyloB<-brm(pdsi~hystscoreB+(1|specificEpithet),data=d,family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs
@@ -292,30 +298,6 @@ tab$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood
 tab$mod_variable<-"mean pdsi"
 
 
-tabfl<-data.frame(t(round(fixef(mod.petal.phyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-tabfl2<-data.frame(t(round(fixef(mod.petal.phylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-tabfl3<-data.frame(t(round(fixef(mod.petal.phyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-
-tabfl<-rbind(tabfl,tabfl2,tabfl3)
-tabfl$classification<-c("main analaysis","alternate 1","alternate 2")
-tabfl$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood with BBCH 0","40% fl. likelihood with BBCH 0 & 09")
-tabfl$mod_variable<-"petal length"
-
-tabfr<-data.frame(t(round(fixef(mod.fruit.phyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-tabfr2<-data.frame(t(round(fixef(mod.fruit.phylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-tabfr3<-data.frame(t(round(fixef(mod.fruit.phyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
-tabfr<-rbind(tabfr,tabfr2,tabfr3)
-tabfr$classification<-c("main analaysis","alternate 1","alternate 2")
-tabfr$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood with BBCH 0","40% fl. likelihood with BBCH 0 & 09")
-tabfr$mod_variable<-"fruit diameter"
-
-
-suptab<-rbind(tab,tabfl,tabfr)
-colnames(suptab)
-suptab<-suptab[, c(9, 7, 8, 1,2,3,4,5,6)]
-xtable::xtable(suptab)
-
-
 ###other covariates
 d.petal<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/petal_clean.csv")
 d.fruit<-read.csv("~/Documents/git/proterant/investment/Input/input_clean/fruitsize_clean.csv")
@@ -332,9 +314,19 @@ d.petal$species<-d.petal$specificEpithet
 d.fruit$species<-d.fruit$specificEpithet
 
 
-mod.petal.phylo<-brm(pental_lengh_mm~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
-mod.petal.phyloB<-brm(pental_lengh_mm~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99))
+mod.petal.phylo<-brm(pental_lengh_mm~hystscoreA+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##tree depth
+mod.petal.phyloB<-brm(pental_lengh_mm~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##tree depth
 mod.petal.phyloC<-brm(pental_lengh_mm~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.petal,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99))
+
+tabfl<-data.frame(t(round(fixef(mod.petal.phyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfl2<-data.frame(t(round(fixef(mod.petal.phylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfl3<-data.frame(t(round(fixef(mod.petal.phyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+
+tabfl<-rbind(tabfl,tabfl2,tabfl3)
+tabfl$classification<-c("main analaysis","alternate 1","alternate 2")
+tabfl$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood with BBCH 0","40% fl. likelihood with BBCH 0 & 09")
+tabfl$mod_variable<-"petal length"
+
 
 fixef(mod.petal.phylo,probs = c(.25,.75))
 fixef(mod.petal.phyloB,probs = c(.25,.75))
@@ -344,26 +336,43 @@ mod.fruit.phylo<-brm(fruit_diam_mm~hystscoreA+(1|specificEpithet)+(1|gr(species,
 mod.fruit.phyloB<-brm(fruit_diam_mm~hystscoreB+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.fruit,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
 mod.fruit.phyloC<-brm(fruit_diam_mm~hystscoreC+(1|specificEpithet)+(1|gr(species, cov = A)),data=d.fruit,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) 
 
+save.image("pcerasus.Rda")
+
+tabfr<-data.frame(t(round(fixef(mod.fruit.phyloB,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfr2<-data.frame(t(round(fixef(mod.fruit.phylo,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfr3<-data.frame(t(round(fixef(mod.fruit.phyloC,prob=c(.025,.25,.75,.975))[2,],digits=3)))
+tabfr<-rbind(tabfr,tabfr2,tabfr3)
+tabfr$classification<-c("main analaysis","alternate 1","alternate 2")
+tabfr$Hystanthous_if<-c("50% fl. likelihood  with BBCH 0 & 09","25% fl. likelihood with BBCH 0","40% fl. likelihood with BBCH 0 & 09")
+tabfr$mod_variable<-"fruit diameter"
+
+
+
 fixef(mod.fruit.phylo,probs = c(.25,.75))
 fixef(mod.fruit.phyloB,probs = c(.25,.75))
 fixef(mod.fruit.phyloC,probs = c(.25,.75))
 ##B
 
 
+suptab<-rbind(tab,tabfl,tabfr)
+colnames(suptab)
+suptab<-suptab[, c(9, 7, 8, 1,2,3,4,5,6)]
+xtable::xtable(suptab)
+
 ###plot all that We're choosing scenario B as the best measure of hysteranthy
 lines.nophylo<-mod.pdsi.phyloB%>%
   spread_draws(b_Intercept,  b_hystscoreB )
 
 a<-ggplot()+
-  geom_jitter(data=d,aes(hystscoreB,pdsi),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48,height=0)+
+  geom_jitter(data=d,aes(hystscoreB,pdsi),color="black",fill="black",alpha=0.6,size=0.1,width = 0.25,height=0)+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
   geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
   #geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
   #geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
-  ylab("Mean \nPDSI at \n collection sites")+
+  ylab("Mean PDSI at collection sites")+
   scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
-                     labels=c("Never","At start \nof season","Through \nearly season","Through \nmid season","Through \nlate season"))+ggthemes::theme_few(base_size = 11)
+                     labels=c("Never","At start \nof season","Through \nearly \nseason","Through \nmid \nseason","Through \nlate \nseason"))+ggthemes::theme_few(base_size = 11)
 
 
 linespetal<-mod.petal.phyloB%>%
@@ -372,33 +381,33 @@ linespetal<-mod.petal.phyloB%>%
 linesfruit<-mod.fruit.phyloB%>%
   spread_draws(b_Intercept,  b_hystscoreB )
 b<-ggplot()+
-  geom_jitter(data=d.fruit,aes(hystscoreB,fruit_diam_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48,height=0)+
+  geom_jitter(data=d.fruit,aes(hystscoreB,fruit_diam_mm),color="black",fill="black",alpha=0.6,size=0.3,width = 0.25,height=0)+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=linesfruit,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
   geom_abline(data=linesfruit,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
   #geom_abline(data=linesfruit.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
   #geom_abline(data=linesfruit.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
-  ylab("Fruit diameter")+
+  ylab("Fruit diameter (mm)")+
   scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
                      labels=c("Never","At start \nof season","Through \nearly \nseason","Through \nmid \nseason","Through \nlate \nseason"))+ggthemes::theme_few(base_size = 11)
 
 
 c<-ggplot()+
-  geom_jitter(data=d.petal,aes(hystscoreB,pental_lengh_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.48,height=0)+
+  geom_jitter(data=d.petal,aes(hystscoreB,pental_lengh_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.25,height=0)+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=linespetal,aes(intercept=b_Intercept,slope=b_hystscoreB),alpha=0.01,color="skyblue3")+
   geom_abline(data=linespetal,aes(intercept=mean(b_Intercept),slope=mean(b_hystscoreB)),color="navy",size=2)+
   # geom_abline(data=linespetal.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
   #  geom_abline(data=linespetal.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
-  ylab("Petal Length")+
+  ylab("Petal Length (mm)")+
   scale_x_continuous(name ="Hysteranthy",breaks=c(0,1,2,3,4),
                      labels=c("Never","At start \nof season","Through \nearly \nseason","Through \nmid \nseason","Through \nlate \nseason"))+ggthemes::theme_few(base_size = 11)
 
-e<-ggpubr::ggarrange(b,c,labels=c("b)","c)"))
 
 
-jpeg("..//Plots/dataplots.jpeg", width=8, height=6,unit="in",res=200)
-ggpubr::ggarrange(a,e,nrow=2,ncol=1,labels =c("a)" ))
+
+jpeg("..//Plots/dataplots.jpeg", width=12, height=4,unit="in",res=200)
+ggpubr::ggarrange(a,b,c,labels=c("a)","b)","c)"),nrow=1)
 dev.off()
 
 
@@ -445,4 +454,4 @@ plastic.mod.noslp<-brm(bbch.v.scale~doy.z+pdsi.z+(1|specificEpithet)+(1|gr(speci
 fixef(plastic.mod,probs = c(.25,.75))
 fixef(plastic.mod.noslp,probs = c(.25,.75))
 
-save.image("pcerasus.Rda")
+
