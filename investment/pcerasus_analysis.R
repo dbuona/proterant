@@ -22,7 +22,7 @@ require(mapdata); require(maptools)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-#load("pcerasus.Rda")
+load("pcerasus.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
@@ -68,6 +68,9 @@ pic(final.df$meanFLS,pruned.by,var.contrasts = TRUE,rescaled.tree = TRUE)###
 ####ordinal model is most descriptive of actual data, so we are going with it here
 #mod.ord.scale.phlyo<-brm(bbch.v.scale~doy+(doy|species)+(doy|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.95,max_treedepth=20)) ##
 mod.ord.scale.phlyo.a<-brm(bbch.v.scale~doy+(doy|species)+(1|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.95,max_treedepth=15)) ##
+
+fixef(mod.ord.scale.phlyo.a)
+ranef(mod.ord.scale.phlyo.a)
 
 ##predict the ordinal
 new.data<-data.frame(quant=rep(c( "0%" , "25%",  "50%",  "75%" ,"100%"),13),d.flo%>% dplyr::group_by(specificEpithet,species)%>% dplyr::summarise(doy=quantile(doy)))

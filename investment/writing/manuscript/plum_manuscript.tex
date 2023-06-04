@@ -100,32 +100,34 @@ Alternative to these functional hypotheses is the assertion that hysteranthous f
 
 We obtained digital herbarium specimens for all members of the section \textit{Prunocerasus} from the Consortium of Midwest Herbaria (CMH) Database \citep{CMH}. To quantify flower-leaf sequence variation within and across species we randomly sampled 200 specimens for each species and scored the phenological development of flowers and leaves using a modified BBCH scale for woody plants \citep{Finn2007}. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis (n=1009). We reconstructed the phylogenetic relationships among species in this group based on the tree topology in \citet{Shaw:2004aa}. We inferred branch lengths following the method of \citet{Granfen1989} in which node heights are estimated in proportion to number of subtending taxa using the R package ``ape" \citep{Paradis2019}.
 
-To quantify flower-leaf sequence variation, we fit an ordinal, hierarchical, Bayesian phylogenetic mixed model \citep{Garamszegi2014} to assess the likelihood an individual would be at any given vegetative BBCH phase while flowering. Our model predicted leaf stage ($Y$, ordinal, with up to $j$ categories) as a function of species and additional phylogenetic effects. Because hysteranthy co-varies with flowering time (i.e., flowering first species will generally flower earlier than other species, on average) we included day of observation as an additional predictor. The model is written below:\\
+To quantify flower-leaf sequence variation, we fit an ordinal, hierarchical, Bayesian phylogenetic mixed model \citep{Garamszegi2014} to assess the likelihood an individual would be at any given vegetative BBCH phase while flowering. Our model predicted leaf stage ($y_i$, ordinal, with six categories) as a function of species and additional phylogenetic effects. Because hysteranthy co-varies with flowering time (i.e., flowering first species will generally flower earlier than other species, on average) we included day of observation as an additional predictor. The model is written below:\\
 
-y = \left\{ \begin{array}{lll}
-1 & if & z < 0\\ 
-2 & if & z  \in (0,c_{2})\\ 
-3 & if & z \in (c_{2},c_{3})\\ 
-4 & if & z \in (c_{3},c_{4})\\ 
-5 & if & z \in (c_{4},c_{5})\\ 
-6 & if & z> c_{5}\\ 
+y_i = \left\{ \begin{array}{lll}
+1 & if & z_i < 0\\ 
+2 & if & z_i  \in (0,c_{2})\\ 
+3 & if & z_i \in (c_{2},c_{3})\\ 
+4 & if & z_i \in (c_{3},c_{4})\\ 
+5 & if & z_i \in (c_{4},c_{5})\\ 
+6 & if & z_i > c_{5}\\ 
 \end{array}\right.
 \\
 
 
-$z  &= \alpha_{[j]phylo}+ \alpha_{[j]sp}+ \beta_{day of year[sp]}*X_{day of year}+ \epsilon$\\
+$z_i  &= \alpha+ \alpha_{phylo}+ \alpha_{sp}+ \beta_{\text{day of year[sp]}}*X_{\text{day of year}}+ \epsilon_i$\\
   
-   $\epsilon & \sim logistic(0,1)$ \\ 
+   $\epsilon_i & \sim logistic(0,1)$ \\ 
    
-where $y$ is the ordinal outcome (leaf stage) of $j$ number of categories (1,2,...6). $c_{2...5}$ are the estimated cutpoints between $categories_j$ on the logit scale. $z$ is the linear component of the underlying latent variable model.  
+where $y_i$ is the ordinal outcome (leaf stage; as 1,2,...6 categories). $c_{2...5}$ are the estimated cutpoints between leaf stages on the logit scale. $z_i$ is the linear component of the underlying latent variable model.  
 % $P(Y \leq j))$ is the probability of $Y$ less than or equal to a category $j&=1...j&-1$. 
-$\alpha_{[j]}$ describes an intercept for each category [1,2,...6], while slope ($\beta_{\text{day of year}[sp]}$) is constant across categories, but varies among $species$. 
+$\alpha$ describes an intercept for each category [1,2,...6], while slope ($\beta_{\text{day of year}}$) is constant across categories, but varies among $species$. 
   
   \noindent The influence of the phylogeny ($\alpha_{phylo}$) was modeled as:\\
-  \alpha_{phylo} & \sim N(\mu_{\alpha}, COR[\sigma^2_{phylo}]) \\
+  %\alpha_{phylo} & \sim N(\mu_{\alpha}, COR[\sigma^2_{phylo}]) \\
+  \alpha_{phylo} & \sim N(0, COR[\sigma^2_{phylo}]) \\
   
   \noindent The $\alpha$ for species effects independent of the phylogeny was modeled as:\\
-  \alpha_{sp} & \sim N(\mu_{\alpha}, \sigma^2_{species}) \\
+  %\alpha_{sp} & \sim N(\mu_{\alpha}, \sigma^2_{species}) \\
+ \alpha_{sp} & \sim N(0, \sigma^2_{species}) \\
 
 We used our model to predict the likelihood each species would be observed at a given vegetative BBCH stage during flowering at the 0\%, 25\% 50\% and 75\% quantiles of their flowering period. We then developed a flower-leaf sequence index, by assigning a numerical score to each species per seasonal quantile, and summing over the full flowering season. In each seasonal quantile, species received a ``1" if more than 50\% of their probability distribution occurred at the two earliest stages of vegetative phenology---BBCH 0 (``bud development") and BBCH 09 (``bud break")---and a ``0" if not. We summed these values across the season, generating an index from 0 (never hysteranthous) to 4 (hysteranthous through late season (Q75)), where 1&= hysteranthous at start of season, 2&= hysteranthous through early season  (Q25) and 3 &= hysteranthous through mid season (Q50). We also used two alternative indexing schemes ($>$25\% of the probability distribution occurred at BBCH 0 and $>$40\% of the probability distribution occurred at BBCH 0 and BBCH 09) to make sure our result were robust across multiple cutoffs.
 
@@ -139,11 +141,11 @@ We then used Bayesian phylogenetic mixed models to test the relationship between
 
 The model structure is: 
 
-  $y_{trait} &= \alpha_{sp} +\alpha_{phylo} + \beta_{hyst.index}*X_{hyst.index} + \epsilon$\\
+  $y_{trait} &= \alpha +\alpha_{sp} +\alpha_{phylo} + \beta_{hyst.index}*X_{hyst.index} + \epsilon$\\
   
   \epsilon & \sim N(0,\sigma^2_y) \\ %Check this
   
-  where $y_{trait}$ is observed trait values (PDSI, petal length or fruit diameter), and the slope $\beta_{\text{hyst.index}$ describes the relationship between extended hysteranthy (higher hysteranthy index value) and the trait of interest. $\alpha_{sp}$ and $\alpha_{phylo}$ describe the species and phylogenetic effects respectively. 
+  where $y_{trait}$ is observed trait values (PDSI, petal length or fruit diameter), and the slope $\beta_{\text{hyst.index}$ describes the relationship between extended hysteranthy (higher hysteranthy index value) and the trait of interest. $\alpha$ describes a grand intercept, and $\alpha_{sp}$ and $\alpha_{phylo}$ describe the species and phylogenetic effects respectively. 
   
 We also ran each model using our two alternative flower-leaf sequence indexing approaches to make sure our results were robust to choice of index. Though these alternative classification schemes did change the hysteranthy index score for some species (Fig. \ref{fig:plums}), they did not substantially impact the inference from our models (see Tab. \ref{tab:modput} for comparisons).
   
@@ -157,20 +159,20 @@ To account for the influence of evolutionary relationships among species, we rec
 
 We standardized the units of all predictors through z-scoring \citep{Gelman2007} to make their effect size estimates for the following model structure directly comparable to each other:
 
-y = \left\{ \begin{array}{lll}
-1 & if & z < 0\\ 
-2 & if & z  \in (0,c_{2})\\ 
-3 & if & z \in (c_{2},c_{3})\\ 
-4 & if & z> c_{3}\\ 
+y_i = \left\{ \begin{array}{lll}
+1 & if & z_i < 0\\ 
+2 & if & z_i  \in (0,c_{2})\\ 
+3 & if & z_i \in (c_{2},c_{3})\\ 
+4 & if & z_i> c_{3}\\ 
 \end{array}\right.
 \\
 
 
-z &= \alpha_{[j]phylo}+ \beta_{PDSI}*X_{PDSI}+\beta_{fruit diameter}*X_{fruit diameter}+\beta_{floral investment}*X_{flowers/inflorescence}+\epsilon$\\
+z_i &= \alpha+ \alpha_{phylo}+ \beta_{PDSI}*X_{PDSI}+\beta_{\text{fruit diameter}}*X_{\text{fruit diameter}}+\beta_{\text{floral investment}}*X_{flowers/inflorescence}+\epsilon_i$\\
   
-   \epsilon & \sim logistic(0,1)) \\ 
+   \epsilon_i & \sim logistic(0,1)) \\ 
   
-where $y$ is the ordinal outcome of flower-leaf sequence category (``flowers before leaves", ``flowers before/with leaves", ``flowers with leaves" and ``flowers after leaves") and $c_{2...3}$ are the estimated cutpoints between $categories_j$ on the logit scale. As above, $z$ is the linear component of the underlying latent variable model. We modeled the influence of the phylogeny ($\alpha_{phylo}$) as above.
+where $y_i$ is the ordinal outcome of flower-leaf sequence category (``flowers before leaves", ``flowers before/with leaves", ``flowers with leaves" and ``flowers after leaves") and $c_{2...3}$ are the estimated cutpoints between categories on the logit scale. As above, $z_i$ is the linear component of the underlying latent variable model. $\alpha$ describes a grand intercept, and we modeled the influence of phylogeny ($\alpha_{phylo}$) as above.
 
 \subsection*{Model runs} 
  
