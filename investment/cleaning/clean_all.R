@@ -107,14 +107,14 @@ palmer.b <- brick("..//Data/lbda-v2_kddm_pmdi_2017.nc")
 lonpoints<-d$lon # make vector of prunus coordinates
 latpoints<-d$lat #
 extract.pts <- cbind(lonpoints,latpoints)
-palmer.b
-palmer.b2 <-palmer.b[[1900:2017]]## subset to pnly last century
-palmer.b2<-brick(palmer.b2)
+palmer.b[1] #year0-2017
+#palmer.b2 <-palmer.b[[1900:2017]]## subset to pnly last century
+#palmer.b2<-brick(palmer.b2)
 
-mean.prunus <-calc(palmer.b2, fun = mean,na.rm=TRUE) #average palmer drought index acrosss time
+mean.prunus <-calc(palmer.b, fun = mean,na.rm=TRUE) #average palmer drought index acrosss time
 
-sd.prunus <-calc(palmer.b2, fun = sd,na.rm=TRUE) #
-min.prunus <-calc(palmer.b2, fun = min,na.rm=TRUE) 
+sd.prunus <-calc(palmer.b, fun = sd,na.rm=TRUE) #
+min.prunus <-calc(palmer.b, fun = min,na.rm=TRUE) 
 ext<-raster::extract(mean.prunus,extract.pts,method="simple")
 ext2<-raster::extract(sd.prunus,extract.pts,method="simple")
 ext3<-raster::extract(min.prunus,extract.pts,method="simple")

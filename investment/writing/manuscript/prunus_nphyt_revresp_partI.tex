@@ -1,0 +1,139 @@
+
+\documentclass{article}[12pt]
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\setkeys{Gin}{width=0.8\textwidth}
+%\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+\topmargin -1.5cm 
+\oddsidemargin -0.04cm 
+\evensidemargin -0.04cm 
+\textwidth 16.59cm
+\textheight 23.94cm 
+\parskip 7.2pt 
+\renewcommand{\baselinestretch}{1.1} 	
+\parindent 0pt
+
+\bibliographystyle{refs/styles/newphyto.bst}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+\usepackage{Sweave}
+\begin{document}
+\input{prunus_nphyt_revresp_partI-concordance}
+
+\emph{Referee: 1}
+
+\emph{Comments to the Author}
+
+\emph{Summary}
+
+\emph{This manuscript quantified flower-leaf sequence variation in the American plums, a clade of insect-pollinated species, using herbaria specimens and Bayesian hierarchical modeling and revealed hysteranthy was associated with aridity and smaller floral displays.}
+
+\emph{General Comments}
+\emph{Overall, I believe this paper addresses a significant and timely topic, and the analyses conducted were intriguing. However, it is crucial to provide additional information as the current explanation is inadequate and challenging to comprehend.}
+
+\emph{Concerns}
+
+\emph{I feel that the title, ‘insect-pollinated temperate trees’, is not appropriate for this study as only Prunus species was included in this study.}
+
+\emph{l.15 “Many trees in temperate forests produce flowers before their leaves emerge.”
+ll.36-37 “This flowering-first phenological sequence, known as hysteranthy, proteranthy or precocious flowering, is particularly common in temperate deciduous forests around the globe (Rathcke & Lacey, 1985).”
+Those sentences are misleading as flower–leaf sequence is a typical pattern for temperate trees. According to Buonaiuto et al. (2021), leaf out before flowering is a typical model of plant life history.}
+
+\emph{ll.110-114 Please clarify the collected years of sampled specimens. Are those specimens collected in a year or over the years? It may be difficult to pool the data if some specimens collected more than 50 years ago due to phenological sifts influenced by global warming.}
+
+\emph{ll.114-115 “In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis (n=1009).”
+Doing some simple math, 16 species x 200 specimens/species is 3200 specimens in total. Why are there less than 3200 specimens evaluated? Also, please provide the numbers of the analysis-included specimens for each species.}
+
+\emph{l.113 Authors are encouraged to add a little more explanations related to ‘BBCH scale’ so that readers can understand it without referring to the original references.}
+
+\emph{ll.134-144 I believe this is an important passage that explains the criteria for determining whether each species is hysteranthous, but it took me some time to understand it. The mixing of similar numerical values such as the percentage of flowering seasonal quantile, the percentage of probability distribution, the BBCH scale, and the aggregated index made it challenging to comprehend. Could you create a diagram using several species as examples to facilitate a more intuitive understanding?}
+
+\emph{Also, it is hard to understand the followings:
+-Why is it needed ‘the 0\%, 25\% 50\% and 75\% quantiles of their flowering period’?
+-Does ‘probability distribution’ mean ‘flowering-probability distribution’?}
+
+\emph{According to Finn et al. (2007), BBCH ‘00’ is ‘Dormancy: buds closed and covered by scales’ and ‘09’ is ‘Buds show green tips.’ I think ’01’ is suitable for ‘bud development’ and ‘07’ is suitable for ‘bud break.’}
+
+\emph{l. 147 Authors are encouraged to add a little more explanations related to ‘PDSI’ so that readers can understand it without referring to the original references.}
+
+\emph{ll.197-206 Please mention the topology of Prunus species on phylogenetic tree in Fig.1b because it is also one of the results of this study.}
+
+\emph{ll.167-173 Please indicate the number of species included to the analysis.}
+
+\emph{Fig.2-4 Please indicate sample sizes of each analysis.}
+
+\emph{Fig.2 & Fig. S1 I think the flowering season and length are different among those species. Is there any trend such as hysteranthous species bloom in early spring but serathous species bloom in late spring or summer?}
+
+\emph{Fig.4b Readers with red-green color blindness may have difficulty distinguishing between four colors.}
+
+\emph{Citation: please check citation style.
+-l.120 (de Villemeruil P. Nakagawa, 2014)\\
+-‘and’ and ‘&’ are mixed.\\
+-Order lists of references in date order (oldest first).}
+
+
+\emph{Referee: 2}
+
+\emph{Comments to the Author}
+\emph{This paper examines the adaptive value of flowering before leaf-out in trees, using data on variation across species from herbarium specimens. and analyses accounting for phylogenetic relationships.}
+
+\emph{The question addressed is important and interesting, and the approach taken appears basically sound. I do, however, have several concerns with the manuscript.}
+
+\emph{The two basic ways in which selection might favor hysteranthy are correlational selection, and independent but differential selection on timing of flowering and timing of leaf-out. In the introduction, the authors touch upon this difference, but the reasoning in the manuscript appears a bit confused as “Fruit maturation hypothesis”, similar to the first two hypotheses, is treated as an example of correlational selection. However, the mechanisms supposed to explain hysteranthy through this mechanism does not involve correlational selection, and thus seems to fall within the category “null explanations” discussed in the following paragraph.}
+
+\emph{Overall, the role of fruit size as a third hypothesis to be tested is a bit unclear. While it is brought up as a separate hypothesis in the introduction, very little is said about it in subsequent sections.}
+
+\emph{The insect visibility hypothesis, as presented, appears a bit simplistic as the argument basically assumes that pollen limitation is equal among species and environments. However, if some species occur in environments that are associated with more severe pollen limitation, then you might expect that these species experience strong selection for increased visibility both through selection for an increased degree of hysteranthy, and through selection for larger floral displays. Responses to this selection would then result in a positive rather than a negative correlation.}
+
+\emph{One major problem I have with the analyses used to test the hypotheses, is that the statistical models used do not seem to correspond to the predicted causal relationships. Currently the models examine effects hysteranthy on drought and flower size respectively. However, the logic way to construct models seem to be to examine effects of drought on hysteranthy rather than effects of hysteranthy on drought. It is thus difficult to understand why the authors use the models they do, and no motivation for the chosen model structure is provided.}
+
+\emph{Moreover, using a model with hysteranthy as the dependent variable, rather than the current models, would also allow assessing the simultaneous effects of drought and flower size on hysteranthy, something that is not done currently. This is essential as there, as pointed out by the authors, are very good reason that drought and hysteranthy are correlated. Models examining the effects of both traits are therefore essential to disentangle the effects of each trait. In fact, you might expect drought to affect hysteranthy both directly and indirectly through effects on flower size. Anyway, I think that statistical models that better reflect causal relationships, and that examine the effects of drought and flower size simultaneously are necessary.}
+
+\emph{On the other hand, I find it highly questionable to include day of observation as a covariate in the models. This is because, as stated by the authors, hysteranthy co-varies with flowering time. In fact, selection for hysteranthy is likely to largely occur through selection for earlier flowering. Adjusting for day of observation will thus statistically remove some on the variation in hysteranthy and bias the results. At the least, I would like to see analyses both with and without day of flowering as a covariate in order to be able to judge the effects of including it.}
+
+\emph{I also do not understand why the authors used the approach they did to generate a five-level index rather than using continuous functions and continuous values of hysteranthy. The methods used seem to imply an unnecessary loss of information through categorizing a continuous variable, without stating any reason for doing this.}
+
+\emph{The authors in several places stress that the flower-sequence is likely to change as a result on climate change. However, climate and phenology has already changed considerably, meaning that herbarium specimens for the same species collected during different periods are likely to differ both with regards to absolute and relative phenology. Thus, if collection dates for herbarium specimens are unevenly distributed over the study period, or differ among species, then this might constitute a significant problem for the analyses. It is therefore a major short-coming that the manuscript does not contain any information about how collection dates were distributed, or even during what time period the used specimens were collected. I think that this key information must be provided, and that analyses need to account for differences in collection date}.
+
+\emph{In several places, the authors refer to the importance for the current study to understand the effects of ongoing global change. For example, on lines 56-57 they state that the study “.. offers insights into how shifting flower-leaf sequences may impact species demography and species distributions as climate continues to change. Although, I agree that almost all basic knowledge about the biology of species will be helpful in this respect, I do not see that this study is particularly important in this respect. I thus suggest to down-tune this type of arguments and rely on the importance of this study for our basic understanding of hysteranthy.}
+
+\emph{Other comments, in order of appearance in the manuscript:}
+
+\emph{Abstract: It would be useful to indicate what hypotheses that were tested, as well as the general methods used to test them.}
+
+\emph{Lines 35-36: This is not correct. Flowering before leaf-out occurs also in non-woody species.}
+
+\emph{Lines 37-41: Explain what kinds of functional significance you refer to here.}
+
+\emph{Lines 146-150: I assume that drought indices have changed over this considerable time period. What was the reason for using this time period, and for using the same time period for all records?}
+
+\emph{Lines 151-154: The unit relevant for attracting pollinators is probably not only the individual flower, but entire inflorescences, or even trees. Would it thus be useful to examine effects of an attraction parameter that includes also, for example, the number of flowers per inflorescence?}
+
+\emph{Lines 178-185: Why did you sue a different number of c categories for this analysis?}
+
+\emph{Lines 209-210: I do not really understand the meaning of this. You also seem to use different wording to explain the same effect in the three paragraphs of the results section.}
+
+\emph{Line 217: Why “However”?}
+
+\emph{Lines 220-221: I suggest to skip sentences like these and let the results talk for themselves.}
+
+\emph{Line 222: “.. through the predictions …” ??}
+
+\emph{Line 225: Strange subheading given that this is the topic of the entire paper?}
+
+\emph{Line 228: Unclear exactly what trade-offs you refer to here.}
+
+\emph{Lines 262-291: Here, I think that it would have been interesting to provide quantitative information about how much of the total variation in hysteranthy that was within vs. among species.}
+
+
+
+\end{document}
