@@ -40,6 +40,33 @@
 \section*{Tables}
 \begin{table}[ht]
 \centering
+\begin{tabular}{rlr}
+  \hline
+ & species & n \\ 
+  \hline
+1 & alleghaniensis &  17 \\ 
+  2 & americana &  97 \\ 
+  3 & angustifolia &  78 \\ 
+  4 & gracilis &  86 \\ 
+  5 & hortulana & 106 \\ 
+  6 & maritima &  76 \\ 
+  7 & mexicana &  64 \\ 
+  8 & munsoniana & 118 \\ 
+  9 & nigra & 119 \\ 
+  10 & rivularis & 112 \\ 
+  11 & subcordata &  46 \\ 
+  12 & texana &  20 \\ 
+  13 & umbellata &  70 \\ 
+   \hline
+\end{tabular}
+
+\caption{Sample size}
+\label{tab:samps}
+\end{table}
+
+
+\begin{table}[ht]
+\centering
 \begin{tabular}[width=.8\textwidth]{|lllrrrrrr|}
   \hline
  model variable & classification & Hysteranthous if & Estimate & Est.Error & Q2.5 & Q25 & Q75 & Q97.5 \\ 

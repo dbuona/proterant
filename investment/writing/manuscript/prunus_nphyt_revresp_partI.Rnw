@@ -54,24 +54,24 @@ ll.36-37 “This flowering-first phenological sequence, known as hysteranthy, pr
 Those sentences are misleading as flower–leaf sequence is a typical pattern for temperate trees. According to Buonaiuto et al. (2021), leaf out before flowering is a typical model of plant life history.}
 
 Thanks for highlighting this. We have adjusted these statements to be more precise characterization of the occurrence of hysteranthy. These lines now read:
-\begin{quote} \textbf{Paste new text here} \end{quote}
+\begin{quote} This flowering-first phenological sequence, known as hysteranthy, proteranthy or precocious flowering, is apparent in temperate deciduous forests around the globe. \end{quote}
 
 \emph{ll.110-114 Please clarify the collected years of sampled specimens. Are those specimens collected in a year or over the years? It may be difficult to pool the data if some specimens collected more than 50 years ago due to phenological sifts influenced by global warming.}
 
-We appreciate this point. Our samples to span many decades of collection (X-Y), which is necessary to generate a large enough sample size to give our analyses statistical power. \textbf{We have added this information.}
+We appreciate this point. Our samples span many decades of collection (1844-2020), which is necessary to generate a large enough sample size to give our analyses statistical power. We have added this information at line \lineref{range1}.
 
-Both reviewers raised the potentially issue of climate change affecting the patterns of flower-leaf sequences we sought to quantify, and for this reason, we have now included year of observation as a co-variate in our main model. Following convention from phenological change studies we, used 1980 as a hinge. With this approach year did not have a significant effect on patterns of hysteranthy, which is consistent with recent large-scale observations that despite advances in both flowering and leafout, the interval between these phases has remained relatively stable \citep{}. 
+Both reviewers raised the potentially issue of climate change affecting the patterns of flower-leaf sequences we sought to quantify, and for this reason, we have now included year of observation as a co-variate in our main model. Following convention from phenological change studies we, used 1980 as a hinge. We detail these methods in lines \lineref{hinge1}-\lineref{hinge2}. In this case, year did not have a significant effect on patterns of hysteranthy.
 
 \emph{ll.114-115 “In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis (n=1009).”
 Doing some simple math, 16 species x 200 specimens/species is 3200 specimens in total. Why are there less than 3200 specimens evaluated? Also, please provide the numbers of the analysis-included specimens for each species.}
 
-We thank the reviewer for catching this. The total sample size is less that 3200, because for several species, the database contained significantly fewer than 200 collected specimens. We have added this point to the presentation of our Methods, and now include a supplemental table with the sample sizes for each species. 
+We thank the reviewer for catching this. The total sample size is less that 3200, because for several species, the database contained significantly fewer than 200 collected specimens. We have added this point to the presentation of our Methods (lines \lineref{samps1}-\lineref{samps2}), and now include a supplemental table with the sample sizes for each species. 
 
 We also would like to highlight that one of the reasons we chose models that partially-pool coefficient estimates on species is to account for this lack of balance among species in our dataset.
 
 \emph{l.113 Authors are encouraged to add a little more explanations related to ‘BBCH scale’ so that readers can understand it without referring to the original references.}
 
-We agree this would make our text easier to follow and have added a more concrete explaination of this scale to our Methods.
+We agree this would make our text easier to follow and have added a more concrete explanation of this scale to our Methods at line \lineref{bbch1} .
 
 \emph{ll.134-144 I believe this is an important passage that explains the criteria for determining whether each species is hysteranthous, but it took me some time to understand it. The mixing of similar numerical values such as the percentage of flowering seasonal quantile, the percentage of probability distribution, the BBCH scale, and the aggregated index made it challenging to comprehend. Could you create a diagram using several species as examples to facilitate a more intuitive understanding?}
 

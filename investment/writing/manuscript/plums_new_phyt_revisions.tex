@@ -29,7 +29,7 @@
 
 \usepackage{lineo}
 \linenumbers
-\title{Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in insect-pollinated temperate trees}
+\title{Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in the American Plums}
 
 \author{D.M. Buonaiuto $^{1,2,3,a}$, T.J. Davies $^{4,5}$, S. Collins $^{4}$ \& E.M. Wolkovich$^{2,3,4}$}
 \date{}
@@ -74,7 +74,7 @@ Keywords: Deciduous forests, Flower-leaf sequences, Hysteranthy, Phenology, Plan
 %load("pcerasus.Rda")
 %doyeff<-round(fixef(mod.ord.scale.phlyo)[6],digits=2)
 %doyints<-round(fixef(mod.ord.scale.phlyo)[6,3:4],digits=3)
-\noindent Woody perennials have a unique ability among plants to seasonally begin reproduction prior to vegetative growth. This flowering-first phenological sequence, known as hysteranthy, proteranthy or precocious flowering, is particularly common in temperate deciduous forests around the globe \citep{Rathcke_1985}. A number of studies suggest that this flower-leaf sequence is under selection, and that hysteranthy has functional significance \citep{Gougherty2018,Buonaiuto2020,Guo2014}, but the importance of variation in flower-leaf sequences for maintaining fitness may vary across functional types and evolutionary clades within the temperate forest biome. With mounting evidence that anthropogenic climate change is driving shifts in flower-leaf sequences \citep{Ma:2021tf,Wang:2022wt}, expanding our understanding of the adaptive benefit of hysteranthy may be important to forecasting the demography and performance of forest communities.
+\noindent Woody perennials have a unique ability among plants to seasonally begin reproduction prior to vegetative growth. This flowering-first phenological sequence, known as hysteranthy, proteranthy or precocious flowering, is apparent in temperate deciduous forests around the globe \citep{Rathcke_1985}. A number of studies suggest that this flower-leaf sequence is under selection, and that hysteranthy has functional significance \citep{Gougherty2018,Buonaiuto2020,Guo2014}, but the importance of variation in flower-leaf sequences for maintaining fitness may vary across functional types and evolutionary clades within the temperate forest biome. With mounting evidence that anthropogenic climate change is driving shifts in flower-leaf sequences \citep{Ma:2021tf,Wang:2022wt}, expanding our understanding of the adaptive benefit of hysteranthy may be important to forecasting the demography and performance of forest communities.
 
 \noindent The most common, and well-tested explanation for the evolution of hysteranthy in temperate forests is that it is adaptive for wind-pollination, as leafless canopies increase wind speeds for pollen transport and reduce the likelihood of pollen interception by vegetation \citep{Whitehead1969,Niklas1985}. However, this explanation does not address the widespread prevalence of hysteranthy in biotically-pollinated taxa found in temperate regions. This number is not trivial; a recent analysis found that approximately 20\% of the hysteranthy species in Eastern Temperate Forests of North America are biotically-pollinated \citep{Buonaiuto2020}. 
 
@@ -100,9 +100,11 @@ Alternative to these functional hypotheses is the assertion that hysteranthous f
 \section*{Materials and Methods}
 \subsection*{Quantifying flower-leaf sequence variation}  
 
-We obtained digital herbarium specimens for all members of the section \textit{Prunocerasus} from the Consortium of Midwest Herbaria (CMH) Database \citep{CMH}. To quantify flower-leaf sequence variation within and across species we randomly sampled 200 specimens for each species and scored the phenological development of flowers and leaves using a modified BBCH scale for woody plants \citep{Finn2007}. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis (n=1009). We reconstructed the phylogenetic relationships among species in this group based on the tree topology in \citet{Shaw:2004aa}. We inferred branch lengths following the method of \citet{Granfen1989} in which node heights are estimated in proportion to number of subtending taxa using the R package ``ape" \citep{Paradis2019}.
+We obtained digital herbarium specimens for all members of the section \textit{Prunocerasus} from the Consortium of Midwest Herbaria (CMH) Database \citep{CMH}. \linelabel{range1}Specimen\linelabel{range1} collection dates ranged from 1844-2020, with the majority collected between\linelabel{range2} 1950-2000. To quantify flower-leaf sequence variation within and across species we randomly sampled 200 specimens for each species and scored the phenological development of flowers and leaves using a modified BBCH scale for woody plants \citep{Finn2007}, which\linelabel{bbch1} is designed to evaluate vegetative and reproductive phenological progress using a standardized quantitative index. For\linelabel{samps1} species with less than 200 specimens in the collection, we included all available specimens. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis. We also assessed and removed outliers of flowering observations visually, and by excluding observations that were beyond three standard deviations of the median flowering time for each species (n=9). Our final analyses included 1000 specimens (see \ref{tab:samps} for number of\linelabel{samps2} observations/species). We reconstructed the phylogenetic relationships among species in this group based on the tree topology in \citet{Shaw:2004aa}. We inferred branch lengths following the method of \citet{Granfen1989} in which node heights are estimated in proportion to number of subtending taxa using the R package ``ape" \citep{Paradis2019}.
 
-To quantify flower-leaf sequence variation, we fit an ordinal, hierarchical, Bayesian phylogenetic mixed model \citep{Garamszegi2014} to assess the likelihood an individual would be at any given vegetative BBCH phase while flowering. Our model predicted leaf stage ($y_i$, ordinal, with six categories) as a function of species and additional phylogenetic effects. Because hysteranthy co-varies with flowering time (i.e., flowering first species will generally flower earlier than other species, on average) we included day of observation as an additional predictor. The model is written below:\\
+To quantify flower-leaf sequence variation, we fit an ordinal, hierarchical, Bayesian phylogenetic mixed model \citep{Garamszegi2014} to assess the likelihood an individual would be at any given vegetative BBCH phase while flowering. Our model predicted leaf stage ($y_i$, ordinal, with six categories) as a function of species and additional phylogenetic effects. Because hysteranthy co-varies with flowering time (i.e., flowering first species will generally flower earlier than other species, on average) we included day of observation as an additional predictor. Additionally, because\linelabel{hinge1} it is possible that climate change has affected the interval between flowering and leafout over the course of our time series, we included the year of collection of each specimen as a co-variate. Because the concern for including this co-variate was related to shifting baselines due to climate change, we parameterized \emph{year} as hinge variable, using 1980 as a break point following standard conventions for modeling the effects of climate\linelabel{hinge2} change \citep{IPCC2013,Buonaiuto2020,Kharouba2018}.
+
+The model is written below:\\
 
 y_i = \left\{ \begin{array}{lll}
 1 & if & z_i < 0\\ 
@@ -115,7 +117,9 @@ y_i = \left\{ \begin{array}{lll}
 \\
 
 
-$z_i  &= \alpha+ \alpha_{phylo}+ \alpha_{sp}+ \beta_{\text{day of year[sp]}}*X_{\text{day of year}}+ \epsilon_i$\\
+$z_i  &= \alpha+ \alpha_{phylo}+ \alpha_{sp}+ \beta_{\text{day of year[sp]}}*X_{\text{day of year}}+
+\beta_{\text{year}}*X_{\text{year}}+
+\epsilon_i$\\
   
    $\epsilon_i & \sim logistic(0,1)$ \\ 
    
@@ -131,7 +135,9 @@ $\alpha$ describes an intercept for each category [1,2,...6], while slope ($\bet
   %\alpha_{sp} & \sim N(\mu_{\alpha}, \sigma^2_{species}) \\
  \alpha_{sp} & \sim N(0, \sigma^2_{species}) \\
 
-We used our model to predict the likelihood each species would be observed at a given vegetative BBCH stage during flowering at the 0\%, 25\% 50\% and 75\% quantiles of their flowering period. We then developed a flower-leaf sequence index, by assigning a numerical score to each species per seasonal quantile, and summing over the full flowering season. In each seasonal quantile, species received a ``1" if more than 50\% of their probability distribution occurred at the two earliest stages of vegetative phenology---BBCH 0 (``bud development") and BBCH 09 (``bud break")---and a ``0" if not. We summed these values across the season, generating an index from 0 (never hysteranthous) to 4 (hysteranthous through late season (Q75)), where 1&= hysteranthous at start of season, 2&= hysteranthous through early season  (Q25) and 3 &= hysteranthous through mid season (Q50). We also used two alternative indexing schemes ($>$25\% of the probability distribution occurred at BBCH 0 and $>$40\% of the probability distribution occurred at BBCH 0 and BBCH 09) to make sure our result were robust across multiple cutoffs.
+We used our model to predict the likelihood each species would be observed at a given vegetative BBCH stage during flowering across the flowering period period of each species. 
+
+We then developed a flower-leaf sequence index, by assigning a numerical score to each species per seasonal quantile, and summing over the full flowering season. In each seasonal quantile, species received a ``1" if more than 50\% of their probability distribution occurred at the two earliest stages of vegetative phenology---BBCH 0 (``bud development") and BBCH 09 (``bud break")---and a ``0" if not. We summed these values across the season, generating an index from 0 (never hysteranthous) to 4 (hysteranthous through late season (Q75)), where 1&= hysteranthous at start of season, 2&= hysteranthous through early season  (Q25) and 3 &= hysteranthous through mid season (Q50). We also used two alternative indexing schemes ($>$25\% of the probability distribution occurred at BBCH 0 and $>$40\% of the probability distribution occurred at BBCH 0 and BBCH 09) to make sure our result were robust across multiple cutoffs.
 
 \subsection*{Evaluating hysteranthy hypotheses}
 

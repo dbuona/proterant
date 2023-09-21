@@ -22,13 +22,18 @@ library(raster)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-#load("mods_whatReviewerswant.Rda")
+load("mods_whatReviewerswant.Rda")
 
 #load("pcerasus.Rda")
 ##read in cleaned data
 d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
 
+library(xtable)
+xtable(d.flo%>% group_by(species) %>% count())
+
+range(d.flo$year)
+ggplot(d.flo,aes(year))+geom_histogram()
 ##### give tree branch lengths
 #is.ultrametric(tree)
 tree<-compute.brlen(tree, method = "Grafen")## make ultrametric
@@ -225,10 +230,10 @@ pollywantaplot<-ggplot(fillz,aes(bbch,.epred))+geom_line(aes(group=.draw,color=c
   theme(axis.text.x = element_text(angle = 270,vjust =.4,size = 7))
   
 pollywantbplot<-ggplot(fillz,aes(class,.epred/1000))+ geom_col(aes(color=class,fill=class))+
-  facet_grid(species~season)+xlab("")+
-ggthemes::theme_few(base_size =11)+
-  scale_color_viridis_d(direction = -1,begin=.6,end=.1)+
-  scale_fill_viridis_d(direction = -1,begin=.6,end=.1)
+  facet_grid(factor(species,levels = c("umbellata", "americana","subcordata"))~season)+xlab("")+
+ggthemes::theme_few(base_size =11)+theme(legend.title = element_blank())+
+  scale_color_viridis_d(direction = -1,begin=.6,end=.1)+theme(strip.text.y = element_text(face="italic"))+
+  scale_fill_viridis_d(direction = -1,begin=.6,end=.1)+ylab("likelihood")
 
 pdf("..//Plots/whatReviwerswant/conceptfig.pdf")
 ggpubr::ggarrange(pollywantbplot,pollywantaplot,common.legend = TRUE,ncol=1,heights = c(.8,1))
