@@ -95,7 +95,7 @@ I am not sure why this is in reference to.
 
 \emph{l. 147 Authors are encouraged to add a little more explanations related to ‘PDSI’ so that readers can understand it without referring to the original references.}
 
-We agree, and have added this an explanation of PDSI to the Methods.
+We agree, and have added this an explanation of PDSI to the Methods (lines \lineref{pdsi1}-\lineref{pdsi2}). Additionally, because in this study we used the Modfied Palmer Drought Severity index for our analyses, we have changed the abbreviation ``PDSI" to ``PMDI'' throughout our text for precision.
 
 \emph{ll.197-206 Please mention the topology of Prunus species on phylogenetic tree in Fig.1b because it is also one of the results of this study.}
 
@@ -130,18 +130,17 @@ We thankful to the Reviwer for their time spent with our manuscript, and for pro
 
 \emph{Overall, the role of fruit size as a third hypothesis to be tested is a bit unclear. While it is brought up as a separate hypothesis in the introduction, very little is said about it in subsequent sections.}
 
-We appreciate the reviewer's clear summary of the different ways selection and operate on flower leaf sequence.
-We found this framing very helpful and have added it to our introduction of the hypotheses.
+We appreciate the reviewer's clear summary of the different ways selection and operate on flower leaf sequence, and agree that the fruit maturation hypothesis fit more broafly within the category of ``independent but differential selection".
 
-We included the fruit maturation hypothesis in our original submission because it has been explicity stated in the literature, but we agree with the reviwers point that this hypothesis better aligns with out null explanations than the two hpyotheses that we treat in greater detail. Because of this point, and the fact that we had low confidence in the inference from our fruit size analyses due to sample size limitations, in our revised manuscript we now mention this hypothesis as an example of our null hypotheses (\textbf{lines X}), and have removed our tests of it from our analyses.
+We included the fruit maturation hypothesis in our original submission because it has been explicitly stated in the literature, but we agree with the reviewers point that this hypothesis better aligns with out null explanations than the two hypotheses that we treat in greater detail. Because of this point, and the fact that we had low confidence in the inference from our fruit size analyses due to sample size limitations, in our revised manuscript we now mention this hypothesis as an example of our null hypotheses (line \lineref{null1}), and have removed our tests of it from our analyses.
 
 \emph{The insect visibility hypothesis, as presented, appears a bit simplistic as the argument basically assumes that pollen limitation is equal among species and environments. However, if some species occur in environments that are associated with more severe pollen limitation, then you might expect that these species experience strong selection for increased visibility both through selection for an increased degree of hysteranthy, and through selection for larger floral displays. Responses to this selection would then result in a positive rather than a negative correlation.}
 
-We agree that the insect visibility hypothesis feels overly simplistic. We feel this is inpart because it has not been well developed in the literature. We with the reviewer's alternative presentation of how selection could operate to increase the size of hysteranthous flower and we had infact presented the hypothesis this was in previous drafts of our submission. We now present the possibilities for both the positive and negative associations between hysteranthy and floral display size in our revised manuscript and include additional citations to better anchor them in the literature. 
+We agree that the insect visibility hypothesis feels overly simplistic. We feel this is in part because it has not been well developed in the literature. We with the reviewer's alternative presentation of how selection could operate to increase the size of hysteranthous flower and we had in fact presented the hypothesis this was in previous drafts of our submission. We now present the possibilities for both the positive and negative associations between hysteranthy and floral display size in our revised manuscript (lines \lineref{caveat1}-\lineref{caveat2}) and \textbf{include additional citations to better anchor them in the literature.} 
 
 \emph{One major problem I have with the analyses used to test the hypotheses, is that the statistical models used do not seem to correspond to the predicted causal relationships. Currently the models examine effects hysteranthy on drought and flower size respectively. However, the logic way to construct models seem to be to examine effects of drought on hysteranthy rather than effects of hysteranthy on drought. It is thus difficult to understand why the authors use the models they do, and no motivation for the chosen model structure is provided.}
 
-We thank the reviewer for this point--- we agree that some of the modeling choices we made in our original were unconventional, and we did not present clear justification for these decision. In the new manuscript, we have included additional analyses more similar to the ones suggested by the reviewer and added text to clarify our modeling choices. We address each of the the reviews concerns in more detail in the sections below.
+We thank the reviewer for this point--- we agree that we did not present clear justification for some of the modeling choices we made in our original submission. In the new manuscript, we have included additional analyses more similar to the ones suggested by the reviewer and added text to clarify our modeling choices. We address each of the the reviews concerns in more detail in the sections below.
 
 We originally chose to to specify hysteranthy as the independent variable and traits (petal size or drought), as the dependent variable because this allowed us to account for phylogenetic autocorrelation in the petal size and PDSI in our analyses. This decision  hinges on the fact that for regression models with only one predictor, we are essentially estimating the correlation coefficient between them, so \emph{statistically}, the assignment of dependent and independent variable will not effect this relationship \citep{}.  However we agree with the Reviewer's point that modeling each predictor separately was not ideal, and the that this was of assigning independent and dependent variables not as biologically intuitive, so we have move these analyses to the Supporting Information, to complement the modeling approach the Reviewer suggested below.
 
@@ -184,7 +183,9 @@ Will do.
 
 \emph{Lines 35-36: This is not correct. Flowering before leaf-out occurs also in non-woody species.}
 
-This is an important point. We have ammended this statement.
+
+This is an important point. We have amended this statement in line \linetrg{uniq1}. It now reads:
+\begin{quote} Woody perennials are among the small subset of plant types with the unique ability to seasonally begin reproduction prior to vegetative growth.\end{quote}
 
 \emph{Lines 37-41: Explain what kinds of functional significance you refer to here.}
 

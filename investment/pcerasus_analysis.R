@@ -259,8 +259,8 @@ cofs<-as.data.frame(fixef(mod.ord.4review.nooutlier,probs = c(.055,.25,.75,.945)
 cofs<-tibble::rownames_to_column(cofs,"predictor")
 cofs<-filter(cofs,predictor %in% c("doy","YEAR.hin"))
 p2a<-ggplot(cofs,aes(Estimate,predictor))+geom_point(size=4)+
-  geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,linetype="dotted")+
-  geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0)+geom_vline(xintercept=0)+
+  geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=.5)+
+  geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
   scale_y_discrete(labels=c("day of season","year"))+xlab("Estimated effect")+ggthemes::theme_few()
 
 p2b<-ggplot(check,aes(doy,pred))+geom_line(aes(color=class,group=.draw),size=0.3)+facet_wrap(~factor(species,levels=c("mexicana","umbellata","angustifolia","maritima","gracilis","americana","munsoniana","alleghaniensis","nigra","hortulana","texana","rivularis","subcordata")))+
@@ -314,9 +314,9 @@ cor(sumz$mean.pdsi,sumz$mean.petal)
 brms::get_prior(bf(index ~ pdsi.z*petal.z, phi ~1),data = sumz,family=Beta())
 bprior <- c(prior_string("student_t(3,0,.25)", class = "b"),
             prior_string("student_t(3,0,.25)", class = "Intercept"))
-           
-mod.review.wants<- brm(
-  bf(index ~ pdsi.z*petal.z,
+         
+mod.review.wants<- brms::brm(
+  brms::bf(index ~ pdsi.z*petal.z,
      phi ~1),
   data = sumz,
   family = Beta(),
@@ -325,7 +325,7 @@ mod.review.wants<- brm(
   cores = 4, seed = 1234,backend = "cmdstanr") 
 
 mod.review.wants.doy<- brm(
-  bf(index.nodoy ~ pdsi.z*petal.z,
+  brms::bf(index.nodoy ~ pdsi.z*petal.z,
      phi ~ 1),
   data = sumz,
   family = Beta(),
@@ -383,10 +383,10 @@ cofs.2<-tibble::rownames_to_column(cofs.2,"predictor")
 cofs.2<-filter(cofs.2,!predictor %in% c("phi_Intercept","Intercept"))
 
 fp<-ggplot(cofs.2,aes(x=Estimate,y=factor(predictor,level=c("pdsi.z:petal.z","pdsi.z","petal.z"))))+geom_point(size=4)+
-  geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,linetype="dotted")+
-  geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0)+geom_vline(xintercept=0)+
+  geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=0.5)+
+  geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
   scale_y_discrete(name="predictor",labels=c("PDSI x petal length","PDSI","petal length"))+
-  ggthemes::theme_few()
+  ggthemes::theme_few()+xlab("standardized effect size estimate")
 
 
 p1<-plot(conditional_effects(mod.review.wants,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE))
@@ -398,15 +398,31 @@ pii<-p1[[2]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nindex")+xlab("p
 pii
 piii<-p1[[3]]+ggthemes::theme_few()+ylab("petal length")+xlab("PDSI")+scale_fill_discrete(name="hysteranthy \nindex",type = "viridis")+theme(legend.position = "right")
 piii
-p4<-ggpubr::ggarrange(pi,pii,nrow=2,common.legend = TRUE,legend="bottom",labels=c("b)","c)"))
+p4<-ggpubr::ggarrange(pi,pii,nrow=1,common.legend = TRUE,legend="bottom",labels=c("b)","c)"))
 
 p5<-ggpubr::ggarrange(p4,piii,labels=c("","d)"),widths=c(1,.5))
 
 jpeg("..//Plots/whatReviwerswant/hypoth_preds.jpeg",height=7,width=7,units='in',res=200)
-ggpubr::ggarrange(fp,p5,ncol=1,labels=c("a)",""),heights=c(.7,1))
+ggpubr::ggarrange(fp,p4,ncol=1,labels=c("a)",""),heights=c(.7,1))
 dev.off()
 
+p1<-plot(conditional_effects(mod.review.wants, "pdsi.z", ordinal = TRUE,prob = .5,plot=FALSE))
 
+p3<-plot(conditional_effects(FNAordz.phylo2, "inflor.z", ordinal = TRUE,prob=.5,plot=FALSE))
+conditions <- make_conditions(FNAordz.phylo2, "inflor.z")
+p4<-plot(conditional_effects(FNAordz.phylo2, "meanpdsi.z",conditions=conditions,ordinal = TRUE,prob=.5,plot=FALSE))
+range(FNA.small$inflor.z)
+p1<-p1[[1]]+ggthemes::theme_few()+scale_y_discrete(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"))+xlab(" mean PDSI")
+
+#p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
+p3<-p3[[1]]+ggthemes::theme_few()+ylab("")+xlab("inflorescence size")+theme(axis.text.y=element_blank(),axis.ticks.y = element_blank())
+
+p4<-p4[[1]]+ggthemes::theme_few()+xlab("inflorescence size")+scale_y_discrete(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"))
+
++scale_color_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
+  scale_fill_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab("fruit size")
+
+potty<-ggpubr::ggarrange(p1,p3,common.legend = TRUE,ncol=2,legend="bottom",widths = c(.8,.5))
 
 
 

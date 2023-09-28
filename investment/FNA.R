@@ -353,7 +353,7 @@ output <-output %>% tidyr::gather("var","estimate",4:6)
 
 #jpeg("Plots/fullprunus_mus.jpeg",width=9, height=7, units = "in",res=300)
 pottymu<-ggplot(output,aes(y = var, x = estimate)) +
-   stat_eye()+ggthemes::theme_few()+
+   stat_pointinterval(.width=c(.5,.89))+ggthemes::theme_few()+
    geom_vline(xintercept=0,linetype="dashed")+xlim(-10,50)+
    scale_y_discrete(limits = c("b_inflor.z:meanpdsi.z","b_inflor.z","b_meanpdsi.z"),labels=c("inflorence size X mean PDSI","inflorescence size","mean PDSI"))+
    ylab("")+xlab("standardized effect size estimate")
@@ -399,7 +399,7 @@ p4<-p4[[1]]+ggthemes::theme_few()+xlab("inflorescence size")+scale_y_discrete(na
 
 potty<-ggpubr::ggarrange(p1,p3,common.legend = TRUE,ncol=2,legend="bottom",widths = c(.8,.5))
 
-jpeg("Plots/fullprunus_4manu.jpeg",width=9, height=8, units = "in",res=300)
+jpeg("Plots/whatreviwerswant/fullprunus_4manu.jpeg",width=9, height=8, units = "in",res=300)
 ggpubr::ggarrange(pottymu,potty,nrow=2,labels=c("a)","b)"))
 dev.off()
 #### run this just on prunocerasus
