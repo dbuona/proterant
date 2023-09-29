@@ -102,7 +102,7 @@ Alternative to these functional hypotheses is the assertion that hysteranthous f
 
 We obtained digital herbarium specimens for all members of the section \textit{Prunocerasus} from the Consortium of Midwest Herbaria (CMH) Database \citep{CMH}. \linelabel{range1}Specimen\linelabel{range1} collection dates ranged from 1844-2020, with the majority collected between\linelabel{range2} 1950-2000. To quantify flower-leaf sequence variation within and across species we randomly sampled 200 specimens for each species and scored the phenological development of flowers and leaves using a modified BBCH scale for woody plants \citep{Finn2007}, which\linelabel{bbch1} is designed to evaluate vegetative and reproductive phenological progress using a standardized quantitative index. For\linelabel{samps1} species with less than 200 specimens in the collection, we included all available specimens. In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis. We also assessed and removed outliers of flowering observations visually, and by excluding observations that were beyond three standard deviations of the median flowering time for each species (n=9). Our final analyses included 1000 specimens (see \ref{tab:samps} for number of\linelabel{samps2} observations/species). We reconstructed the phylogenetic relationships among species in this group based on the tree topology in \citet{Shaw:2004aa}. We inferred branch lengths following the method of \citet{Granfen1989} in which node heights are estimated in proportion to number of subtending taxa using the R package ``ape" \citep{Paradis2019}.
 
-To quantify flower-leaf sequence variation, we fit an ordinal, hierarchical, Bayesian phylogenetic mixed model \citep{Garamszegi2014} to assess the likelihood an individual would be at any given vegetative BBCH phase while flowering. Our model predicted leaf stage ($y_i$, ordinal, with six categories) as a function of species and additional phylogenetic effects. Because hysteranthy co-varies with flowering time (i.e., flowering first species will generally flower earlier than other species, on average) we included day of observation as an additional predictor. Additionally, because\linelabel{hinge1} it is possible that climate change has affected the interval between flowering and leafout over the course of our time series, we included the year of collection of each specimen as a co-variate. Because the concern for including this co-variate was related to shifting baselines due to climate change, we parameterized \emph{year} as hinge variable, using 1980 as a break point following standard conventions for modeling the effects of climate\linelabel{hinge2} change \citep{IPCC2013,Buonaiuto2020,Kharouba2018}.
+To quantify flower-leaf sequence variation, we fit an ordinal, hierarchical, Bayesian phylogenetic mixed model \citep{Garamszegi2014} to assess the likelihood an individual would be at any given vegetative BBCH phase while flowering. Our model predicted leaf stage ($y_i$, ordinal, with six categories) as a function of species and additional phylogenetic effects. Because hysteranthy co-varies with flowering time (i.e., flowering first species will generally flower earlier than other species, on average), and collection\linelabel{bias1} dates are not evenly distributed across the flowering season (see Fig. \ref{fig:bias}), we included day of observation as an additional predictor. Additionally, because\linelabel{hinge1} it is possible that climate change has affected the interval between flowering and leafout over the course of our time series, we included the year of collection of each specimen as a co-variate. Because the concern for including this co-variate was related to shifting baselines due to climate change, we parameterized \emph{year} as hinge variable, using 1980 as a break point following standard conventions for modeling the effects of climate\linelabel{hinge2} change \citep{IPCC2013,Buonaiuto2020,Kharouba2018}.
 
 The model is written below:\\
 
@@ -135,8 +135,9 @@ $\alpha$ describes an intercept for each category [1,2,...6], while slope ($\bet
   %\alpha_{sp} & \sim N(\mu_{\alpha}, \sigma^2_{species}) \\
  \alpha_{sp} & \sim N(0, \sigma^2_{species}) \\
 
-We used our model to predict the likelihood each species would be observed at a given vegetative BBCH stage during flowering for each day of the flowering period of each species. For each day of the flowering season, we summed the predicted likelihood that species would be at BBCH 0  (``bud closed"), BBCH 07/09 (``bud break") or BBCH 11 (``start of leaf unfolding) vs. BBCH 15 (``leaf unfolding"),BBCH 17(``most leaves unfolded"), BBCH 19 (``leaf expansion complete") to quantify the likelihood as species would be be hysteranthous or non-hysteranthy respectively on each day of the the season. We used these estimate to  developed a flower-leaf sequence index by summing the likelihood of hysteranthy vs. non-hysteranthy across the flowering period of each species, with 0 being never hysteranthous and 1 being always hysteranthous.
+We used our model to predict the likelihood each species would be observed at a given vegetative BBCH stage during flowering for each day of the flowering period of each species. For each day of the flowering season, we summed the predicted likelihood that species would be at BBCH 0  (``bud closed"), BBCH 07/09 (``bud break") or BBCH 11 (``start of leaf unfolding) vs. BBCH 15 (``leaf unfolding"),BBCH 17(``most leaves unfolded"), BBCH 19 (``leaf expansion complete") to quantify the likelihood as species would be be hysteranthous or non-hysteranthy respectively on each day of the the season. We used these estimate to  developed a flower-leaf sequence index by summing the likelihood of hysteranthy vs. non-hysteranthy across the flowering period of each species, with 0 being never hysteranthous and 1 being always hysteranthous. ADD USING POSTERIOR DRAWS
 
+To better understand how within season dynamics affected our inference, we also repeated this procedure without including day of season as a predictor. 
 %We then developed a flower-leaf sequence index, by summing over the full flowering season. In each seasonal quantile, species received a ``1" if more than 50\% of their probability distribution occurred at the two earliest stages of vegetative phenology---BBCH 0 (``bud closed") and BBCH 09 (``bud break")---and a ``0" if not. We summed these values across the season, generating an index from 0 (never hysteranthous) to 4 (hysteranthous through late season (Q75)), where 1&= hysteranthous at start of season, 2&= hysteranthous through early season  (Q25) and 3 &= hysteranthous through mid season (Q50). We also used two alternative indexing schemes ($>$25\% of the probability distribution occurred at BBCH 0 and $>$40\% of the probability distribution occurred at BBCH 0 and BBCH 09) to make sure our result were robust across multiple cutoffs.
 
 \subsection*{Evaluating hysteranthy hypotheses}
@@ -145,7 +146,17 @@ To test the hypotheses of hysteranthy, we obtained data on petal length and frui
 
 \noindent For our morphological measurements, we sampled an additional 321 specimens and measured the petal length of up to 10 randomly selected petals per specimen (n=2757) using ImageJ image processing software.% We also used ImageJ to measure the diameter of fruits on an additional 316 specimens, measuring up to 5 fruit per specimen (n=224).
 
-We then used Bayesian phylogenetic mixed models to test the relationship between flower-leaf sequence index scores and each of the variables. In these models, we modeled species and phylogeny as above. 
+Because\linelabel{just1} our all of our measurements were on different individuals, with different sample sizes we executed two different modeling approaches in order to test the relationship between flower-leaf sequence index scores, aridity tolerance and floral\linelabel{just2} displays.
+
+First we computed species-levels means of PDSI and petal length and used a Beta regression to evaluate the relationship between flower-leaf sequences, PDSI, petal length and their interaction.
+
+The model structure is: 
+
+Write it
+
+The advantage of this approach is that this model structure allowed us to assess the additive and interactive effects of PDSI and petal size on flower-leaf sequences. By using means trait values, this approach cannot incorporate within species variation in these trait/environmental predictors or account for their phylogenetic structure. Because of this we as modeled the relationship between flower-leaf sequences index values and PDSI, and between flower-leaf sequences index values and petal size separately. Because single-predictor regressions can be formulated with either variable as the dependent one (say better and cite),  this allowed us to both account for variation in within species PDSI and petal lengths and account for the phylogenetic structure of these variables as well.
+
+ In these models, we modeled species and phylogeny as above. 
 
 The model structure is: 
 
@@ -155,7 +166,7 @@ The model structure is:
   
   where $y_{trait}$ is observed trait values (PDSI or petal length), and the slope $\beta_{\text{hyst.index}$ describes the relationship between extended hysteranthy (higher hysteranthy index value) and the trait of interest. $\alpha$ describes a grand intercept, and $\alpha_{sp}$ and $\alpha_{phylo}$ describe the species and phylogenetic effects respectively. 
   
-We also ran each model using our two alternative flower-leaf sequence indexing approaches to make sure our results were robust to choice of index. Though these alternative classification schemes did change the hysteranthy index score for some species (Fig. \ref{fig:plums}), they did not substantially impact the inference from our models (see Tab. \ref{tab:modput} for comparisons).
+%We also ran each model using our two alternative flower-leaf sequence indexing approaches to make sure our results were robust to choice of index. Though these alternative classification schemes did change the hysteranthy index score for some species (Fig. \ref{fig:plums}), they did not substantially impact the inference from our models (see Tab. \ref{tab:modput} for comparisons).
   
 \subsection*{Hysteranthy in the larger genus \textit{Prunus}}
 
@@ -176,7 +187,7 @@ y_i = \left\{ \begin{array}{lll}
 \\
 
 
-z_i &= \alpha+ \alpha_{phylo}+ \beta_{PDSI}*X_{PDSI}+\beta_{\text{floral investment}}*X_{flowers/inflorescence}+\epsilon_i$\\ % write this with interaction
+z_i &= \alpha+ \alpha_{phylo}+ \beta_{PDSI}*X_{PDSI}+\beta_{\text{floral investment}}*X_{flowers/inflorescence}+\beta{PDSI x floral investment}*X_{PDSI x floral investment}+\epsilon_i$\\ % is this right?
   
    \epsilon_i & \sim logistic(0,1)) \\ 
   
@@ -189,7 +200,14 @@ For the ``Quantifying flower-leaf sequence variation" and ``Evaluating hysterant
 
 \section*{Results}
 \subsection*{Quantifying flower leaf sequences in the American plums}
-We found substantial inter-specific differences in flower-leaf sequences within the American plums (Fig. \ref{fig:ordinals}, \ref{fig:plums}). Flower-leaf sequence patterns were strongly dependent on the day of observation, with observations later in the the flowering season of each species decreasing the likelihood of finding flowers open during early vegetative BBCH phases ($\beta_{doy}$ 0.03, $CI_{50}$ [0.02,0.04]). Based on our flower leaf sequence index, two species (\textit{P. umbellata}, \textit{P. mexicana}) were likely to be hysteranthous regardless of the time of observation and five species (\textit{P. alleghaniensis}, \textit{P. nigra}, \textit{P. rivularis}, \textit{P. subcordata}, and \textit{P. texana}) were always most likely to flower after leaves developed (Fig. \ref{fig:phylo2}b). All other species displayed intermediate phenotypes, with four species mostly likely to hysteranthous at the start of the season (\textit{P. americana}, \textit{P. hortulana}, \textit{P. munsoniana} and \textit{P. gracilis}), one species through early season (\textit{P. maritima}) and one species through mid season (\textit{P. angustifolia}) (Fig \ref{fig:phylo2}b).
+Across all species of the American Plums, day of observation had a strong association with the hysteranthy likelihood (Fig. \ref{fig:ordinals},a). Year of observation did not substantially impact the likelihood of hysteranthy in this taxonomic group (Fig. \ref{fig:ordinals},a).
+
+We found substantial inter-specific differences in flower-leaf sequences within the American plums (Fig. \ref{fig:ordinals}. b). 
+
+Based on our flower leaf sequence index, some species (\textit{P. mexicana}, \textit{P. umbellata} and \textit{P. angustifolia}) were likely to be hysteranthous 
+across their flowering season. Two species (\textit{P. maritima} and \textit{P. gracilis}), were likely to be hysteranthous for much of their flowering period, but had a  
+
+(\textit{P. alleghaniensis}, \textit{P. nigra}, \textit{P. rivularis}, \textit{P. subcordata}, and \textit{P. texana}) were always most likely to flower after leaves developed (Fig. \ref{fig:phylo2}b). All other species displayed intermediate phenotypes, with four species mostly likely to hysteranthous at the start of the season (\textit{P. americana}, \textit{P. hortulana}, \textit{P. munsoniana} and ), one species through early season () and one species through mid season () (Fig \ref{fig:phylo2}b).
 
 \subsection*{Associations between hysteranthy and environmental and morphological traits}
 In the American plums clade, aridity (lower average PDSI) was associated with higher flower-leaf sequence index scores ($\beta$: -0.04, $CI_{50}$[-0.06,  -0.03], Fig. \ref{fig:prunes}a), suggesting that species that displayed hysteranthous flowering later into their flowering season are found in drier locations. 

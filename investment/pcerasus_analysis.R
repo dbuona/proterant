@@ -278,7 +278,7 @@ dev.off()
 
 
 
-save.image("mods_whatReviewerswant.Rda")
+
 
 check.h<-filter(check,class=="hysteranthous")
 p2c<-ggplot(check.h,aes(doy,pred))+geom_line(aes(color=class,group=.draw),size=0.01)+facet_wrap(~factor(species,levels=c("mexicana","umbellata","angustifolia","maritima","gracilis","americana","munsoniana","alleghaniensis","nigra","hortulana","texana","rivularis","subcordata")))+
@@ -425,10 +425,46 @@ p4<-p4[[1]]+ggthemes::theme_few()+xlab("inflorescence size")+scale_y_discrete(na
 potty<-ggpubr::ggarrange(p1,p3,common.legend = TRUE,ncol=2,legend="bottom",widths = c(.8,.5))
 
 
+####old way for suppliment
+compromise<-left_join(pdsi.dat,sumz)
+mod.pdsi.phylo<-brm(pdsi~index+(1|specificEpithet)+(1|gr(species, cov = A)),data=compromise,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs                    
+compromise2<-left_join(petal.dat,sumz)
 
-                    
+mod.petal.phylo<-brm(pental_lengh_mm~index+(1|specificEpithet)+(1|gr(species, cov = A)),data=compromise2,data2=list(A=A),family=gaussian(),warmup=3500,iter=4500,control=list(adapt_delta=0.99)) ##runs                    
+
+save.image("mods_whatReviewerswant.Rda")
+
+lines.nophylo<-mod.pdsi.phylo%>%
+  spread_draws(b_Intercept,  b_index )
+
+a<-ggplot()+
+  geom_jitter(data=compromise,aes(index,pdsi),color="black",fill="black",alpha=0.6,size=0.1,width = 0.1,height=0)+
+  #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
+  geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_index),alpha=0.01,color="skyblue3")+
+  geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_index)),color="navy",size=2)+
+  #geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
+  #geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
+  ylab("Mean PDSI at collection sites")+
+  ggthemes::theme_few(base_size = 11)
+ 
+
+linespetal<-mod.petal.phylo%>%
+  spread_draws(b_Intercept,  b_index )
+b<-ggplot()+
+  geom_jitter(data=compromise2,aes(index,pental_lengh_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.1,height=0)+
+  #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
+  geom_abline(data=linespetal,aes(intercept=b_Intercept,slope=b_index),alpha=0.01,color="skyblue3")+
+  geom_abline(data=linespetal,aes(intercept=mean(b_Intercept),slope=mean(b_index)),color="navy",size=2)+
+  #geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_score),alpha=0.004,color="firebrick1")+
+  #geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_score)),color="firebrick1",size=2)+
+  ylab("Mean petal length (mm")+
+  ggthemes::theme_few(base_size = 11)
 
 
+
+jpeg("..//Plots/dataplots_SUPP.jpeg", width=12, height=4,unit="in",res=200)
+ggpubr::ggarrange(a,b,labels=c("a)","b)"),nrow=1)
+dev.off()
 
 
 
