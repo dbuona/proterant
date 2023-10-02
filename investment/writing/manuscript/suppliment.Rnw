@@ -40,27 +40,26 @@
 \section*{Tables}
 \begin{table}[ht]
 \centering
-\begin{tabular}{rlr}
+\begin{tabular}{rlrrr}
   \hline
- & species & n \\ 
+ & species & n.FLS & n.petal & n.pdsi \\ 
   \hline
-1 & alleghaniensis &  17 \\ 
-  2 & americana &  97 \\ 
-  3 & angustifolia &  78 \\ 
-  4 & gracilis &  86 \\ 
-  5 & hortulana & 106 \\ 
-  6 & maritima &  76 \\ 
-  7 & mexicana &  64 \\ 
-  8 & munsoniana & 118 \\ 
-  9 & nigra & 119 \\ 
-  10 & rivularis & 112 \\ 
-  11 & subcordata &  46 \\ 
-  12 & texana &  20 \\ 
-  13 & umbellata &  70 \\ 
+1 & alleghaniensis &  17 &  39 & 114 \\ 
+  2 & americana &  95 & 271 & 200 \\ 
+  3 & angustifolia &  77 & 238 & 200 \\ 
+  4 & gracilis &  85 & 289 & 200 \\ 
+  5 & hortulana & 106 & 254 & 200 \\ 
+  6 & maritima &  75 & 255 & 200 \\ 
+  7 & mexicana &  64 & 284 & 200 \\ 
+  8 & munsoniana & 117 & 279 & 200 \\ 
+  9 & nigra & 118 & 230 & 200 \\ 
+  10 & rivularis & 111 & 225 & 200 \\ 
+  11 & subcordata &  46 &  71 &  30 \\ 
+  12 & texana &  19 &  38 &  39 \\ 
+  13 & umbellata &  70 & 284 & 200 \\ 
    \hline
 \end{tabular}
-
-\caption{Sample size}
+\caption{Sample sizes of each for each species used in this study}
 \label{tab:samps}
 \end{table}
 

@@ -29,8 +29,7 @@ load("mods_whatReviewerswant.Rda")
 d.flo<-read.csv("input_clean/FLS_clean.csv") ##data
 tree<-read.tree("~/Documents/git/proterant/investment/Input/plum.tre") ##tree
 
-library(xtable)
-xtable(d.flo%>% group_by(species) %>% count())
+
 
 range(d.flo$year)
 ggplot(d.flo,aes(year))+geom_histogram()
@@ -71,13 +70,15 @@ d.flo.check <- d.flo %>%
   group_by(species) %>%
   filter(!(abs(doy - median(doy)) > 3*sd(doy)))
 ggplot(d.flo,aes(doy))+geom_histogram(bins=20)+facet_wrap(~species)
+
 ggplot(d.flo.check,aes(doy))+geom_histogram(bins=20)+facet_wrap(~species)
 
 d.flo.check <- d.flo.check  %>% group_by(species) %>%  mutate(range = min(doy))
 
-ggplot(d.flo.check,aes(doy))+geom_histogram(bins=15)+facet_wrap(~species,scales="free_x")
-
-
+jpeg("..//Plots/whatReviwerswant/seasonal_distrbn.jpeg",height=7,width=7,units='in',res=300)
+ggplot(d.flo.check,aes(doy))+geom_histogram(bins=15)+facet_wrap(~species,scales="free_x")+
+  ggthemes::theme_few()+theme(strip.text = element_text(face="italic"))+xlab("day of year collected")
+dev.off()
 diffs<-filter(d.flo,!id %in% d.flo.check$id)
 
 mod.ord.4review<-brm(bbch.v.scale~YEAR.hin+doy+(doy|species)+(1|gr(specificEpithet, cov = A)),data=d.flo,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
@@ -468,6 +469,16 @@ dev.off()
 
 
 
+
+library(xtable)
+xtable(d.flo.check%>% group_by(species) %>% count())
+
+samps_sum<-dplyr::select(sumz,species,n.petal,n.pdsi)
+
+fls.samps<-d.flo.check%>% group_by(species) %>% count()
+colnames(fls.samps)[2]<-"n.FLS"
+sampsize<-left_join(fls.samps,samps_sum)
+xtable(sampsize)
 
 if(FALSE){
 ###Part 1: Turns out phylogeny might matter, or not when we use SE instead of SD

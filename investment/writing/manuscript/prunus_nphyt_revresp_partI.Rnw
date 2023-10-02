@@ -21,10 +21,14 @@
 \parskip 7.2pt 
 \renewcommand{\baselinestretch}{1.1} 	
 \parindent 0pt
-
+\usepackage{lineno}
 \bibliographystyle{refs/styles/newphyto.bst}
 \usepackage{xr-hyper}
-\usepackage{hyperref}
+%\usepackage{hyperref}
+\externaldocument{plums_new_phyt_revisions}
+\externaldocument{suppliment}
+
+
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
@@ -65,7 +69,7 @@ Both reviewers raised the potentially issue of climate change affecting the patt
 \emph{ll.114-115 “In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis (n=1009).”
 Doing some simple math, 16 species x 200 specimens/species is 3200 specimens in total. Why are there less than 3200 specimens evaluated? Also, please provide the numbers of the analysis-included specimens for each species.}
 
-We thank the reviewer for catching this. The total sample size is less that 3200, because for several species, the database contained significantly fewer than 200 collected specimens. We have added this point to the presentation of our Methods (lines \lineref{samps1}-\lineref{samps2}), and now include a supplemental table with the sample sizes for each species. 
+We thank the reviewer for catching this. The total sample size is less that 3200, because for several species, the database contained significantly fewer than 200 collected specimens. We have added this point to the presentation of our Methods (lines \lineref{samps1}-\lineref{samps2}), and now include a supplemental table with the sample sizes for each species (Tab. \ref{{tab:samps}). 
 
 We also would like to highlight that one of the reasons we chose models that partially-pool coefficient estimates on species is to account for this lack of balance among species in our dataset.
 
@@ -95,7 +99,7 @@ I am not sure why this is in reference to.
 
 \emph{l. 147 Authors are encouraged to add a little more explanations related to ‘PDSI’ so that readers can understand it without referring to the original references.}
 
-We agree, and have added this an explanation of PDSI to the Methods (lines \lineref{pdsi1}-\lineref{pdsi2}). Additionally, because in this study we used the Modfied Palmer Drought Severity index for our analyses, we have changed the abbreviation ``PDSI" to ``PMDI'' throughout our text for precision.
+We agree, and have added this an explanation of PDSI to the Methods (lines \lineref{pdsi1}-\lineref{pdsi2}).
 
 \emph{ll.197-206 Please mention the topology of Prunus species on phylogenetic tree in Fig.1b because it is also one of the results of this study.}
 
@@ -130,7 +134,7 @@ We thankful to the Reviwer for their time spent with our manuscript, and for pro
 
 \emph{Overall, the role of fruit size as a third hypothesis to be tested is a bit unclear. While it is brought up as a separate hypothesis in the introduction, very little is said about it in subsequent sections.}
 
-We appreciate the reviewer's clear summary of the different ways selection and operate on flower leaf sequence, and agree that the fruit maturation hypothesis fit more broafly within the category of ``independent but differential selection".
+We appreciate the reviewer's clear summary of the different ways selection and operate on flower leaf sequence, and agree that the fruit maturation hypothesis fit more broadly within the category of ``independent but differential selection".
 
 We included the fruit maturation hypothesis in our original submission because it has been explicitly stated in the literature, but we agree with the reviewers point that this hypothesis better aligns with out null explanations than the two hypotheses that we treat in greater detail. Because of this point, and the fact that we had low confidence in the inference from our fruit size analyses due to sample size limitations, in our revised manuscript we now mention this hypothesis as an example of our null hypotheses (line \lineref{null1}), and have removed our tests of it from our analyses.
 
