@@ -337,8 +337,8 @@ mod.review.wants.doy<- brm(
 dex<-sumz$index
 stancode(mod.review.wants)
 
-fixef(mod.review.wants,probs = c(.055,.25,.75,.945))
-fixef(mod.review.wants.doy,probs = c(.055,.25,.75,.945))
+xtable(fixef(mod.review.wants,probs = c(.055,.25,.75,.945)))
+xtable(fixef(mod.review.wants.doy,probs = c(.055,.25,.75,.945)))
 
 conditional_effects(mod.review.wants.doy,prob=.89)
 
@@ -472,7 +472,8 @@ dev.off()
 
 library(xtable)
 xtable(d.flo.check%>% group_by(species) %>% count())
-
+indexcomps<-dplyr::select(sumz,species,index,index.nodoy)
+xtable(indexcomps)
 samps_sum<-dplyr::select(sumz,species,n.petal,n.pdsi)
 
 fls.samps<-d.flo.check%>% group_by(species) %>% count()

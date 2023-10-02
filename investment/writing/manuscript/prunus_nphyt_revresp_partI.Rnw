@@ -105,9 +105,14 @@ We agree, and have added this an explanation of PDSI to the Methods (lines \line
 
 \emph{ll.167-173 Please indicate the number of species included to the analysis.}
 
+We have added the sample size to our Methods section (line \lineref{n1}).
+
 \emph{Fig.2-4 Please indicate sample sizes of each analysis.}
 
+We have added this information to the figure captions.
+
 \emph{Fig.2 & Fig. S1 I think the flowering season and length are different among those species. Is there any trend such as hysteranthous species bloom in early spring but serathous species bloom in late spring or summer?}
+
 We agree there is a potentially interesting relationship between hysteranthy and flowering duration and time of flowering. It is true that the three most hysteranthous species in our analysis flower earlier and longer than other in our dataset. However, these species also tend to have more southern distributions, where flowering typically occurs earlier, and growing seasons are longer. We think this is an important nuance and have added a paragraph to our Discussion detailing this relationship.
 
 \emph{Fig.4b Readers with red-green color blindness may have difficulty distinguishing between four colors.}

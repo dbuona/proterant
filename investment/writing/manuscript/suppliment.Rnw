@@ -31,7 +31,7 @@
 \externaldocument{plum_manuscript}
 
 
-\title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in insect-pollinated temperate trees} %emw: check title if you change it
+\title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in The American Plums} %emw: check title if you change it
 \date{}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -63,36 +63,88 @@
 \label{tab:samps}
 \end{table}
 
-
+% latex table generated in R 4.1.2 by xtable 1.8-4 package
+% Mon Oct  2 18:15:48 2023
 \begin{table}[ht]
 \centering
-\begin{tabular}[width=.8\textwidth]{|lllrrrrrr|}
+\begin{tabular}{rlrr}
   \hline
- model variable & classification & Hysteranthous if & Estimate & Est.Error & Q2.5 & Q25 & Q75 & Q97.5 \\ 
+ & species & index & index.nodoy \\ 
   \hline
- mean PDSI & main & 50\% fl. lik.  w/ BBCH 0 \& 09 & -0.04 & 0.02 & -0.08 & -0.06 & -0.03 & 0.00 \\ 
- mean PDSI & alternate 1 & 25\% fl. lik. w/ BBCH 0 & -0.04 & 0.02 & -0.08 & -0.05 & -0.02 & 0.01 \\ 
- mean PDSI & alternate 2 & 40\% fl. lik. w/ BBCH 0 \& 09 & -0.04 & 0.02 & -0.08 & -0.05 & -0.02 & 0.01 \\ 
-  \hline
- petal length & main & 50\% fl. lik.  w/ BBCH 0 \& 09 & -0.21 & 0.26 & -0.75 & -0.38 & -0.05 & 0.30 \\ 
- petal length & alternate 1 & 25\% fl. lik. w/ BBCH 0 & -0.15 & 0.28 & -0.71 & -0.33 & 0.03 & 0.40 \\ 
- petal length & alternate 2 & 40\% fl. lik. w/ BBCH 0 \& 09 & -0.25 & 0.26 & -0.77 & -0.42 & -0.09 & 0.25 \\ 
-  \hline
- fruit diameter & main & 50\% fl. lik.  w/ BBCH 0 \& 09 & -1.41 & 0.91 & -3.18 & -2.00 & -0.84 & 0.39 \\ 
- fruit diameter & alternate 1 & 25\% fl. lik. w/ BBCH 0 & -1.76 & 0.90 & -3.50 & -2.34 & -1.22 & 0.08 \\ 
-fruit diameter & alternate 2 & 40\% fl. lik. w/ BBCH 0 \& 09 & -1.80 & 0.89 & -3.56 & -2.38 & -1.24 & -0.05 \\ 
+1 & mexicana & 0.85 & 0.90 \\ 
+  2 & umbellata & 0.82 & 0.83 \\ 
+  3 & angustifolia & 0.76 & 0.77 \\ 
+  4 & maritima & 0.68 & 0.76 \\ 
+  5 & gracilis & 0.64 & 0.68 \\ 
+  6 & americana & 0.62 & 0.55 \\ 
+  7 & munsoniana & 0.60 & 0.67 \\ 
+  8 & alleghaniensis & 0.59 & 0.65 \\ 
+  9 & nigra & 0.55 & 0.62 \\ 
+  10 & hortulana & 0.51 & 0.52 \\ 
+  11 & texana & 0.51 & 0.54 \\ 
+  12 & rivularis & 0.44 & 0.53 \\ 
+  13 & subcordata & 0.16 & 0.18 \\ 
    \hline
 \end{tabular}
-\caption{Estimates of the relationship between the hysteranthy index and traits for three alternative models based on different classification schemes of the hysteranthy index. In the table, ``fl. lik." is short for \emph{flowering likelihood},and ``Q" for quantile representing the predicted uncertainty intervals of our model estimates }
-\label{tab:modput}
+\end{table}
+
+% xtable(fixef(mod.review.wants,probs = c(.055,.25,.75,.945)))
+% latex table generated in R 4.1.2 by xtable 1.8-4 package
+% Mon Oct  2 16:33:58 2023
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & Estimate & Est.Error & Q5.5 & Q25 & Q75 & Q94.5 \\ 
+  \hline
+Intercept & 0.34 & 0.23 & -0.02 & 0.20 & 0.48 & 0.70 \\ 
+  phi\_Intercept & 1.92 & 0.42 & 1.22 & 1.65 & 2.21 & 2.55 \\ 
+  pdsi.z & -0.47 & 0.30 & -0.96 & -0.66 & -0.28 & 0.01 \\ 
+  petal.z & -0.14 & 0.24 & -0.54 & -0.29 & 0.01 & 0.23 \\ 
+  pdsi.z:petal.z & -0.14 & 0.49 & -0.91 & -0.46 & 0.16 & 0.65 \\ 
+   \hline
+\end{tabular}
+\end{table}
+% xtable(fixef(mod.review.wants.doy,probs = c(.055,.25,.75,.945)))
+% latex table generated in R 4.1.2 by xtable 1.8-4 package
+% Mon Oct  2 16:34:12 2023
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & Estimate & Est.Error & Q5.5 & Q25 & Q75 & Q94.5 \\ 
+  \hline
+Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\ 
+  phi\_Intercept & 1.77 & 0.41 & 1.09 & 1.50 & 2.06 & 2.39 \\ 
+  pdsi.z & -0.43 & 0.32 & -0.92 & -0.63 & -0.22 & 0.07 \\ 
+  petal.z & -0.14 & 0.27 & -0.56 & -0.30 & 0.03 & 0.27 \\ 
+  pdsi.z:petal.z & -0.16 & 0.54 & -1.01 & -0.50 & 0.17 & 0.69 \\ 
+   \hline
+\end{tabular}
 \end{table}
 \pagebreak
+
 \section*{Figures} 
 \begin{figure}[h!]
     \centering
- \includegraphics[width=.95\textwidth]{..//..//Plots/ord_quants_phylo.jpeg}
-    \caption{Predicted likelihood that a species would be in flower during each vegetative BBCH phase. Points show the mean likelihood while the bar represents the 95\% uncertainty intervals. In a) species were classified as hysteranthous if greater than 50\% probability flowering occurred in BBCH 0 and BBCH 09 (colors) for each part of the flowering season. In b) species were classified as hysteranthous if greater than 25\% probability flowering occurred in BBCH 0 for each part of the flowering season. In c) species were classified as hysteranthous if greater than 40\% probability flowering occurred in BBCH 0 and BBCH 09 for each part of the flowering season.}
-    \label{fig:plums}
+ \includegraphics[width=.95\textwidth]{..//..//Plots/whatReviwerswant/seasonal_distrbn.jpeg}
+    \caption{Sampling is uneven}
+    \label{fig:samps}
+\end{figure}
+
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=.95\textwidth]{..//..//Plots/whatReviwerswant/sps_preds_nodoy4supp.jpeg}
+    \caption{This the model predictions without doy}
+    \label{fig:nodoy}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=.95\textwidth]{..//..//Plots/dataplots_SUPP.jpeg}
+    \caption{This is the seperate model}
+    \label{fig:seps}
 \end{figure}
 
 \end{document}
