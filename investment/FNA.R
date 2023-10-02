@@ -300,12 +300,7 @@ FNA.small$meanpdsi.z<-zscore(FNA.small$meanpdsi)
 FNA.small$inflor.z<-zscore(FNA.small$inflor_high)
 FNA.small$fruit.z<-zscore(FNA.small$fruit_high)
 
-###this is the main model
-FNAordz.phylo2<-brm(FLSnum~inflor.z*meanpdsi.z +(1|specificEpithet)+(1|gr(species, cov = A)),
-                   data=FNA.small,
-                   family=cumulative("logit"),
-                   data2 = list(A = A),control=list(adapt_delta=0.99),
-                   warmup=6000,iter=8000)
+
 
 
 
@@ -315,6 +310,23 @@ fixef(FNAordz.phylo,probs = c(.25,.75))
 fixef(FNAordz.phylo2,probs = c(.05,.25,.75,.95))
 conditional_effects(FNAordz.phylo2,prob = .5,categorical=F)
 conditional_effects(FNAgaus.phylo,prob = .5)
+
+
+###reverseFLS number so on same scale as Plums
+FNA.small$FLSnum[FNA.small$FLS=="before"]<-4
+FNA.small$FLSnum[FNA.small$FLS=="before/with"]<-3
+FNA.small$FLSnum[FNA.small$FLS=="with"]<-2
+FNA.small$FLSnum[FNA.small$FLS=="after"]<-1
+FNA.small$FLSnum<-as.integer(FNA.small$FLSnum)
+
+
+###this is the main model
+FNAordz.phylo2<-brm(FLSnum~inflor.z*meanpdsi.z +(1|specificEpithet)+(1|gr(species, cov = A)),
+                    data=FNA.small,
+                    family=cumulative("logit"),
+                    data2 = list(A = A),control=list(adapt_delta=0.99),
+                    warmup=6000,iter=8000)
+
 
 
 
@@ -354,7 +366,7 @@ output <-output %>% tidyr::gather("var","estimate",4:6)
 #jpeg("Plots/fullprunus_mus.jpeg",width=9, height=7, units = "in",res=300)
 pottymu<-ggplot(output,aes(y = var, x = estimate)) +
    stat_pointinterval(.width=c(.5,.89))+ggthemes::theme_few()+
-   geom_vline(xintercept=0,linetype="dashed")+xlim(-10,50)+
+   geom_vline(xintercept=0,linetype="dashed")+xlim(-50,10)+
    scale_y_discrete(limits = c("b_inflor.z:meanpdsi.z","b_inflor.z","b_meanpdsi.z"),labels=c("inflorence size X mean PDSI","inflorescence size","mean PDSI"))+
    ylab("")+xlab("standardized effect size estimate")
 

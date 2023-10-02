@@ -46,7 +46,7 @@ We thank the reviewer for their efforts reviewing our manuscript and are please 
 
 \emph{I feel that the title, ‘insect-pollinated temperate trees’, is not appropriate for this study as only Prunus species was included in this study.}
 
-This is a good point. We have modified the title to better reflect our study system. The title of the manuscript is now: 
+We have modified the title to better reflect our study system. The title of the manuscript is now: 
 \begin{quote}Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in the American Plums \end{quote}
 
 \emph{l.15 “Many trees in temperate forests produce flowers before their leaves emerge.”
@@ -157,14 +157,14 @@ We also emphasize that the coefficient interaction between mean aridity and mean
 
 \emph{On the other hand, I find it highly questionable to include day of observation as a covariate in the models. This is because, as stated by the authors, hysteranthy co-varies with flowering time. In fact, selection for hysteranthy is likely to largely occur through selection for earlier flowering. Adjusting for day of observation will thus statistically remove some on the variation in hysteranthy and bias the results. At the least, I would like to see analyses both with and without day of flowering as a covariate in order to be able to judge the effects of including it.}
 
-For the updated version of this manuscript, we  have followed the Reviewer's suggestion and produced analyses both with and without day of flowering as a co variate (see lines). While these differences do change the hysteranthy likelihood estimates for some species, the relative patterns among species do not change greatly, nor do the relationships between hysteranthy and the trait predictors. We have included the results from the model without day of flowering as a covariate, in the Supporting Information for comparison.
+For the updated version of this manuscript, we  have followed the Reviewer's suggestion and produced analyses both with and without day of flowering as a co-variate (see lines \lineref{noday}-\lineref{noday2}). While these differences do change the hysteranthy likelihood estimates for some species, the relative patterns among species do not change greatly, nor do the relationships between hysteranthy and the trait predictors. We have included the results from the model without day of flowering as a co-variate, in the Supporting Information for comparison (Fig. \ref{}).
 
 We have chosen to keep the model with day of flowering as a predictor as our main analyses because we feel it a biological relevant explanatory variable that also helps control from temporal observer bias in herbaria records. Unlike in well-designed observational studies or experiments , hebaria record observations are not consistent across the season, and, therefor, trying to estimate flower-leaf sequences with accounting fore the unevenness of observations within season could misrepresent the estimates. We have added a sentence explaining this to our Methods section (line \lineref{bias1}) and \textbf{include histograms of observations across the season for each species in the Supporting Information.}
 
 
 \emph{I also do not understand why the authors used the approach they did to generate a five-level index rather than using continuous functions and continuous values of hysteranthy. The methods used seem to imply an unnecessary loss of information through categorizing a continuous variable, without stating any reason for doing this.}
 
-This concern was shared by Reviewer 1, and we agree that developing this five level index masked important variation that could be captured in a continuous index. In this version, we now provide a continuous index (detailed in lines X-X), and redone all of our analyses with this metric.
+This concern was shared by Reviewer 1, and we agree that developing this five level index masked important variation that could be captured in a continuous index. In this version, we now provide a continuous index (detailed in lines \lineref{conty1}-\lineref{conty2}), and redone all of our analyses with this metric.
 
 \emph{The authors in several places stress that the flower-sequence is likely to change as a result on climate change. However, climate and phenology has already changed considerably, meaning that herbarium specimens for the same species collected during different periods are likely to differ both with regards to absolute and relative phenology. Thus, if collection dates for herbarium specimens are unevenly distributed over the study period, or differ among species, then this might constitute a significant problem for the analyses. It is therefore a major short-coming that the manuscript does not contain any information about how collection dates were distributed, or even during what time period the used specimens were collected. I think that this key information must be provided, and that analyses need to account for differences in collection date}.
 
@@ -200,26 +200,40 @@ While we also agree it is certainly possibly that aridity levels at a given loca
 
 \emph{Lines 151-154: The unit relevant for attracting pollinators is probably not only the individual flower, but entire inflorescences, or even trees. Would it thus be useful to examine effects of an attraction parameter that includes also, for example, the number of flowers per inflorescence?}
 
-We agree with this point, and in our analyses of the larger \emph{Prunus} genus we use do indeed use number of flowers/inflorescence as a predictor. By contrast, the American plums all have solitary flowers, which is why we used petal length as our predictor. We have added text to discuss this nuance in our Dicussion.
+We agree with this point, and in our analyses of the larger \emph{Prunus} genus we use do indeed use number of flowers/inflorescence as a predictor. By contrast, the American plums all have solitary flowers, which is why we used petal length as our predictor. We have added text to discuss this nuance in our Discussion at lines \lineref{floflo1}-\lineref{floflo2}.
 
 \emph{Lines 178-185: Why did you sue a different number of c categories for this analysis?}
 
-This choice was based on data availability. As we mention in our methods, our flower-leaf sequence data for this group come from qualitative descriptions of which only four levels are available. 
+This choice was based on data availability. As we mention in our methods, our flower-leaf sequence data for this group come from qualitative descriptions of which only four levels are available. We have added a sentence to explicitly make this point at line \lineref{catergories}.
 
 \emph{Lines 209-210: I do not really understand the meaning of this. You also seem to use different wording to explain the same effect in the three paragraphs of the results section.}
 
+With the incorporation of our new continuous flower-leaf sequence index, we have re-written the Results sections. We hope that the reviewer finds this presentation more clear.
+
 \emph{Line 217: Why “However”?}
+
+This section is no longer included in our revised manuscript.
 
 \emph{Lines 220-221: I suggest to skip sentences like these and let the results talk for themselves.}
 
+We have removed this sentence.
+
 \emph{Line 222: “.. through the predictions …” ??}
+
+As the reviewer suggested about we have worked to tighten the language of this summary paragraph of our Discussion, and agree the meaning of this statement was not clear in our origial submission. We hope the stylistic changes we've made here (lines \lineref{style1}-\lineref{style2}) read more clearly in this version.
 
 \emph{Line 225: Strange subheading given that this is the topic of the entire paper?}
 
+We thank the reviewer for this point and have removed this subheading.
+
+
 \emph{Line 228: Unclear exactly what trade-offs you refer to here.}
+
+We have elaborated on this in lines \lineref{tradeoffz}.
 
 \emph{Lines 262-291: Here, I think that it would have been interesting to provide quantitative information about how much of the total variation in hysteranthy that was within vs. among species.}
 
-We can't. THIS IS NOT AN OBSERVATIONAL STUDY.
+We agree with the Reviewer that this would be a very interesting contribution to our understanding of these phenological sequences. However, because our study was based on herbaria records that were collected systematically across space and time without any repeat sample, we feel that we cannot robustly partition this variation with the present data. We have added a paragraph clarifying this limitation and suggesting it as an area for further study at lines \lineref{lim1}-\lineref{lim2}.  
+
 
 \end{document}
