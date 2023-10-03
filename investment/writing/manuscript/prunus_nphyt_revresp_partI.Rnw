@@ -194,11 +194,11 @@ Will do.
 
 
 This is an important point. We have amended this statement in line \linetrg{uniq1}. It now reads:
-\begin{quote} Woody perennials are among the small subset of plant types with the unique ability to seasonally begin reproduction prior to vegetative growth.\end{quote}
+\begin{quote} Woody perennials are among a subset of plant types with the unique ability to seasonally begin reproduction prior to vegetative growth.\end{quote}
 
 \emph{Lines 37-41: Explain what kinds of functional significance you refer to here.}
 
-TBD.
+We have replace this statement with a more precise one: ``can confer performance advantages...''.
 
 \emph{Lines 146-150: I assume that drought indices have changed over this considerable time period. What was the reason for using this time period, and for using the same time period for all records?}
 

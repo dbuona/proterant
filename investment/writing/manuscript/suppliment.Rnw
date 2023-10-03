@@ -104,6 +104,7 @@ Intercept & 0.34 & 0.23 & -0.02 & 0.20 & 0.48 & 0.70 \\
   pdsi.z:petal.z & -0.14 & 0.49 & -0.91 & -0.46 & 0.16 & 0.65 \\ 
    \hline
 \end{tabular}
+\label{tab:nodoy}
 \end{table}
 % xtable(fixef(mod.review.wants.doy,probs = c(.055,.25,.75,.945)))
 % latex table generated in R 4.1.2 by xtable 1.8-4 package
@@ -146,5 +147,20 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
     \caption{This is the seperate model}
     \label{fig:seps}
 \end{figure}
+
+\section*{Extended Methods:}
+
+Because single-predictor regressions can be formulated with either variable as the dependent one (say better and cite),  this allowed us to both account for variation in within species PDSI and petal lengths and account for the phylogenetic structure of these variables as well. (Should everything below go to the supplement?)
+
+ In these models, we modeled species and phylogeny as above. 
+
+The model structure is: 
+
+  $y_{trait} &= \alpha +\alpha_{sp} +\alpha_{phylo} + \beta_{hyst.index}*X_{hyst.index} + \epsilon$\\
+  
+  \epsilon & \sim N(0,\sigma^2_y) \\ %Check this
+  
+  where $y_{trait}$ is observed trait values (PDSI or petal length), and the slope $\beta_{\text{hyst.index}$ describes the relationship between extended hysteranthy (higher hysteranthy index value) and the trait of interest. $\alpha$ describes a grand intercept, and $\alpha_{sp}$ and $\alpha_{phylo}$ describe the species and phylogenetic effects respectively. 
+
 
 \end{document}
