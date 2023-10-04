@@ -347,7 +347,7 @@ fixef(FNAgaus.small)
 fixef(FNAordz)
 
 
-
+round(fixef(FNAordz.phylo2, probs = c(.055,.25,0.75,.945)),2)
 posterior <- as.matrix(FNAordz)
 colnames(posterior)
 mcmc_areas(posterior,
