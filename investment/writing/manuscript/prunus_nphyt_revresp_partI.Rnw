@@ -21,10 +21,11 @@
 \parskip 7.2pt 
 \renewcommand{\baselinestretch}{1.1} 	
 \parindent 0pt
-\usepackage{lineno}
+
 \bibliographystyle{refs/styles/newphyto.bst}
 \usepackage{xr-hyper}
 %\usepackage{hyperref}
+\usepackage{lineno}
 \externaldocument{plums_new_phyt_revisions}
 \externaldocument{suppliment}
 
@@ -69,7 +70,7 @@ Both reviewers raised the potentially issue of climate change affecting the patt
 
 We have also added a paragraph to our Discussion regarding this point in lines \lineref{climo1}-\lineref{climo2}.
 
-\emph{ll.114-115 “In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis (n=1009).”
+\emph{ll.114-115 ''In total, we evaluated the phenology of 2521 specimens, but only specimens with visible flowers were included in this analysis (n=1009)."
 Doing some simple math, 16 species x 200 specimens/species is 3200 specimens in total. Why are there less than 3200 specimens evaluated? Also, please provide the numbers of the analysis-included specimens for each species.}
 
 We thank the reviewer for catching this. The total sample size is less that 3200, because for several species, the database contained significantly fewer than 200 collected specimens. We have added this point to the presentation of our Methods (lines \lineref{samps1}-\lineref{samps2}), and now include a supplemental table with the sample sizes for each species (Tab. \ref{tab:samps}). 
@@ -86,7 +87,7 @@ We can see why the development of our initial index was difficult to follow and,
 
 We want to highlight that this index is based on the same underlying data and statistical model as our previous one, and that it yields similar results. The major difference is that we predict hysteranthy likelihood across the whole flowering season for each species, rather than just at each major quantile, which we feel is yields more precise and interpretable index than our previous one.
 
-We think the these changes suggested by the reviewer have made our methods much easier to follower, even without an additional visual aid, Howver if the reviwer still feels that a conceptual figure would enhance the clarity of the study, we would be have to discuss this further.
+We think the these changes suggested by the reviewer have made our methods much easier to follower, even without an additional visual aid, However if the reviewer still feels that a conceptual figure would enhance the clarity of the study, we would be have to discuss this further.
 
 \emph{Also, it is hard to understand the followings:
 -Why is it needed ‘the 0\%, 25\% 50\% and 75\% quantiles of their flowering period’?
@@ -104,7 +105,7 @@ We agree, and have added this an explanation of PDSI to the Methods (lines \line
 
 \emph{ll.197-206 Please mention the topology of Prunus species on phylogenetic tree in Fig.1b because it is also one of the results of this study.}
 
-We now include reference to the original tree toplogy in the figure.
+We now include reference to the original tree topology in the figure.
 
 \emph{ll.167-173 Please indicate the number of species included to the analysis.}
 
@@ -116,7 +117,7 @@ We have added this information to the figure captions.
 
 \emph{Fig.2 & Fig. S1 I think the flowering season and length are different among those species. Is there any trend such as hysteranthous species bloom in early spring but serathous species bloom in late spring or summer?}
 
-We agree there is a potentially interesting relationship between hysteranthy and flowering duration and time of flowering. We now mention this more explicit in our paper at line \lineref{fiver}. We think this is a really interesting question to persue further, to do so, we think you would really need to understand both spatial bias in the dataset and  species-level differences in range size, which we think is beyond the capacity of our models to account for in this context. 
+We agree there is a potentially interesting relationship between hysteranthy and flowering duration and time of flowering. We now mention this more explicit in our paper at line \lineref{fiver}. We think this is a really interesting question to pursue further, to do so, we think you would really need to understand both spatial bias in the dataset and  species-level differences in range size, which we think is beyond the capacity of our models to account for in this context. 
 
 \emph{Fig.4b Readers with red-green color blindness may have difficulty distinguishing between four colors.}
 
@@ -152,17 +153,17 @@ We agree that the insect visibility hypothesis feels overly simplistic. We feel 
 
 \emph{One major problem I have with the analyses used to test the hypotheses, is that the statistical models used do not seem to correspond to the predicted causal relationships. Currently the models examine effects hysteranthy on drought and flower size respectively. However, the logic way to construct models seem to be to examine effects of drought on hysteranthy rather than effects of hysteranthy on drought. It is thus difficult to understand why the authors use the models they do, and no motivation for the chosen model structure is provided.}
 
-We thank the reviewer for this point--- we agree that we did not present clear justification for some of the modeling choices we made in our original submission. In the new manuscript, we now include several new analyses more similar to the ones suggested by the reviewer and add text to clarify our modeling choices. We address detail thse changes below.
+We thank the reviewer for this point--- we agree that we did not present clear justification for some of the modeling choices we made in our original submission. In the new manuscript, we now include several new analyses more similar to the ones suggested by the reviewer and add text to clarify our modeling choices. We address detail these changes below.
 
 \emph{Moreover, using a model with hysteranthy as the dependent variable, rather than the current models, would also allow assessing the simultaneous effects of drought and flower size on hysteranthy, something that is not done currently. This is essential as there, as pointed out by the authors, are very good reason that drought and hysteranthy are correlated. Models examining the effects of both traits are therefore essential to disentangle the effects of each trait. In fact, you might expect drought to affect hysteranthy both directly and indirectly through effects on flower size. Anyway, I think that statistical models that better reflect causal relationships, and that examine the effects of drought and flower size simultaneously are necessary.}
 
-We agree with the Reviewer that our ideal model would include both traits as a predictors and their interactions to better understand their additive and interactive relationship to flower-leaf sequences. However, our data does not proved a straight-forward wau to do this as our  hysteranthy indices, PDSI and petal size variables were measured on different individual and have different sample sizes (FLS:1000, PDSI:2305 Petal:2757).
+We agree with the Reviewer that our ideal model would include both traits as a predictors and their interactions to better understand their additive and interactive relationship to flower-leaf sequences. However, our data does not proved a straight-forward way to do this as our  hysteranthy indices, PDSI and petal size variables were measured on different individual and have different sample sizes (FLS:1000, PDSI:2305 Petal:2757).
 
 We now explicitly make this point out in lines \lineref{just1}-lines \lineref{just2} and have executed new analyses to address this. First, to capture the additive and interactive effects of our predictors on hysteranthy we now utilize a model where we use species-level means of PDSI and petal size and test their relationship to our hysteranthy index using a beta regression framework. This is the analyses we now present in our main text and Fig. \ref{fig:prunes}.
 
-This approach captures the important interaction between the predictors, but the tradeoff is that it losses the within-species variation in the environmental/morphological traits and the phylogenetic structure. For this reason, we also include versons of our original analyses in which we model the relationship between hysteranthy and each trait seperately, which allows us to interchange the placement of the dependent and independent variable (\textbf{citation for this?}) and used phylogenetic mixed models. We now include these complementary analyses in Fig. \ref{fig:seps}, and as Extended Methods in our Supporting Information.
+This approach captures the important interaction between the predictors, but the tradeoff is that it losses the within-species variation in the environmental/morphological traits and the phylogenetic structure. For this reason, we also include versions of our original analyses in which we model the relationship between hysteranthy and each trait separately, which allows us to interchange the placement of the dependent and independent variable (\textbf{citation for this?}) and used phylogenetic mixed models. We now include these complementary analyses in Fig. \ref{fig:seps}, and as Extended Methods in our Supporting Information.
 
-We should note that we found that the coefficient interaction between mean aridity and mean petal size was not a significant driver of hysteranthy, making the qualitative inferences from these two approaches similary, with strong associations between hysteranthy and aridity and both approach and weaker associations between hysteranthy and petal size. 
+We should note that we found that the coefficient interaction between mean aridity and mean petal size was not a significant driver of hysteranthy, making the qualitative inferences from these two approaches similar, with strong associations between hysteranthy and aridity and both approach and weaker associations between hysteranthy and petal size. 
 
 
 \emph{On the other hand, I find it highly questionable to include day of observation as a covariate in the models. This is because, as stated by the authors, hysteranthy co-varies with flowering time. In fact, selection for hysteranthy is likely to largely occur through selection for earlier flowering. Adjusting for day of observation will thus statistically remove some on the variation in hysteranthy and bias the results. At the least, I would like to see analyses both with and without day of flowering as a covariate in order to be able to judge the effects of including it.}
@@ -184,7 +185,7 @@ This issues was also raised by Reviewer 1. We have added information about colle
 
 \emph{In several places, the authors refer to the importance for the current study to understand the effects of ongoing global change. For example, on lines 56-57 they state that the study “.. offers insights into how shifting flower-leaf sequences may impact species demography and species distributions as climate continues to change. Although, I agree that almost all basic knowledge about the biology of species will be helpful in this respect, I do not see that this study is particularly important in this respect. I thus suggest to down-tune this type of arguments and rely on the importance of this study for our basic understanding of hysteranthy.}
 
-We appreciate this point, and agree that this study may have more relevance to understanding the basic ecology and evolution of phenological sequences than the implications for climate change. We have followed the Reviewers recommendation and shifted the context of our study away from climate change in several places our Introduction and Discussion seconds. We now only discuss climate change in the context of our model covariate (see above) in lines \lineref{climo1}-\lineref{climo2}, and include the new citation from \citet{Guo:2023wb} suggesting the stability of flower-leaf sequences we observed in our data is consistent with wider observations.
+We appreciate this point, and agree that this study may have more relevance to understanding the basic ecology and evolution of phenological sequences than the implications for climate change. We have followed the Reviewers recommendation and shifted the context of our study away from climate change in several places our Introduction and Discussion seconds. We now only discuss climate change in the context of our model co-variate (see above) in lines \lineref{climo1}-\lineref{climo2}, and include the new citation from \citet{Guo:2023wb} suggesting the stability of flower-leaf sequences we observed in our data is consistent with wider observations.
 
 \emph{Other comments, in order of appearance in the manuscript:}
 
@@ -206,7 +207,7 @@ We have replace this statement with a more precise one: ``can confer performance
 
 We agree that our decision to truncate the drought index at for this period was arbitrary. In the new version, we use the full 2000 year record provided by our data source.
 
-While we also agree it is certainly possibly that aridity levels at a given location have changed over this time period, we see no clear way coherently assign different evaluation periods for different records, or truncate specific records based on change at a location. While this could be possible with extending spatio-temporal modeling approached, we do not have any baseline information about how long a population has been present at a given locality, which we feel would make it difficult to root any attempt to fine-time the time period we evaluate in ecological sound. If the reviewer has any suggestions for a straightforward way to do this we would certainly be open to trying iy.
+While we also agree it is certainly possibly that aridity levels at a given location have changed over this time period, we see no clear way coherently assign different evaluation periods for different records, or truncate specific records based on change at a location. While this could be possible with extending spatio-temporal modeling approached, we do not have any baseline information about how long a population has been present at a given locality, which we feel would make it difficult to root any attempt to fine-time the time period we evaluate in ecological sound. If the reviewer has any suggestions for a straightforward way to do this we would certainly be open to trying it.
 
 
 \emph{Lines 151-154: The unit relevant for attracting pollinators is probably not only the individual flower, but entire inflorescences, or even trees. Would it thus be useful to examine effects of an attraction parameter that includes also, for example, the number of flowers per inflorescence?}
