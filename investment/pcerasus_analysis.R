@@ -473,6 +473,10 @@ dev.off()
 library(xtable)
 xtable(d.flo.check%>% group_by(species) %>% count())
 indexcomps<-dplyr::select(sumz,species,index,index.nodoy)
+sumz2<-dplyr::select(sumz2,species,index)
+colnames(sumz2)[2]<-"index_bbch_09"
+indexcomps<-left_join(indexcomps,sumz2)
+
 xtable(indexcomps)
 samps_sum<-dplyr::select(sumz,species,n.petal,n.pdsi)
 
@@ -651,7 +655,7 @@ alt2<-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=
 library(ggtree)
 jpeg("..//Plots/phylosig2.jpeg", width=4, height=4,unit="in",res=300)
 p<-ggtree(pruned.by,layout = "roundrect")
-p %<+% FLSindexB+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=as.factor(hystscoreB)),size=5,shape=15)+ xlim(0, 3)+scale_color_viridis_d(option="turbo",name="Hysteranthy",  labels=c("Never","At start of season","Through early season","Through mid season","Through late season"))
+p %<+% sumz+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=index),size=5,shape=15)+ xlim(0, 3)+scale_color_viridis_c(option="turbo",direction=1,name="hysteranthy \nindex", )
 dev.off()
 
 jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=13,unit="in",res=250)

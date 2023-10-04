@@ -41,23 +41,23 @@
 \section*{Tables}
 \begin{table}[ht]
 \centering
-\begin{tabular}{rlrrr}
+\begin{tabular}{|lccc|}
   \hline
- & species & n.FLS & n.petal & n.pdsi \\ 
+  species & n FLS & n petal length & n pdsi \\ 
   \hline
-1 & alleghaniensis &  17 &  39 & 114 \\ 
-  2 & americana &  95 & 271 & 200 \\ 
-  3 & angustifolia &  77 & 238 & 200 \\ 
-  4 & gracilis &  85 & 289 & 200 \\ 
-  5 & hortulana & 106 & 254 & 200 \\ 
-  6 & maritima &  75 & 255 & 200 \\ 
-  7 & mexicana &  64 & 284 & 200 \\ 
-  8 & munsoniana & 117 & 279 & 200 \\ 
-  9 & nigra & 118 & 230 & 200 \\ 
-  10 & rivularis & 111 & 225 & 200 \\ 
-  11 & subcordata &  46 &  71 &  30 \\ 
-  12 & texana &  19 &  38 &  39 \\ 
-  13 & umbellata &  70 & 284 & 200 \\ 
+ alleghaniensis &  17 &  39 & 114 \\ 
+americana &  95 & 271 & 200 \\ 
+angustifolia &  77 & 238 & 200 \\ 
+ gracilis &  85 & 289 & 200 \\ 
+ hortulana & 106 & 254 & 200 \\ 
+  maritima &  75 & 255 & 200 \\ 
+  mexicana &  64 & 284 & 200 \\ 
+  munsoniana & 117 & 279 & 200 \\ 
+ nigra & 118 & 230 & 200 \\ 
+   rivularis & 111 & 225 & 200 \\ 
+   subcordata &  46 &  71 &  30 \\ 
+   texana &  19 &  38 &  39 \\ 
+  umbellata &  70 & 284 & 200 \\ 
    \hline
 \end{tabular}
 \caption{Sample sizes of each for each species used in this study}
@@ -66,27 +66,31 @@
 
 % latex table generated in R 4.1.2 by xtable 1.8-4 package
 % Mon Oct  2 18:15:48 2023
+% latex table generated in R 4.1.2 by xtable 1.8-4 package
+% Wed Oct  4 10:01:21 2023
 \begin{table}[ht]
 \centering
-\begin{tabular}{rlrr}
+\begin{tabular}{|lccc|}
   \hline
- & species & index & index.nodoy \\ 
+  species & index BBCH 0-11 & index BBCH 0-11 w/o day of season & index BBCH 0-09 \\ 
   \hline
-1 & mexicana & 0.85 & 0.90 \\ 
-  2 & umbellata & 0.82 & 0.83 \\ 
-  3 & angustifolia & 0.76 & 0.77 \\ 
-  4 & maritima & 0.68 & 0.76 \\ 
-  5 & gracilis & 0.64 & 0.68 \\ 
-  6 & americana & 0.62 & 0.55 \\ 
-  7 & munsoniana & 0.60 & 0.67 \\ 
-  8 & alleghaniensis & 0.59 & 0.65 \\ 
-  9 & nigra & 0.55 & 0.62 \\ 
-  10 & hortulana & 0.51 & 0.52 \\ 
-  11 & texana & 0.51 & 0.54 \\ 
-  12 & rivularis & 0.44 & 0.53 \\ 
-  13 & subcordata & 0.16 & 0.18 \\ 
+ mexicana & 0.85 & 0.90 & 0.69 \\ 
+  umbellata & 0.82 & 0.83 & 0.58 \\ 
+ angustifolia & 0.76 & 0.77 & 0.51 \\ 
+  maritima & 0.68 & 0.76 & 0.42 \\ 
+ gracilis & 0.64 & 0.68 & 0.36 \\ 
+  americana & 0.62 & 0.55 & 0.38 \\ 
+  munsoniana & 0.60 & 0.67 & 0.38 \\ 
+ alleghaniensis & 0.59 & 0.65 & 0.32 \\ 
+  nigra & 0.55 & 0.62 & 0.30 \\ 
+   hortulana & 0.51 & 0.52 & 0.28 \\ 
+   texana & 0.51 & 0.54 & 0.25 \\ 
+   rivularis & 0.44 & 0.53 & 0.22 \\ 
+   subcordata & 0.16 & 0.18 & 0.05 \\ 
    \hline
 \end{tabular}
+\label{tab:mod1comps}
+\caption{Hysteranthy index score for 13 species in the American plums based on model predictions defining flowering during BBCH stages 0-11 as hysteranthous for models with an without day of season of observation as a co-variate, and with hysteranthy defined as flowering during BBCH 0-09 only. }
 \end{table}
 
 % xtable(fixef(mod.review.wants,probs = c(.055,.25,.75,.945)))
@@ -94,7 +98,7 @@
 % Mon Oct  2 16:33:58 2023
 \begin{table}[ht]
 \centering
-\begin{tabular}{rrrrrrr}
+\begin{tabular}{rrccccc}
   \hline
  & Estimate & Est.Error & Q5.5 & Q25 & Q75 & Q94.5 \\ 
   \hline
@@ -105,14 +109,13 @@ Intercept & 0.34 & 0.23 & -0.02 & 0.20 & 0.48 & 0.70 \\
   pdsi.z:petal.z & -0.14 & 0.49 & -0.91 & -0.46 & 0.16 & 0.65 \\ 
    \hline
 \end{tabular}
-\label{tab:nodoy}
 \end{table}
 % xtable(fixef(mod.review.wants.doy,probs = c(.055,.25,.75,.945)))
 % latex table generated in R 4.1.2 by xtable 1.8-4 package
 % Mon Oct  2 16:34:12 2023
-\begin{table}[ht]
+\begin{table}
 \centering
-\begin{tabular}{rrrrrrr}
+\begin{tabular}{rrccccc}
   \hline
  & Estimate & Est.Error & Q5.5 & Q25 & Q75 & Q94.5 \\ 
   \hline
@@ -123,35 +126,41 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
   pdsi.z:petal.z & -0.16 & 0.54 & -1.01 & -0.50 & 0.17 & 0.69 \\ 
    \hline
 \end{tabular}
+\label{tab:nodoy}
+\caption{Model paremeter estimates of the relationship between environmental/trait predictors and hysteranthy index based on hysteranthy index derived from a model included day of season of observation (top table) and one that excluded this predictor from the index derivation (bottom table)}
 \end{table}
-\pagebreak
+
+\pagebreak[4]
 
 \section*{Figures} 
+
 \begin{figure}[h!]
     \centering
- \includegraphics[width=.95\textwidth]{..//..//Plots/whatReviwerswant/seasonal_distrbn.jpeg}
-    \caption{Sampling is uneven}
-    \label{fig:samps}
+ \includegraphics[width=.5\textwidth]{..//..//Plots/whatReviwerswant/seasonal_distrbn.jpeg}
+    \label{fig:bias}
+     \caption{Histograms of collect day of year for each of the American plum species used in these analyses}
 \end{figure}
 
 
 \begin{figure}[h!]
     \centering
- \includegraphics[width=.95\textwidth]{..//..//Plots/whatReviwerswant/sps_preds_nodoy4supp.jpeg}
-    \caption{This the model predictions without doy}
+ \includegraphics[width=.7\textwidth]{..//..//Plots/whatReviwerswant/sps_preds_nodoy4supp.jpeg}
+    \caption{Predicted likelihood that a species would be in flower during each vegetative BBCH phase for each species in the American plums. Points are the mean likelihood while bars represent 89\% uncertainty intervals. Hysteranthy index values in each box were derived from the summed likelihood  species would be found at BBCH stages 0-11 (purple fill).}
     \label{fig:nodoy}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
  \includegraphics[width=.95\textwidth]{..//..//Plots/dataplots_SUPP.jpeg}
-    \caption{This is the seperate model}
+    \caption{Relationships between the hysteranthy index scores and environmental and biological traits based on Bayesian phylogenetic mixed models where the relationship between hysteranthy score and PDSI a)  and mean petal length b)  were each modeled seperately. Solid lines indicate the mean posterior estimate and shaded areas 4000 draws from the posterior distrubtion as a display of uncertainty. The points are jittered along the x-axis only for visibility. This plots complements the model presented in Fig. \ref{fig:prunes}}
     \label{fig:seps}
 \end{figure}
 
+\pagebreak
+
 \section*{Extended Methods:}
 
-Because single-predictor regressions can be formulated with either variable as the dependent one (say better and cite),  this allowed us to both account for variation in within species PDSI and petal lengths and account for the phylogenetic structure of these variables as well. (Should everything below go to the supplement?)
+To complement our main analyses, we also modeled the relationship between PDSI and hysteranthy index scores and petal length and hysteranthy index scores for the 13 species in the American plums, which allowed us to both account for variation in within species PDSI and petal lengths and account for the phylogenetic structure of these variables as well. 
 
  In these models, we modeled species and phylogeny as above. 
 
