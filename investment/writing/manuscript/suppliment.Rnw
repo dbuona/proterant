@@ -24,10 +24,10 @@
 \bibliographystyle{..//refs/styles/besjournals.bst}
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
-%\usepackage{xr}
+\usepackage{xr}
 %\usepackage{hyperref}
-\usepackage{xr-hyper}
-\usepackage{hyperref}
+%\usepackage{xr-hyper}
+%\usepackage{hyperref}
 \externaldocument{plum_manuscript}
 
 

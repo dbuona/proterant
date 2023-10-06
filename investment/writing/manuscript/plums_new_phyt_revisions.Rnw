@@ -22,8 +22,8 @@
 \parindent 0pt
 
 \bibliographystyle{refs/styles/newphyto.bst}
-\usepackage{xr-hyper}
-\usepackage{hyperref}
+\usepackage{xr}
+%\usepackage{hyperref}
 \externaldocument{suppliment}
 \externaldocument{prunus_nphyt_revresp_partI}
 
