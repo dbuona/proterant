@@ -34,6 +34,8 @@
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
+%emw22Oct -- I would perhaps add a snippet from the editor, from 'I have received .... ' ending with 'rationale for the hypotheses you present.'  And very quickly reply and stress that (1) You completely redid ALL the analyses, you switched the dependent/indep., you added year (and it does not matter) and you have overhauled the methods and results, and show that *your results are unchanged.* That's an important point to make sure the editor gets (both -- you did a ton and, it did not change the answer). 
+
 \emph{Referee: 1}
 
 \emph{Comments to the Author}
@@ -46,7 +48,7 @@
 
 \emph{Overall, I believe this paper addresses a significant and timely topic, and the analyses conducted were intriguing. However, it is crucial to provide additional information as the current explanation is inadequate and challenging to comprehend.}
 
-
+%emw22Oct -- I only quickly skimmed but this sort of verbiage with no actual mention of WHAT you did is not so great to me. You have the right friendly verbiage for a response to reviewers, but you need to condense it to say more clearly: we did X, Y, and Z and we find the same thing. The paper is better and you can read more below. 
 We thank the reviewer for their efforts reviewing our manuscript and are pleased that they found our topic interesting and relevant. We also appreciate the reviewer's perspective on the aspects of our study that required more development and clarification. We have done our best to address the issues highlighted by the reviewer and feel that their comments have helped us generate an improved manuscript that expressed our analyses and their implications more clearly. We detail the changes we've made below.
 
 \emph{Concerns}
@@ -67,7 +69,7 @@ Thanks for highlighting this. We have adjusted these statements to be more a pre
 
 We appreciate this point. Our samples span many decades of collection (1844-2020), which is necessary to generate a large enough sample size to give our analyses statistical power. We have added this information at line \lineref{range1}.
 
-Both reviewers raised the potentially issue of climate change affecting the patterns of flower-leaf sequences we sought to quantify, and for this reason, we have now included year of observation as a co-variate in our main model. Following convention from phenological change studies we, used 1980 as a hinge. We detail these methods in lines \lineref{hinge1}-\lineref{hinge2}. In this case, year did not have a significant effect on patterns of hysteranthy.
+Both reviewers raised the potentially issue of climate change affecting the patterns of flower-leaf sequences we sought to quantify, and for this reason, we have now included year of observation as a co-variate in our main model. Following convention from phenological change studies we, used 1980 as a hinge. We detail these methods in lines \lineref{hinge1}-\lineref{hinge2}. In this case, year did not have a significant effect on patterns of hysteranthy. %emw22Oct -- way to bury the lead! You need to say this upfront: both reviewers said this, we addressed it, it did not matter ... so this means that ... then you can explain the lines and methods a touch. 
 
 We have also added a paragraph to our Discussion regarding this point in lines \lineref{climo1}-\lineref{climo2}.
 
@@ -76,6 +78,7 @@ Doing some simple math, 16 species x 200 specimens/species is 3200 specimens in 
 
 We thank the reviewer for catching this. The total sample size is less that 3200, because for several species, the database contained significantly fewer than 200 collected specimens. We have added this point to the presentation of our Methods (lines \lineref{samps1}-\lineref{samps2}), and now include a supplemental table with the sample sizes for each species (Tab. \ref{tab:samps}). 
 
+%emw22Oct -- you could cut some wordiness in your letter. 'We also would like to highlight that one of the ... ' --> A major reason we chose these models is ... 
 We also would like to highlight that one of the reasons we chose models that partially-pool coefficient estimates on species is to account for this lack of balance among species in our dataset.
 
 \emph{l.113 Authors are encouraged to add a little more explanations related to ‘BBCH scale’ so that readers can understand it without referring to the original references.}
@@ -86,6 +89,7 @@ We agree this would make our text easier to follow and have added a more concret
 
 We can see why the development of our initial index was difficult to follow and, in retrospect, we agree that building our index of of seasonal quantiles wasn't the most straightforward approach.  In the new version of the paper, we instead present a continuous index based on the likelihood a species' flowers appear before leaf development through across their whole flowering season. We believe this approach is equally robust and substantially more clear and useful. 
 
+%emw22Oct -- 'We want to highlight that ' --> delete
 We want to highlight that this index is based on the same underlying data and statistical model as our previous one, and that it yields similar results. The major difference is that we predict hysteranthy likelihood across the whole flowering season for each species, rather than just at each major quantile, which we feel is yields more precise and interpretable index than our previous one.
 
 We think the these changes suggested by the reviewer have made our methods much easier to follower, even without an additional visual aid, However if the reviewer still feels that a conceptual figure would enhance the clarity of the study, we would be have to discuss this further.
@@ -118,6 +122,7 @@ We have added this information to the figure captions.
 
 \emph{Fig.2 & Fig. S1 I think the flowering season and length are different among those species. Is there any trend such as hysteranthous species bloom in early spring but serathous species bloom in late spring or summer?}
 
+%emw22Oct -- I am only skimming, but this is some new voice you have! I think it sounds a little daft for you.... too many 'really' for me. Sound more authoritative as you are damn good at this topic. Something like, great question -- to address it you need XYZ, we say this now here (even if you said it before the revisions!). 
 We agree there is a potentially interesting relationship between hysteranthy and flowering duration and time of flowering. We now mention this more explicit in our paper at line \lineref{fiver}. We think this is a really interesting question to pursue further, to do so, we think you would really need to understand both spatial bias in the dataset and  species-level differences in range size, which we think is beyond the capacity of our models to account for in this context. 
 
 \emph{Fig.4b Readers with red-green color blindness may have difficulty distinguishing between four colors.}
@@ -129,7 +134,7 @@ We appreciate you identifying this and have changed our color scheme in all colo
 -‘and’ and ‘&’ are mixed.\\
 -Order lists of references in date order (oldest first).}
 
-Thanks. We have made these formatting changes. \textbf{TO DO}
+Thanks. We have made these formatting changes. \textbf{TO DO} %emw22Oct -- oy! I bet this *is* someone who checks for typos in the journal list. 
 
 \emph{Referee: 2}
 
@@ -138,6 +143,7 @@ Thanks. We have made these formatting changes. \textbf{TO DO}
 
 \emph{The question addressed is important and interesting, and the approach taken appears basically sound. I do, however, have several concerns with the manuscript.}
 
+%emw22Oct --  wait, did you plagiarize yourself (see above) here? 
 We thank the Reviewer for their time spent with our manuscript, and for providing important feedback. We are please that they found the topic important and interesting, and our general approach to be sound. We appreciate the  Reviewer's concerns, and have done our best to address them in the revised version of the manuscript. We feel their comments have improved the quality of our study, and we detail the changes we've made below.
 
 \emph{The two basic ways in which selection might favor hysteranthy are correlational selection, and independent but differential selection on timing of flowering and timing of leaf-out. In the introduction, the authors touch upon this difference, but the reasoning in the manuscript appears a bit confused as “Fruit maturation hypothesis”, similar to the first two hypotheses, is treated as an example of correlational selection. However, the mechanisms supposed to explain hysteranthy through this mechanism does not involve correlational selection, and thus seems to fall within the category “null explanations” discussed in the following paragraph.}
