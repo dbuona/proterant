@@ -21,17 +21,17 @@
 \parindent 0pt
 
 
-\bibliographystyle{..//refs/styles/besjournals.bst}
+\bibliographystyle{..//refs/styles/newphyto.bst}
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
 \usepackage{xr}
 %\usepackage{hyperref}
 %\usepackage{xr-hyper}
 %\usepackage{hyperref}
-\externaldocument{plum_manuscript}
+\externaldocument{plums_new_phyt_revisions}
 
 
-\title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in The American Plums} %emw: check title if you change it
+\title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in the American Plums}
 \date{}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -88,8 +88,8 @@ angustifolia &  77 & 238 & 200 \\
    subcordata & 0.16 & 0.18 & 0.05 \\ 
    \hline
 \end{tabular}
-\label{tab:mod1comps}
 \caption{Hysteranthy index score for 13 species in the American plums based on model predictions defining flowering during BBCH stages 0-11 as hysteranthous for models with an without day of season of observation as a co-variate, and with hysteranthy defined as flowering during BBCH 0-09 only. }
+\label{tab:mod1comps}
 \end{table}
 
 % xtable(fixef(mod.review.wants,probs = c(.055,.25,.75,.945)))
@@ -125,8 +125,8 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
   pdsi.z:petal.z & -0.16 & 0.54 & -1.01 & -0.50 & 0.17 & 0.69 \\ 
    \hline
 \end{tabular}
-\label{tab:nodoy}
 \caption{Model paremeter estimates of the relationship between environmental/trait predictors and hysteranthy index based on hysteranthy index derived from a model included day of season of observation (top table) and one that excluded this predictor from the index derivation (bottom table)}
+\label{tab:nodoy}
 \end{table}
 
 \pagebreak[4]
@@ -136,8 +136,9 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
 \begin{figure}[h!]
     \centering
  \includegraphics[width=.5\textwidth]{..//..//Plots/whatReviwerswant/seasonal_distrbn.jpeg}
-    \label{fig:bias}
+   
      \caption{Histograms of collect day of year for each of the American plum species used in these analyses}
+      \label{fig:bias}
 \end{figure}
 
 
@@ -159,7 +160,7 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
 
 \section*{Extended Methods:}
 %emw22Oct -- I don't get how this is different than what you have in main text. We need to spell it out better. 
-To complement our main analyses, we also modeled the relationship between PDSI and hysteranthy index scores and petal length and hysteranthy index scores for the 13 species in the American plums, which allowed us to both account for variation in within species PDSI and petal lengths and account for the phylogenetic structure of these variables as well. 
+To complement our main analyses in which we fit models based on species-level means of PDSI and petal length as predictors, we also implemented additional models where we assessed the relationship between PDSI and hysteranthy, and the relationship between petal length and hysteranthy separately. With this model structure our analyses accounted for the intra-specific variation in both PDSI and petal length as the phylogenetic structure of these variables.
 
  In these models, we modeled species and phylogeny as above. 
 
@@ -170,6 +171,5 @@ The model structure is:
   \epsilon & \sim N(0,\sigma^2_y) \\ %Check this
   
   where $y_{trait}$ is observed trait values (PDSI or petal length), and the slope $\beta_{\text{hyst.index}$ describes the relationship between extended hysteranthy (higher hysteranthy index value) and the trait of interest. $\alpha$ describes a grand intercept, and $\alpha_{sp}$ and $\alpha_{phylo}$ describe the species and phylogenetic effects respectively. 
-
 
 \end{document}

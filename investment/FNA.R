@@ -367,7 +367,7 @@ output <-output %>% tidyr::gather("var","estimate",4:6)
 pottymu<-ggplot(output,aes(y = var, x = estimate)) +
    stat_pointinterval(.width=c(.5,.89))+ggthemes::theme_few()+
    geom_vline(xintercept=0,linetype="dashed")+xlim(-50,10)+
-   scale_y_discrete(limits = c("b_inflor.z:meanpdsi.z","b_inflor.z","b_meanpdsi.z"),labels=c("inflorence size X mean PDSI","inflorescence size","mean PDSI"))+
+   scale_y_discrete(limits = c("b_inflor.z:meanpdsi.z","b_meanpdsi.z","b_inflor.z"),labels=c("PDSI X infloresence size","PDSI","inflorescence size"))+
    ylab("")+xlab("standardized effect size estimate")
 
 #dev.off()
@@ -396,10 +396,11 @@ launch_shinystan(FNAordz.error)
 #launch_shinystan(FNAordz.error1)
 p1<-plot(conditional_effects(FNAordz.phylo2, "meanpdsi.z", ordinal = TRUE,prob = .5,plot=FALSE))
 p3<-plot(conditional_effects(FNAordz.phylo2, "inflor.z", ordinal = TRUE,prob=.5,plot=FALSE))
+
 conditions <- make_conditions(FNAordz.phylo2, "inflor.z")
 p4<-plot(conditional_effects(FNAordz.phylo2, "meanpdsi.z",conditions=conditions,ordinal = TRUE,prob=.5,plot=FALSE))
 range(FNA.small$inflor.z)
-p1<-p1[[1]]+ggthemes::theme_few()+scale_y_discrete(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"))+xlab(" mean PDSI")
+p1<-p1[[1]]+ggthemes::theme_few()+scale_y_discrete(name="FLS",labels=c("flowers after leaves","flowers with leaves","flowers before/with leaves","flowers before leaves"))+xlab("PDSI")
 
 #p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p3<-p3[[1]]+ggthemes::theme_few()+ylab("")+xlab("inflorescence size")+theme(axis.text.y=element_blank(),axis.ticks.y = element_blank())

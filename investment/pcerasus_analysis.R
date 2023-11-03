@@ -262,21 +262,18 @@ cofs<-filter(cofs,predictor %in% c("doy","YEAR.hin"))
 p2a<-ggplot(cofs,aes(Estimate,predictor))+geom_point(size=4)+
   geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=.5)+
   geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
-  scale_y_discrete(labels=c("day of season","year"))+xlab("Estimated effect")+ggthemes::theme_few()
+  scale_y_discrete(labels=c("day of year","year"))+xlab("Estimated effect")+ggthemes::theme_few()
 
 p2b<-ggplot(check,aes(doy,pred))+geom_line(aes(color=class,group=.draw),size=0.3)+facet_wrap(~factor(species,levels=c("mexicana","umbellata","angustifolia","maritima","gracilis","americana","munsoniana","alleghaniensis","nigra","hortulana","texana","rivularis","subcordata")))+
   ggthemes::theme_few(base_size =11)+
   scale_color_viridis_d(direction = -1,begin=.6,end=.1)+geom_label(data=sumz,x=150,y=.75,aes(label=index))+
-  xlab("day of season")+
+  xlab("day of year")+
   ylab("hysteranthy likelihood")+
   theme(strip.text = element_text(face = "italic"))+theme(legend.position = "bottom",legend.title = element_blank())
 
 jpeg("..//Plots/whatReviwerswant/sps_preds.jpeg",height=7,width=7,units='in',res=300)
-ggpubr::ggarrange(p2a,p2b, ncol=1,heights=c(.3,.7),labels=c("a)","b)"))
+ggpubr::ggarrange(p2b,p2a, ncol=1,heights=c(.7,.3),labels=c("a)","b)"))
 dev.off()
-
-
-
 
 
 
@@ -393,13 +390,13 @@ fp<-ggplot(cofs.2,aes(x=Estimate,y=factor(predictor,level=c("pdsi.z:petal.z","pd
 p1<-plot(conditional_effects(mod.review.wants,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE))
 
 
-pi<-p1[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nindex")+xlab("PDSI")
+pi<-p1[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("PDSI")
 pi
-pii<-p1[[2]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nindex")+xlab("petal length")
+pii<-p1[[2]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")
 pii
 piii<-p1[[3]]+ggthemes::theme_few()+ylab("petal length")+xlab("PDSI")+scale_fill_discrete(name="hysteranthy \nindex",type = "viridis")+theme(legend.position = "right")
 piii
-p4<-ggpubr::ggarrange(pi,pii,nrow=1,common.legend = TRUE,legend="bottom",labels=c("b)","c)"))
+p4<-ggpubr::ggarrange(pi,pii,nrow=1,common.legend = TRUE,legend="bottom",labels=c("b)",""))
 
 p5<-ggpubr::ggarrange(p4,piii,labels=c("","d)"),widths=c(1,.5))
 

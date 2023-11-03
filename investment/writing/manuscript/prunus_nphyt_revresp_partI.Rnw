@@ -34,6 +34,13 @@
 \begin{document}
 \SweaveOpts{concordance=TRUE}
 
+\emph{Comments from the editor}
+
+\emph{I have received two reviews of your manuscript and have read it carefully myself.  While both reviewers believe that the topic investigated is interesting and timely, both also identify some critical problems that prevent my acceptance of the manuscript in its present form.  Most of these concern statistical issues, particularly which variables are used as dependent and which as independent.  In addition, one reviewer questions the rationale for some of the hypotheses you present.}
+
+We thank the editor, Dr. Rausher, for feedback on our manuscript and for the opportunity to revise and resubmit this work. In our updated submission we have addressed the reviewers' statistical concerns by developed a continuous index to quantify flower-leaf sequences and re-done all of our analyses using this metric. We also 
+
+
 %emw22Oct -- I would perhaps add a snippet from the editor, from 'I have received .... ' ending with 'rationale for the hypotheses you present.'  And very quickly reply and stress that (1) You completely redid ALL the analyses, you switched the dependent/indep., you added year (and it does not matter) and you have overhauled the methods and results, and show that *your results are unchanged.* That's an important point to make sure the editor gets (both -- you did a ton and, it did not change the answer). 
 
 \emph{Referee: 1}
