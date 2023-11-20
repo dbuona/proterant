@@ -650,7 +650,8 @@ alt2<-ggplot(data=result2,aes(bbch,likelihood2))+geom_point()+geom_ribbon(aes(x=
   scale_fill_viridis_d()+ylab("likelihood")+xlab("vegetative BBCH stage while flowering")+theme(legend.title=element_blank())
 
 library(ggtree)
-jpeg("..//Plots/phylosig2.jpeg", width=4, height=4,unit="in",res=300)
+#jpeg("..//Plots/phylosig2.jpeg", width=4, height=4,unit="in",res=300)
+pdf("..//Plots/phylosig2.pdf")
 p<-ggtree(pruned.by,layout = "roundrect")
 p %<+% sumz+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=index),size=5,shape=15)+ xlim(0, 3)+scale_color_viridis_c(option="turbo",direction=1,name="hysteranthy \nindex", )
 dev.off()

@@ -60,7 +60,7 @@ angustifolia &  77 & 238 & 200 \\
   umbellata &  70 & 284 & 200 \\ 
    \hline
 \end{tabular}
-\caption{Sample sizes of each for each species used in this study}
+\caption{Sample sizes of each for each species used in this study.}
 \label{tab:samps}
 \end{table}
 
@@ -89,7 +89,7 @@ angustifolia &  77 & 238 & 200 \\
    subcordata & 0.16 & 0.18 & 0.05 \\ 
    \hline
 \end{tabular}
-\caption{Hysteranthy index score for 13 species in the American plums based on model predictions defining flowering during BBCH stages 0-11 as hysteranthous for models with an without day of season of observation as a co-variate, and with hysteranthy defined as flowering during BBCH 0-09 only. }
+\caption{Hysteranthy index score for 13 species in the American plums based on model predictions defining flowering during BBCH stages 0-11 as hysteranthous for models with and without day of season of observation as a covariate, and with hysteranthy defined as flowering during BBCH 0-09 only. }
 \label{tab:mod1comps}
 \end{table}
 
@@ -126,7 +126,7 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
   pdsi.z:petal.z & -0.16 & 0.54 & -1.01 & -0.50 & 0.17 & 0.69 \\ 
    \hline
 \end{tabular}
-\caption{Model paremeter estimates of the relationship between environmental/trait predictors and hysteranthy index based on hysteranthy index derived from a model included day of season of observation (top table) and one that excluded this predictor from the index derivation (bottom table)}
+\caption{Model paremeter estimates of the relationship between environmental/trait predictors and hysteranthy based on a hysteranthy index derived from a model that included day of season of observation (top table) and one that excluded this predictor from the index derivation (bottom table)}
 \label{tab:nodoy}
 \end{table}
 
@@ -153,18 +153,16 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
 \begin{figure}[h!]
     \centering
  \includegraphics[width=.95\textwidth]{..//..//Plots/dataplots_SUPP.jpeg}
-    \caption{Relationships between the hysteranthy index scores and environmental and biological traits based on Bayesian phylogenetic mixed models where the relationship between hysteranthy score and PDSI a)  and mean petal length b)  were each modeled seperately. Solid lines indicate the mean posterior estimate and shaded areas 4000 draws from the posterior distrubtion as a display of uncertainty. The points are jittered along the x-axis only for visibility. This plots complements the model presented in Fig. \ref{fig:prunes}}
+    \caption{Relationships between the hysteranthy index scores and environmental and biological traits based on Bayesian phylogenetic mixed models where the relationship between hysteranthy score and PDSI a)  and mean petal length b)  were each modeled seperately. Solid lines indicate the mean posterior estimate and shaded areas 4000 draws from the posterior distrubtion as a display of uncertainty. The points are jittered along the $x$-axis only for visibility. These plots complements the model presented in Fig. \ref{fig:prunes}}
     \label{fig:seps}
 \end{figure}
 
 \pagebreak
 
 \section*{Extended Methods:}
-%emw22Oct -- I don't get how this is different than what you have in main text. We need to spell it out better. 
 To complement our main analyses in which we fit models based on species-level means of PDSI and petal length as predictors, we also implemented additional models where we assessed the relationship between PDSI and hysteranthy, and the relationship between petal length and hysteranthy separately. With this model structure our analyses accounted for the intra-specific variation in both PDSI and petal length as the phylogenetic structure of these variables.
 
- In these models, we modeled species and phylogeny as above. 
-
+ In these models, we modeled species and phylogeny as in the main text.
 The model structure is: 
 
   $y_{trait} &= \alpha +\alpha_{sp} +\alpha_{phylo} + \beta_{hyst.index}*X_{hyst.index} + \epsilon$\\
