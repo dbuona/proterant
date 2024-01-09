@@ -23,7 +23,7 @@ library(sp)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-
+load("TP_analyses_Rda")
 
 
 
@@ -53,16 +53,11 @@ ggplot(d.flo,aes(doy))+geom_histogram(bins=20)+facet_wrap(~species)
 
 ggplot(d.flo.check,aes(doy))+geom_histogram(bins=20)+facet_wrap(~species)
 d.flo.check <- d.flo.check  %>% group_by(species) %>%  mutate(range = min(doy))
-
-
-
-
 latpoints<-d.flo.check$lat #
 lonpoints<-d.flo.check$lon
+
+### Mean Temperature and precip
 lonpoints<-lonpoints+360 # make vector of prunus coordinates
-
-
-
 extract.pts<-cbind(lonpoints,latpoints)
 
 extract.pts <- extract.pts[complete.cases(extract.pts), ]
@@ -73,14 +68,12 @@ p<-brick("~/Downloads/precip.mon.total.v501.nc")
 t<-brick("~/Downloads/air.mon.mean.v501.nc")
 
 
-mean.p <-calc(p, fun = mean,na.rm=TRUE)
+mean.p <-calc(p, fun = mean,na.rm=TRUE) ## calculate the mean of each
 mean.t <-calc(t, fun = mean,na.rm=TRUE)
 
 Pp<-raster::extract(mean.p,extract.pts,method="simple")
 Tt<-raster::extract(mean.t,extract.pts,method="simple")
-#cellStats(climy,stat = "mean")
-#names(climy) <- c("Temp","Prec")
-#tp<-extract(climy,extract.pts,method="simple")
+
 Pp<-as.data.frame(Pp)
 Tt<-as.data.frame(Tt)
 joiner<-dplyr::select(d.flo.check,lat,lon,species)
@@ -115,10 +108,16 @@ varP<-as.data.frame(varP)
 
 joiney<-dplyr::select(d.flo.check,id,species,year,lon,lat)
 joiney <- joiney[complete.cases(joiney),] 
+
 vart<-cbind(joiney,varT)
 vart<-tidyr::gather(vart,timeperiod,temperature,6:1421)
-#vart<-arrange(vart,timeperiod)
-#vart.t<-data.frame(timeperiod=vart$timeperiod)
+
+varp<-cbind(joiney,varP)
+varp<-tidyr::gather(varp,timeperiod,precip,6:1421)
+
+
+
+vart.t<-data.frame(timeperiod=unique(vart$timeperiod))
 
 
 vart.t$year2<-rep(1900:2017,each=12)
@@ -127,7 +126,20 @@ vart<-left_join(vart,vart.t)
 vart<-filter(vart,year==year2)
 varty<- vart %>% group_by(id,year) %>% summarise(annualT=mean(temperature,na.rm=TRUE))
 
+
+
+varp.p<-data.frame(timeperiod=unique(varp$timeperiod))
+varp.p$year2<-rep(1900:2017,each=12)
+varp.p$month<-rep(1:12,118)
+varp<-left_join(varp,varp.p)
+varp<-filter(varp,year==year2)
+varpy<- varp %>% group_by(id,year) %>% summarise(annualP=mean(precip,na.rm=TRUE))
+
+
+
 tempting<-left_join(d.flo.check,varty)
+tempting<-left_join(tempting,varpy)
+
 
 tree<-compute.brlen(tree, method = "Grafen")## make ultrametric
 #check names
@@ -143,9 +155,39 @@ mytree.names<-pruned.by$tip.label # did i get them all
 intersect(namelist,mytree.names) #yes
 
 A <- ape::vcv.phylo(pruned.by) ## make acovarience matrix for brms models
+
+cor(tempting$annualT,tempting$annualP,use = "pairwise.complete.obs")
+
+save.image("..//Input/TP_analyses_Rda")
+
 plasticT<-brm(bbch.v.scale~annualT+(annualT|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+plasticP<-brm(bbch.v.scale~annualP+(annualP|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+
+plasticT.doy<-brm(bbch.v.scale~doy+annualT+(annualT|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+plasticP.doy<-brm(bbch.v.scale~doy+annualP+(annualP|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+
+cor(tempting$doy,tempting$annualT,use="pairwise.complete.obs")
+cor(tempting$doy,tempting$annualP,use="pairwise.complete.obs")
+plasticT.doy2<-brm(bbch.v.scale~doy*annualT+(doy*annualT|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+plasticP.doy2<-brm(bbch.v.scale~doy*annualP+(doy*annualP|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+
+
+coef(plasticP,probs = c(.055,.945,.25,.75))
+fixef(plasticT,probs = c(.055,.945,.25,.75))
+fixef(plasticT.doy,probs = c(.055,.945,.25,.75))
+
+zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
+tempting$T.z<-zscore(tempting$annualT)
+tempting$P.z<-zscore(tempting$annualP)
 quantile(tempting$annualT,na.rm=TRUE,probs=(c(.15,.85)))
 
+plasticTP<-brm(bbch.v.scale~T.z*P.z+(T.z*P.z|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+fixef(plasticTP,probs =  c(.055,.945,.25,.75))
+fixef(plasticT,probs =  c(.055,.945,.25,.75))
+fixef(plasticP,probs =  c(.055,.945,.25,.75))
+
+coef(plasticTP,probs =  c(.055,.945,.25,.75))
+save.image("..//Input/TP_analyses_Rda")
 new.data<-data.frame(species=rep(unique(tempting$species),each=2),annualT=rep(c(9,18),13))
 new.data$specificEpithet<-new.data$species
 fity<-fitted(plasticT,newdata = new.data,probs = c(.055,.945))
@@ -208,13 +250,6 @@ coef(plasticT)
 
 
 
-
-
-
-
-
-
-
 palmer.b
 palmer.b1 <-palmer.b[[1:1900]]## subset to pnly last century
 palmer.b2 <-palmer.b[[1900:2018]]## subset to pnly last century
@@ -232,76 +267,78 @@ library("RColorBrewer")
 par(mar = c(5, 5, 5, 5)) 
 par(mfrow = c(1, 3))
 
+pdf("..//Plots/PDSIovertimemaps.pdf")
 plot(long,col=rev( rainbow( 99, start=0,end=1 )),zlim=c(-.8,1.1))
 plot(recent,  col=rev( rainbow( 99, start=0,end=1 ) ),zlim=c(-.8,1.1))
 plot(dif,col=brewer.pal(n=11,name="PuOr"),zlim=c(-.6,1))
-    
+dev.off()    
 
 
-ext<-raster::extract(palmer.b2,extract.pts,method="simple")
+### PDSI plasticity
+#reset coordinate to this raster
+lonpoints2<-d.flo.check$lon # make vector of prunus coordinates
+latpoints2<-d.flo.check$lat
+  extract.pts2<-cbind(lonpoints2,latpoints2)
+
+ext<-raster::extract(palmer.b2,extract.pts2,method="simple")
 colnames(ext)<-(c(1899:2017))
 ext<-as.data.frame(ext)
 ext$lat<-latpoints
-ext$lon<-lonpoints
+ext$lon<-lonpoints2
 colnames(ext)
 pdsi.dater<-tidyr::gather(ext,"year","pdsi",1:119)
 class(pdsi.dater$year)
 pdsi.dater$year<-as.integer(pdsi.dater$year)
 
-joiner<-d.flo.check
+gner<-d.flo.check
 
-pdsi.dater2<-dplyr::left_join(joiner,pdsi.dater)
+pdsi.dater2<-dplyr::left_join(gner,pdsi.dater)
 pdsi.dater2<-pdsi.dater2 %>% distinct()
 
 zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
 
 pdsi.dater2$pdsi.z<-zscore(pdsi.dater2$pdsi)
-library(geodata)
-#climy<-worldclim_country("United States",lon=lonpoints, lat=latpoints,var="bio",res=0.5,path="~/Documents/git/proterant/investment/Input/")
-#climy$wc2.1_30s_bio_17
-climy <- getData("worldclim",lon=lonpoints, lat=latpoints ,var="bio",res=2.5)
-climy <- climy[[c(12)]]
-climy<-calc(climy, fun = mean,na.rm=TRUE)
-geodata_path()
+
+
+plastic.PDSI<-brm(bbch.v.scale~pdsi+(pdsi|species)+(1|gr(specificEpithet, cov = A)),data=pdsi.dater2,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
+
+fixef(plastic.PDSI,probs =  c(.055,.945,.25,.75))
+fixef(plasticT,probs =  c(.055,.945,.25,.75))
+fixef(plasticP,probs =  c(.055,.945,.25,.75))
+
+PDSI.plas<-coef(plastic.PDSI,probs =  c(.055,.945,.25,.75))[1]
+PDSI.plas<-as.data.frame(PDSI.plas)
+PDSI.plas<-select(PDSI.plas,1:6)
+colnames(PDSI.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
+PDSI.plas$species<-rownames(PDSI.plas)
+
+T.plas<-coef(plasticT,probs =  c(.055,.945,.25,.75))[1]
+T.plas<-as.data.frame(T.plas)
+T.plas<-select(T.plas,1:6)
+colnames(T.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
+T.plas$species<-rownames(T.plas)
+
+P.plas<-coef(plasticP,probs =  c(.055,.945,.25,.75))[1]
+P.plas<-as.data.frame(P.plas)
+P.plas<-selecy(P.plas,1:6)
+colnames(P.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
+P.plas$species<-rownames(P.plas)
 
 
 
+pp1<-ggplot(T.plas,aes(estimate,reorder(species,-estimate)))+geom_point(size=2.5)+geom_errorbarh(aes(xmin=Q5.5,xmax=Q94.5),size=.25,height=0)+
+  geom_errorbarh(aes(xmin=Q25,xmax=Q75),height=0,size=1)+geom_vline(xintercept=0,linetype="dotdash")+xlab("temperature")+
+  theme_minimal()+xlim(-.35,.4)+ylab("")+theme(axis.text.y = element_text(face="italic"))
+
+pp2<-ggplot(P.plas,aes(estimate,reorder(species,-estimate)))+geom_point(size=2.5)+geom_errorbarh(aes(xmin=Q5.5,xmax=Q94.5),size=.25,height=0)+
+  geom_errorbarh(aes(xmin=Q25,xmax=Q75),height=0,size=1)+geom_vline(xintercept=0,linetype="dotdash")+xlab("precipitation")+
+  theme_minimal()+xlim(-.35,.4)+ylab("")+theme(axis.text.y = element_text(face="italic"))#+theme(axis.text.y = element_blank(),axis.ticks.y = element_blank())
 
 
+pp3<-ggplot(PDSI.plas,aes(estimate,reorder(species,-estimate)))+geom_point(size=2.5)+geom_errorbarh(aes(xmin=Q5.5,xmax=Q94.5),size=.25,height=0)+
+  geom_errorbarh(aes(xmin=Q25,xmax=Q75),height=0,size=1)+geom_vline(xintercept=0,linetype="dotdash")+xlab("PDSI")+
+  theme_minimal()+xlim(-.35,.4)+ylab("")+theme(axis.text.y = element_text(face="italic"))#+theme(axis.text.y = element_blank(),axis.ticks.y = element_blank())
 
-crs(mean.p)<-crs(palmer.b)
-
-
-
-
-#wa#pdsi.dater2$doy.z<-zscore(pdsi.dater2$doy)
-#pdsi.dater2$species<-pdsi.dater2$specificEpithet
-#table(pdsi.dater2$species)
-#pdsi.dater2 %>%group_by(species) %>%summarize(mean(pdsi,na.rm=TRUE),sd(pdsi,na.rm=TRUE))
-
-plastic.mod.ord.4review.nooutlier2<-brm(bbch.v.scale~pdsi+(pdsi|species)+(1|gr(specificEpithet, cov = A)),data=pdsi.dater2,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
-coef(plastic.mod.ord.4review.nooutlier2,probs =c(0.055,.945))
-table(pdsi.dater2$specificEpithet)
-nigra<-filter(pdsi.dater2,species=="nigra")
-
-plastic.mod.ngra<-brm(bbch.v.scale~pdsi,data=nigra,family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
-
-#plastic.mod<-brm(bbch.v.scale~doy.z+pdsi.z+(pdsi.z|specificEpithet)+(1|gr(species, cov = A)),data=pdsi.dater2,data2=list(A=A),family=cumulative("logit"),control = list(adapt_delta=.99),warmup=3000,iter=4000)
-
-#plastic.mod.noslp<-brm(bbch.v.scale~doy.z+pdsi.z+(1|specificEpithet)+(1|gr(species, cov = A)),data=pdsi.dater2,data2=list(A=A),family=cumulative("logit"),control = list(adapt_delta=.99),warmup=3000,iter=4000)
-
-
-fixef(plastic.mod,probs = c(.25,.75))
-fixef(plastic.mod.noslp,probs = c(.25,.75))
-
-
-
-
-#air<-brick("air.mon.ltm.v501.nc")
-air2<-brick("air.mon.mean.v501.nc")
-#crs(palmer.b2) <- crs(air2)
-#crs(air2) <- crs(palmer.b2)
-air2
-plot(air2)
-air.extract<-extract(air2,extract.pts)
-
+pdf("..//Plots/pasticity_mus.pdf")
+ggpubr::ggarrange(pp1,pp2,pp3,ncol=1,labels=(c("a)","b)","c)")))
+dev.off()

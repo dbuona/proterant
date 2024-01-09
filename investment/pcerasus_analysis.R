@@ -340,9 +340,10 @@ sumzJan<-left_join(sumz,TP)
 sumzJan$temp.z<-zscore(sumzJan$meanT)
 sumzJan$prec.z<-zscore(sumzJan$meanP)
 
-cor(sumzJan$prec.z,sumzJan$pdsi.z)
-cor(sumzJan$prec.z,sumzJan$temp.z)
-cor(sumzJan$pdsi.z,sumzJan$spi.z)
+
+cor(sumzJan$petal.z,sumzJan$temp.z) ### to collinear
+cor(sumzJan$petal.z,sumzJan$prec.z)
+cor(sumzJan$petal.z,sumzJan$pdsi.z)
 
 
 mod.review.PDSI<- brms::brm(
@@ -354,18 +355,10 @@ mod.review.PDSI<- brms::brm(
   chains = 4, iter = 5000, warmup = 3000,
   cores = 4, seed = 1234,backend = "cmdstanr")
 
-mod.review.spi<- brms::brm(
-  brms::bf(index ~ spi.z*petal.z,
-           phi ~1),
-  data = sumzJan,
-  family = Beta(),
-  control=list(adapt_delta=.99),
-  chains = 4, iter = 5000, warmup = 3000,
-  cores = 4, seed = 1234,backend = "cmdstanr") 
 
 
 mod.review.Temp<- brms::brm(
-  brms::bf(index ~ temp.z*petal.z,
+  brms::bf(index ~ meanT,
            phi ~1),
   data = sumzJan,
   family = Beta(),
@@ -383,9 +376,8 @@ mod.review.Precip<- brms::brm(
   chains = 4, iter = 5000, warmup = 3000,
   cores = 4, seed = 1234,backend = "cmdstanr") 
 
-cor(sumzJan$mean.pdsi,sumzJan$meanP)
 
-fixef(mod.review.spi,probs = c(.055,.945))
+
 fixef(mod.review.PDSI,probs = c(.055,.945))
 fixef(mod.review.Precip,probs = c(.055,.945))
 fixef(mod.review.Temp,probs = c(.055,.945))
@@ -396,9 +388,16 @@ fixef(mod.review.Temp,probs = c(.055,.945))
 p.T<-plot(conditional_effects(mod.review.Temp,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
 p.C<-plot(conditional_effects(mod.review.Precip,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
 p.PDSI<-plot(conditional_effects(mod.review.PDSI,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
-p.T2<-p.T[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("Mean temperature")
-p.P2<-p.C[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("Mean precipitation")
-p.PD2<-p.PDSI[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("PDSI")
+p.T2<-p.T[[1]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("temperature")
+p.P2<-p.C[[1]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("precipitation")
+p.PD2<-p.PDSI[[1]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("PDSI")
+
+
+p.P2.pet<-p.C[[2]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")+ylab("")+theme(axis.text.y=element_blank(),
+                                                                                                                        axis.ticks.y=element_blank())
+p.PD2.pet<-p.PDSI[[2]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")+ylab("")+theme(axis.text.y=element_blank(),axis.ticks.y=element_blank())
+
+
 
 pdf("~/Documents/git/proterant/investment/Plots/TPplots.pdf")
 ggpubr::ggarrange(p.PD2,p.P2,p.T2,ncol=3)
@@ -471,12 +470,46 @@ cofs.2<-as.data.frame(fixef(mod.review.wants,probs = c(.055,.25,.75,.945)))
 cofs.2<-tibble::rownames_to_column(cofs.2,"predictor")
 cofs.2<-filter(cofs.2,!predictor %in% c("phi_Intercept","Intercept"))
 
-fp<-ggplot(cofs.2,aes(x=Estimate,y=factor(predictor,level=c("pdsi.z:petal.z","pdsi.z","petal.z"))))+geom_point(size=4)+
+fp<-ggplot(cofs.2,aes(x=Estimate,y=factor(predictor,level=c("pdsi.z:petal.z","pdsi.z","petal.z"))))+geom_point(size=3)+
   geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=0.5)+
   geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
-  scale_y_discrete(name="predictor",labels=c("PDSI x petal length","PDSI","petal length"))+
-  ggthemes::theme_few()+xlab("standardized effect size estimate")
+  scale_y_discrete(name="",labels=c("PDSI x petal length","PDSI","petal length"))+
+  ggthemes::theme_few(base_size = 10)+xlab("")+ylab("")
 
+cofs.3<-as.data.frame(fixef(mod.review.Precip,probs = c(.055,.25,.75,.945)))
+cofs.3<-tibble::rownames_to_column(cofs.3,"predictor")
+cofs.3<-filter(cofs.3,!predictor %in% c("phi_Intercept","Intercept"))
+
+pppp<-ggplot(cofs.3,aes(x=Estimate,y=factor(predictor,level=c("prec.z:petal.z","prec.z","petal.z"))))+geom_point(size=3)+
+  geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=0.5)+
+  geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
+  scale_y_discrete(name="",labels=c("precip. x petal length","precip","petal length"))+
+  ggthemes::theme_few(base_size = 10)+xlab("")+ylab("")
+
+
+
+cofs.4<-as.data.frame(fixef(mod.review.Temp,probs = c(.055,.25,.75,.945)))
+cofs.4<-tibble::rownames_to_column(cofs.4,"predictor")
+cofs.4<-filter(cofs.4,!predictor %in% c("phi_Intercept","Intercept"))
+
+tttt<-ggplot(cofs.4,aes(x=Estimate,y=factor(predictor,level=c("temp.z"))))+geom_point(size=3)+
+  geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=0.5)+
+  geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
+  scale_y_discrete(name="",labels=c("temperature"))+
+  ggthemes::theme_few(base_size = 10)+xlab("standardized \neffect size estimates")+ylab("")
+
+pa<-ggpubr::ggarrange(fp,p.PD2,p.PD2.pet,ncol=3,nrow=1,widths=c(.5,.3,.25))
+pb<-ggpubr::ggarrange(pppp,p.P2,p.P2.pet,ncol=3,nrow=1,widths=c(.5,.3,.25))
+pc<-ggpubr::ggarrange(tttt,p.T2,ncol=3,nrow=3,widths=c(2,2,2))
+
+pdf("..//Plots/new_fig3.pdf")
+ggpubr::ggarrange(pa,pb,ncol=1,heights=c(3,2),labels=c("a)","b)"))
+dev.off()
+
+
+pdf("..//Plots/new_fig3c.pdf")
+pc
+dev.off()
 
 p1<-plot(conditional_effects(mod.review.wants,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
 
