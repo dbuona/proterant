@@ -294,16 +294,24 @@ pdsi.dat<-read.csv("input_clean/pruno_clean_pdsi.csv")
 pdsi.dat$species<-pdsi.dat$specificEpithet
 pdsi.sum<-pdsi.dat %>% group_by(species) %>% summarise(mean.pdsi=mean(pdsi,na.rm=TRUE), sd.pdsi = sd(pdsi,na.rm=TRUE),n.pdsi = n(),se.pdsi = sd.pdsi / sqrt(n.pdsi))
 
+
+spi.dat<-read.csv("input_clean/pdsi_spi.csv")
+spi.dat$species<-spi.dat$specificEpithet
+spi.sum<-spi.dat %>% group_by(species) %>% summarise(mean.spi=mean(spisummer.mean,na.rm=TRUE), sd.spi = sd(spisummer.mean,na.rm=TRUE),n.spi = n(),se.spi = sd.spi / sqrt(n.spi))
+
+
 petal.dat<-read.csv("input_clean/petal_clean.csv")
 petal.dat$species<-petal.dat$specificEpithet
 petal.sum<-petal.dat %>% group_by(species) %>% summarise(mean.petal=mean(pental_lengh_mm,na.rm=TRUE), sd.petal = sd(pental_lengh_mm,na.rm=TRUE),n.petal = n(),se.petal = sd.petal / sqrt(n.petal))
 dep.sum<-left_join(petal.sum,pdsi.sum)
 sumz<-left_join(sumz,dep.sum)
+sumz<-left_join(sumz,spi.sum)
 
 zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
 
 sumz$pdsi.z<-zscore(sumz$mean.pdsi)
 sumz$petal.z<-zscore(sumz$mean.petal)
+sumz$spi.z<-zscore(sumz$mean.spi)
 sumz<-left_join(sumz,indy)
 
 cor(sumz$pdsi.z,sumz$petal.z)
@@ -321,6 +329,89 @@ mod.review.wants<- brms::brm(
   control=list(adapt_delta=.99),
   chains = 4, iter = 5000, warmup = 3000,
   cores = 4, seed = 1234,backend = "cmdstanr") 
+
+####Jan 8 20024 Integrate this with Temp and P for new reviewr
+TP<-read.csv("input_clean/TP.csv")
+#colnames(TP)[2]<-"species"
+TP<-dplyr::select(TP,-X)
+sumzJan<-left_join(sumz,TP)
+
+
+sumzJan$temp.z<-zscore(sumzJan$meanT)
+sumzJan$prec.z<-zscore(sumzJan$meanP)
+
+cor(sumzJan$prec.z,sumzJan$pdsi.z)
+cor(sumzJan$prec.z,sumzJan$temp.z)
+cor(sumzJan$pdsi.z,sumzJan$spi.z)
+
+
+mod.review.PDSI<- brms::brm(
+  brms::bf(index ~ pdsi.z*petal.z,
+           phi ~1),
+  data = sumzJan,
+  family = Beta(),
+  control=list(adapt_delta=.99),
+  chains = 4, iter = 5000, warmup = 3000,
+  cores = 4, seed = 1234,backend = "cmdstanr")
+
+mod.review.spi<- brms::brm(
+  brms::bf(index ~ spi.z*petal.z,
+           phi ~1),
+  data = sumzJan,
+  family = Beta(),
+  control=list(adapt_delta=.99),
+  chains = 4, iter = 5000, warmup = 3000,
+  cores = 4, seed = 1234,backend = "cmdstanr") 
+
+
+mod.review.Temp<- brms::brm(
+  brms::bf(index ~ temp.z*petal.z,
+           phi ~1),
+  data = sumzJan,
+  family = Beta(),
+  control=list(adapt_delta=.99),
+  chains = 4, iter = 5000, warmup = 3000,
+  cores = 4, seed = 1234,backend = "cmdstanr") 
+
+
+mod.review.Precip<- brms::brm(
+  brms::bf(index ~ prec.z*petal.z,
+           phi ~1),
+  data = sumzJan,
+  family = Beta(),
+  control=list(adapt_delta=.99),
+  chains = 4, iter = 5000, warmup = 3000,
+  cores = 4, seed = 1234,backend = "cmdstanr") 
+
+cor(sumzJan$mean.pdsi,sumzJan$meanP)
+
+fixef(mod.review.spi,probs = c(.055,.945))
+fixef(mod.review.PDSI,probs = c(.055,.945))
+fixef(mod.review.Precip,probs = c(.055,.945))
+fixef(mod.review.Temp,probs = c(.055,.945))
+
+
+
+###plot this:
+p.T<-plot(conditional_effects(mod.review.Temp,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
+p.C<-plot(conditional_effects(mod.review.Precip,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
+p.PDSI<-plot(conditional_effects(mod.review.PDSI,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
+p.T2<-p.T[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("Mean temperature")
+p.P2<-p.C[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("Mean precipitation")
+p.PD2<-p.PDSI[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("PDSI")
+
+pdf("~/Documents/git/proterant/investment/Plots/TPplots.pdf")
+ggpubr::ggarrange(p.PD2,p.P2,p.T2,ncol=3)
+dev.off()
+pdf("~/Documents/git/proterant/investment/Plots/precip_v_pdsi.pdf")
+ggplot(sumzJan,aes(mean.pdsi,meanP))+geom_point()+geom_smooth(method="lm")+  geom_text(hjust=0, vjust=0,aes(label=species))
+dev.off()
+  
+
+#### this iwhat new review wants
+ggplot(sumz,aes(mean.pdsi,index))+geom_point()+geom_smooth(method="lm")+
+  geom_text(hjust=0, vjust=0,aes(label=species))
+
 
 mod.review.wants.doy<- brm(
   brms::bf(index.nodoy ~ pdsi.z*petal.z,
@@ -387,11 +478,13 @@ fp<-ggplot(cofs.2,aes(x=Estimate,y=factor(predictor,level=c("pdsi.z:petal.z","pd
   ggthemes::theme_few()+xlab("standardized effect size estimate")
 
 
-p1<-plot(conditional_effects(mod.review.wants,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE))
-
+p1<-plot(conditional_effects(mod.review.wants,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
 
 pi<-p1[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("PDSI")
 pi
+ggpubr::ggarrange(pi,p.T2,p.P2)
+
+
 pii<-p1[[2]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")
 pii
 piii<-p1[[3]]+ggthemes::theme_few()+ylab("petal length")+xlab("PDSI")+scale_fill_discrete(name="hysteranthy \nindex",type = "viridis")+theme(legend.position = "right")
