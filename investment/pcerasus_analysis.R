@@ -332,19 +332,24 @@ mod.review.wants<- brms::brm(
 
 ####Jan 8 20024 Integrate this with Temp and P for new reviewr
 TP<-read.csv("input_clean/TP.csv")
-#colnames(TP)[2]<-"species"
+PS<-read.csv("Psummeronly.csv")
+colnames(PS)[3]<-"summerP"
+
+colnames(TP)[2]<-"species"
 TP<-dplyr::select(TP,-X)
+PS<-dplyr::select(PS,-X)
+TP<-left_join(TP,PS)
 sumzJan<-left_join(sumz,TP)
 
-
+cor(sumzJan$meanP,sumzJan$summerP)
 sumzJan$temp.z<-zscore(sumzJan$meanT)
 sumzJan$prec.z<-zscore(sumzJan$meanP)
-
+sumzJan$sum.prec.z<-zscore(sumzJan$summerP)
 
 cor(sumzJan$petal.z,sumzJan$temp.z) ### to collinear
 cor(sumzJan$petal.z,sumzJan$prec.z)
 cor(sumzJan$petal.z,sumzJan$pdsi.z)
-
+#sumzJan<-filter(sumzJan,species!="subcordata") ## remove outlier?
 
 mod.review.PDSI<- brms::brm(
   brms::bf(index ~ pdsi.z*petal.z,
@@ -358,7 +363,7 @@ mod.review.PDSI<- brms::brm(
 
 
 mod.review.Temp<- brms::brm(
-  brms::bf(index ~ meanT,
+  brms::bf(index ~ meanT*petal.z,
            phi ~1),
   data = sumzJan,
   family = Beta(),
@@ -367,8 +372,11 @@ mod.review.Temp<- brms::brm(
   cores = 4, seed = 1234,backend = "cmdstanr") 
 
 
+bayes_R2(mod.review.Temp)
+bayes_R2(mod.review.PDSI)
+bayes_R2(mod.review.Precip)
 mod.review.Precip<- brms::brm(
-  brms::bf(index ~ prec.z*petal.z,
+  brms::bf(index ~ sum.prec.z*petal.z,
            phi ~1),
   data = sumzJan,
   family = Beta(),
@@ -515,7 +523,7 @@ p1<-plot(conditional_effects(mod.review.wants,prob=.89,surface = TRUE,method = c
 
 pi<-p1[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("PDSI")
 pi
-ggpubr::ggarrange(pi,p.T2,p.P2)
+
 
 
 pii<-p1[[2]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")
@@ -562,7 +570,7 @@ lines.nophylo<-mod.pdsi.phylo%>%
   spread_draws(b_Intercept,  b_index )
 
 a<-ggplot()+
-  geom_jitter(data=compromise,aes(index,pdsi),color="black",fill="black",alpha=0.6,size=0.1,width = 0.1,height=0)+
+  stat_summary(data=compromise,aes(index,pdsi,group=species),color="black",fill="black")+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=lines.nophylo,aes(intercept=b_Intercept,slope=b_index),alpha=0.01,color="skyblue3")+
   geom_abline(data=lines.nophylo,aes(intercept=mean(b_Intercept),slope=mean(b_index)),color="navy",size=2)+
@@ -575,7 +583,7 @@ a<-ggplot()+
 linespetal<-mod.petal.phylo%>%
   spread_draws(b_Intercept,  b_index )
 b<-ggplot()+
-  geom_jitter(data=compromise2,aes(index,pental_lengh_mm),color="black",fill="black",alpha=0.6,size=0.1,width = 0.1,height=0)+
+  stat_summary(data=compromise2,aes(index,pental_lengh_mm,group=species),color="black",fill="black")+
   #stat_eye(data=d,aes(score,pdsi),alpha=0.6,fill="grey50")+
   geom_abline(data=linespetal,aes(intercept=b_Intercept,slope=b_index),alpha=0.01,color="skyblue3")+
   geom_abline(data=linespetal,aes(intercept=mean(b_Intercept),slope=mean(b_index)),color="navy",size=2)+
