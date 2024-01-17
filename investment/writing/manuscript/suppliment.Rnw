@@ -20,18 +20,17 @@
 \renewcommand{\baselinestretch}{1} 	
 \parindent 0pt
 
-
-\bibliographystyle{..//refs/styles/newphyto.bst}
+\bibliographystyle{refs/styles/newphyto.bst}
 \renewcommand{\thetable}{S\arabic{table}}
 \renewcommand{\thefigure}{S\arabic{figure}}
 \usepackage{xr}
 %\usepackage{hyperref}
 %\usepackage{xr-hyper}
 %\usepackage{hyperref}
-\externaldocument{plums_new_phyt_revisions}
+\externaldocument{3plums_new_phyt_revisionsJan2024}
 
 
-\title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and pollination success select for flowering-first in the American Plums}
+\title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and floral traits select for flowering-first in the American Plums}
 \date{}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -152,8 +151,15 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
 \begin{figure}[h!]
     \centering
  \includegraphics[width=.95\textwidth]{..//..//Plots/dataplots_SUPP.jpeg}
-    \caption{Relationships between the hysteranthy index scores and environmental and biological traits based on Bayesian phylogenetic mixed models where the relationship between hysteranthy score and PDSI a)  and mean petal length b)  were each modeled seperately. Solid lines indicate the mean posterior estimate and shaded areas 4000 draws from the posterior distrubtion as a display of uncertainty. The points are jittered along the $x$-axis only for visibility. These plots complements the model presented in Fig. \ref{fig:prunes}}
+    \caption{Relationships between the hysteranthy index scores and environmental and biological traits based on Bayesian phylogenetic mixed models where the relationship between hysteranthy score and PDSI a)  and mean petal length b)  were each modeled separately. Solid lines indicate the mean posterior estimate and shaded areas 4000 draws from the posterior distribution as a display of uncertainty. The points and bars represent the mean estimate and standard error for each species. These plots complements the model presented in Fig. \ref{fig:prunes}}
     \label{fig:seps}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+ \includegraphics[width=\textwidth]{..//..//Plots/PDSIovertimemaps.jpeg}
+    \caption{Average PDSI values for two time periods and the difference between them across the contiguous United States. The data used here are from \citet{Gile_2017}, and show that the south-central United States, which encompasses the ranges of many species in this study (see Fig. \ref{fig:phylo2}), has gotten considerably wetter in the contemporary period.}
+    \label{fig:timeschange}
 \end{figure}
 
 \pagebreak
@@ -169,5 +175,9 @@ The model structure is:
   \epsilon & \sim N(0,\sigma^2_y) \\ %Check this
   
   where $y_{trait}$ is observed trait values (PDSI or petal length), and the slope $\beta_{\text{hyst.index}$ describes the relationship between extended hysteranthy (higher hysteranthy index value) and the trait of interest. $\alpha$ describes a grand intercept, and $\alpha_{sp}$ and $\alpha_{phylo}$ describe the species and phylogenetic effects respectively. 
+
+\pagebreak
+
+\bibliography{refs/hyst_outline.bib} 
 
 \end{document}

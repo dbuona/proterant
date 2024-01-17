@@ -23,7 +23,7 @@ library(sp)
 #install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
 
 setwd("~/Documents/git/proterant/investment/Input")
-#load("TP_analyses_Rda")
+load("TP_analyses_Rda")
 
 
 
@@ -301,11 +301,20 @@ coef(plasticT)
 
 
 
+######
+palmer.b1 <-palmer.b[[1:1900]]## subset to pnly last century
+palmer.b2 <-palmer.b[[1900:2018]]## subset to pnly last century
+palmer.b1<-brick(palmer.b1)
+palmer.b2<-brick(palmer.b2)
 
+long <-calc(palmer.b1, fun = mean,na.rm=TRUE)
+recent <-calc(palmer.b2, fun = mean,na.rm=TRUE)
+lonpoints2<-d.flo.check$lon # make vector of prunus coordinates
+latpoints2<-d.flo.check$lat
+extract.pts2<-cbind(lonpoints2,latpoints2)
 
-<-extract(long,)
-
-
+#ext.recent<-raster::extract(recent,extract.pts2,method="simple")
+#ext.long<-raster::extract(long,extract.pts2,method="simple")
 
 
 x1b <- resample(long, recent)
@@ -316,7 +325,9 @@ library("RColorBrewer")
 par(mar = c(5, 5, 5, 5)) 
 par(mfrow = c(1, 3))
 
-pdf("..//Plots/PDSIovertimemaps.pdf")
+jpeg("..//Plots/PDSIovertimemaps.jpeg",width=10,height=5,unit='in',res=300)
+par(mar = c(5, 5, 5, 5)) 
+par(mfrow = c(1, 3))
 plot(long,col=rev( rainbow( 99, start=0,end=1 )),zlim=c(-.8,1.1))
 plot(recent,  col=rev( rainbow( 99, start=0,end=1 ) ),zlim=c(-.8,1.1))
 plot(dif,col=brewer.pal(n=11,name="PuOr"),zlim=c(-.6,1))
