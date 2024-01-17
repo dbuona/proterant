@@ -31,6 +31,7 @@
 
 
 \title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and floral traits select for flowering-first in the American Plums}
+\author{D.M. Buonaiuto, T.J. Davies, S. Collins \& E.M. Wolkovich}
 \date{}
 \begin{document}
 \SweaveOpts{concordance=TRUE}
