@@ -346,7 +346,9 @@ sumzJan$temp.z<-zscore(sumzJan$meanT)
 sumzJan$prec.z<-zscore(sumzJan$meanP)
 sumzJan$sum.prec.z<-zscore(sumzJan$summerP)
 
-cor(sumzJan$petal.z,sumzJan$temp.z) ### to collinear
+cor(sumzJan$petal.z,sumzJan$temp.z) ### to0 collinear
+cor(sumzJan$pdsi.z,sumzJan$temp.z) ### 
+
 cor(sumzJan$petal.z,sumzJan$prec.z)
 cor(sumzJan$petal.z,sumzJan$pdsi.z)
 #sumzJan<-filter(sumzJan,species!="subcordata") ## remove outlier?
@@ -360,10 +362,20 @@ mod.review.PDSI<- brms::brm(
   chains = 4, iter = 5000, warmup = 3000,
   cores = 4, seed = 1234,backend = "cmdstanr")
 
-
+mod.review.PDSI.temp<- brms::brm(
+  brms::bf(index ~ pdsi.z*temp.z*petal.z,
+           phi ~1),
+  data = sumzJan,
+  family = Beta(),
+  control=list(adapt_delta=.99),
+  chains = 4, iter = 5000, warmup = 3000,
+  cores = 4, seed = 1234,backend = "cmdstanr")
+plot(conditional_effects(mod.review.PDSI.temp,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
+bayes_R2(mod.review.PDSI.temp)
+conditional_effects(mod.review.PDSI.temp)
 
 mod.review.Temp<- brms::brm(
-  brms::bf(index ~ meanT*petal.z,
+  brms::bf(index ~ temp.z*petal.z,
            phi ~1),
   data = sumzJan,
   family = Beta(),
@@ -371,8 +383,17 @@ mod.review.Temp<- brms::brm(
   chains = 4, iter = 5000, warmup = 3000,
   cores = 4, seed = 1234,backend = "cmdstanr") 
 
+mod.review.Temp2<- brms::brm(
+  brms::bf(index ~ meanT,
+           phi ~1),
+  data = sumzJan,
+  family = Beta(),
+  control=list(adapt_delta=.99),
+  chains = 4, iter = 4000, warmup = 3000,
+  cores = 4, seed = 1234,backend = "cmdstanr") 
 
-bayes_R2(mod.review.Temp)
+conditional_effects(mod.review.Temp2,points=TRUE)
+ bayes_R2(mod.review.Temp2)
 bayes_R2(mod.review.PDSI)
 bayes_R2(mod.review.Precip)
 mod.review.Precip<- brms::brm(
@@ -393,7 +414,7 @@ fixef(mod.review.Temp,probs = c(.055,.945))
 
 
 ###plot this:
-p.T<-plot(conditional_effects(mod.review.Temp,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
+p.T<-plot(conditional_effects(mod.review.Temp2,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
 p.C<-plot(conditional_effects(mod.review.Precip,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
 p.PDSI<-plot(conditional_effects(mod.review.PDSI,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
 p.T2<-p.T[[1]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("temperature")
@@ -404,7 +425,8 @@ p.PD2<-p.PDSI[[1]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranth
 p.P2.pet<-p.C[[2]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")+ylab("")+theme(axis.text.y=element_blank(),
                                                                                                                         axis.ticks.y=element_blank())
 p.PD2.pet<-p.PDSI[[2]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")+ylab("")+theme(axis.text.y=element_blank(),axis.ticks.y=element_blank())
-
+p.T2.pet<-p.T[[2]]+ggthemes::theme_few(base_size = 9)+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")
+ggpubr::ggarrange(p.T2,p.T2.pet)
 
 
 pdf("~/Documents/git/proterant/investment/Plots/TPplots.pdf")
@@ -500,10 +522,10 @@ cofs.4<-as.data.frame(fixef(mod.review.Temp,probs = c(.055,.25,.75,.945)))
 cofs.4<-tibble::rownames_to_column(cofs.4,"predictor")
 cofs.4<-filter(cofs.4,!predictor %in% c("phi_Intercept","Intercept"))
 
-tttt<-ggplot(cofs.4,aes(x=Estimate,y=factor(predictor,level=c("temp.z"))))+geom_point(size=3)+
+tttt<-ggplot(cofs.4,aes(x=Estimate,y=factor(predictor,level=c("temp.z:petal.z","temp.z","petal.z"))))+geom_point(size=3)+
   geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=0.5)+
   geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
-  scale_y_discrete(name="",labels=c("temperature"))+
+  scale_y_discrete(name="",labels=c("temperature. x petal length","temperature","petal length"))+
   ggthemes::theme_few(base_size = 10)+xlab("standardized \neffect size estimates")+ylab("")
 
 pa<-ggpubr::ggarrange(fp,p.PD2,p.PD2.pet,ncol=3,nrow=1,widths=c(.5,.3,.25))
@@ -537,6 +559,16 @@ p5<-ggpubr::ggarrange(p4,piii,labels=c("","d)"),widths=c(1,.5))
 jpeg("..//Plots/whatReviwerswant/hypoth_preds.jpeg",height=7,width=7,units='in',res=200)
 ggpubr::ggarrange(fp,p4,ncol=1,labels=c("a)",""),heights=c(.7,1))
 dev.off()
+
+ptemp<-ggpubr::ggarrange(p.T2,p.T2.pet,nrow=1,common.legend = TRUE,legend="bottom",labels=c("b)",""))
+
+jpeg("..//Plots/whatReviwerswant/hypoth_predstemp.jpeg",height=7,width=7,units='in',res=200)
+ggpubr::ggarrange(tttt,ptemp,ncol=1,labels=c("a)",""),heights=c(.7,1))
+dev.off()
+
+
+
+
 
 p1<-plot(conditional_effects(mod.review.wants, "pdsi.z", ordinal = TRUE,prob = .5,plot=FALSE))
 

@@ -3,6 +3,7 @@ rm(list=ls())
 options(stringsAsFactors = FALSE)
 options(mc.cores = parallel::detectCores())
 #rstan_options(auto_write = TRUE)
+
 graphics.off()
 library(dplyr)
 library(ggplot2)
@@ -233,13 +234,14 @@ tempting$P.z<-zscore(tempting$annualP)
 quantile(tempting$annualT,na.rm=TRUE,probs=(c(.15,.85)))
 
 plasticTP<-brm(bbch.v.scale~T.z*P.z+(T.z*P.z|species)+(1|gr(specificEpithet, cov = A)),data=tempting,data2=list(A = A),family=cumulative("logit"), warmup = 3000,iter=4000,control=list(adapt_delta=0.99))
-fixef(plasticTP,probs =  c(.055,.945,.25,.75))
+coef(plasticTP,probs =  c(.055,.945,.25,.75))
 fixef(plasticT,probs =  c(.055,.945,.25,.75))
 fixef(plasticP,probs =  c(.055,.945,.25,.75))
+mean(tempting$annualT,na.rm=TRUE)
 
 coef(plasticTP,probs =  c(.055,.945,.25,.75))
 save.image("..//Input/TP_analyses_Rda")
-new.data<-data.frame(species=rep(unique(tempting$species),each=2),annualT=rep(c(9,18),13))
+new.data<-data.frame(species=rep(unique(tempting$species),each=2),annualT=rep(c(14.2,18.7),13))
 new.data$specificEpithet<-new.data$species
 fity<-fitted(plasticT,newdata = new.data,probs = c(.055,.945))
 plotT<-cbind(new.data,fity)
@@ -368,7 +370,14 @@ PDSI.plas$species<-rownames(PDSI.plas)
 
 T.plas<-coef(plasticT,probs =  c(.055,.945,.25,.75))[1]
 T.plas<-as.data.frame(T.plas)
-T.plas<-select(T.plas,1:6)
+T.plas<-dplyr::select(T.plas,1:6)
+colnames(T.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
+T.plas$species<-rownames(T.plas)
+
+
+Tk<-fixef(plasticT,probs =  c(.055,.945,.25,.75))
+T.plas<-as.data.frame(T.plas)
+T.plas<-dplyr::select(T.plas,1:6)
 colnames(T.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
 T.plas$species<-rownames(T.plas)
 
@@ -378,10 +387,18 @@ P.plas<-selecy(P.plas,1:6)
 colnames(P.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
 P.plas$species<-rownames(P.plas)
 
+TP.plas<-coef(plasticTP,probs =  c(.055,.945,.25,.75))[1]
+TP.plas<-as.data.frame(TP.plas)
+T.plas<-dplyr::select(T.plas,1:6)
+colnames(T.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
+T.plas$species<-rownames(T.plas)
 
+T.plas$sp<-factor(x=T.plas$species,levels=rev(c("mexicana","umbellata","angustifolia","maritima","gracilis","americana","munsoniana","alleghaniensis","nigra","hortulana","texana","rivularis","subcordata")))
+T.plas<-left_join(T.plas,TP)
 
-pp1<-ggplot(T.plas,aes(estimate,reorder(species,-estimate)))+geom_point(size=2.5)+geom_errorbarh(aes(xmin=Q5.5,xmax=Q94.5),size=.25,height=0)+
-  geom_errorbarh(aes(xmin=Q25,xmax=Q75),height=0,size=1)+geom_vline(xintercept=0,linetype="dotdash")+xlab("temperature")+
+pp1<-ggplot(T.plas,aes(estimate,reorder(sp,meanT)))+geom_point(size=2.5)+geom_errorbarh(aes(xmin=Q5.5,xmax=Q94.5),size=.25,height=0)+
+  geom_errorbarh(aes(xmin=Q25,xmax=Q75),height=0,size=1)+
+  geom_vline(xintercept=0,linetype="dotdash")+xlab("temperature")+
   theme_minimal()+xlim(-.35,.4)+ylab("")+theme(axis.text.y = element_text(face="italic"))
 
 pp2<-ggplot(P.plas,aes(estimate,reorder(species,-estimate)))+geom_point(size=2.5)+geom_errorbarh(aes(xmin=Q5.5,xmax=Q94.5),size=.25,height=0)+
