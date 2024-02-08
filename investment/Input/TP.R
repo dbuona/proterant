@@ -375,7 +375,7 @@ colnames(T.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
 T.plas$species<-rownames(T.plas)
 
 
-Tk<-fixef(plasticT,probs =  c(.055,.945,.25,.75))
+T.plas<-fixef(plasticT,probs =  c(.055,.945,.25,.75))
 T.plas<-as.data.frame(T.plas)
 T.plas<-dplyr::select(T.plas,1:6)
 colnames(T.plas)<-c("estimate", "error","Q5.5","Q94.5","Q25","Q75")
