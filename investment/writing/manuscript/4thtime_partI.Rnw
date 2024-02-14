@@ -1,0 +1,44 @@
+\documentclass{article}[12pt]
+%Required: You must have these
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{array}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\setkeys{Gin}{width=0.8\textwidth}
+%\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+\topmargin -1.5cm 
+\oddsidemargin -0.04cm 
+\evensidemargin -0.04cm 
+\textwidth 16.59cm
+\textheight 23.94cm 
+\parskip 7.2pt 
+\renewcommand{\baselinestretch}{1.2} 	
+\parindent 0pt
+
+\bibliographystyle{refs/styles/newphyto.bst}
+\pagenumbering{gobble}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\noindent\includegraphics[width=0.4\textwidth]{umasslogo}\\\\
+
+\noindent{Dear Dr. Rausher,}\\
+
+\noindent Please consider this revised manuscript: ``Ecological drivers of flower-leaf sequences: aridity and proxies for pollinator attraction select for flowering-first in the American Plums" as a ``Full paper" in \textit{New Phytologist}.
+
+Our submission has been reviewed multiple times by three reviewers; and in the most recent round of feedback the reviewer reported that  ``The authors have revised their paper in a reasonable way in response to the comments" and found our study to be creative and novel. 
+
+As you requested, in our current submission we now present an analysis assessing the influence of mean spring temperature on hysteranthy variation among species. Contrary to the reviewer's expectation, our analyses indicated that mean temperature was not a strong predictor of flower-leaf sequences differences among species, and our model with temperature had lower explanatory power than the model with aridity. While this poor model performance was the main reason we previously did not include this analyses are part of our paper, we are now convinced that this result will help readers better understand the environmental drivers of hysteranthy. We feel including this analysis will spur ideas for future ways to investigate the flower-leaf sequence variation across multiple scales, and are grateful to you and the reviewer for pushing us to incorporate it into our manuscript. Our manuscript now includes a new table in the Supporting Information, and text in the Methods, Results and Discussion addressing the relationship between temperature and hysteranthy. We detail these changes, and the other adjustments we have made to our submission in response the reviewer's feedback in the following pages.
+
+The main text of this manuscript is now XXXX words in length and it contains four figures. It is co-authored by T.J. Davies, S. Collins and E.M. Wolkovich. We hope that you will now find it suitable for publication in \emph{New Phytologist}, and look forward to hearing from you.\\\\\\\\
+
+\noindent Daniel Buonaiuto\\
+
+\bibliography{refs/hyst_outline.bib} 
+
+\end{document}

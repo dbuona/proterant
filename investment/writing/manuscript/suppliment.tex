@@ -27,7 +27,7 @@
 %\usepackage{hyperref}
 %\usepackage{xr-hyper}
 %\usepackage{hyperref}
-\externaldocument{3plums_new_phyt_revisionsJan2024}
+\externaldocument{4plums_new_phyt_revisionsFeb2024}
 
 
 \title{Supporting Information for: Ecological drivers of flower-leaf sequences: aridity and proxies for pollinator attraction select for flowering-first in the American Plums}
@@ -98,7 +98,7 @@ angustifolia &  77 & 238 & 200 \\
 % Mon Oct  2 16:33:58 2023
 \begin{table}[ht]
 \centering
-\begin{tabular}{rrccccc}
+\begin{tabular}{|rrccccc|}
   \hline
  & Estimate & Est.Error & Q5.5 & Q25 & Q75 & Q94.5 \\ 
   \hline
@@ -109,13 +109,13 @@ Intercept & 0.34 & 0.23 & -0.02 & 0.20 & 0.48 & 0.70 \\
   pdsi.z:petal.z & -0.14 & 0.49 & -0.91 & -0.46 & 0.16 & 0.65 \\ 
    \hline
 \end{tabular}
-\end{table}
+%\end{table}
 % xtable(fixef(mod.review.wants.doy,probs = c(.055,.25,.75,.945)))
 % latex table generated in R 4.1.2 by xtable 1.8-4 package
 % Mon Oct  2 16:34:12 2023
-\begin{table}
-\centering
-\begin{tabular}{rrccccc}
+%\begin{table}
+%\centering
+\begin{tabular}{|rrccccc|}
   \hline
  & Estimate & Est.Error & Q5.5 & Q25 & Q75 & Q94.5 \\ 
   \hline
@@ -130,41 +130,56 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
 \label{tab:nodoy}
 \end{table}
 
-\pagebreak[4]
+\begin{table}[ht]
+\centering
+\begin{tabular}{|rrccccc|}
+  \hline
+ & Estimate & Est.Error & Q5.5 & Q25 & Q75 & Q94.5 \\ 
+  \hline
+Intercept & 0.38 & 0.29 & -0.08 & 0.19 & 0.57 & 0.82 \\ 
+  phi\_Intercept & 1.66 & 0.40 & 1.00 & 1.39 & 1.93 & 2.28 \\ 
+  temp.z & 0.26 & 0.39 & -0.36 & 0.01 & 0.51 & 0.86 \\ 
+  petal.z & 0.14 & 0.48 & -0.61 & -0.18 & 0.44 & 0.89 \\ 
+  temp.z:petal.z & 0.04 & 0.27 & -0.38 & -0.13 & 0.21 & 0.46 \\ 
+   \hline
+\end{tabular}
+\caption{Model paremeter estimates of the relationship between mean spring temperature, petal length and hysteranthy.}
+\label{tab:temp}
+\end{table}
 
-\section*{Figures} 
+\clearpage
 
-\begin{figure}[h!]
+\section*{Figures}
+\begin{figure}[ht]
     \centering
- \includegraphics[width=.5\textwidth]{..//..//Plots/whatReviwerswant/seasonal_distrbn.jpeg}
+ \includegraphics[width=.6\textwidth]{..//..//Plots/whatReviwerswant/seasonal_distrbn.jpeg}
    
      \caption{Histograms of collect day of year for each of the American plum species used in these analyses.}
       \label{fig:bias}
 \end{figure}
 
-
-\begin{figure}[h!]
+\begin{figure}[ht]
     \centering
  \includegraphics[width=.7\textwidth]{..//..//Plots/whatReviwerswant/sps_preds_nodoy4supp.jpeg}
     \caption{Predicted likelihood that a species would be in flower during each vegetative BBCH phase for each species in the American plums. Points are the mean likelihood while bars represent 89\% uncertainty intervals. Hysteranthy index values in each box were derived from the summed likelihood  species would be found at BBCH stages 0-11 (purple fill).}
     \label{fig:nodoy}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[ht]
     \centering
- \includegraphics[width=.95\textwidth]{..//..//Plots/dataplots_SUPP.jpeg}
+ \includegraphics[width=.7\textwidth]{..//..//Plots/dataplots_SUPP.jpeg}
     \caption{Relationships between the hysteranthy index scores and environmental and biological traits based on Bayesian phylogenetic mixed models where the relationship between hysteranthy score and PDSI a)  and mean petal length b)  were each modeled separately. Solid lines indicate the mean posterior estimate and shaded areas 4000 draws from the posterior distribution as a display of uncertainty. The points and bars represent the mean estimate and standard error for each species. These plots complements the model presented in Fig. \ref{fig:prunes}.}
     \label{fig:seps}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}[htp]
     \centering
  \includegraphics[width=\textwidth]{..//..//Plots/PDSIovertimemaps.jpeg}
     \caption{Average PDSI values for two time periods and the difference between them across the contiguous United States. The data used here are from \citet{Gile_2017}, and show that the south-central United States, which encompasses the ranges of many species in this study (see Fig. \ref{fig:phylo2}), has gotten considerably wetter in the contemporary period.}
     \label{fig:timeschange}
 \end{figure}
 
-\pagebreak
+\clearpage
 
 \section*{Extended Methods:}
 To complement our main analyses in which we fit models based on species-level means of PDSI and petal length as predictors, we also implemented additional models where we assessed the relationship between PDSI and hysteranthy, and the relationship between petal length and hysteranthy separately. With this model structure our analyses accounted for the intra-specific variation in both PDSI and petal length as the phylogenetic structure of these variables.
@@ -178,7 +193,7 @@ The model structure is:
   
   where $y_{trait}$ is observed trait values (PDSI or petal length), and the slope $\beta_{\text{hyst.index}$ describes the relationship between extended hysteranthy (higher hysteranthy index value) and the trait of interest. $\alpha$ describes a grand intercept, and $\alpha_{sp}$ and $\alpha_{phylo}$ describe the species and phylogenetic effects respectively. 
 
-\pagebreak
+\clearpage
 
 \bibliography{refs/hyst_outline.bib} 
 

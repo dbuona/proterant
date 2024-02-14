@@ -16,7 +16,7 @@ library(tidybayes)
 
 
 setwd("~/Documents/git/proterant/investment/Input")
-#load("..//forKNB/amer_plums_KNB.Rda")
+load("..//forKNB/amer_plums_KNB.Rda")
 d<-read.csv("..//forKNB/amerplum_final.csv") ##read in data
 tree<-read.tree("~/Documents/git/proterant/investment/forKNB/amerplum_tree.tre") ##read in tree
 
@@ -199,3 +199,7 @@ bayes_R2(mod.review.PDSI,probs = c(.25,.75))
 bayes_R2(mod.review.Temp,probs = c(.25,.75))
 
 save.image("..//forKNB/amer_plums_KNB.Rda")
+
+library(xtable)
+xtable(fixef(mod.review.Temp,probs = c(.055,.25,.75,.945)))
+       
