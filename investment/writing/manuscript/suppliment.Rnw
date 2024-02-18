@@ -125,7 +125,7 @@ Intercept & 0.49 & 0.25 & 0.09 & 0.33 & 0.65 & 0.88 \\
   pdsi.z:petal.z & -0.16 & 0.54 & -1.01 & -0.50 & 0.17 & 0.69 \\ 
    \hline
 \end{tabular}
-\caption{Model paremeter estimates of the relationship between environmental/trait predictors and hysteranthy based on a hysteranthy index derived from a model that included day of season of observation (top table) and one that excluded this predictor from the index derivation (bottom table).}
+\caption{Model parameter estimates of the relationship between environmental/trait predictors and hysteranthy based on a hysteranthy index derived from a model that included day of season of observation (top table) and one that excluded this predictor from the index derivation (bottom table).}
 \label{tab:nodoy}
 \end{table}
 
@@ -142,7 +142,7 @@ Intercept & 0.38 & 0.29 & -0.08 & 0.19 & 0.57 & 0.82 \\
   temp.z:petal.z & 0.04 & 0.27 & -0.38 & -0.13 & 0.21 & 0.46 \\ 
    \hline
 \end{tabular}
-\caption{Model paremeter estimates of the relationship between mean spring temperature, petal length and hysteranthy.}
+\caption{Model parameter estimates of the relationship between mean spring temperature, petal length and hysteranthy.} 
 \label{tab:temp}
 \end{table}
 
@@ -181,6 +181,7 @@ Intercept & 0.38 & 0.29 & -0.08 & 0.19 & 0.57 & 0.82 \\
 \clearpage
 
 \section*{Extended Methods:}
+%emw17Feb -- is this the methods for the new model? It sounds like it does inta-specific ... or maybe this model was always here. Can you clarify a little and connect with whatever table/figure shows these results?
 To complement our main analyses in which we fit models based on species-level means of PDSI and petal length as predictors, we also implemented additional models where we assessed the relationship between PDSI and hysteranthy, and the relationship between petal length and hysteranthy separately. With this model structure our analyses accounted for the intra-specific variation in both PDSI and petal length as the phylogenetic structure of these variables.
 
  In these models, we modeled species and phylogeny as in the main text.
