@@ -319,6 +319,8 @@ FNA.small$FLSnum[FNA.small$FLS=="with"]<-2
 FNA.small$FLSnum[FNA.small$FLS=="after"]<-1
 FNA.small$FLSnum<-as.integer(FNA.small$FLSnum)
 
+write.csv(FNA.small,"forKNB/prunus_final.csv")
+
 
 ###this is the main model
 FNAordz.phylo2<-brm(FLSnum~inflor.z*meanpdsi.z +(1|specificEpithet)+(1|gr(species, cov = A)),
@@ -366,7 +368,7 @@ output <-output %>% tidyr::gather("var","estimate",4:6)
 #jpeg("Plots/fullprunus_mus.jpeg",width=9, height=7, units = "in",res=300)
 pottymu<-ggplot(output,aes(y = var, x = estimate)) +
    stat_pointinterval(.width=c(.5,.89))+ggthemes::theme_few()+
-   geom_vline(xintercept=0,linetype="dashed")+xlim(-50,10)+
+   geom_vline(xintercept=0,linetype="dashed")+
    scale_y_discrete(limits = c("b_inflor.z:meanpdsi.z","b_meanpdsi.z","b_inflor.z"),labels=c("PDSI X infloresence size","PDSI","inflorescence size"))+
    ylab("")+xlab("standardized effect size estimate")
 

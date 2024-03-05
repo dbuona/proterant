@@ -1,10 +1,11 @@
 ##American plums 4KNB
-####FINAL PRUNUS ANAYSIS: see plummywork for scratch and hydraulic demand
-rm(list=ls()) 
-options(stringsAsFactors = FALSE)
-options(mc.cores = parallel::detectCores())
-#rstan_options(auto_write = TRUE)
-graphics.off()
+
+###housekeeping
+rm(list=ls()) ## remove everything in R memory
+options(stringsAsFactors = FALSE) # strings are not factors
+options(mc.cores = parallel::detectCores()) ## parallelize chains for stan/brms
+
+#load/install packages
 library(dplyr)
 library(ggplot2)
 library(rstan)
@@ -12,11 +13,11 @@ library(brms)
 library(phytools)
 library(ape)
 library(tidybayes)
+library(ggpubr)
 
 
-
-setwd("~/Documents/git/proterant/investment/Input")
-load("..//forKNB/amer_plums_KNB.Rda")
+setwd("") ## set your working directory
+load("amer_plums_KNB.Rda") ## load model outputs in R workspace as short cut to figure making
 d<-read.csv("..//forKNB/amerplum_final.csv") ##read in data
 tree<-read.tree("~/Documents/git/proterant/investment/forKNB/amerplum_tree.tre") ##read in tree
 
@@ -169,14 +170,15 @@ sumz<-left_join(sumz,spsmean)
 ##make zscoring function
 zscore <- function(x){(x-mean(x,na.rm=TRUE))/sd(x,na.rm=TRUE)}
 
-sumz$pdsi.z<-zscore(sumz$mean.pdsi)
+sumz$pdsi.z<-zscore(sumz$mean.pdsi) ## zscore predictors
 sumz$petal.z<-zscore(sumz$mean.petal)
 sumz$temp.z<-zscore(sumz$meanspringT)
 
 ##check covarience
-cor(sumz$petal.z,sumz$temp.z) ### -0.72 maybe too high
-cor(sumz$petal.z,sumz$pdsi.z) ##-0.1 ok
+cor(sumz$petal.z,sumz$temp.z) 
+cor(sumz$petal.z,sumz$pdsi.z) 
 
+### model with PDSI and petal length as predictors
 mod.review.PDSI<- brms::brm(
   brms::bf(index ~ pdsi.z*petal.z,
            phi ~1),
@@ -186,6 +188,8 @@ mod.review.PDSI<- brms::brm(
   chains = 4, iter = 5000, warmup = 3000,
   cores = 4, seed = 1234,backend = "cmdstanr")
 
+
+#model with average spring temperature and petal length as predictors
 mod.review.Temp<- brms::brm(
   brms::bf(index ~ temp.z*petal.z,
            phi ~1),
@@ -195,11 +199,39 @@ mod.review.Temp<- brms::brm(
   chains = 4, iter = 5000, warmup = 3000,
   cores = 4, seed = 1234,backend = "cmdstanr")
 
+
+## compare Bayesian R^2s
 bayes_R2(mod.review.PDSI,probs = c(.25,.75)) 
 bayes_R2(mod.review.Temp,probs = c(.25,.75))
 
-save.image("..//forKNB/amer_plums_KNB.Rda")
+
+
+
+save.image("..//forKNB/amer_plums_KNB.Rda") ### save model output
 
 library(xtable)
-xtable(fixef(mod.review.Temp,probs = c(.055,.25,.75,.945)))
+xtable(fixef(mod.review.Temp,probs = c(.055,.25,.75,.945)))### table for model output in Supporting Info
+
+### make Figure 3
+cofs.2<-as.data.frame(fixef(mod.review.PDSI,probs = c(.055,.25,.75,.945))) # extract fixed effects
+cofs.2<-tibble::rownames_to_column(cofs.2,"predictor") # format
+cofs.2<-filter(cofs.2,!predictor %in% c("phi_Intercept","Intercept")) ## remove intercept estimates from plot
+
+###Figure 3a (mu plot)
+three.a<-ggplot(cofs.2,aes(x=Estimate,y=factor(predictor,level=c("pdsi.z:petal.z","pdsi.z","petal.z"))))+geom_point(size=3)+
+  geom_errorbarh(aes(xmin=`Q5.5`,xmax=`Q94.5`),height=0,size=0.5)+
+  geom_errorbarh(aes(xmin=`Q25`,xmax=`Q75`),height=0,size=1)+geom_vline(xintercept=0)+
+  scale_y_discrete(name="",labels=c("PDSI x petal length","PDSI","petal length"))+
+  ggthemes::theme_few(base_size = 10)+xlab("")+ylab("")
+
+# Figure 3b (conditional effects)
+p1<-plot(conditional_effects(mod.review.PDSI,prob=.89,surface = TRUE,method = c("fitted"),plot=FALSE),points=TRUE)
+
+##make prettier and label
+pi<-p1[[1]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("PDSI")
+pii<-p1[[2]]+ggthemes::theme_few()+ylim(0,1)+ylab("hysteranthy \nlikelihood")+xlab("petal length")
+
+##combine
+p4<-ggpubr::ggarrange(pi,pii,nrow=1,common.legend = TRUE,legend="bottom",labels=c("b)",""))
+
        

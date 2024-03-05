@@ -865,7 +865,7 @@ library(ggtree)
 #jpeg("..//Plots/phylosig2.jpeg", width=4, height=4,unit="in",res=300)
 pdf("..//Plots/phylosig2.pdf")
 p<-ggtree(pruned.by,layout = "roundrect")
-p %<+% sumz+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=index),size=5,shape=15)+ xlim(0, 3)+scale_color_viridis_c(option="turbo",direction=1,name="hysteranthy \nindex", )
+p %<+% sumz+geom_tiplab(hjust=-.2,align=TRUE,fontface="italic")+geom_tippoint(aes(color=index),size=5,shape=15)+ xlim(0, 3)+scale_color_viridis_c(option="viridis",direction=-1,name="hysteranthy \nindex", )
 dev.off()
 
 jpeg("..//Plots/ord_quants_phylo.jpeg", width=11, height=13,unit="in",res=250)
