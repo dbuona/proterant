@@ -8,14 +8,14 @@ library(ggplot2)
 library(tidyverse)
 library(brms)
 library(rstan)
-library(arm)
-library(rstanarm)
+#library(arm)
+#library(rstanarm)
 library(tibble)
 library(ggstance)
 
 setwd("~/Documents/git/proterant/FLOBUDS")
 
-d<-read.csv("dicogamy.csv",header=TRUE)
+d<-read.csv("input/dicogamy.csv",header=TRUE)
 plot.raw.dat<-gather(d,sex,DOY,5:6)
 
 pd=position_dodge2(width=.8,preserve="total")
@@ -42,17 +42,59 @@ com<-filter(d,GEN.SPA=="COM.PER")
 
 ### likelihood of flowering
 
-com
+
 ladylikelinood<-brm(floF~Force+Chill+Light+Force:Chill+Force:Light+Chill:Light,data=cor, family=bernoulli(link="logit"))
 summary(ladylikelinood)
-brolikelinood<-brm(floM~Force+Chill+Light+Force:Chill+Force:Light+Chill:Light,data=cor, family=bernoulli(link="logit"))
+
+brolikelinood<-brm(floM~Force+Chill+Light+GEN.SPA+Force:GEN.SPA+Chill:GEN.SPA+Light:GEN.SPA,data=d, family=gaussian())
 
 
 
 summary(brolikelinood)
 extract_coefs<-function(x){rownames_to_column(as.data.frame(fixef(x, summary=TRUE,probs=c(0.10,.25,.75,0.90))),"Predictor")
 }
-brm(flo_dayM~Force+Chill+Light+Force:Chill+Force:Light+Chill:Light,data=com,iter=5000,warmup=4000)
+
+
+d<-gather(d,"phase","doy",5:6)
+
+highchill<-filter(d,Chill==1)
+highlight<-filter(highchill,Light==1)
+
+corcor<-filter(d,GEN.SPA!="COR.COR")
+mod.cor<-brm(doy~Force*Chill*phase,data=corcor)
+
+ggplot(highchill,aes(as.factor(temp_day),doy))+stat_summary(
+  fun.data= "mean_sdl", fun.args = list(mult = 1),size=.75,aes(shape=phase))+facet_wrap(~GEN.SPA)
+
+mod<-brm(doy~Force*phase*GEN.SPA,data=highchill)
+
+conditional_effects(mod)
+
+newdat<-data.frame(Force=rep(c(0,1),2),phase=rep(c("flo_dayF","flo_dayM"),each=2),GEN.SPA=rep(c("COM.PER","COR.COR"),each=4))#,Light=rep(c(0,1),each=8))
+newdat2<-data.frame(Chill=rep(c(0,1),2),phase=rep(c("flo_dayF","flo_dayM"),each=2),Force=rep(c(0,1),2))
+fit<-fitted(mod,newdata = newdat,probs = c(.25,.75,.05,.95))
+fit<-cbind(newdat,fit)
+
+library(ggplot2)
+pd<-position_dodge(width = .5)
+pp_check(mod,ndraws = 100)
+
+fit$species<-ifelse(fit$GEN.SPA=="COM.PER","Comptonia peregrina","Corylus cornuta")
+
+ggplot(fit,aes(as.factor(Force),Estimate))+geom_point(aes(shape=phase),position=pd,size=2.5)+
+  geom_errorbar(aes(ymin=`Q25`,ymax=`Q75`,group=phase),position=pd,width=0,size=.25)+
+  geom_line(aes(ymin=Estimate,ymax=Estimate),color="firebrick",size=0.75)+
+  geom_errorbar(aes(ymin=Estimate,ymax=Estimate),color="firebrick",width=.05)+
+  #geom_errorbar(aes(ymin=`Q5`,ymax=`Q95`,group=phase),position=pd,width=0,size=.25)+
+  facet_wrap(~species,scales="free_y")+ggthemes::theme_few(base_size = 11)+
+  scale_x_discrete(name="mean daytime temperature",labels=c("18","24"))+ylab("flowers open day of season")+
+  scale_shape_manual(values=c(1,17),labels=c("female","male"))+ theme(strip.text = element_text(face = "italic"))
+
+fixef(mod,probs = c(.25,.75,.055,.945))
+bayes_R2(mod)
+
+ladyday<-brm(flo_dayF~FForce+Chill+Light+GEN.SPA+Force:GEN.SPA+Chill:GEN.SPA+Light:GEN.SPA,data=d,iter=5000,warmup=4000)
+
 
 lady<-extract_coefs(ladylikelinood)
 bro<-extract_coefs(brolikelinood)
@@ -77,7 +119,7 @@ dev.off()
 cor(d$flo_dayF, d$flo_dayM,use="na.or.complete")
 ?cor()
 
-lady.fect<-brm(flo_dayF~Force*GEN.SPA+Chill*GEN.SPA+Light*GEN.SPA,data=d)
+lady.fect<-brm(flo_dayF~temp_day*GEN.SPA+Chill*GEN.SPA+Light*GEN.SPA,data=d)
 summary(lady.fect)
 pp_check(lady.fect)
 bro.fect<-brm(flo_dayM~Force+Chill+Light,data=d)

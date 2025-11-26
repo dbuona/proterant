@@ -402,15 +402,15 @@ p3<-plot(conditional_effects(FNAordz.phylo2, "inflor.z", ordinal = TRUE,prob=.5,
 conditions <- make_conditions(FNAordz.phylo2, "inflor.z")
 p4<-plot(conditional_effects(FNAordz.phylo2, "meanpdsi.z",conditions=conditions,ordinal = TRUE,prob=.5,plot=FALSE))
 range(FNA.small$inflor.z)
-p1<-p1[[1]]+ggthemes::theme_few()+scale_y_discrete(name="FLS",labels=c("flowers after leaves","flowers with leaves","flowers before/with leaves","flowers before leaves"))+xlab("PDSI")
+p1<-p1[[1]]+ggthemes::theme_few()+scale_y_discrete(name="flower-leaf sequence",labels=c("flowers after leaves","flowers with leaves","flowers before/with leaves","flowers before leaves"))+xlab("PDSI")
 
 #p2<-p2[[1]]+ggthemes::theme_few()+scale_color_manual(values=c("hotpink","orange","lightgreen","darkgreen"))+scale_fill_manual(values=c("hotpink","orange","lightgreen","darkgreen"))
 p3<-p3[[1]]+ggthemes::theme_few()+ylab("")+xlab("inflorescence size")+theme(axis.text.y=element_blank(),axis.ticks.y = element_blank())
 
-p4<-p4[[1]]+ggthemes::theme_few()+xlab("inflorescence size")+scale_y_discrete(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"))
+p4<-p4[[1]]+ggthemes::theme_few()+xlab("inflorescence size")+scale_y_discrete(name="flower-leaf sequence",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"))
 
-+scale_color_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
-   scale_fill_manual(name="FLS",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab("fruit size")
++scale_color_manual(name="flower-leaf sequence",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+
+   scale_fill_manual(name="flower-leaf sequence",labels=c("flowers before leaves","flowers before/with leaves","flowers with leaves","flowers after leaves"),values=c("hotpink","orange","lightgreen","darkgreen"))+xlab("fruit size")
 
 potty<-ggpubr::ggarrange(p1,p3,common.legend = TRUE,ncol=2,legend="bottom",widths = c(.8,.5))
 

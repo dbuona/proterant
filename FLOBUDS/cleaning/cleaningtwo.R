@@ -18,6 +18,11 @@ dater<-full_join(dater,first,by="id") ###now you have a data set with first leav
 ### flowers (currrently mixed only)
 unique(dx$flophase)
 d.flo<-filter(dx,flophase %in% c("60","60-F","60-M")) ###This is all the 60s ever I have
+
+##added in 2024
+d.dich<-filter(d.flo, flophase!="60")
+dich<-d.dich %>%group_by(id,flophase) %>%summarise(ff=min(doy.final))
+
 firstflo<-aggregate(d.flo$doy.final, by = list(d.flo$id),min )
 
 colnames(firstflo)<-c("id","flo_day")

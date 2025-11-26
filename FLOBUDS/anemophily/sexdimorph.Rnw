@@ -1,0 +1,118 @@
+\documentclass{article}[12pt]
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{natbib}
+
+\usepackage{array}
+\usepackage{amsmath}
+%\usepackage[backend=bibtex]{biblatex}
+\bibliographystyle{..//refs/styles/ecoletters.bst}
+\setkeys{Gin}{width=0.8\textwidth}
+%\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{10pt}
+ \topmargin -1.5cm 
+ \oddsidemargin -0.04cm 
+ \evensidemargin -0.04cm 
+ \textwidth 16.59cm
+ \textheight 21.94cm 
+ \parskip 7.2pt 
+\renewcommand{\baselinestretch}{2}
+\AtBeginEnvironment{thebibliography}{\linespread{1}\selectfont}
+\parindent 0pt
+\usepackage{lineno}
+\linenumbers % for dissertation
+
+%\usepackage{xr-hyper}
+%\usepackage{hyperref}
+
+
+\title{Sexual dimporphism in flowering responses to climate variation in a monoecious shrub}
+
+
+\author{Dan}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\maketitle
+%\setlength{\parskip}{0.5pt} % 1ex plus 0.5ex minus 0.2ex}
+\setlength{\parindent}{0pt}
+
+
+\section{Introduction}
+Plants use a combination of environmental cues to trigger when and if plants flower. One of the most common flowering cues in the temperate zone is exposure to a prolongue cool (0-10) period. This requirement, known as vernalization or chilling, prevents plants from iniatition in the winter. Vernalization lets plants then respond to other cues like light and temperature, can affect phenology, and even competency to flower at all. Climate change has already started to affect when, where and if plants flower. Recent studies have indicated lack of chilling as a major factor.
+
+For the X+ number of species that have unisexual flowers climate cues, like vernalization may affect male and female flowers different.  This may be particularly true for woody species, that begin floral initaiton in previous year. Despite the fact that sexual dimorphism in reponses to climate change are widely reported, this are has been far less explored in plants, and only for a limited number of taxa.
+
+In this study, I investigate differences in the response to vernalization responses between male and female flowers of two woodland shrubs of Eastern North America.
+
+This has implications both in natural and managed system. Pollinizers and crop production. but also natural population. reproductive success, breeding etc.
+
+
+
+
+
+May important 
+
+Vernalization requirements---neccisary exposure to a prolonged period of cool winter temperatures to make plant
+
+\begin{itemize}
+\item Phenology is shifting
+\item different phases shift at different rates
+\item Dichogamy might be shifting
+\item But we dont really know, because most studies come from crops or a small number of wild taxa.
+\end{itemize}
+
+\section{Methods}
+\begin{itemize}
+\item Reanalyzed flowering phenology data from Buonaiuto and Wolkovich (2021) for one monoecious species, \emph{Comptonia peregrina}, with ample observations of both staminate and pistillate flower buds (n=96).
+\item In this experiment, the authors exposed cutting to full factorial climate treatment. The original study included multiple species, but few monoecious species that had enough flowering observations of both sex phases to analysize.
+\item To understand the effects of climate cues on flowering probability we fit a model.
+\item To understand the effects of climate cues on dichogamy, we fit a model that allowed us to estimate differences in phenological sensitivity between sex phases (n=40).
+\item All models were fit in brms
+
+\end{itemize}
+
+\section{Results}
+\subsection{Flowering probability}
+\begin{itemize}
+\item Chilling increased flowering probability for both flower sexes. For pistillate flowers, the increase was modest. For staminate flowers, the change was start. No flowering under short chill treatment and 100\% under long chill.
+\item The effects of forcing and photoperiod on flowering probability were models for both sex phases. Slight decrease with increasing temperature for pistillate flowers and slight increase for staminate ones. Increasing photoperiod modestly increase flowering likelihood for both sex phases with stronger gains in pistillate flowers.
+\end{itemize}
+
+\subsection{Flowering phenology}
+\begin{itemize}
+\item Warming advance both sex phases
+\item A trend of switches from protandry to protogyny was visable with increasing photoperiod, but there was high uncertaintly.
+\item Under low photoperiod, the warming drove a relatively proportionate advance in phenology for both sexphases, maintaining the dichogamy interval between sex phases. However, under longer photoperiod the staminate sex phase had higher temperature sensitivity reduceing the duration of the protogynous interval.
+\end{itemize}
+
+
+
+\section{Discussion}
+\section{Differential sensitivity of sex phases to climate variation}
+\begin{itemize}
+\item Chill was a big deal for probability of flower
+\item why was male flowering so much more sensitive to chilling than female?
+\item the usually point about spatial variation in chilling
+\item The indication that dichogamy can flip under different environmental conditions (in this case photoperiod) is interesting and supported by the literature. However, this relatively small size of this study leaves large uncertainty. 
+\end{itemize}
+
+\section{Implications for climate change}
+\begin{itemize}
+\item The strong interaction between warming and photoperiod is important because this interactions is present in nature.
+\item Advances due to warming encounter different photoperiod which can exacerbate or mute the warming. Cite Ailene
+\item If we produce a basic forecast of 4 degrees warming and 1/2 hour shorter photoperiod, our modewl predicts the species to still be protogynous, but the interval to decreases substantially which could have fitness implications
+\end{itemize}
+
+\section{Fitness implication}
+\begin{itemize}
+\item decreased dichogamy interval should either increase selfing rates or pollen wasting (cite me), depending on the self-compatibility of species
+\item To date I found no information about the breeding system of C. peregrina, so we cant assess this.
+\item Some of the fitness consequences depend on the relative synchrony of population. This analysis only included X individuals, and variation was Y in male than female
+\item This study adds another datapoint to the suggestion that climate change will effect population structure. We don't know how adar to extapoliare
+\end{itemize}
+
+
+\end{document}
