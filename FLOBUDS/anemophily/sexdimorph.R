@@ -37,6 +37,7 @@ dichogat<-filter(dichogat,!is.na(dichogamy))
 dichogatcomp<-filter(dichogat,GEN.SPA=="COM.PER")
 
 table(dichogat$GEN.SPA)
+###dan is addding to code wooo
 
 dat<-tidyr::gather(dat,"phase","flower",14:15)
 dat<-tidyr::gather(dat,"phase2","phenology",14:15)
@@ -85,6 +86,12 @@ prior <- c(
 compVern<-brm(flower~Chill*phase*Force*Light+(1|name),
               warmup=4000,iter=5000,control=list(adapt_delta=0.99),
               data=comper,family = bernoulli(link = "logit"),prior = prior)
+
+colnames(comper)
+
+pubdat<-comper[,c(7,9:11,14:15)]
+
+write.csv(x = pubdat,"~/Documents/git/proterant/FLOBUDS/anemophily/submission/comptonia_data.csv")
 
 brms::effective_sample(compVern)
 #compPhen<-brm(phenology~Chill*phase*Force*Light+(1|name),
