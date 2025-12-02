@@ -70,8 +70,8 @@ ggplot(dat,aes(GEN.SPA,phenology))+stat_summary(aes(color=phase),position=posy)+
 
 ###addsreon regularization priors
 prior <- c(
-  prior(normal(0, 10), class = "b"),      # stronger regularization
-  prior(normal(0, 10), class = "Intercept")
+  prior(normal(0, 5), class = "b"),      # stronger regularization
+  prior(normal(0, 5), class = "Intercept")
 )
 
 #compVern<-brm(flower~Chill*
@@ -86,6 +86,7 @@ compVern<-brm(flower~Chill*phase*Force*Light+(1|name),
               warmup=4000,iter=5000,control=list(adapt_delta=0.99),
               data=comper,family = bernoulli(link = "logit"),prior = prior)
 
+brms::effective_sample(compVern)
 #compPhen<-brm(phenology~Chill*phase*Force*Light+(1|name),
 #             warmup=4000,iter=5000,control=list(adapt_delta=0.99),
  #             data=comper,family = gaussian(),prior = prior)
@@ -106,7 +107,13 @@ p1<-ggplot(compyplot,aes(as.factor(Chill),.epred))+
   scale_x_discrete(name="vernalization",labels = c("30 days","60 days"))+
   scale_fill_manual(name="",values=c("gray90","gray30"))+ggthemes::theme_few()+ylab("Likelihood of flowering")+scale_linewidth_manual(name="",values=c(1,.25))
 
-round(compyplot$.epred,2)
+
+compyresp<- compy %>%
+  group_by(phase,Chill) %>%
+  mean_qi(.epred, .width = c(0.89))
+
+round(compyresp[,3:6],2)
+
 
 library(tidybayes)
 library(dplyr)
